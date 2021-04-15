@@ -1,10 +1,13 @@
-from Symbol import Symbol
+from OneModel import OneModel
+from ModelPart import ModelPart
 
-s = Symbol()
+om = OneModel()
 
-s.name
-print(s.name)
+mp = ModelPart(om)
 
-s.name = "Omega_A"
+mp.name
+print(mp.name)
 
-print(s.name)
+mp.name = "Omega_A"
+
+print(mp.name)
