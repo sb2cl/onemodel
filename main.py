@@ -1,13 +1,18 @@
 from OneModel import OneModel
 from ModelPart import ModelPart
+from Symbol import Symbol
 
 om = OneModel()
 
-mp = ModelPart(om)
+mp = ModelPart(om,"test")
 
 mp.name
 print(mp.name)
+print(mp.namebase)
+print(mp.namespace)
 
 mp.name = "Omega_A"
 
 print(mp.name)
+print(mp.namebase)
+print(mp.namespace)

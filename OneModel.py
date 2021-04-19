@@ -10,4 +10,4 @@ class OneModel:
         """
                 
         # Actual namespace being used.
-        self.namespace = "std"
+        self.namespace = "std::"
