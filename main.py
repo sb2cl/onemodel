@@ -6,13 +6,10 @@ om = OneModel()
 
 mp = Symbol(om,"test")
 
-print(mp.name)
-print(mp.namebase)
-print(mp.namespace)
-
 mp.name = "Omega_A"
+mp.nameTex = "Omega_A"
+mp.units = "[g \cdot L]"
 
 print(mp.name)
-print(mp.namebase)
-print(mp.namespace)
 print(mp.nameTex)
+print(mp.units)

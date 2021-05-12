@@ -34,14 +34,43 @@ class Symbol(ModelPart):
             return self._nameTex
                 
     @nameTex.setter
-    def nameTex(self, n):
+    def nameTex(self, nameTex):
         """
         @brief: Setter for nameTex.
 
-        @param: n New nameTex to set.
+        @param: nameTex New nameTex to set.
         """
 
-        if(type(n) != str):
-            raise ValueError("'%s' is not a valid type for the 'nameTex' property of '%s'. Use string type instead." % (str(n),self._name))
+        if(type(nameTex) != str):
+            raise ValueError("'%s' is not a valid type for the 'nameTex' property of '%s'. Use string type instead." % (str(nameTex),self._name))
 
-        self._nameTex = n
+        self._nameTex = nameTex
+
+    @property
+    def units(self):
+        """
+        @brief: Units of the symbol.
+        """
+
+        # Check if units is not defined.
+        try:
+            self._units
+        except AttributeError:
+            # If not defined, just return and empty string.
+            return ""
+        else:
+            # Otherwise, return the units.
+            return self._units
+                
+    @units.setter
+    def units(self, units):
+        """
+        @brief: Setter for units.
+
+        @param: units New units to set.
+        """
+
+        if(type(units) != str):
+            raise ValueError("'%s' is not a valid type for the 'units' property of '%s'. Use string type instead." % (str(units),self._name))
+
+        self._units = units
