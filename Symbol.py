@@ -74,3 +74,32 @@ class Symbol(ModelPart):
             raise ValueError("'%s' is not a valid type for the 'units' property of '%s'. Use string type instead." % (str(units),self._name))
 
         self._units = units
+
+    @property
+    def comment(self):
+        """
+        @brief: Comment of the symbol.
+        """
+
+        # Check if units is not defined.
+        try:
+            self._comment
+        except AttributeError:
+            # If not defined, just return and empty string.
+            return ""
+        else:
+            # Otherwise, return the comment.
+            return self._comment
+                
+    @comment.setter
+    def comment(self, comment):
+        """
+        @brief: Setter for comment.
+
+        @param: comment New comment to set.
+        """
+
+        if(type(comment) != str):
+            raise ValueError("'%s' is not a valid type for the 'comment' property of '%s'. Use string type instead." % (str(units),self._name))
+
+        self._comment = comment

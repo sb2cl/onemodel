@@ -7,9 +7,7 @@ om = OneModel()
 mp = Symbol(om,"test")
 
 mp.name = "Omega_A"
-mp.nameTex = "Omega_A"
-mp.units = 1
+mp.comment = "This is a comment"
 
 print(mp.name)
-print(mp.nameTex)
-print(mp.units)
+print(mp.comment)
