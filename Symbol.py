@@ -81,7 +81,7 @@ class Symbol(ModelPart):
         @brief: Comment of the symbol.
         """
 
-        # Check if units is not defined.
+        # Check if comment is not defined.
         try:
             self._comment
         except AttributeError:
@@ -103,3 +103,32 @@ class Symbol(ModelPart):
             raise ValueError("'%s' is not a valid type for the 'comment' property of '%s'. Use string type instead." % (str(units),self._name))
 
         self._comment = comment
+
+    @property
+    def reference(self):
+        """
+        @brief: Reference of the symbol value.
+        """
+
+        # Check if reference is not defined.
+        try:
+            self._reference
+        except AttributeError:
+            # If not defined, just return and empty string.
+            return ""
+        else:
+            # Otherwise, return the reference.
+            return self._reference
+                
+    @reference.setter
+    def reference(self, reference):
+        """
+        @brief: Setter for reference.
+
+        @param: reference New reference to set.
+        """
+
+        if(type(reference) != str):
+            raise ValueError("'%s' is not a valid type for the 'reference' property of '%s'. Use string type instead." % (str(reference),self._name))
+
+        self._reference = reference

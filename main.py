@@ -7,7 +7,7 @@ om = OneModel()
 mp = Symbol(om,"test")
 
 mp.name = "Omega_A"
-mp.comment = "This is a comment"
+mp.reference = "This is a reference"
 
 print(mp.name)
-print(mp.comment)
+print(mp.reference)
