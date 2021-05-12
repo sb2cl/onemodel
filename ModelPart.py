@@ -14,8 +14,7 @@ class ModelPart:
 
         # The OneModel object which this ModelPart is included.
         self.om = om
-        # The name of the ModelPart with namespace.
-        # (the namespace is added in name.setter).
+        # The name of the ModelPart (the namespace is added in name.setter).
         self.name = name  
 
     @property

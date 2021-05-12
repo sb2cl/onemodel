@@ -4,9 +4,8 @@ from Symbol import Symbol
 
 om = OneModel()
 
-mp = ModelPart(om,"test")
+mp = Symbol(om,"test")
 
-mp.name
 print(mp.name)
 print(mp.namebase)
 print(mp.namespace)
@@ -16,3 +15,4 @@ mp.name = "Omega_A"
 print(mp.name)
 print(mp.namebase)
 print(mp.namespace)
+print(mp.nameTex)
