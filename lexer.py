@@ -62,8 +62,8 @@ class Lexer:
         # Update current_char
         self.current_char = self.text[self.pos.idx] if self.pos.idx < len(self.text) else None
 
-    def make_tokens(self):
-        """ MAKE_TOKENS
+    def generate_tokens(self):
+        """ GENERATE_TOKENS
         @brief: Process all the input text and make the corresponding tokens.
 
         @return: tokens Array with the tokens.

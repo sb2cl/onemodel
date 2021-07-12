@@ -1,11 +1,12 @@
 from lexer import Lexer
+from tokens import *
 
 while True:
     text = input('basic > ')
     if text.strip() == "": continue
 
     lexer = Lexer('<stdin>', text)
-    result,error = lexer.make_tokens()
+    result,error = lexer.generate_tokens()
 
     if error:
         print(error.as_string())

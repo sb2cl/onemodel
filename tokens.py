@@ -85,3 +85,6 @@ class Token:
         @return: string
         """
         return self.type.name + (f":{self.value}" if self.value != None else "")
+
+    def __eq__(self, other):
+        return self.type == other.type and str(self.value) == str(other.value) 
