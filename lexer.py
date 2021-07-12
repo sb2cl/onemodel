@@ -135,6 +135,16 @@ class Lexer:
                 if error: return [], error
                 tokens.append(token)
 
+            elif self.current_char == '<':
+                tokens.append(self.generate_less_than())
+
+            elif self.current_char == '>':
+                tokens.append(self.generate_greater_than())
+
+            elif self.current_char == ',':
+                tokens.append(Token(TokenType.COMMA, pos_start=self.pos))
+                self.advance()
+
         # Add end of file token.
         tokens.append(Token(TokenType.END_OF_FILE, pos_start=self.pos))
         return tokens, None
@@ -278,3 +288,35 @@ class Lexer:
     
         self.advance()
         return None, ExpectedCharError(pos_start, self.pos, "'=' (after '!')")
+
+    def generate_less_than(self):
+        """ GENERATE_LESS_THAN
+        @brief: Generate less_than and less_equal_tokens.
+        
+        @return: Token
+        """
+        tok_type = TokenType.LESS_THAN
+        pos_start = self.pos.copy()
+        self.advance()
+
+        if self.current_char == '=':
+            self.advance()
+            tok_type = TokenType.LESS_EQUAL_THAN
+
+        return Token(tok_type, pos_start=pos_start, pos_end=self.pos)
+
+    def generate_greater_than(self):
+        """ GENERATE_GREATER_THAN
+        @brief: Generate greater_than and greater_equal_tokens.
+        
+        @return: Token
+        """
+        tok_type = TokenType.GREATER_THAN
+        pos_start = self.pos.copy()
+        self.advance()
+
+        if self.current_char == '=':
+            self.advance()
+            tok_type = TokenType.GREATER_EQUAL_THAN
+
+        return Token(tok_type, pos_start=pos_start, pos_end=self.pos)
