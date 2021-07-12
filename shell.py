@@ -5,9 +5,12 @@ while True:
     if text.strip() == "": continue
 
     lexer = Lexer('<stdin>', text)
-    result = lexer.make_tokens()
+    result,error = lexer.make_tokens()
 
-    print(result)
+    if error:
+        print(error.as_string())
+    elif result:
+        print(result)
 
 	#result, error = basic.run('<stdin>', text)
 

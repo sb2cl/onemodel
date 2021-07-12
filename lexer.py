@@ -1,5 +1,6 @@
 from position import Position
 from tokens import Token, TokenType
+from error import *
 import string
 
 WHITESPACE = ' \n\t'
@@ -144,8 +145,13 @@ class Lexer:
             elif self.current_char == ',':
                 tokens.append(Token(TokenType.COMMA, pos_start=self.pos))
                 self.advance()
+            else:
+                pos_start = self.pos.copy()
+                char = self.current_char
+                self.advance()
+                return [], IllegalCharError(pos_start, self.pos, "'" + char + "'")
 
-        # Add end of file token.
+        # Add end_of_file token.
         tokens.append(Token(TokenType.END_OF_FILE, pos_start=self.pos))
         return tokens, None
 
