@@ -1,8 +1,11 @@
 from position import Position
 from tokens import Token, TokenType
+import string
 
 WHITESPACE = ' \n\t'
 DIGITS = '0123456789'
+LETTERS = string.ascii_letters
+LETTERS_DIGITS = LETTERS + DIGITS
 
 # Keywords reserved.
 KEYWORDS = [
@@ -76,6 +79,10 @@ class Lexer:
             elif self.current_char == '#':
                 self.skip_comment()
 
+            elif self.current_char in ';\n':
+                tokens.append(Token(TokenType.NEW_LINE, pos_start=self.pos))
+                self.advance()
+
             elif self.current_char == '.' or self.current_char in DIGITS:
                 tokens.append(self.generate_number())
 
@@ -102,7 +109,7 @@ class Lexer:
             self.advance()
 
         self.advance()
-
+ 
     def generate_number(self):
         """ GENERATE_NUMBER
         @brief: Generate a number (float)
