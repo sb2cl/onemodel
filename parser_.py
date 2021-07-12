@@ -105,8 +105,8 @@ class Parser:
         @return: Token Current token.
         """
         self.tok_idx += 1
-        self.update_current_tok()
-        return self.current_tok
+        self.update_current_token()
+        return self.current_token
     
     def reverse(self, amount=1):
         """ REVERSE
@@ -117,19 +117,19 @@ class Parser:
         @return: Token Previous token.
         """
         self.tok_idx += 1
-        self.update_current_tok()
-        return self.current_tok
+        self.update_current_token()
+        return self.current_token
 
-    def update_current_tok(self):
-        """ UPDATE_CURRENT_TOK
-        @brief: Update self.current_tok to the current one defined by self.tok_idx
+    def update_current_token(self):
+        """ UPDATE_CURRENT_TOKEN
+        @brief: Update self.current_token to the current one defined by self.tok_idx
         
         @return: None
         """
         if self.tok_idx >= 0 and self.tok_idx < len(self.tokens):
-            self.current_tok = self.tokens[self.tok_idx]
+            self.current_token = self.tokens[self.tok_idx]
         else:
-            self.current_tok = None
+            self.current_token = None
 
     def parse(self):
         """ PARSE
@@ -137,15 +137,46 @@ class Parser:
         
         @return: ParseResult Result of the parser (AST and error)
         """
-        res = self.factor()
+        res = self.term()
 
-        if not res.error and self.current_tok.type != TokenType.END_OF_FILE:
+        if not res.error and self.current_token.type != TokenType.END_OF_FILE:
             return res.failure(InvalidSyntaxError(
-                self.current_tok.pos_start, self.current_tok.pos_end,
+                self.current_token.pos_start, self.current_token.pos_end,
                 "Token cannot appear after previous tokens"
             ))
 
         return res
+
+    def term(self):
+        """ TERM
+        @brief: Find a term.
+        
+        @return: node
+        """
+        res = ParseResult()
+        result = res.register(self.factor())
+
+        while self.current_token != None and self.current_token.type in (TokenType.MULTIPLICATION, TokenType.DIVISION):
+
+            if self.current_token.type == TokenType.MULTIPLICATION:
+                res.register_advancement()
+                self.advance()
+
+                factor = res.register(self.factor())
+                if res.error: return res
+
+                result = MultiplyNode(result, factor)
+
+            elif self.current_token.type == TokenType.DIVISION:
+                res.register_advancement()
+                self.advance()
+
+                factor = res.register(self.factor())
+                if res.error: return res
+
+                result = DivideNode(result, factor)
+
+        return res.success(result)
 
     def factor(self):
         """ FACTOR
@@ -154,7 +185,7 @@ class Parser:
         @return: node
         """
         res = ParseResult()
-        tok = self.current_tok
+        tok = self.current_token
 
         if tok.type == TokenType.PLUS:
             res.register_advancement()

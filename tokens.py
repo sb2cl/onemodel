@@ -94,4 +94,7 @@ class Token:
                 
         @return: True if the have equal type and value
         """
+        if other == None: 
+            return False
+
         return self.type == other.type and str(self.value) == str(other.value) 
