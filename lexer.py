@@ -96,6 +96,17 @@ class Lexer:
                 tokens.append(Token(TokenType.PLUS, pos_start=self.pos))
                 self.advance()
 
+            elif self.current_char == '-':
+                tokens.append(self.generate_minus_or_arrow())
+
+            elif self.current_char == '*':
+                tokens.append(Token(TokenType.MULTIPLICATION, pos_start=self.pos))
+                self.advance()
+
+            elif self.current_char == '/':
+                tokens.append(Token(TokenType.DIVISION, pos_start=self.pos))
+                self.advance()
+
         # Add end of file token.
         tokens.append(Token(TokenType.END_OF_FILE, pos_start=self.pos))
         return tokens, None
@@ -190,3 +201,19 @@ class Lexer:
         
         tok_type = TokenType.KEYWORD if id_str in KEYWORDS else TokenType.IDENTIFIER
         return Token(tok_type, id_str, pos_start, self.pos)
+
+    def generate_minus_or_arrow(self):
+        """ GENERATE_MINUS_OR_ARROW
+        @brief: Generate a minus token or an arrow token.
+        
+        @return: Token
+        """
+        tok_type = TokenType.MINUS
+        pos_start = self.pos.copy()
+        self.advance()
+
+        if self.current_char == '>':
+            self.advance()
+            tok_type = TokenType.ARROW
+
+        return Token(tok_type, pos_start=pos_start, pos_end=self.pos)
