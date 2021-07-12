@@ -89,6 +89,9 @@ class Lexer:
             elif self.current_char == '"':
                 tokens.append(self.generate_string())
 
+            elif self.current_char in LETTERS:
+                tokens.append(self.generate_identifier())
+
             elif self.current_char == '+':
                 tokens.append(Token(TokenType.PLUS, pos_start=self.pos))
                 self.advance()
@@ -170,3 +173,20 @@ class Lexer:
 
         self.advance()
         return Token(TokenType.STRING, string, pos_start, self.pos)
+
+    def generate_identifier(self):
+        """ GENERATE_IDENTIFIER
+        @brief: Generate an identifier (KEYWORD or IDENTIFIER).
+        
+        @return: Token  Generate keyword or identifier token.
+        """
+                
+        id_str = ''
+        pos_start = self.pos.copy()
+
+        while self.current_char != None and self.current_char in LETTERS_DIGITS + '_':
+            id_str += self.current_char
+            self.advance()
+        
+        tok_type = TokenType.KEYWORD if id_str in KEYWORDS else TokenType.IDENTIFIER
+        return Token(tok_type, id_str, pos_start, self.pos)
