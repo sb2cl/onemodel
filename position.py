@@ -1,9 +1,15 @@
+from dataclasses import dataclass
+
 class Position:
     """ POSITION
 
     This class keep track of the position in files for pin pointing errors.
     """
-
+    idx: int
+    ln: int
+    col: int
+    fn: str
+    ftxt: str
 
     def __init__(self,idx, ln, col, fn, ftxt):
         """

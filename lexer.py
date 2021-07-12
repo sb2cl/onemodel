@@ -1,38 +1,10 @@
-from enum import Enum, auto
-from Position import Position
+from position import Position
+from tokens import Token, TokenType
 
-class TokenType(Enum):
-    """ TOKENTYPE
+WHITESPACE = ' \n\t'
+DIGITS = '0123456789'
 
-    This class defines all the token types available for the lexer.
-    """
-    INTEGER             = auto()
-    FLOAT               = auto()
-    STRING              = auto()
-    IDENTIFIER          = auto()
-    KEYWORD             = auto()
-    PLUS                = auto()
-    MINUS               = auto()
-    MULTIPLY            = auto()
-    DIVIDE              = auto()
-    POWER               = auto()
-    EQUAL               = auto()
-    LEFT_PAREN          = auto()
-    RIGHT_PAREN         = auto()
-    LEFT_SQUARE         = auto()
-    RIGHT_SQUARE        = auto()
-    IS_EQUAL            = auto()
-    NOT_EQUAL           = auto()
-    LESS_THAN           = auto()
-    GREATER_THAN        = auto()
-    LESS_EQUAL_THAN     = auto()
-    GREATER_EQUAL_THAN  = auto()
-    COMMA               = auto()
-    ARROW               = auto()
-    NEW_LINE            = auto()
-    END_OF_FILE         = auto()
-
-# Keywords reserved for tokens.
+# Keywords reserved.
 KEYWORDS = [
         'VAR',
         'AND',
@@ -52,26 +24,6 @@ KEYWORDS = [
         'CONTINUE',
         'BREAK',
         ]
-
-class Token:
-    def __init__(self, type_, value=None, pos_start=None, pos_end=None):
-        self.type = type_
-        self.value = value
-
-        if pos_start:
-            self.pos_start = pos_start.copy()
-            self.pos_end = pos_start.copy()
-            self.pos_end.advance()
-
-        if pos_end:
-            self.pos_end = pos_end.copy()
-
-    def matches(self, type_, value):
-        return self.type == type_ and self.value == value
-  
-    def __repr__(self):
-        if self.value: return f'{self.type}:{self.value}'
-        return f'{self.type}'
 
 class Lexer:
     """ LEXER
@@ -118,8 +70,11 @@ class Lexer:
         # Process all the chars one by one
         while self.current_char != None:
             # Remove white space
-            if self.current_char in ' \t':
+            if self.current_char in WHITESPACE:
                 self.advance()
+
+            elif self.current_char == '.' or self.current_char in DIGITS:
+                tokens.append(self.generate_number())
 
             elif self.current_char == '+':
                 tokens.append(Token(TokenType.PLUS, pos_start=self.pos))
@@ -129,14 +84,30 @@ class Lexer:
         tokens.append(Token(TokenType.END_OF_FILE, pos_start=self.pos))
         return tokens, None
 
-
-
-                
+    def generate_number(self):
+        """ GENERATE_NUMBER
+        @brief: Generate a number (float)
         
+        @return: Token Generate number token.
+        """
+        decimal_point_count = 0
+        number_str = self.current_char
+        pos_start = self.pos.copy()
 
-                
-        
-                
-        
+        self.advance()
 
-    
+        while self.current_char != None and (self.current_char == '.' or self.current_char in DIGITS):
+            if self.current_char == '.':
+                decimal_point_count += 1
+                if decimal_point_count > 1:
+                    break
+
+            number_str += self.current_char
+            self.advance()
+
+        if number_str.startswith('.'):
+            number_str = '0' + number_str
+        if number_str.endswith('.'):
+            number_str += '0'
+
+        return Token(TokenType.NUMBER, value=(number_str), pos_start=pos_start, pos_end=self.pos)
