@@ -73,6 +73,9 @@ class Lexer:
             if self.current_char in WHITESPACE:
                 self.advance()
 
+            elif self.current_char == '#':
+                self.skip_comment()
+
             elif self.current_char == '.' or self.current_char in DIGITS:
                 tokens.append(self.generate_number())
 
@@ -86,6 +89,19 @@ class Lexer:
         # Add end of file token.
         tokens.append(Token(TokenType.END_OF_FILE, pos_start=self.pos))
         return tokens, None
+
+    def skip_comment(self):
+        """ SKIP_COMMENT
+        @brief: Skipe the comment until newline is reached.
+        
+        @return: None
+        """
+        self.advance()
+        
+        while self.current_char != '\n' and self.current_char != None:
+            self.advance()
+
+        self.advance()
 
     def generate_number(self):
         """ GENERATE_NUMBER
