@@ -1,6 +1,6 @@
 from position import Position
 from tokens import Token, TokenType
-from error import *
+from errors import *
 import string
 
 WHITESPACE = ' \t'

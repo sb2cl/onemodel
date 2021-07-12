@@ -1,5 +1,5 @@
 from lexer import Lexer
-from tokens import *
+from parser_ import Parser
 
 while True:
     text = input('basic > ')
@@ -8,10 +8,13 @@ while True:
     lexer = Lexer('<stdin>', text)
     result,error = lexer.generate_tokens()
 
-    if error:
-        print(error.as_string())
-    elif result:
-        print(result)
+    parser = Parser(result)
+    res = parser.parse()
+
+    if res.error:
+        print(res.error.as_string())
+    elif res.node:
+        print(res.node)
 
 	#result, error = basic.run('<stdin>', text)
 
