@@ -111,10 +111,6 @@ class Lexer:
                 tokens.append(Token(TokenType.POWER, pos_start=self.pos))
                 self.advance()
 
-            elif self.current_char == '=':
-                tokens.append(Token(TokenType.EQUAL, pos_start=self.pos))
-                self.advance()
-
             elif self.current_char == '(':
                 tokens.append(Token(TokenType.LEFT_PAREN, pos_start=self.pos))
                 self.advance()
@@ -131,9 +127,13 @@ class Lexer:
                 tokens.append(Token(TokenType.RIGHT_SQUARE, pos_start=self.pos))
                 self.advance()
 
+            elif self.current_char == '=':
+                tokens.append(self.generate_equals())
 
-
-
+            elif self.current_char == '!':
+                token, error = self.generate_not_equal()
+                if error: return [], error
+                tokens.append(token)
 
         # Add end of file token.
         tokens.append(Token(TokenType.END_OF_FILE, pos_start=self.pos))
@@ -245,3 +245,36 @@ class Lexer:
             tok_type = TokenType.ARROW
 
         return Token(tok_type, pos_start=pos_start, pos_end=self.pos)
+
+    def generate_equals(self):
+        """ GENERATE_EQUALS
+        @brief: Generate equal and is_equal tokens.
+        
+        @return: Token
+        """
+        tok_type = TokenType.EQUAL
+        pos_start = self.pos.copy()
+        self.advance()
+
+        if self.current_char == '=':
+            self.advance()
+            tok_type = TokenType.IS_EQUAL
+
+        return Token(tok_type, pos_start=pos_start, pos_end=self.pos)
+
+    def generate_not_equal(self):
+        """ GENERATE_NOT_EQUAL
+        @brief: Generate not_equal token.
+        
+        @return: Token
+               : error
+        """
+        pos_start = self.pos.copy()
+        self.advance()
+
+        if self.current_char == '=':
+            self.advance()
+            return Token(TokenType.NOT_EQUAL, pos_start=pos_start, pos_end=self.pos), None
+    
+        self.advance()
+        return None, ExpectedCharError(pos_start, self.pos, "'=' (after '!')")
