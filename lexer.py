@@ -111,6 +111,21 @@ class Lexer:
                 tokens.append(Token(TokenType.POWER, pos_start=self.pos))
                 self.advance()
 
+            elif self.current_char == '=':
+                tokens.append(Token(TokenType.EQUAL, pos_start=self.pos))
+                self.advance()
+
+            elif self.current_char == '(':
+                tokens.append(Token(TokenType.LEFT_PAREN, pos_start=self.pos))
+                self.advance()
+
+            elif self.current_char == ')':
+                tokens.append(Token(TokenType.RIGHT_PAREN, pos_start=self.pos))
+                self.advance()
+
+
+
+
 
         # Add end of file token.
         tokens.append(Token(TokenType.END_OF_FILE, pos_start=self.pos))
