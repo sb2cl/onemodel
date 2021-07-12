@@ -123,6 +123,14 @@ class Lexer:
                 tokens.append(Token(TokenType.RIGHT_PAREN, pos_start=self.pos))
                 self.advance()
 
+            elif self.current_char == '[':
+                tokens.append(Token(TokenType.LEFT_SQUARE, pos_start=self.pos))
+                self.advance()
+
+            elif self.current_char == ']':
+                tokens.append(Token(TokenType.RIGHT_SQUARE, pos_start=self.pos))
+                self.advance()
+
 
 
 
