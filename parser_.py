@@ -65,7 +65,7 @@ class ParseResult:
         
         @param: node
                 
-        @return: void
+        @return: self
         """
         self.node = node
         return self
@@ -76,7 +76,7 @@ class ParseResult:
         
         @param: error
                 
-        @return: void
+        @return: self
         """
         if not self.error or self.last_registered_advance_count == 0:
             self.error = error
@@ -137,7 +137,7 @@ class Parser:
         
         @return: ParseResult Result of the parser (AST and error)
         """
-        res = self.term()
+        res = self.expr()
 
         if not res.error and self.current_token.type != TokenType.END_OF_FILE:
             return res.failure(InvalidSyntaxError(
@@ -147,11 +147,42 @@ class Parser:
 
         return res
 
+    def expr(self):
+        """ EXPR
+        @brief: Find a expr.
+        
+        @return: ParseResult
+        """
+        res = ParseResult()
+        result = res.register(self.term())
+
+        while self.current_token != None and self.current_token.type in (TokenType.PLUS, TokenType.MINUS):
+
+            if self.current_token.type == TokenType.PLUS:
+                res.register_advancement()
+                self.advance()
+                
+                term = res.register(self.term())
+                if res.error: return res
+
+                result = AddNode(result, term)
+        
+            elif self.current_token.type == TokenType.MINUS:
+                res.register_advancement()
+                self.advance()
+                
+                term = res.register(self.term())
+                if res.error: return res
+
+                result = SubtractNode(result, term)
+
+        return res.success(result)
+
     def term(self):
         """ TERM
         @brief: Find a term.
         
-        @return: node
+        @return: ParseResult
         """
         res = ParseResult()
         result = res.register(self.factor())
@@ -182,26 +213,39 @@ class Parser:
         """ FACTOR
         @brief: Find a factor.
         
-        @return: node
+        @return: ParseResult
         """
         res = ParseResult()
         tok = self.current_token
 
-        if tok.type == TokenType.PLUS:
+        if tok.type == TokenType.LEFT_PAREN:
+            res.register_advancement()
+            self.advance()
+            expr = res.register(self.expr())
+
+            if self.current_token.type != TokenType.RIGHT_PAREN:
+                return res.failure(InvalidSyntaxError(
+                    self.current_token.pos_start, self.current_token.pos_end,
+                    "Expected ')'"
+                ))
+
             res.register_advancement()
             self.advance()
 
-            factor = res.register(self.factor())
+            if res.error: return res
+            return res.success(expr)
 
+        elif tok.type == TokenType.PLUS:
+            res.register_advancement()
+            self.advance()
+            factor = res.register(self.factor())
             if res.error: return res
             return res.success(PlusNode(factor))
 
         elif tok.type == TokenType.MINUS:
             res.register_advancement()
             self.advance()
-
             factor = res.register(self.factor())
-
             if res.error: return res
             return res.success(MinusNode(factor))
 
