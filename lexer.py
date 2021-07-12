@@ -3,7 +3,7 @@ from tokens import Token, TokenType
 from error import *
 import string
 
-WHITESPACE = ' \n\t'
+WHITESPACE = ' \t'
 DIGITS = '0123456789'
 LETTERS = string.ascii_letters
 LETTERS_DIGITS = LETTERS + DIGITS

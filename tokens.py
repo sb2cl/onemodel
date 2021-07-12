@@ -86,5 +86,12 @@ class Token:
         """
         return self.type.name + (f":{self.value}" if self.value != None else "")
 
-    def __eq__(self, other):
+    def __eq__(self,other):
+        """ __EQ__
+        @brief: Override equality operator to only take into account type and value.
+        
+        @param: other Token
+                
+        @return: True if the have equal type and value
+        """
         return self.type == other.type and str(self.value) == str(other.value) 
