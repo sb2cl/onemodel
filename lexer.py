@@ -34,7 +34,7 @@ class Lexer:
     def __init__(self,fn,text):
         """
         @brief: Constructor of Lexer.
-        
+
         @param: fn   Filename of the text (used in error generation).
               : text Input text to convert into tokens.
         """
@@ -50,7 +50,7 @@ class Lexer:
     def advance(self):
         """ ADVANCE
         @brief: Update self.current_char with the next char to be processed.
-        
+
         @return: None
         """
         # Keep track of the position in the file
@@ -61,7 +61,7 @@ class Lexer:
     def make_tokens(self):
         """ MAKE_TOKENS
         @brief: Process all the input text and make the corresponding tokens.
-        
+
         @return: tokens Array with the tokens.
                : error  ExpectedCharError, IllegalCharError, or None
         """
@@ -76,6 +76,9 @@ class Lexer:
             elif self.current_char == '.' or self.current_char in DIGITS:
                 tokens.append(self.generate_number())
 
+            elif self.current_char == '"':
+                tokens.append(self.generate_string())
+
             elif self.current_char == '+':
                 tokens.append(Token(TokenType.PLUS, pos_start=self.pos))
                 self.advance()
@@ -87,8 +90,8 @@ class Lexer:
     def generate_number(self):
         """ GENERATE_NUMBER
         @brief: Generate a number (float)
-        
-        @return: Token Generate number token.
+
+        @return: Token Generated number token.
         """
         decimal_point_count = 0
         number_str = self.current_char
@@ -111,3 +114,36 @@ class Lexer:
             number_str += '0'
 
         return Token(TokenType.NUMBER, value=(number_str), pos_start=pos_start, pos_end=self.pos)
+
+    def generate_string(self):
+        """ GENERATE_STRING
+        @brief: Generate a string
+
+        @return: Token  Generated string Token
+        """
+        string = ''
+        pos_start = self.pos.copy()
+        escape_character = False
+        self.advance()
+
+        escape_characters = {
+                'n': '\n',
+                't': '\t',
+                '"': '"'
+                }
+
+        while self.current_char != None and (self.current_char != '"' or escape_character):
+            if escape_character:
+                string += escape_characters.get(self.current_char, self.current_char)
+            else:
+                if self.current_char == '\\':
+                    escape_character = True
+                    self.advance()
+                    continue # The above statements are useless without thiss one.
+                else:
+                    string += self.current_char
+                self.advance()
+                escape_character = False
+
+        self.advance()
+        return Token(TokenType.STRING, string, pos_start, self.pos)
