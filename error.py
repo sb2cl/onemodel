@@ -56,11 +56,14 @@ class InvalidSyntaxError(Error):
     def __init__(self, pos_start, pos_end, details=''):
         super().__init__(pos_start, pos_end, 'Invalid Syntax', details)
 
-# TODO: Implement context.
 class RTError(Error):
+    """ RTERROR(ERROR)
+
+    This error message is shown when an error occours during run time.
+    """
     def __init__(self, pos_start, pos_end, details, context):
         super().__init__(pos_start, pos_end, 'Runtime Error', details)
-    #self.context = context
+        self.context = context
 
     def as_string(self):
         result  = self.generate_traceback()
