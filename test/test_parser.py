@@ -22,7 +22,7 @@ class TestParser(unittest.TestCase):
                 ]
         res = Parser(tokens).parse()
         self.assertEqual(res.node, 
-                NumberNode(Token(TokenType.NUMBER,1))
+                NumberNode(1)
                 )    
 
         tokens = [
@@ -33,7 +33,7 @@ class TestParser(unittest.TestCase):
         res = Parser(tokens).parse()
         self.assertEqual(res.node, 
                 PlusNode(
-                    NumberNode(Token(TokenType.NUMBER,1))
+                    NumberNode(1)
                     )
                 )
 
@@ -45,7 +45,7 @@ class TestParser(unittest.TestCase):
         res = Parser(tokens).parse()
         self.assertEqual(res.node, 
                 MinusNode(
-                    NumberNode(Token(TokenType.NUMBER,1))
+                    NumberNode(1)
                     )
                 )
 
@@ -58,8 +58,8 @@ class TestParser(unittest.TestCase):
         res = Parser(tokens).parse()
         self.assertEqual(res.node, 
                 AddNode(
-                    NumberNode(Token(TokenType.NUMBER,1)),
-                    NumberNode(Token(TokenType.NUMBER,2))
+                    NumberNode(1),
+                    NumberNode(2)
                     )
                 )
 
@@ -72,8 +72,8 @@ class TestParser(unittest.TestCase):
         res = Parser(tokens).parse()
         self.assertEqual(res.node, 
                 SubtractNode(
-                    NumberNode(Token(TokenType.NUMBER,1)),
-                    NumberNode(Token(TokenType.NUMBER,2))
+                    NumberNode(1),
+                    NumberNode(2)
                     )
                 )
 
@@ -86,8 +86,8 @@ class TestParser(unittest.TestCase):
         res = Parser(tokens).parse()
         self.assertEqual(res.node, 
                 MultiplyNode(
-                    NumberNode(Token(TokenType.NUMBER,1)),
-                    NumberNode(Token(TokenType.NUMBER,2))
+                    NumberNode(1),
+                    NumberNode(2)
                     )
                 )
 
@@ -101,8 +101,8 @@ class TestParser(unittest.TestCase):
         res = Parser(tokens).parse()
         self.assertEqual(res.node, 
                 DivideNode(
-                    NumberNode(Token(TokenType.NUMBER,1)),
-                    NumberNode(Token(TokenType.NUMBER,2))
+                    NumberNode(1),
+                    NumberNode(2)
                     )
                 )
 
@@ -125,16 +125,16 @@ class TestParser(unittest.TestCase):
         res = Parser(tokens).parse()
         self.assertEqual(res.node, 
                 AddNode(
-                    NumberNode(Token(TokenType.NUMBER,27)),
+                    NumberNode(27),
                     MultiplyNode(
                         SubtractNode(
                             DivideNode(
-                                NumberNode(Token(TokenType.NUMBER,43)),
-                                NumberNode(Token(TokenType.NUMBER,36)),
+                                NumberNode(43),
+                                NumberNode(36),
                                 ),
-                            NumberNode(Token(TokenType.NUMBER,48))
+                            NumberNode(48)
                             ),
-                        NumberNode(Token(TokenType.NUMBER,51))
+                        NumberNode(51)
                         )
                     )
                 )
