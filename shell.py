@@ -1,5 +1,6 @@
 from lexer import Lexer
 from parser_ import Parser
+from interpreter import Interpreter
 
 while True:
     text = input('basic > ')
@@ -11,17 +12,12 @@ while True:
     parser = Parser(result)
     res = parser.parse()
 
+
     if res.error:
         print(res.error.as_string())
-    elif res.node:
-        print(res.node)
 
-	#result, error = basic.run('<stdin>', text)
+    if not res.node: continue
 
-	#if error:
-	#	print(error.as_string())
-	#elif result:
-	#	if len(result.elements) == 1:
-	#		print(repr(result.elements[0]))
-	#	else:
-	#		print(repr(result))
+    interpreter = Interpreter()
+    value = interpreter.visit(res.node)
+    print(value)
