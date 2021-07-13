@@ -1,5 +1,6 @@
 from enum import Enum, auto
 from dataclasses import dataclass
+from position import Position
 
 class TokenType(Enum):
     """ TOKENTYPE
@@ -37,10 +38,10 @@ class Token:
 
     This class implements a Token.
     """
-    # The token type
-    type: TokenType   
-    # The token value
-    value: any = None
+    type:       TokenType           # Token type.
+    value:      any         = None  # Token value.
+    pos_start:  Position    = None  # Token start position in file.
+    pos_end:    Position    = None  # Token end position in file.
 
     def __init__(self, type_, value=None, pos_start=None, pos_end=None):
         """ __INIT__
