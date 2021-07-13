@@ -1,23 +1,17 @@
-from lexer import Lexer
-from parser_ import Parser
-from interpreter import Interpreter
+import interpreter 
 
 while True:
     text = input('basic > ')
     if text.strip() == "": continue
 
-    lexer = Lexer('<stdin>', text)
-    result,error = lexer.generate_tokens()
-
-    parser = Parser(result)
-    res = parser.parse()
-
-
-    if res.error:
-        print(res.error.as_string())
-
-    if not res.node: continue
-
-    interpreter = Interpreter()
-    value = interpreter.visit(res.node)
-    print(value)
+    result, error = interpreter.run('<stdin>', text)
+    
+    if error:
+        print(error.as_string())
+    elif result:
+        # TODO: recover the result.elements
+        print(result)
+        #if len(result.elements) == 1:
+        #    print(repr(result.elements[0]))
+        #else:
+        #    print(repr(result))
