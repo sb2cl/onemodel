@@ -33,7 +33,7 @@ class NumberNode:
         
         @param: other Token
                 
-        @return: True if the have equal type and value
+        @return: True if they are equal.
         """
         if other == None: 
             return False
@@ -62,8 +62,21 @@ class BinaryOperationNode:
         self.pos_start = self.left_node.pos_start
         self.pos_end = self.right_node.pos_end
 
-        def __repr__(self):
-            return f'({self.left_node}, {self.operation_token}, {self.right_node})'
+    def __repr__(self):
+        return f'({self.left_node}, {self.operation_token}, {self.right_node})'
+
+    def __eq__(self,other):
+        """ __EQ__
+        @brief: Override equality operator to only take into account type and value.
+        
+        @param: other Token
+                
+        @return: True if they are equal.
+        """
+        if other == None: 
+            return False
+
+        return self.left_node == self.left_node and self.operation_token == other.operation_token and self.right_node == other.right_node
 
 class UnaryOperationNode:
     """ UNARYOPERATIONNODE
@@ -87,6 +100,20 @@ class UnaryOperationNode:
 
     def __repr__(self):
         return f'({self.operation_token}, {self.node})'
+
+    def __eq__(self,other):
+        """ __EQ__
+        @brief: Override equality operator to only take into account type and value.
+        
+        @param: other Token
+                
+        @return: True if they are equal.
+        """
+        if other == None: 
+            return False
+
+        return self.operation_token == other.operation_token and self.node == other.node
+
 
 #@dataclass
 #class AddNode:

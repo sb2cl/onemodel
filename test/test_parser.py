@@ -32,8 +32,9 @@ class TestParser(unittest.TestCase):
                 ]
         res = Parser(tokens).parse()
         self.assertEqual(res.node, 
-                PlusNode(
-                    NumberNode(1)
+                UnaryOperationNode(
+                    Token(TokenType.PLUS),
+                    NumberNode(Token(TokenType.NUMBER,1))
                     )
                 )
 
@@ -44,8 +45,9 @@ class TestParser(unittest.TestCase):
                 ]
         res = Parser(tokens).parse()
         self.assertEqual(res.node, 
-                MinusNode(
-                    NumberNode(1)
+                UnaryOperationNode(
+                    Token(TokenType.MINUS),
+                    NumberNode(Token(TokenType.NUMBER,1))
                     )
                 )
 
@@ -57,9 +59,10 @@ class TestParser(unittest.TestCase):
                 ]
         res = Parser(tokens).parse()
         self.assertEqual(res.node, 
-                AddNode(
-                    NumberNode(1),
-                    NumberNode(2)
+                BinaryOperationNode(
+                    NumberNode(Token(TokenType.NUMBER,1)),
+                    Token(TokenType.PLUS),
+                    NumberNode(Token(TokenType.NUMBER,2)),
                     )
                 )
 
@@ -71,9 +74,10 @@ class TestParser(unittest.TestCase):
                 ]
         res = Parser(tokens).parse()
         self.assertEqual(res.node, 
-                SubtractNode(
-                    NumberNode(1),
-                    NumberNode(2)
+                BinaryOperationNode(
+                    NumberNode(Token(TokenType.NUMBER,1)),
+                    Token(TokenType.MINUS),
+                    NumberNode(Token(TokenType.NUMBER,2)),
                     )
                 )
 
@@ -85,9 +89,10 @@ class TestParser(unittest.TestCase):
                 ]
         res = Parser(tokens).parse()
         self.assertEqual(res.node, 
-                MultiplyNode(
-                    NumberNode(1),
-                    NumberNode(2)
+                BinaryOperationNode(
+                    NumberNode(Token(TokenType.NUMBER,1)),
+                    Token(TokenType.MULTIPLICATION),
+                    NumberNode(Token(TokenType.NUMBER,2)),
                     )
                 )
 
@@ -100,9 +105,10 @@ class TestParser(unittest.TestCase):
                 ]
         res = Parser(tokens).parse()
         self.assertEqual(res.node, 
-                DivideNode(
-                    NumberNode(1),
-                    NumberNode(2)
+                BinaryOperationNode(
+                    NumberNode(Token(TokenType.NUMBER,1)),
+                    Token(TokenType.DIVISION),
+                    NumberNode(Token(TokenType.NUMBER,2)),
                     )
                 )
 
@@ -123,18 +129,30 @@ class TestParser(unittest.TestCase):
                 Token(TokenType.END_OF_FILE),
                 ]
         res = Parser(tokens).parse()
-        self.assertEqual(res.node, 
-                AddNode(
-                    NumberNode(27),
-                    MultiplyNode(
-                        SubtractNode(
-                            DivideNode(
-                                NumberNode(43),
-                                NumberNode(36),
-                                ),
-                            NumberNode(48)
-                            ),
-                        NumberNode(51)
-                        )
+
+        result = BinaryOperationNode(
+                    NumberNode(Token(TokenType.NUMBER,43)),
+                    Token(TokenType.DIVISION),
+                    NumberNode(Token(TokenType.NUMBER,36))
                     )
-                )
+
+        # 27 + (43 / 36 - 48) * 51
+        result = BinaryOperationNode(
+                    result,
+                    Token(TokenType.MINUS),
+                    NumberNode(Token(TokenType.NUMBER,48))
+                    )
+
+        result = BinaryOperationNode(
+                    result,
+                    Token(TokenType.MULTIPLICATION),
+                    NumberNode(Token(TokenType.NUMBER,51))
+                    )
+
+        result = BinaryOperationNode(
+                    NumberNode(Token(TokenType.NUMBER,27)),
+                    Token(TokenType.PLUS),
+                    result,
+                    )
+
+        self.assertEqual(res.node, result)
