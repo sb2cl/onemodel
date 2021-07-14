@@ -22,7 +22,7 @@ class TestParser(unittest.TestCase):
                 ]
         res = Parser(tokens).parse()
         self.assertEqual(res.node, 
-                NumberNode(1)
+                NumberNode(Token(TokenType.NUMBER,1))
                 )    
 
         tokens = [

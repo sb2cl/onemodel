@@ -27,6 +27,19 @@ class NumberNode:
         """
         return f"{self.token.value}"
 
+    def __eq__(self,other):
+        """ __EQ__
+        @brief: Override equality operator to only take into account type and value.
+        
+        @param: other Token
+                
+        @return: True if the have equal type and value
+        """
+        if other == None: 
+            return False
+
+        return self.token == other.token
+
 class BinaryOperationNode:
     """ BINARYOPERATIONNODE
 
@@ -51,6 +64,29 @@ class BinaryOperationNode:
 
         def __repr__(self):
             return f'({self.left_node}, {self.operation_token}, {self.right_node})'
+
+class UnaryOperationNode:
+    """ UNARYOPERATIONNODE
+
+    Definition of a generic unary operation node.
+    """
+    def __init__(self,operation_token,node):
+        """ __INIT__
+        @brief: Constructor of UnaryOperationNode.
+        
+        @param: operation_token 
+              : node
+                
+        @return: UnaryOperationNode
+        """
+        self.operation_token = operation_token
+        self.node = node
+
+        self.pos_start = self.operation_token.pos_start
+        self.pos_end = node.pos_end
+
+    def __repr__(self):
+        return f'({self.operation_token}, {self.node})'
 
 #@dataclass
 #class AddNode:

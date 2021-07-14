@@ -236,6 +236,22 @@ class Interpreter:
         else:
             return res.success(result.set_pos(node.pos_start, node.pos_end))
 
+    def visit_UnaryOperationNode(self, node, context):
+        res = RunTimeResult()
+        number = res.register(self.visit(node.node, context))
+        if res.should_return(): return res
+
+        error = None
+
+        if node.operation_token.type == TokenType.MINUS:
+            number, error = number.multed_by(Number(-1))
+        elif node.operation_token.matches(TokenType.KEYWORD, 'NOT'):
+            number, error = number.notted()
+
+        if error:
+            return res.failure(error)
+        else:
+            return res.success(number.set_pos(node.pos_start, node.pos_end))
 
 global_symbol_table = SymbolTable()
 

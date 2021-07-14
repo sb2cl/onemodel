@@ -201,19 +201,12 @@ class Parser:
             if res.error: return res
             return res.success(expr)
 
-        elif tok.type == TokenType.PLUS:
+        elif tok.type in (TokenType.PLUS, TokenType.MINUS):
             res.register_advancement()
             self.advance()
             factor = res.register(self.factor())
             if res.error: return res
-            return res.success(PlusNode(factor))
-
-        elif tok.type == TokenType.MINUS:
-            res.register_advancement()
-            self.advance()
-            factor = res.register(self.factor())
-            if res.error: return res
-            return res.success(MinusNode(factor))
+            return res.success(UnaryOperationNode(tok, factor))
 
         elif tok.type == TokenType.NUMBER:
             res.register_advancement()
