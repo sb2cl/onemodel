@@ -4,28 +4,135 @@ from lexer import Lexer
 from parser_ import Parser
 
 class Context:
-    def __init__(self, display_name, parent=None, parent_entry_pos=None):
+    """ CONTEXT
+
+    This class keep track of the context where the node is executed (symbol table, context name, ect.)
+    """
+
+    def __init__(self,display_name,parent=None,parent_entry_pos=None):
+        """ __INIT__
+        @brief: Constructo of Context.
+        
+        @param: display_name     Name of this context.
+              : parent           Parent context of this context.
+              : parent_entry_pos Position of the parent context.
+                
+        @return: Context
+        """
         self.display_name = display_name
         self.parent = parent
         self.parent_entry_pos = parent_entry_pos
         self.symbol_table = None
 
 class SymbolTable:
-    def __init__(self, parent=None):
+    """ SYMBOLTABLE
+
+    SymbolTable keeps track of the worspace variables and functions.
+    """
+    def __init__(self,parent=None):
+        """ __INIT__
+        @brief: Constructor of SymbolTable.
+        
+        @param: parent  Parent SymbolTable.
+                
+        @return: SymbolTable
+        """
+        # Dictionary where all symbols are saved by name.
         self.symbols = {}
         self.parent = parent
 
-    def get(self, name):
+    def get(self,name):
+        """ GET
+        @brief: Return symbol value by name.
+        
+        @param: name Symbol name.
+                
+        @return: value Symbol value.
+        """
+        # Find the symbol in this SymbolTable.
         value = self.symbols.get(name, None)
+
+        # If the symbol is not found.
         if value == None and self.parent:
+
+            # Look for it in parent SymbolTable (this is recursive).
             return self.parent.get(name)
+
         return value
 
-    def set(self, name, value):
+    def set(self,name,value):
+        """ SET
+        @brief: Set the value of a symbol in current SymbolTable.
+        
+        @param: name  Symbol name.
+              : value Symbol value.
+                
+        @return: None
+        """
         self.symbols[name] = value
 
-    def remove(self, name):
+    def remove(self,name):
+        """ REMOVE
+        @brief: Remove symbol from current SymbolTable.
+        
+        @param: name Symbol name.
+                
+        @return: None
+        """
         del self.symbols[name]
+
+class RTResult:
+  def __init__(self):
+    self.reset()
+
+  def reset(self):
+    self.value = None
+    self.error = None
+    self.func_return_value = None
+    self.loop_should_continue = False
+    self.loop_should_break = False
+
+  def register(self, res):
+    self.error = res.error
+    self.func_return_value = res.func_return_value
+    self.loop_should_continue = res.loop_should_continue
+    self.loop_should_break = res.loop_should_break
+    return res.value
+
+  def success(self, value):
+    self.reset()
+    self.value = value
+    return self
+
+  def success_return(self, value):
+    self.reset()
+    self.func_return_value = value
+    return self
+
+  def success_continue(self):
+    self.reset()
+    self.loop_should_continue = True
+    return self
+
+  def success_break(self):
+    self.reset()
+    self.loop_should_break = True
+    return self
+
+  def failure(self, error):
+    self.reset()
+    self.error = error
+    return self
+
+  def should_return(self):
+    # Note: this will allow you to continue and break outside the current function
+    return (
+      self.error or
+      self.func_return_value or
+      self.loop_should_continue or
+      self.loop_should_break
+    )
+
 
 class Interpreter:
     """ INTERPRETER
