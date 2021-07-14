@@ -1,3 +1,5 @@
+from errors import RunTimeError
+
 class Value:
     def __init__(self):
         self.set_pos()
@@ -65,16 +67,40 @@ class Value:
 
     def illegal_operation(self, other=None):
         if not other: other = self
-        return RTError(
+        return RunTimeError(
                 self.pos_start, other.pos_end,
                 'Illegal operation',
                 self.context
                 )
+
 class Number(Value):
 
     def __init__(self, value):
         super().__init__()
-        self.value = value
+        self.value = float(value)
+
+    def added_to(self, other):
+        if isinstance(other, Number):
+            return Number(self.value + other.value).set_context(self.context), None
+
+    def subbed_by(self, other):
+        if isinstance(other, Number):
+            return Number(self.value - other.value).set_context(self.context), None
+
+    def multed_by(self, other):
+        if isinstance(other, Number):
+            return Number(self.value * other.value).set_context(self.context), None
+
+    def dived_by(self, other):
+        if isinstance(other, Number):
+            if other.value == 0:
+                return None, RunTimeError(
+                    other.pos_start, other.pos_end,
+                    'Division by zero',
+                    self.context
+                    )
+
+            return Number(self.value / other.value).set_context(self.context), None
 
     def __repr__(self):
         return f"{self.value}"

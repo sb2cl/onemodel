@@ -157,6 +157,7 @@ class Parser:
         result = res.register(self.term())
 
         while self.current_token != None and self.current_token.type in (TokenType.PLUS, TokenType.MINUS):
+            operation_token = self.current_token
 
             if self.current_token.type == TokenType.PLUS:
                 res.register_advancement()
@@ -165,7 +166,7 @@ class Parser:
                 term = res.register(self.term())
                 if res.error: return res
 
-                result = AddNode(result, term)
+                result = BinaryOperationNode(result, operation_token, term)
         
             elif self.current_token.type == TokenType.MINUS:
                 res.register_advancement()
@@ -174,7 +175,7 @@ class Parser:
                 term = res.register(self.term())
                 if res.error: return res
 
-                result = SubtractNode(result, term)
+                result = BinaryOperationNode(result, operation_token, term)
 
         return res.success(result)
 
@@ -188,6 +189,7 @@ class Parser:
         result = res.register(self.factor())
 
         while self.current_token != None and self.current_token.type in (TokenType.MULTIPLICATION, TokenType.DIVISION):
+            operation_token = self.current_token
 
             if self.current_token.type == TokenType.MULTIPLICATION:
                 res.register_advancement()
@@ -196,7 +198,7 @@ class Parser:
                 factor = res.register(self.factor())
                 if res.error: return res
 
-                result = MultiplyNode(result, factor)
+                result = BinaryOperationNode(result, operation_token, factor)
 
             elif self.current_token.type == TokenType.DIVISION:
                 res.register_advancement()
@@ -205,7 +207,7 @@ class Parser:
                 factor = res.register(self.factor())
                 if res.error: return res
 
-                result = DivideNode(result, factor)
+                result = BinaryOperationNode(result, operation_token, factor)
 
         return res.success(result)
 

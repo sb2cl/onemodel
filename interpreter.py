@@ -1,4 +1,5 @@
 from nodes import *
+from tokens import TokenType
 from values import Number
 from lexer import Lexer
 from parser_ import Parser
@@ -189,56 +190,51 @@ class Interpreter:
             Number(node.token.value).set_context(context).set_pos(node.pos_start, node.pos_end)
         )
 
-    def visit_AddNode(self,node,context):
-        """ VISIT_ADDNODE
-        @brief: Vist an add node.
-        
-        @param: node    Node to visit.
-              : context Context for executing the node.
-                
-        @return: value  Execution result.
-        """
-        print(self.visit(node.node_a,context).value)
-        print(self.visit(node.node_b,context).value)
-        return RunTimeResult().success(
-            Number(self.visit(node.node_a,context).value + self.visit(node.node_b,context).value)
-        )
 
-    def visit_SubtractNode(self,node,context):
-        """ VISIT_SUBTRACTNODE
-        @brief: Vist a subtract node.
-        
-        @param: node    Node to visit.
-              : context Context for executing the node.
-                
-        @return: value  Execution result.
-        """
-        return Number(self.visit(node.node_a,context).value - self.visit(node.node_b,context).value)
+    def visit_BinaryOperationNode(self, node, context):
+        res = RunTimeResult()
 
-    def visit_MultiplyNode(self,node,context):
-        """ VISIT_MULTIPLYNODE
-        @brief: Vist a multiply node.
-        
-        @param: node    Node to visit.
-              : context Context for executing the node.
-                
-        @return: value  Execution result.
-        """
-        return Number(self.visit(node.node_a,context).value * self.visit(node.node_b,context).value)
+        left = res.register(self.visit(node.left_node, context))
+        if res.should_return(): return res
 
-    def visit_DivideNode(self,node,context):
-        """ VISIT_DIVIDENODE
-        @brief: Vist a divide node.
-        
-        @param: node    Node to visit.
-              : context Context for executing the node.
-                
-        @return: value  Execution result.
-        """
-        try:
-            return Number(self.visit(node.node_a,context).value / self.visit(node.node_b,context).value)
-        except:
-            raise Exception("Runtime math error")
+        right = res.register(self.visit(node.right_node, context))
+        if res.should_return(): return res
+
+        if node.operation_token.type == TokenType.PLUS:
+            result, error = left.added_to(right)
+
+        elif node.operation_token.type == TokenType.MINUS:
+            result, error = left.subbed_by(right)
+
+        elif node.operation_token.type == TokenType.MULTIPLICATION:
+            result, error = left.multed_by(right)
+
+        elif node.operation_token.type == TokenType.DIVISION:
+            result, error = left.dived_by(right)
+
+        #elif node.op_tok.type == TT_POW:
+        #    result, error = left.powed_by(right)
+        #elif node.op_tok.type == TT_EE:
+        #    result, error = left.get_comparison_eq(right)
+        #elif node.op_tok.type == TT_NE:
+        #    result, error = left.get_comparison_ne(right)
+        #elif node.op_tok.type == TT_LT:
+        #    result, error = left.get_comparison_lt(right)
+        #elif node.op_tok.type == TT_GT:
+        #    result, error = left.get_comparison_gt(right)
+        #elif node.op_tok.type == TT_LTE:
+        #    result, error = left.get_comparison_lte(right)
+        #elif node.op_tok.type == TT_GTE:
+        #    result, error = left.get_comparison_gte(right)
+        #elif node.op_tok.matches(TT_KEYWORD, 'AND'):
+        #    result, error = left.anded_by(right)
+        #elif node.op_tok.matches(TT_KEYWORD, 'OR'):
+        #    result, error = left.ored_by(right)
+
+        if error:
+            return res.failure(error)
+        else:
+            return res.success(result.set_pos(node.pos_start, node.pos_end))
 
 
 global_symbol_table = SymbolTable()

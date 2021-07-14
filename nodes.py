@@ -32,7 +32,7 @@ class BinaryOperationNode:
 
     Definition of a generic binary operation node.
     """
-    def __init__(self,node_a,operation_token,node_b):
+    def __init__(self,left_node,operation_token,right_node):
         """ __INIT__
         @brief: Constructor of BinaryOperationNode.
         
@@ -43,14 +43,14 @@ class BinaryOperationNode:
         @return: BinaryOperationNode
         """
         self.left_node = left_node
-        self.op_tok = op_tok
+        self.operation_token = operation_token
         self.right_node = right_node
 
         self.pos_start = self.left_node.pos_start
         self.pos_end = self.right_node.pos_end
 
         def __repr__(self):
-            return f'({self.node_a}, {self.operation_token}, {self.node_b})'
+            return f'({self.left_node}, {self.operation_token}, {self.right_node})'
 
 #@dataclass
 #class AddNode:
