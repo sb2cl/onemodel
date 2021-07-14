@@ -1,8 +1,12 @@
 from dataclasses import dataclass
+from position import Position
 
 @dataclass
 class NumberNode:
     value: float
+
+    pos_start: Position
+    pos_end: Position
 
     def __repr__(self):
         return f"{self.value}"

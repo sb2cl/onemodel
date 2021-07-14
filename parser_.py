@@ -253,7 +253,7 @@ class Parser:
             res.register_advancement()
             self.advance()
 
-            return res.success(NumberNode(float(tok.value)))
+            return res.success(NumberNode(float(tok.value),tok.pos_start, tok.pos_end))
 
         return res.failure(InvalidSyntaxError(
             tok.pos_start, tok.pos_end,

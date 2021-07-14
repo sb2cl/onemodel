@@ -80,59 +80,61 @@ class SymbolTable:
         @return: None
         """
         del self.symbols[name]
+class RunTimeResult:
+    """ RUNTIMERESULT
 
-class RTResult:
-  def __init__(self):
-    self.reset()
+    RunTimeResult handles the results and errors of the interpreting process.
+    """
+    def __init__(self):
+        self.reset()
 
-  def reset(self):
-    self.value = None
-    self.error = None
-    self.func_return_value = None
-    self.loop_should_continue = False
-    self.loop_should_break = False
+    def reset(self):
+        self.value = None
+        self.error = None
+        self.func_return_value = None
+        self.loop_should_continue = False
+        self.loop_should_break = False
 
-  def register(self, res):
-    self.error = res.error
-    self.func_return_value = res.func_return_value
-    self.loop_should_continue = res.loop_should_continue
-    self.loop_should_break = res.loop_should_break
-    return res.value
+    def register(self, res):
+        self.error = res.error
+        self.func_return_value = res.func_return_value
+        self.loop_should_continue = res.loop_should_continue
+        self.loop_should_break = res.loop_should_break
+        return res.value
 
-  def success(self, value):
-    self.reset()
-    self.value = value
-    return self
+    def success(self, value):
+        self.reset()
+        self.value = value
+        return self
 
-  def success_return(self, value):
-    self.reset()
-    self.func_return_value = value
-    return self
+    def success_return(self, value):
+        self.reset()
+        self.func_return_value = value
+        return self
 
-  def success_continue(self):
-    self.reset()
-    self.loop_should_continue = True
-    return self
+    def success_continue(self):
+        self.reset()
+        self.loop_should_continue = True
+        return self
 
-  def success_break(self):
-    self.reset()
-    self.loop_should_break = True
-    return self
+    def success_break(self):
+        self.reset()
+        self.loop_should_break = True
+        return self
 
-  def failure(self, error):
-    self.reset()
-    self.error = error
-    return self
+    def failure(self, error):
+        self.reset()
+        self.error = error
+        return self
 
-  def should_return(self):
-    # Note: this will allow you to continue and break outside the current function
-    return (
-      self.error or
-      self.func_return_value or
-      self.loop_should_continue or
-      self.loop_should_break
-    )
-
+    def should_return(self):
+        # Note: this will allow you to continue and break outside the current function
+        return (
+            self.error or
+            self.func_return_value or
+            self.loop_should_continue or
+            self.loop_should_break
+            )
 
 class Interpreter:
     """ INTERPRETER
@@ -182,7 +184,10 @@ class Interpreter:
                 
         @return: value  Execution result.
         """
-        return Number(node.value)
+
+        return RunTimeResult().success(
+            Number(node.value).set_context(context).set_pos(node.pos_start, node.pos_end)
+        )
 
     def visit_AddNode(self,node,context):
         """ VISIT_ADDNODE
@@ -251,5 +256,4 @@ def run(fn, text):
     context.symbol_table = global_symbol_table
     result = interpreter.visit(ast.node, context)
 
-    # TODO: return the error of the interpreter.
-    return result, None
+    return result.value, result.error
