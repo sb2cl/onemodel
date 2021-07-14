@@ -186,7 +186,7 @@ class Interpreter:
         """
 
         return RunTimeResult().success(
-            Number(node.value).set_context(context).set_pos(node.pos_start, node.pos_end)
+            Number(node.token.value).set_context(context).set_pos(node.pos_start, node.pos_end)
         )
 
     def visit_AddNode(self,node,context):
@@ -198,7 +198,11 @@ class Interpreter:
                 
         @return: value  Execution result.
         """
-        return Number(self.visit(node.node_a,context).value + self.visit(node.node_b,context).value)
+        print(self.visit(node.node_a,context).value)
+        print(self.visit(node.node_b,context).value)
+        return RunTimeResult().success(
+            Number(self.visit(node.node_a,context).value + self.visit(node.node_b,context).value)
+        )
 
     def visit_SubtractNode(self,node,context):
         """ VISIT_SUBTRACTNODE
