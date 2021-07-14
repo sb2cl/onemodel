@@ -153,31 +153,13 @@ class Parser:
         
         @return: ParseResult
         """
-        res = ParseResult()
-        result = res.register(self.term())
-
-        while self.current_token != None and self.current_token.type in (TokenType.PLUS, TokenType.MINUS):
-            operation_token = self.current_token
-
-            if self.current_token.type == TokenType.PLUS:
-                res.register_advancement()
-                self.advance()
-                
-                term = res.register(self.term())
-                if res.error: return res
-
-                result = BinaryOperationNode(result, operation_token, term)
-        
-            elif self.current_token.type == TokenType.MINUS:
-                res.register_advancement()
-                self.advance()
-                
-                term = res.register(self.term())
-                if res.error: return res
-
-                result = BinaryOperationNode(result, operation_token, term)
-
-        return res.success(result)
+        return self.binary_operation(
+                self.term, 
+                (
+                    TokenType.PLUS, 
+                    TokenType.MINUS
+                )
+            )
 
     def term(self):
         """ TERM
@@ -185,31 +167,13 @@ class Parser:
         
         @return: ParseResult
         """
-        res = ParseResult()
-        result = res.register(self.factor())
-
-        while self.current_token != None and self.current_token.type in (TokenType.MULTIPLICATION, TokenType.DIVISION):
-            operation_token = self.current_token
-
-            if self.current_token.type == TokenType.MULTIPLICATION:
-                res.register_advancement()
-                self.advance()
-
-                factor = res.register(self.factor())
-                if res.error: return res
-
-                result = BinaryOperationNode(result, operation_token, factor)
-
-            elif self.current_token.type == TokenType.DIVISION:
-                res.register_advancement()
-                self.advance()
-
-                factor = res.register(self.factor())
-                if res.error: return res
-
-                result = BinaryOperationNode(result, operation_token, factor)
-
-        return res.success(result)
+        return self.binary_operation(
+                self.factor, 
+                (
+                    TokenType.MULTIPLICATION, 
+                    TokenType.DIVISION
+                )
+            )
 
     def factor(self):
         """ FACTOR
@@ -261,3 +225,35 @@ class Parser:
             tok.pos_start, tok.pos_end,
             "Expected number"
         ))
+
+    def binary_operation(self, func_a, ops, func_b = None):
+        """ BINARY_OPERATION
+        @brief: Generic operation with two elements.
+        
+        @param: func_a First parser function to look for the first element.
+              : ops    Operaton token.
+              : func_b Second parser function to look for the second element.
+                
+        @return: ParseResult
+        """
+        # If func_b is not passed.
+        if func_b == None:
+            # Use func_a as func_b.
+            func_b = func_a
+
+        res = ParseResult()
+        left = res.register(func_a())
+        if res.error: return res
+
+        while self.current_token.type in ops or (self.current_token.type, self.current_token.value) in ops:
+            operation_token = self.current_token
+
+            res.register_advancement()
+            self.advance()
+
+            right = res.register(func_b())
+
+            if res.error: return res
+            left = BinaryOperationNode(left, operation_token, right)
+
+        return res.success(left)
