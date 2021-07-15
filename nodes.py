@@ -152,49 +152,10 @@ class UnaryOperationNode:
 
         return self.operation_token == other.operation_token and self.node == other.node
 
+class IfNode:
+    def __init__(self, cases, else_case):
+        self.cases = cases
+        self.else_case = else_case
 
-#@dataclass
-#class AddNode:
-#    node_a: any
-#    node_b: any
-#
-#    def __repr__(self):
-#        return f"({self.node_a}+{self.node_b})"
-#
-#@dataclass
-#class SubtractNode:
-#    node_a: any
-#    node_b: any
-#
-#    def __repr__(self):
-#        return f"({self.node_a}-{self.node_b})"
-#
-#@dataclass
-#class MultiplyNode:
-#    node_a: any
-#    node_b: any
-#
-#    def __repr__(self):
-#        return f"({self.node_a}*{self.node_b})"
-#
-#@dataclass
-#class DivideNode:
-#    node_a: any
-#    node_b: any
-#
-#    def __repr__(self):
-#        return f"({self.node_a}/{self.node_b})"
-#
-#@dataclass
-#class PlusNode:
-#    node: any
-#
-#    def __repr__(self):
-#        return f"(+{self.node})"
-#    
-#@dataclass
-#class MinusNode:
-#    node: any
-#
-#    def __repr__(self):
-#        return f"(-{self.node})"
+        self.pos_start = self.cases[0][0].pos_start
+        self.pos_end = (self.else_case or self.cases[len(self.cases) - 1][0]).pos_end

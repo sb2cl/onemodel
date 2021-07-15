@@ -346,10 +346,79 @@ class Parser:
             if res.error: return res
             return res.success(expr)
 
+        elif tok.matches(TokenType.KEYWORD, "IF"):
+            if_expr = res.register(self.if_expr())
+            if res.error: return res
+            return res.success(if_expr)
+
         return res.failure(InvalidSyntaxError(
             tok.pos_start, tok.pos_end,
             "Expected int, float, identifier, '+', '-', '(', '[', IF', 'FOR', 'WHILE', 'FUN'"
         ))
+
+    def if_expr(self):
+        """ IF_EXPR
+        @brief: Find a if expression.
+        
+        @return: ParseResult
+        """
+        res = ParseResult()
+        cases = []
+        else_case = None
+
+        if not self.current_token.matches(TokenType.KEYWORD, 'IF'):
+                return res.failure(InvalidSyntaxError(
+                    self.current_token.pos_start, self.current_tok.pos_end,
+                    f"Expected 'IF'"
+                    ))
+
+        res.register_advancement()
+        self.advance()
+
+        condition = res.register(self.expr())
+        if res.error: return res
+
+        if not self.current_token.matches(TokenType.KEYWORD, 'THEN'):
+            return res.failure(InvalidSyntaxError(
+                self.current_tok.pos_start, self.current_tok.pos_end,
+                f"Expected 'THEN'"
+                ))
+
+        res.register_advancement()
+        self.advance()
+
+        expr = res.register(self.expr())
+        if res.error: return res
+        cases.append((condition, expr))
+
+        while self.current_token.matches(TokenType.KEYWORD, 'ELIF'):
+            res.register_advancement()
+            self.advance()
+
+            condition = res.register(self.expr())
+            if res.error: return res
+
+            if not self.current_token.matches(TokenType.KEYWORD, 'THEN'):
+                return res.failure(InvalidSyntaxError(
+                    self.current_tok.pos_start, self.current_tok.pos_end,
+                    f"Expected 'THEN'"
+                    ))
+
+            res.register_advancement()
+            self.advance()
+
+            expr = res.register(self.expr())
+            if res.error: return res
+            cases.append((condition, expr))
+
+        if self.current_token.matches(TokenType.KEYWORD, 'ELSE'):
+            res.register_advancement()
+            self.advance()
+
+            else_case = res.register(self.expr())
+            if res.error: return res
+
+        return res.success(IfNode(cases, else_case))
 
     def binary_operation(self, func_a, ops, func_b = None):
         """ BINARY_OPERATION
