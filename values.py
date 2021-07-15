@@ -106,5 +106,29 @@ class Number(Value):
         if isinstance(other, Number):
             return Number(self.value ** other.value).set_context(self.context), None
 
+    def get_comparison_eq(self, other):
+        if isinstance(other, Number):
+            return Number(self.value == other.value).set_context(self.context), None
+
+    def get_comparison_ne(self, other):
+        if isinstance(other, Number):
+            return Number(self.value != other.value).set_context(self.context), None
+
+    def get_comparison_lt(self, other):
+        if isinstance(other, Number):
+            return Number(self.value < other.value).set_context(self.context), None
+
+    def get_comparison_gt(self, other):
+        if isinstance(other, Number):
+            return Number(self.value > other.value).set_context(self.context), None
+
+    def get_comparison_lte(self, other):
+        if isinstance(other, Number):
+            return Number(self.value <= other.value).set_context(self.context), None
+
+    def get_comparison_gte(self, other):
+        if isinstance(other, Number):
+            return Number(self.value >= other.value).set_context(self.context), None
+
     def __repr__(self):
         return f"{self.value}"

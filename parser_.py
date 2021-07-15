@@ -177,8 +177,37 @@ class Parser:
         
         @return: ParseResult
         """
-        return self.arith_expr()
-                
+        res = ParseResult()
+
+        if self.current_token.matches(TokenType.KEYWORD, 'NOT'):
+            op_tok = self.current_token
+            res.register_advancement()
+            self.advance()
+
+            node = res.register(self.comp_expr())
+            if res.error: return res
+            return res.success(UnaryOperationNode(op_tok, node))
+
+        node = res.register(self.binary_operation(
+            self.arith_expr,
+            (
+                TokenType.IS_EQUAL,
+                TokenType.NOT_EQUAL,
+                TokenType.LESS_THAN,
+                TokenType.GREATER_THAN,
+                TokenType.LESS_EQUAL_THAN,
+                TokenType.GREATER_EQUAL_THAN
+                )
+            ))
+
+        if res.error:
+            return res.failure(InvalidSyntaxError(
+                self.current_token.pos_start, self.current_token.pos_end,
+                "Expected int, float, identifier, '+', '-', '(', '[', 'IF', 'FOR', 'WHILE', 'FUN' or 'NOT'"
+                ))
+
+        return res.success(node)
+
     def arith_expr(self):
         """ ARITH_EXPR
         @brief: Find arithmetic expression.

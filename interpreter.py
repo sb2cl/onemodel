@@ -215,20 +215,24 @@ class Interpreter:
         elif node.operation_token.type == TokenType.POWER:
             result, error = left.powed_by(right)
 
-        #elif node.op_tok.type == TT_POW:
-        #    result, error = left.powed_by(right)
-        #elif node.op_tok.type == TT_EE:
-        #    result, error = left.get_comparison_eq(right)
-        #elif node.op_tok.type == TT_NE:
-        #    result, error = left.get_comparison_ne(right)
-        #elif node.op_tok.type == TT_LT:
-        #    result, error = left.get_comparison_lt(right)
-        #elif node.op_tok.type == TT_GT:
-        #    result, error = left.get_comparison_gt(right)
-        #elif node.op_tok.type == TT_LTE:
-        #    result, error = left.get_comparison_lte(right)
-        #elif node.op_tok.type == TT_GTE:
-        #    result, error = left.get_comparison_gte(right)
+        elif node.operation_token.type == TokenType.IS_EQUAL:
+            result, error = left.get_comparison_eq(right)
+
+        elif node.operation_token.type == TokenType.NOT_EQUAL:
+            result, error = left.get_comparison_ne(right)
+
+        elif node.operation_token.type == TokenType.LESS_THAN:
+            result, error = left.get_comparison_lt(right)
+
+        elif node.operation_token.type == TokenType.GREATER_THAN:
+            result, error = left.get_comparison_gt(right)
+
+        elif node.operation_token.type == TokenType.LESS_EQUAL_THAN:
+            result, error = left.get_comparison_lte(right)
+
+        elif node.operation_token.type == TokenType.GREATER_EQUAL_THAN:
+            result, error = left.get_comparison_gte(right)
+
         #elif node.op_tok.matches(TT_KEYWORD, 'AND'):
         #    result, error = left.anded_by(right)
         #elif node.op_tok.matches(TT_KEYWORD, 'OR'):

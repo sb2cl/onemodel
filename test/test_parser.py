@@ -112,10 +112,27 @@ class TestParser(unittest.TestCase):
                     )
                 )
 
+        tokens = [
+                Token(TokenType.NUMBER,1),
+                Token(TokenType.POWER),
+                Token(TokenType.NUMBER,2),
+                Token(TokenType.END_OF_FILE)
+                ]
+        res = Parser(tokens).parse()
+        self.assertEqual(res.node, 
+                BinaryOperationNode(
+                    NumberNode(Token(TokenType.NUMBER,1)),
+                    Token(TokenType.POWER),
+                    NumberNode(Token(TokenType.NUMBER,2)),
+                    )
+                )
+
     def test_full_expr(self):
-        # 27 + (43 / 36 - 48) * 51
+        # 27^2 + (43 / 36 - 48) * 51
         tokens = [
                 Token(TokenType.NUMBER, 27),
+                Token(TokenType.POWER),
+                Token(TokenType.NUMBER, 2),
                 Token(TokenType.PLUS),
                 Token(TokenType.LEFT_PAREN),
                 Token(TokenType.NUMBER, 43),
@@ -149,7 +166,11 @@ class TestParser(unittest.TestCase):
                     )
 
         result = BinaryOperationNode(
-                    NumberNode(Token(TokenType.NUMBER,27)),
+                    BinaryOperationNode(
+                        NumberNode(Token(TokenType.NUMBER,27)),
+                        Token(TokenType.POWER),
+                        NumberNode(Token(TokenType.NUMBER,2)),
+                        ),
                     Token(TokenType.PLUS),
                     result,
                     )
