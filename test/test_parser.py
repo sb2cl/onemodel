@@ -223,6 +223,38 @@ class TestParser(unittest.TestCase):
                     )
                 )
 
+        # 1 AND 1
+        tokens = [
+                Token(TokenType.NUMBER,1),
+                Token(TokenType.KEYWORD, "AND"),
+                Token(TokenType.NUMBER,1),
+                Token(TokenType.END_OF_FILE)
+                ]
+        res = Parser(tokens).parse()
+        self.assertEqual(res.node, 
+                BinaryOperationNode(
+                    NumberNode(Token(TokenType.NUMBER,1)),
+                    Token(TokenType.KEYWORD, "AND"),
+                    NumberNode(Token(TokenType.NUMBER,1)),
+                    )
+                )
+
+        # 1 OR 1
+        tokens = [
+                Token(TokenType.NUMBER,1),
+                Token(TokenType.KEYWORD, "OR"),
+                Token(TokenType.NUMBER,1),
+                Token(TokenType.END_OF_FILE)
+                ]
+        res = Parser(tokens).parse()
+        self.assertEqual(res.node, 
+                BinaryOperationNode(
+                    NumberNode(Token(TokenType.NUMBER,1)),
+                    Token(TokenType.KEYWORD, "OR"),
+                    NumberNode(Token(TokenType.NUMBER,1)),
+                    )
+                )
+
     def test_full_expr(self):
         # 27^2 + (43 / 36 - 48) * 51
         tokens = [
