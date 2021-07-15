@@ -1,4 +1,5 @@
 from nodes import *
+from errors import RunTimeError
 from tokens import TokenType
 from values import Number
 from lexer import Lexer
@@ -301,6 +302,10 @@ class Interpreter:
             return res.success(number.set_pos(node.pos_start, node.pos_end))
 
 global_symbol_table = SymbolTable()
+global_symbol_table.set("NULL", Number.null)
+global_symbol_table.set("FALSE", Number.false)
+global_symbol_table.set("TRUE", Number.true)
+global_symbol_table.set("MATH_PI", Number.math_PI)
 
 def run(fn, text):
     # Generate tokens

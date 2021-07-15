@@ -1,4 +1,5 @@
 from errors import RunTimeError
+import math
 
 class Value:
     def __init__(self):
@@ -149,3 +150,8 @@ class Number(Value):
 
     def __repr__(self):
         return f"{self.value}"
+
+Number.null    = Number(0)
+Number.false   = Number(0)
+Number.true    = Number(1)
+Number.math_PI = Number(math.pi)
