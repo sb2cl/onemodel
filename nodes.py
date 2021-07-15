@@ -40,6 +40,44 @@ class NumberNode:
 
         return self.token == other.token
 
+class VarAccessNode:
+    """ VARACCESSNODE
+
+    Access the value of a variable.
+    """
+    def __init__(self,var_name_tok):
+        """ __INIT__
+        @brief: Constructor of VarAccessNode
+        
+        @param: var_name_tok Name of the variable to access.
+                
+        @return: VarAccessNode
+        """
+        self.var_name_tok = var_name_tok
+
+        self.pos_start = self.var_name_tok.pos_start
+        self.pos_end = self.var_name_tok.pos_end
+
+class VarAssignNode:
+    """ VARASSIGNNODE
+
+    Assign the value of a variable.
+    """
+    def __init__(self,var_name_tok,value_node):
+        """ __INIT__
+        @brief: Constructor of VarAssignNode.
+        
+        @param: var_name_tok Name of the varible.
+              : value_node   Value to assign.
+                
+        @return: VarAssignNode
+        """
+        self.var_name_tok = var_name_tok
+        self.value_node = value_node
+
+        self.pos_start = self.var_name_tok.pos_start
+        self.pos_end = self.value_node.pos_end
+
 class BinaryOperationNode:
     """ BINARYOPERATIONNODE
 

@@ -6,7 +6,7 @@ statement		# : KEYWORD:RETURN expr?
 						# : KEYWORD:BREAK
 						: expr
 
-expr        # : KEYWORD:VAR IDENTIFIER EQ expr
+expr        : KEYWORD:VAR IDENTIFIER EQ expr
             : comp-expr ((KEYWORD:AND|KEYWORD:OR) comp-expr)*
 
 comp-expr   : NOT comp-expr
@@ -23,7 +23,7 @@ power       : call (POW factor)*
 
 call        : atom (LPAREN (expr (COMMA expr)*)? RPAREN)?
 
-atom        : NUMBER # |STRING|IDENTIFIER
+atom        : NUMBER|IDENTIFIER # |STRING
             : LPAREN expr RPAREN
             # : list-expr
             # : if-expr

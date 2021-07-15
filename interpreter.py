@@ -190,6 +190,45 @@ class Interpreter:
             Number(node.token.value).set_context(context).set_pos(node.pos_start, node.pos_end)
         )
 
+    def visit_VarAccessNode(self,node,context):
+        """ VISIT_VARACCESSNODE
+        @brief: Visit a VarAccessNode.
+        
+        @param: node    Node to visit.
+              : context Context for executing the node.
+                
+        @return: value  Execution result.
+        """
+        res = RunTimeResult()
+        var_name = node.var_name_tok.value
+        value = context.symbol_table.get(var_name)
+
+        if not value:
+            return res.failure(RunTimeError(
+                node.pos_start, node.pos_end,
+                f"'{var_name}' is not defined",
+                context
+            ))
+
+        value = value.copy().set_pos(node.pos_start, node.pos_end).set_context(context)
+        return res.success(value)
+
+    def visit_VarAssignNode(self,node,context):
+        """ VISIT_VARASSIGNNODE
+        @brief: Visit a VarAssignNode.
+        
+        @param: node    Node to visit.
+              : context Context for executing the node.
+                
+        @return: value  Execution result.
+        """
+        res = RunTimeResult()
+        var_name = node.var_name_tok.value
+        value = res.register(self.visit(node.value_node, context))
+        if res.should_return(): return res
+
+        context.symbol_table.set(var_name, value)
+        return res.success(value)
 
     def visit_BinaryOperationNode(self, node, context):
         res = RunTimeResult()

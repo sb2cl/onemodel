@@ -171,31 +171,31 @@ class Parser:
         """
         res = ParseResult()
 
-        #if self.current_token.matches(TT_KEYWORD, 'VAR'):
-        #    res.register_advancement()
-        #    self.advance()
+        if self.current_token.matches(TokenType.KEYWORD, 'VAR'):
+            res.register_advancement()
+            self.advance()
 
-        #    if self.current_token.type != TT_IDENTIFIER:
-        #        return res.failure(InvalidSyntaxError(
-        #        self.current_token.pos_start, self.current_token.pos_end,
-        #        "Expected identifier"
-        #        ))
+            if self.current_token.type != TokenType.IDENTIFIER:
+                return res.failure(InvalidSyntaxError(
+                self.current_token.pos_start, self.current_token.pos_end,
+                "Expected identifier"
+                ))
 
-        #    var_name = self.current_token
-        #    res.register_advancement()
-        #    self.advance()
+            var_name = self.current_token
+            res.register_advancement()
+            self.advance()
 
-        #    if self.current_token.type != TT_EQ:
-        #        return res.failure(InvalidSyntaxError(
-        #        self.current_token.pos_start, self.current_token.pos_end,
-        #        "Expected '='"
-        #        ))
+            if self.current_token.type != TokenType.EQUAL:
+                return res.failure(InvalidSyntaxError(
+                self.current_token.pos_start, self.current_token.pos_end,
+                "Expected '='"
+                ))
 
-        #    res.register_advancement()
-        #    self.advance()
-        #    expr = res.register(self.expr())
-        #    if res.error: return res
-        #    return res.success(VarAssignNode(var_name, expr))
+            res.register_advancement()
+            self.advance()
+            expr = res.register(self.expr())
+            if res.error: return res
+            return res.success(VarAssignNode(var_name, expr))
 
         node = res.register(self.binary_operation(
             self.comp_expr,
@@ -326,6 +326,11 @@ class Parser:
             res.register_advancement()
             self.advance()
             return res.success(NumberNode(tok))
+
+        elif tok.type == TokenType.IDENTIFIER:
+            res.register_advancement()
+            self.advance()
+            return res.success(VarAccessNode(tok))
 
         elif tok.type == TokenType.LEFT_PAREN:
             res.register_advancement()
