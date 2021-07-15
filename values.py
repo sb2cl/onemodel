@@ -130,6 +130,14 @@ class Number(Value):
         if isinstance(other, Number):
             return Number(self.value >= other.value).set_context(self.context), None
 
+    def anded_by(self, other):
+        if isinstance(other, Number):
+            return Number(self.value and other.value).set_context(self.context), None
+
+    def ored_by(self, other):
+        if isinstance(other, Number):
+            return Number(self.value or other.value).set_context(self.context), None
+
     def notted(self):
         return Number(1 if self.value == 0 else 0).set_context(self.context), None
 

@@ -169,7 +169,46 @@ class Parser:
         
         @return: ParseResult
         """
-        return self.comp_expr()
+        res = ParseResult()
+
+        #if self.current_token.matches(TT_KEYWORD, 'VAR'):
+        #    res.register_advancement()
+        #    self.advance()
+
+        #    if self.current_token.type != TT_IDENTIFIER:
+        #        return res.failure(InvalidSyntaxError(
+        #        self.current_token.pos_start, self.current_token.pos_end,
+        #        "Expected identifier"
+        #        ))
+
+        #    var_name = self.current_token
+        #    res.register_advancement()
+        #    self.advance()
+
+        #    if self.current_token.type != TT_EQ:
+        #        return res.failure(InvalidSyntaxError(
+        #        self.current_token.pos_start, self.current_token.pos_end,
+        #        "Expected '='"
+        #        ))
+
+        #    res.register_advancement()
+        #    self.advance()
+        #    expr = res.register(self.expr())
+        #    if res.error: return res
+        #    return res.success(VarAssignNode(var_name, expr))
+
+        node = res.register(self.binary_operation(
+            self.comp_expr,
+            ((TokenType.KEYWORD, 'AND'), (TokenType.KEYWORD, 'OR'))
+            ))
+
+        if res.error:
+            return res.failure(InvalidSyntaxError(
+                self.current_token.pos_start, self.current_token.pos_end,
+                "Expected 'VAR', 'IF', 'FOR', 'WHILE', 'FUN', int, float, identifier, '+', '-', '(', '[' or 'NOT'"
+            ))
+
+        return res.success(node)
 
     def comp_expr(self):
         """ COMP_EXPR

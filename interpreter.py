@@ -233,10 +233,11 @@ class Interpreter:
         elif node.operation_token.type == TokenType.GREATER_EQUAL_THAN:
             result, error = left.get_comparison_gte(right)
 
-        #elif node.op_tok.matches(TT_KEYWORD, 'AND'):
-        #    result, error = left.anded_by(right)
-        #elif node.op_tok.matches(TT_KEYWORD, 'OR'):
-        #    result, error = left.ored_by(right)
+        elif node.operation_token.matches(TokenType.KEYWORD, 'AND'):
+            result, error = left.anded_by(right)
+
+        elif node.operation_token.matches(TokenType.KEYWORD, 'OR'):
+            result, error = left.ored_by(right)
 
         if error:
             return res.failure(error)
