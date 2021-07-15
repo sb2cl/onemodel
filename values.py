@@ -130,5 +130,8 @@ class Number(Value):
         if isinstance(other, Number):
             return Number(self.value >= other.value).set_context(self.context), None
 
+    def notted(self):
+        return Number(1 if self.value == 0 else 0).set_context(self.context), None
+
     def __repr__(self):
         return f"{self.value}"
