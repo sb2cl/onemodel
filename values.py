@@ -54,7 +54,7 @@ class Value:
         return None, self.illegal_operation(other)
 
     def notted(self):
-        return None, self.illegal_operation(other)
+        return None, self.illegal_operation()
 
     def execute(self, args):
         return RTResult().failure(self.illegal_operation())

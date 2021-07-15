@@ -127,6 +127,102 @@ class TestParser(unittest.TestCase):
                     )
                 )
 
+        # 1 == 1
+        tokens = [
+                Token(TokenType.NUMBER,1),
+                Token(TokenType.IS_EQUAL),
+                Token(TokenType.NUMBER,1),
+                Token(TokenType.END_OF_FILE)
+                ]
+        res = Parser(tokens).parse()
+        self.assertEqual(res.node, 
+                BinaryOperationNode(
+                    NumberNode(Token(TokenType.NUMBER,1)),
+                    Token(TokenType.IS_EQUAL),
+                    NumberNode(Token(TokenType.NUMBER,1)),
+                    )
+                )
+
+        # 1 != 1
+        tokens = [
+                Token(TokenType.NUMBER,1),
+                Token(TokenType.NOT_EQUAL),
+                Token(TokenType.NUMBER,1),
+                Token(TokenType.END_OF_FILE)
+                ]
+        res = Parser(tokens).parse()
+        self.assertEqual(res.node, 
+                BinaryOperationNode(
+                    NumberNode(Token(TokenType.NUMBER,1)),
+                    Token(TokenType.NOT_EQUAL),
+                    NumberNode(Token(TokenType.NUMBER,1)),
+                    )
+                )
+
+        # 1 < 1
+        tokens = [
+                Token(TokenType.NUMBER,1),
+                Token(TokenType.LESS_THAN),
+                Token(TokenType.NUMBER,1),
+                Token(TokenType.END_OF_FILE)
+                ]
+        res = Parser(tokens).parse()
+        self.assertEqual(res.node, 
+                BinaryOperationNode(
+                    NumberNode(Token(TokenType.NUMBER,1)),
+                    Token(TokenType.LESS_THAN),
+                    NumberNode(Token(TokenType.NUMBER,1)),
+                    )
+                )
+
+        # 1 > 1
+        tokens = [
+                Token(TokenType.NUMBER,1),
+                Token(TokenType.GREATER_THAN),
+                Token(TokenType.NUMBER,1),
+                Token(TokenType.END_OF_FILE)
+                ]
+        res = Parser(tokens).parse()
+        self.assertEqual(res.node, 
+                BinaryOperationNode(
+                    NumberNode(Token(TokenType.NUMBER,1)),
+                    Token(TokenType.GREATER_THAN),
+                    NumberNode(Token(TokenType.NUMBER,1)),
+                    )
+                )
+
+        # 1 <= 1
+        tokens = [
+                Token(TokenType.NUMBER,1),
+                Token(TokenType.LESS_EQUAL_THAN),
+                Token(TokenType.NUMBER,1),
+                Token(TokenType.END_OF_FILE)
+                ]
+        res = Parser(tokens).parse()
+        self.assertEqual(res.node, 
+                BinaryOperationNode(
+                    NumberNode(Token(TokenType.NUMBER,1)),
+                    Token(TokenType.LESS_EQUAL_THAN),
+                    NumberNode(Token(TokenType.NUMBER,1)),
+                    )
+                )
+
+        # 1 >= 1
+        tokens = [
+                Token(TokenType.NUMBER,1),
+                Token(TokenType.GREATER_EQUAL_THAN),
+                Token(TokenType.NUMBER,1),
+                Token(TokenType.END_OF_FILE)
+                ]
+        res = Parser(tokens).parse()
+        self.assertEqual(res.node, 
+                BinaryOperationNode(
+                    NumberNode(Token(TokenType.NUMBER,1)),
+                    Token(TokenType.GREATER_EQUAL_THAN),
+                    NumberNode(Token(TokenType.NUMBER,1)),
+                    )
+                )
+
     def test_full_expr(self):
         # 27^2 + (43 / 36 - 48) * 51
         tokens = [
