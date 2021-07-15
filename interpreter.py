@@ -212,6 +212,9 @@ class Interpreter:
         elif node.operation_token.type == TokenType.DIVISION:
             result, error = left.dived_by(right)
 
+        elif node.operation_token.type == TokenType.POWER:
+            result, error = left.powed_by(right)
+
         #elif node.op_tok.type == TT_POW:
         #    result, error = left.powed_by(right)
         #elif node.op_tok.type == TT_EE:

@@ -231,12 +231,11 @@ class Parser:
         
         @return: ParseResult
         """
-        #return self.binary_operation(
-        #        self.call, 
-        #        (TokenType.POWER, ), 
-        #        self.factor
-        #        )
-        return self.call()
+        return self.binary_operation(
+                self.call, 
+                (TokenType.POWER, ), 
+                self.factor
+                )
 
     def call(self):
         """ CALL
