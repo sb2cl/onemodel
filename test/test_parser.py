@@ -136,7 +136,6 @@ class TestParser(unittest.TestCase):
                     NumberNode(Token(TokenType.NUMBER,36))
                     )
 
-        # 27 + (43 / 36 - 48) * 51
         result = BinaryOperationNode(
                     result,
                     Token(TokenType.MINUS),

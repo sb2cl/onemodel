@@ -137,7 +137,7 @@ class Parser:
         
         @return: ParseResult Result of the parser (AST and error)
         """
-        res = self.expr()
+        res = self.statements()
 
         if not res.error and self.current_token.type != TokenType.END_OF_FILE:
             return res.failure(InvalidSyntaxError(
@@ -147,9 +147,41 @@ class Parser:
 
         return res
 
+    def statements(self):
+        """ STATEMENTS
+        @brief: Find statements.
+        
+        @return: ParseResult
+        """
+        return self.statement()
+
+    def statement(self):
+        """ STATEMENT
+        @brief: Find statement.
+        
+        @return: ParseResult
+        """
+        return self.expr()
+        
     def expr(self):
         """ EXPR
         @brief: Find a expr.
+        
+        @return: ParseResult
+        """
+        return self.comp_expr()
+
+    def comp_expr(self):
+        """ COMP_EXPR
+        @brief: Find a comparison expression.
+        
+        @return: ParseResult
+        """
+        return self.arith_expr()
+                
+    def arith_expr(self):
+        """ ARITH_EXPR
+        @brief: Find arithmetic expression.
         
         @return: ParseResult
         """
@@ -182,41 +214,69 @@ class Parser:
         @return: ParseResult
         """
         res = ParseResult()
+        token = self.current_token
+        
+        if token.type in (TokenType.PLUS, TokenType.MINUS):
+            res.register_advancement()
+            self.advance()
+            factor = res.register(self.factor())
+            if res.error: return res
+            return res.success(UnaryOperationNode(token, factor))
+
+        return self.power()
+
+    def power(self):
+        """ POWER
+        @brief: Find a power expression.
+        
+        @return: ParseResult
+        """
+        #return self.binary_operation(
+        #        self.call, 
+        #        (TokenType.POWER, ), 
+        #        self.factor
+        #        )
+        return self.call()
+
+    def call(self):
+        """ CALL
+        @brief: Find a call expression.
+        
+        @return: ParseResult
+        """
+        return self.atom()
+
+    def atom(self):
+        """ ATOM
+        @brief: Find an atom expression.
+        
+        @return: ParseResult
+        """
+        res = ParseResult()
         tok = self.current_token
 
-        if tok.type == TokenType.LEFT_PAREN:
+        if tok.type == TokenType.NUMBER:
+            res.register_advancement()
+            self.advance()
+            return res.success(NumberNode(tok))
+
+        elif tok.type == TokenType.LEFT_PAREN:
             res.register_advancement()
             self.advance()
             expr = res.register(self.expr())
-
             if self.current_token.type != TokenType.RIGHT_PAREN:
                 return res.failure(InvalidSyntaxError(
                     self.current_token.pos_start, self.current_token.pos_end,
                     "Expected ')'"
                 ))
-
             res.register_advancement()
             self.advance()
-
             if res.error: return res
             return res.success(expr)
 
-        elif tok.type in (TokenType.PLUS, TokenType.MINUS):
-            res.register_advancement()
-            self.advance()
-            factor = res.register(self.factor())
-            if res.error: return res
-            return res.success(UnaryOperationNode(tok, factor))
-
-        elif tok.type == TokenType.NUMBER:
-            res.register_advancement()
-            self.advance()
-
-            return res.success(NumberNode(tok))
-
         return res.failure(InvalidSyntaxError(
             tok.pos_start, tok.pos_end,
-            "Expected number"
+            "Expected int, float, identifier, '+', '-', '(', '[', IF', 'FOR', 'WHILE', 'FUN'"
         ))
 
     def binary_operation(self, func_a, ops, func_b = None):
