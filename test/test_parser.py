@@ -255,6 +255,20 @@ class TestParser(unittest.TestCase):
                     )
                 )
 
+        # NOT 1
+        tokens = [
+                Token(TokenType.KEYWORD, "NOT"),
+                Token(TokenType.NUMBER,1),
+                Token(TokenType.END_OF_FILE)
+                ]
+        res = Parser(tokens).parse()
+        self.assertEqual(res.node, 
+                UnaryOperationNode(
+                    Token(TokenType.KEYWORD, "NOT"),
+                    NumberNode(Token(TokenType.NUMBER,1)),
+                    )
+                )
+
     def test_full_expr(self):
         # 27^2 + (43 / 36 - 48) * 51
         tokens = [
