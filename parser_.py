@@ -440,7 +440,7 @@ class Parser:
 
         if not self.current_token.matches(TokenType.KEYWORD, 'FOR'):
             return res.failure(InvalidSyntaxError(
-                self.current_tok.pos_start, self.current_tok.pos_end,
+                self.current_token.pos_start, self.current_token.pos_end,
                 f"Expected 'FOR'"
             ))
 
@@ -449,7 +449,7 @@ class Parser:
 
         if self.current_token.type != TokenType.IDENTIFIER:
             return res.failure(InvalidSyntaxError(
-                self.current_tok.pos_start, self.current_tok.pos_end,
+                self.current_token.pos_start, self.current_token.pos_end,
                 f"Expected identifier"
             ))
 
@@ -459,7 +459,7 @@ class Parser:
 
         if self.current_token.type != TokenType.EQUAL:
             return res.failure(InvalidSyntaxError(
-                self.current_tok.pos_start, self.current_tok.pos_end,
+                self.current_token.pos_start, self.current_token.pos_end,
                 f"Expected '='"
             ))
         
@@ -471,7 +471,7 @@ class Parser:
 
         if not self.current_token.matches(TokenType.KEYWORD, 'TO'):
             return res.failure(InvalidSyntaxError(
-                self.current_tok.pos_start, self.current_tok.pos_end,
+                self.current_token.pos_start, self.current_token.pos_end,
                 f"Expected 'TO'"
             ))
         
@@ -492,7 +492,7 @@ class Parser:
 
         if not self.current_token.matches(TokenType.KEYWORD, 'THEN'):
             return res.failure(InvalidSyntaxError(
-                self.current_tok.pos_start, self.current_tok.pos_end,
+                self.current_token.pos_start, self.current_token.pos_end,
                 f"Expected 'THEN'"
             ))
 
@@ -509,7 +509,7 @@ class Parser:
 
         if not self.current_token.matches(TokenType.KEYWORD, 'WHILE'):
             return res.failure(InvalidSyntaxError(
-                self.current_tok.pos_start, self.current_tok.pos_end,
+                self.current_token.pos_start, self.current_token.pos_end,
                 f"Expected 'WHILE'"
             ))
 
@@ -521,7 +521,7 @@ class Parser:
 
         if not self.current_token.matches(TokenType.KEYWORD, 'THEN'):
             return res.failure(InvalidSyntaxError(
-                self.current_tok.pos_start, self.current_tok.pos_end,
+                self.current_token.pos_start, self.current_token.pos_end,
                 f"Expected 'THEN'"
             ))
 
