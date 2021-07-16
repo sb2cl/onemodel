@@ -197,3 +197,47 @@ class WhileNode:
 
         self.pos_start = self.condition_node.pos_start
         self.pos_end = self.body_node.pos_end
+
+class FuncDefNode:
+    def __init__(self,var_name_tok,arg_name_toks,body_node):
+        """ __INIT__
+        @brief: Constructor of FuncDefNode.
+        
+        @param: var_name_tok   Name of the function.
+              : arg_name_toks  Arguments of the function.
+              : body_node      Commands to execute.
+                
+        @return: FuncDefNode
+        """
+        self.var_name_tok = var_name_tok
+        self.arg_name_toks = arg_name_toks
+        self.body_node = body_node
+
+        if self.var_name_tok:
+            self.pos_start = self.var_name_tok.pos_start
+        elif len(self.arg_name_toks) > 0:
+            self.pos_start = self.arg_name_toks[0].pos_start
+        else:
+            self.pos_start = self.body_node.pos_start
+
+        self.pos_end = self.body_node.pos_end
+
+class CallNode:
+    def __init__(self,node_to_call,arg_nodes):
+        """ __INIT__
+        @brief: Constructor of CallNode.
+        
+        @param: node_to_call Node to be called.
+              : arg_nodes    Arguments for calling the node.
+                
+        @return: CallNode
+        """
+        self.node_to_call = node_to_call
+        self.arg_nodes = arg_nodes
+
+        self.pos_start = self.node_to_call.pos_start
+
+        if len(self.arg_nodes) > 0:
+            self.pos_end = self.arg_nodes[len(self.arg_nodes)-1].pos_end
+        else:
+            self.pos_end = self.node_to_call.pos_end

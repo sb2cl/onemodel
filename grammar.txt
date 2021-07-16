@@ -21,15 +21,15 @@ factor      : (PLUS|MINUS) factor
 
 power       : call (POW factor)*
 
-call        : atom # (LPAREN (expr (COMMA expr)*)? RPAREN)?
+call        : atom (LPAREN (expr (COMMA expr)*)? RPAREN)?
 
 atom        : NUMBER|IDENTIFIER # |STRING
             : LPAREN expr RPAREN
             # : list-expr
             : if-expr
-            # : for-expr
-            # : while-expr
-            # : func-def
+            : for-expr
+            : while-expr
+            : func-def
 
 
 #list-expr   : LSQUARE (expr (COMMA expr)*)? RSQUARE
@@ -51,7 +51,7 @@ for-expr    : KEYWORD:FOR IDENTIFIER EQ expr KEYWORD:TO expr
 
 while-expr  : KEYWORD:WHILE expr KEYWORD:THEN expr
 
-#func-def    : KEYWORD:FUN IDENTIFIER?
-#              LPAREN (IDENTIFIER (COMMA IDENTIFIER)*)? RPAREN
-#              (ARROW expr)
-#            | (NEWLINE statements KEYWORD:END)
+func-def    : KEYWORD:FUN IDENTIFIER? 
+              LEFT_PAREN (IDENTIFIER (COMMA IDENTIFIER)*)? RIGHT_PAREN
+              ARROW expr
+
