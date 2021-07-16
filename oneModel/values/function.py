@@ -1,5 +1,7 @@
 from values.value import Value
 from errors import *
+from runTimeResult import RunTimeResult
+import interpreter
 
 class Function(Value):
     def __init__(self, name, body_node, arg_names):
@@ -10,9 +12,9 @@ class Function(Value):
 
     def execute(self, args):
         res = RunTimeResult()
-        interpreter = Interpreter()
-        new_context = Context(self.name, self.context, self.pos_start)
-        new_context.symbol_table = SymbolTable(new_context.parent.symbol_table)
+        my_interpreter = interpreter.Interpreter()
+        new_context = interpreter.Context(self.name, self.context, self.pos_start)
+        new_context.symbol_table = interpreter.SymbolTable(new_context.parent.symbol_table)
 
         if len(args) > len(self.arg_names):
             return res.failure(RunTimeError(
@@ -34,7 +36,7 @@ class Function(Value):
             arg_value.set_context(new_context)
             new_context.symbol_table.set(arg_name, arg_value)
 
-        value = res.register(interpreter.visit(self.body_node, new_context))
+        value = res.register(my_interpreter.visit(self.body_node, new_context))
         if res.error: return res
         return res.success(value)
 
@@ -46,5 +48,3 @@ class Function(Value):
 
     def __repr__(self):
         return f"<function {self.name}>"
-
-

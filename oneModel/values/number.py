@@ -1,5 +1,6 @@
 from values.value import Value
 from errors import *
+from runTimeResult import RunTimeResult
 import math
 
 class Number(Value):
