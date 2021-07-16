@@ -141,6 +141,19 @@ class Interpreter:
             Number(node.token.value).set_context(context).set_pos(node.pos_start, node.pos_end)
         )
 
+    def visit_StringNode(self,node,context):
+        """ VISIT_STRINGNODE
+        @brief: Vist a StrinNode
+        
+        @param: node    Node to visit.
+              : context Context for executing the node.
+                
+        @return: RunTimeResult
+        """
+        return RunTimeResult().success(
+                String(node.token.value).set_context(context).set_pos(node.pos_start, node.pos_end)
+                )
+ 
     def visit_VarAccessNode(self,node,context):
         """ VISIT_VARACCESSNODE
         @brief: Visit a VarAccessNode.

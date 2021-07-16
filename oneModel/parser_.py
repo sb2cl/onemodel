@@ -364,6 +364,11 @@ class Parser:
             self.advance()
             return res.success(NumberNode(tok))
 
+        elif tok.type == TokenType.STRING:
+            res.register_advancement()
+            self.advance()
+            return res.success(StringNode(tok))
+
         elif tok.type == TokenType.IDENTIFIER:
             res.register_advancement()
             self.advance()
