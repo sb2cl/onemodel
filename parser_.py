@@ -1,6 +1,7 @@
+from errors import *
+
 from tokens import TokenType
 from nodes import *
-from errors import *
 
 class ParseResult:
     """ PARSERESULT

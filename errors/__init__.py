@@ -1,0 +1,4 @@
+from errors.expectedCharError import ExpectedCharError
+from errors.illegalCharError import IllegalCharError
+from errors.invalidSyntaxError import InvalidSyntaxError
+from errors.runTimeError import RunTimeError

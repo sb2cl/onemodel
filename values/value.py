@@ -1,4 +1,5 @@
-from errors import RunTimeError
+from errors import *
+
 from runTimeResult import RunTimeResult
 
 import math

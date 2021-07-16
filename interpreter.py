@@ -1,5 +1,6 @@
+from errors import *
+
 from nodes import *
-from errors import RunTimeError
 from tokens import TokenType
 from values import *
 from lexer import Lexer
