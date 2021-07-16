@@ -26,17 +26,18 @@ call        : atom # (LPAREN (expr (COMMA expr)*)? RPAREN)?
 atom        : NUMBER|IDENTIFIER # |STRING
             : LPAREN expr RPAREN
             # : list-expr
-            # : if-expr
+            : if-expr
             # : for-expr
             # : while-expr
             # : func-def
 
+
 #list-expr   : LSQUARE (expr (COMMA expr)*)? RSQUARE
-#
-#if-expr     : KEYWORD:IF expr KEYWORD:THEN
-#              (statement if-expr-b|if-expr-c?)
-#            | (NEWLINE statements KEYWORD:END|if-expr-b|if-expr-c)
-#
+
+if-expr     : KEYWORD:IF expr KEYWORD:THEN
+              (KEYWORD:ELIF expr KEYWORD:THEn expr)*
+              (KEYWORD:ELSE expr)?
+
 #if-expr-b   : KEYWORD:ELIF expr KEYWORD:THEN
 #              (statement if-expr-b|if-expr-c?)
 #            | (NEWLINE statements KEYWORD:END|if-expr-b|if-expr-c)
@@ -44,16 +45,12 @@ atom        : NUMBER|IDENTIFIER # |STRING
 #if-expr-c   : KEYWORD:ELSE
 #              statement
 #            | (NEWLINE statements KEYWORD:END)
-#
-#for-expr    : KEYWORD:FOR IDENTIFIER EQ expr KEYWORD:TO expr 
-#              (KEYWORD:STEP expr)? KEYWORD:THEN
-#              statement
-#            | (NEWLINE statements KEYWORD:END)
-#
-#while-expr  : KEYWORD:WHILE expr KEYWORD:THEN
-#              statement
-#            | (NEWLINE statements KEYWORD:END)
-#
+
+for-expr    : KEYWORD:FOR IDENTIFIER EQ expr KEYWORD:TO expr 
+              (KEYWORD:STEP expr)? KEYWORD:THEN expr
+
+while-expr  : KEYWORD:WHILE expr KEYWORD:THEN expr
+
 #func-def    : KEYWORD:FUN IDENTIFIER?
 #              LPAREN (IDENTIFIER (COMMA IDENTIFIER)*)? RPAREN
 #              (ARROW expr)
