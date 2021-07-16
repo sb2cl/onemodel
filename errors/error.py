@@ -1,5 +1,5 @@
 from position import Position
-from string_with_arrows import string_with_arrows
+from errors.string_with_arrows import string_with_arrows
 
 class Error:
     """ ERROR
