@@ -1,9 +1,3 @@
-import sys, os
-
-testdir = os.path.dirname(__file__)
-srcdir = '../oneModel'
-sys.path.insert(0, os.path.abspath(os.path.join(testdir, srcdir)))
-
 import unittest
 from parser_ import Parser
 from tokens import Token, TokenType
