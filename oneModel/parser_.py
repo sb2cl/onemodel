@@ -118,7 +118,7 @@ class Parser:
         
         @return: Token Previous token.
         """
-        self.tok_idx += 1
+        self.tok_idx -= 1
         self.update_current_token()
         return self.current_token
 
@@ -779,9 +779,9 @@ class Parser:
 
             if not self.current_token.matches(TokenType.KEYWORD, 'END'):
                 return res.failure(InvalidSyntaxError(
-                self.current_token.pos_start, self.current_token.pos_end,
-                f"Expected 'END'"
-                ))
+                    self.current_token.pos_start, self.current_token.pos_end,
+                    f"Expected 'END'"
+                    ))
 
             res.register_advancement()
             self.advance()
