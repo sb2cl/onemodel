@@ -161,7 +161,7 @@ class Parser:
             res.register_advancement()
             self.advance()
 
-        statement = res.register(self.expr())
+        statement = res.register(self.statement())
         if res.error: return res
         statements.append(statement)
 
@@ -177,7 +177,7 @@ class Parser:
                 more_statements = False
 
             if not more_statements: break
-            statement = res.try_register(self.expr())
+            statement = res.try_register(self.statement())
             if not statement:
                 self.reverse(res.to_reverse_count)
                 more_statements = False
@@ -196,7 +196,36 @@ class Parser:
         
         @return: ParseResult
         """
-        return self.expr()
+        res = ParseResult()
+        pos_start = self.current_token.pos_start.copy()
+
+        if self.current_token.matches(TokenType.KEYWORD, 'RETURN'):
+            res.register_advancement()
+            self.advance()
+
+            expr = res.try_register(self.expr())
+            if not expr:
+                self.reverse(res.to_reverse_count)
+            return res.success(ReturnNode(expr, pos_start, self.current_token.pos_start.copy()))
+
+        if self.current_token.matches(TokenType.KEYWORD, 'CONTINUE'):
+            res.register_advancement()
+            self.advance()
+            return res.success(ContinueNode(pos_start, self.current_token.pos_start.copy()))
+
+        if self.current_token.matches(TokenType.KEYWORD, 'BREAK'):
+            res.register_advancement()
+            self.advance()
+            return res.success(BreakNode(pos_start, self.current_token.pos_start.copy()))
+
+        expr = res.register(self.expr())
+        if res.error:
+            return res.failure(InvalidSyntaxError(
+                self.current_token.pos_start, self.current_token.pos_end,
+                "Expected 'RETURN', 'CONTINUE', 'BREAK', 'VAR', 'IF', 'FOR', 'WHILE', 'FUN', int, float, identifier, '+', '-', '(', '[' or 'NOT'"
+            ))
+
+        return res.success(expr)
         
     def expr(self):
         """ EXPR
@@ -544,7 +573,7 @@ class Parser:
                             "Expected 'END'"
                             ))
             else:
-                expr = res.register(self.expr())
+                expr = res.register(self.statement())
                 if res.error: return res
                 else_case = (expr, False)
 
@@ -614,7 +643,7 @@ class Parser:
                 new_cases, else_case = all_cases
                 cases.extend(new_cases)
         else:
-            expr = res.register(self.expr())
+            expr = res.register(self.statement())
             if res.error: return res
             cases.append((condition, expr, False))
 
@@ -712,7 +741,7 @@ class Parser:
     
             return res.success(ForNode(var_name, start_value, end_value, step_value, body, True))
 
-        body = res.register(self.expr())
+        body = res.register(self.statement())
         if res.error: return res
 
         return res.success(ForNode(var_name, start_value, end_value, step_value, body, False))
@@ -759,7 +788,7 @@ class Parser:
 
             return res.success(WhileNode(condition, body, True))
     
-        body = res.register(self.expr())
+        body = res.register(self.statement())
         if res.error: return res
 
         return res.success(WhileNode(condition, body, False))
@@ -841,7 +870,7 @@ class Parser:
                 var_name_tok,
                 arg_name_toks,
                 node_to_return,
-                False
+                True
             ))
 
         if self.current_token.type != TokenType.NEW_LINE:
@@ -869,7 +898,7 @@ class Parser:
             var_name_tok,
             arg_name_toks,
             body,
-            True
+            False
             ))
 
     def binary_operation(self, func_a, ops, func_b = None):

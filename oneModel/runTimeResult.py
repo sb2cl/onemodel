@@ -53,5 +53,3 @@ class RunTimeResult:
             self.loop_should_continue or
             self.loop_should_break
             )
-
-
