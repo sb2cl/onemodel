@@ -10,7 +10,7 @@ while True:
         print(error.as_string())
     elif result:
         # TODO: recover the result.elements
-        print(result)
+        print(repr(result))
         #if len(result.elements) == 1:
         #    print(repr(result.elements[0]))
         #else:
