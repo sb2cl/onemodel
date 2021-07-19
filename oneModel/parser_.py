@@ -130,8 +130,6 @@ class Parser:
         """
         if self.tok_idx >= 0 and self.tok_idx < len(self.tokens):
             self.current_token = self.tokens[self.tok_idx]
-        else:
-            self.current_token = None
 
     def parse(self):
         """ PARSE
@@ -155,7 +153,42 @@ class Parser:
         
         @return: ParseResult
         """
-        return self.statement()
+        res = ParseResult()
+        statements = []
+        pos_start = self.current_token.pos_start.copy()
+
+        while self.current_token.type == TokenType.NEW_LINE:
+            res.register_advancement()
+            self.advance()
+
+        statement = res.register(self.expr())
+        if res.error: return res
+        statements.append(statement)
+
+        more_statements = True
+
+        while True:
+            newline_count = 0
+            while self.current_token.type == TokenType.NEW_LINE:
+                res.register_advancement()
+                self.advance()
+                newline_count += 1
+            if newline_count == 0:
+                more_statements = False
+
+            if not more_statements: break
+            statement = res.try_register(self.expr())
+            if not statement:
+                self.reverse(res.to_reverse_count)
+                more_statements = False
+                continue
+            statements.append(statement)
+
+        return res.success(ListNode(
+            statements,
+            pos_start,
+            self.current_token.pos_end.copy()
+            ))
 
     def statement(self):
         """ STATEMENT
