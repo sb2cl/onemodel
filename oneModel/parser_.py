@@ -2,6 +2,7 @@ from errors import *
 
 from tokens import TokenType
 from nodes import *
+import pdb
 
 class ParseResult:
     """ PARSERESULT
@@ -388,6 +389,11 @@ class Parser:
             if res.error: return res
             return res.success(expr)
 
+        elif tok.type == TokenType.LEFT_SQUARE:
+            list_expr = res.register(self.list_expr())
+            if res.error: return res
+            return res.success(list_expr)
+
         elif tok.matches(TokenType.KEYWORD, "IF"):
             if_expr = res.register(self.if_expr())
             if res.error: return res
@@ -412,6 +418,58 @@ class Parser:
             tok.pos_start, tok.pos_end,
             "Expected int, float, identifier, '+', '-', '(', '[', IF', 'FOR', 'WHILE', 'FUN'"
         ))
+
+    def list_expr(self):
+        """ LIST_EXPR
+        @brief: Find a list expression.
+        
+        @return: ParseResult
+        """
+        res = ParseResult()
+        element_nodes = []
+        pos_start = self.current_token.pos_start.copy()
+
+        if self.current_token.type != TokenType.LEFT_SQUARE:
+            return res.failure(InvalidSyntaxError(
+                self.current_token.pos_start, self.current_token.pos_end,
+                f"Expected '['"
+                ))
+
+        res.register_advancement()
+        self.advance()
+
+        if self.current_token.type == TokenType.RIGHT_SQUARE:
+            res.register_advancement()
+            self.advance()
+        else:
+            element_nodes.append(res.register(self.expr()))
+            if res.error:
+                return res.failure(InvalidSyntaxError(
+                    self.current_token.pos_start, self.current_token.pos_end,
+                    "Expected ']', 'VAR', 'IF', 'FOR', 'WHILE', 'FUN', int, float, identifier, '+', '-', '(', '[' or 'NOT'"
+                    ))
+
+            while self.current_token.type == TokenType.COMMA:
+                res.register_advancement()
+                self.advance()
+
+                element_nodes.append(res.register(self.expr()))
+                if res.error: return res
+
+            if self.current_token.type != TokenType.RIGHT_SQUARE:
+                return res.failure(InvalidSyntaxError(
+                    self.current_token.pos_start, self.current_token.pos_end,
+                    f"Expected ',' or ']'"
+                    ))
+
+            res.register_advancement()
+            self.advance()
+        
+        return res.success(ListNode(
+            element_nodes,
+            pos_start,
+            self.current_token.pos_end.copy()
+            ))
 
     def if_expr(self):
         """ IF_EXPR

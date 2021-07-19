@@ -66,6 +66,23 @@ class StringNode:
         """
         return f"{self.token.value}"
 
+class ListNode:
+    """ LISTNODE
+
+    Definition of ListNode.
+    """
+    def __init__(self, element_nodes, pos_start, pos_end):
+        """ __INIT__
+        @brief: Constructor of ListNode.
+        
+        @param: element_nodes Nodes in the list.
+                
+        @return: ListNode
+        """
+        self.element_nodes = element_nodes
+
+        self.pos_start = pos_start
+        self.pos_end = pos_end
     
 class VarAccessNode:
     """ VARACCESSNODE
