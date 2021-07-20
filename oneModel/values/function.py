@@ -26,7 +26,7 @@ class BaseFunction(Value):
                 f"{len(args) - len(arg_names)} too many args passed into {self}",
                 self.contex
                 ))
-        
+
         if len(args) < len(arg_names):
             return res.failure(RunTimeError(
                 self.pos_start, self.pos_end,
@@ -228,6 +228,57 @@ class BuiltInFunction(BaseFunction):
         return RunTimeResult().success(Number.null)
     execute_extend.arg_names = ["listA", "listB"]
 
+    def execute_len(self, exec_ctx):
+        list_ = exec_ctx.symbol_table.get("list")
+
+        if not isinstance(list_, List) and not isinstance(list_, String):
+            return RunTimeResult().failure(RunTimeError(
+                self.pos_start, self.pos_end,
+                "Argument must be list or string",
+                exec_ctx
+                ))
+
+        if isinstance(list_, List):
+            return RunTimeResult().success(Number(len(list_.elements)))
+
+        return RTResult().success(Number(len(list_.value)))
+    execute_len.arg_names = ["list"]
+
+    def execute_run(self, exec_ctx):
+        fn = exec_ctx.symbol_table.get("fn")
+
+        if not isinstance(fn, String):
+            return RunTimeResult().failure(RunTimeError(
+                self.pos_start, self.pos_end,
+                "Argument must be string",
+                exec_ctx
+                ))
+
+        fn = fn.value
+
+        try:
+            with open(fn, "r") as f:
+                script = f.read()
+        except Exception as e:
+            return RunTimeResult().failure(RunTimeError(
+                self.pos_start, self.pos_end,
+                f"Failed to load script \"{fn}\"\n" + str(e),
+                exec_ctx
+                ))
+
+        _, error = interpreter.run(fn, script)
+
+        if error:
+            return RunTimeResult().failure(RunTimeError(
+                self.pos_start, self.pos_end,
+                f"Failed to finish executing script \"{fn}\"\n" +
+                error.as_string(),
+                exec_ctx
+                ))
+
+        return RunTimeResult().success(Number.null)
+    execute_run.arg_names = ["fn"]
+
 BuiltInFunction.print       = BuiltInFunction("print")
 BuiltInFunction.print_ret   = BuiltInFunction("print_ret")
 BuiltInFunction.input       = BuiltInFunction("input")
@@ -240,3 +291,5 @@ BuiltInFunction.is_function = BuiltInFunction("is_function")
 BuiltInFunction.append      = BuiltInFunction("append")
 BuiltInFunction.pop         = BuiltInFunction("pop")
 BuiltInFunction.extend      = BuiltInFunction("extend")
+BuiltInFunction.len         = BuiltInFunction("len")
+BuiltInFunction.run         = BuiltInFunction("run")
