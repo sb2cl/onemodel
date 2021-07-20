@@ -1,4 +1,4 @@
-from errors.error import Error
+from oneModel.errors.error import Error
 
 class ExpectedCharError(Error):
     """ EXPECTEDCHARERROR(ERROR)

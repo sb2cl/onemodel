@@ -1,4 +1,4 @@
-import interpreter 
+import oneModel.interpreter 
 
 while True:
     text = input('basic > ')

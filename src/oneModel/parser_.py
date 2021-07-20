@@ -1,8 +1,7 @@
-from errors import *
+from oneModel.errors import *
 
-from tokens import TokenType
-from nodes import *
-import pdb
+from oneModel.tokens import TokenType
+from oneModel.nodes import *
 
 class ParseResult:
     """ PARSERESULT

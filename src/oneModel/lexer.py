@@ -1,7 +1,7 @@
-from errors import *
+from oneModel.errors import *
 
-from position import Position
-from tokens import Token, TokenType
+from oneModel.position import Position
+from oneModel.tokens import Token, TokenType
 import string
 
 WHITESPACE = ' \t'

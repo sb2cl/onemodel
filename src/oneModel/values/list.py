@@ -1,6 +1,6 @@
-from values.value import Value
-from errors import *
-from values.number import Number
+from oneModel.values.value import Value
+from oneModel.errors import *
+from oneModel.values.number import Number
 
 class List(Value):
     """ LIST(VALUE)
