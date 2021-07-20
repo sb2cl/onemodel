@@ -1,4 +1,4 @@
-from oneModel.errors.error import Error
+from onemodel.errors.error import Error
 
 class IllegalCharError(Error):
     """ ILLEGALCHARERROR(ERROR)

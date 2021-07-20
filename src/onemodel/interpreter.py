@@ -1,12 +1,12 @@
-from oneModel.errors import *
-from oneModel.values import *
+from onemodel.errors import *
+from onemodel.values import *
 
-from oneModel.nodes import *
-from oneModel.tokens import TokenType
-from oneModel.values import *
-from oneModel.lexer import Lexer
-from oneModel.parser_ import Parser
-from oneModel.runTimeResult import RunTimeResult
+from onemodel.nodes import *
+from onemodel.tokens import TokenType
+from onemodel.values import *
+from onemodel.lexer import Lexer
+from onemodel.parser_ import Parser
+from onemodel.runTimeResult import RunTimeResult
 
 import math
 

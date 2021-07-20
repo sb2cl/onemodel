@@ -1,0 +1,4 @@
+from onemodel.errors.expectedCharError import ExpectedCharError
+from onemodel.errors.illegalCharError import IllegalCharError
+from onemodel.errors.invalidSyntaxError import InvalidSyntaxError
+from onemodel.errors.runTimeError import RunTimeError

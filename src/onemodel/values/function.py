@@ -1,10 +1,10 @@
-from oneModel.values.value import Value
-from oneModel.values.number import Number
-from oneModel.values.string import String
-from oneModel.values.list import List
-from oneModel.errors import *
-from oneModel.runTimeResult import RunTimeResult
-import oneModel.interpreter
+from onemodel.values.value import Value
+from onemodel.values.number import Number
+from onemodel.values.string import String
+from onemodel.values.list import List
+from onemodel.errors import *
+from onemodel.runTimeResult import RunTimeResult
+import onemodel.interpreter
 import os
 
 class BaseFunction(Value):

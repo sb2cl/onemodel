@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from oneModel.position import Position
+from onemodel.position import Position
 
 class NumberNode:
     """ NUMBERNODE

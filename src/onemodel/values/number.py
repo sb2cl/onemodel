@@ -1,6 +1,6 @@
-from oneModel.values.value import Value
-from oneModel.errors import *
-from oneModel.runTimeResult import RunTimeResult
+from onemodel.values.value import Value
+from onemodel.errors import *
+from onemodel.runTimeResult import RunTimeResult
 import math
 
 class Number(Value):

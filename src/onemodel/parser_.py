@@ -1,7 +1,7 @@
-from oneModel.errors import *
+from onemodel.errors import *
 
-from oneModel.tokens import TokenType
-from oneModel.nodes import *
+from onemodel.tokens import TokenType
+from onemodel.nodes import *
 
 class ParseResult:
     """ PARSERESULT

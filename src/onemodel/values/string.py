@@ -1,6 +1,6 @@
-from oneModel.values.value import Value
-from oneModel.values.number import Number
-from oneModel.errors import *
+from onemodel.values.value import Value
+from onemodel.values.number import Number
+from onemodel.errors import *
 
 class String(Value):
     def __init__(self, value):
