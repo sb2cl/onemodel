@@ -328,8 +328,11 @@ class Lexer:
 
         return Token(tok_type, pos_start=pos_start, pos_end=self.pos)
 
-
 if __name__ == '__main__':
+    from onemodel.utils.setup_input_history import setup_input_history
+
+    setup_input_history()
+
     while True:
         text = input('lexer > ')
         if text.strip() == "": continue

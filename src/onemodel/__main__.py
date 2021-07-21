@@ -1,10 +1,13 @@
-from onemodel import interpreter
-
 if __name__ == '__main__':
+    from onemodel import interpreter
+    from onemodel.utils.setup_input_history import setup_input_history
+
+    setup_input_history()
+
     while True:
-        text = input('basic > ')
+        text = input('onemodel > ')
         if text.strip() == "": continue
-    
+
         result, error = interpreter.run('<stdin>', text)
         
         if error:
