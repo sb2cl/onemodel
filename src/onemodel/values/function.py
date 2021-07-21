@@ -5,6 +5,7 @@ from onemodel.values.list import List
 from onemodel.errors import *
 from onemodel.runTimeResult import RunTimeResult
 from onemodel import interpreter
+import onemodel
 import os
 
 class BaseFunction(Value):
@@ -255,6 +256,19 @@ class BuiltInFunction(BaseFunction):
                 ))
 
         fn = fn.value
+
+        onemodel_path = os.path.dirname(os.path.dirname(os.path.dirname(onemodel.__file__)))
+
+        # Check if the file exists in the local path.
+        if os.path.isfile(fn):
+            # Do nothing.
+            pass
+        # Check if the file exits in the libraries folder.
+        elif os.path.isfile(onemodel_path + "/libraries/" + fn):
+            fn = onemodel_path + "/libraries/" + fn
+        # Check if the file exits in the examples folder.
+        elif os.path.isfile(onemodel_path + "/examples/" + fn):
+            fn = onemodel_path + "/examples/" + fn
 
         try:
             with open(fn, "r") as f:

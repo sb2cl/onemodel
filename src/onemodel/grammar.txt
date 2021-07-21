@@ -3,7 +3,6 @@ statements  : NEWLINE* statement (NEWLINE+ statement)* NEWLINE*
 statement		: KEYWORD:RETURN expr?
 						: KEYWORD:CONTINUE
 						: KEYWORD:BREAK
-            : KEYWORD:include 
 						: expr
 
 expr        : KEYWORD:VAR IDENTIFIER EQ expr
@@ -25,7 +24,7 @@ call        : atom (LPAREN (expr (COMMA expr)*)? RPAREN)?
 
 atom        : NUMBER|IDENTIFIER|STRING
             : LPAREN expr RPAREN
-            # : list-expr
+            : list-expr
             : if-expr
             : for-expr
             : while-expr
