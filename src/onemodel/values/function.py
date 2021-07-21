@@ -4,7 +4,7 @@ from onemodel.values.string import String
 from onemodel.values.list import List
 from onemodel.errors import *
 from onemodel.runTimeResult import RunTimeResult
-import onemodel.interpreter
+from onemodel import interpreter
 import os
 
 class BaseFunction(Value):
