@@ -154,6 +154,7 @@ class Lexer:
 
         # Add end_of_file token.
         tokens.append(Token(TokenType.END_OF_FILE, pos_start=self.pos))
+
         return tokens, None
 
     def skip_comment(self):

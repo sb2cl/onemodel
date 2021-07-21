@@ -98,7 +98,8 @@ class Token:
         if other == None: 
             return False
 
-        if self.type == other.type:
-            return True
+        if self.value == None and other.value == None:
+            if self.type == other.type:
+                return True
 
         return self.type == other.type and str(self.value) == str(other.value) 

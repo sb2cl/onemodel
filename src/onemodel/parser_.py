@@ -154,6 +154,7 @@ class Parser:
         """
         res = ParseResult()
         statements = []
+
         pos_start = self.current_token.pos_start.copy()
 
         while self.current_token.type == TokenType.NEW_LINE:

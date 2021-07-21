@@ -1,4 +1,3 @@
-import unittest
 from onemodel.tokens import Token, TokenType
 from onemodel.lexer import Lexer
 

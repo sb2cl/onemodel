@@ -1,43 +1,47 @@
-#import unittest
-#from onemodel.parser_ import Parser
-#from onemodel.tokens import Token, TokenType
-#from onemodel.nodes import *
-#
-#class TestParser(unittest.TestCase):
-#
-#    def test_empty(self):
-#        tokens = [
-#                Token(TokenType.END_OF_FILE)
-#                ]
-#
-#        parser = Parser(tokens)
-#        res = parser.parse()
-#
-#        self.assertEqual(res.node, None)
-#
-#    def test_individual_operations(self):
-#        tokens = [
-#                Token(TokenType.NUMBER,1),
-#                Token(TokenType.END_OF_FILE)
-#                ]
-#        res = Parser(tokens).parse()
-#        self.assertEqual(res.node, 
-#                NumberNode(Token(TokenType.NUMBER,1))
-#                )    
-#
-#        tokens = [
-#                Token(TokenType.PLUS),
-#                Token(TokenType.NUMBER,1),
-#                Token(TokenType.END_OF_FILE)
-#                ]
-#        res = Parser(tokens).parse()
-#        self.assertEqual(res.node, 
-#                UnaryOperationNode(
-#                    Token(TokenType.PLUS),
-#                    NumberNode(Token(TokenType.NUMBER,1))
-#                    )
-#                )
-#
+from onemodel.parser_ import Parser
+from onemodel.tokens import Token, TokenType
+from onemodel.nodes import *
+
+import pdb
+
+def test_empty():
+    tokens = [
+            Token(TokenType.END_OF_FILE, pos_start = Position(0,0,0,"",""))
+            ]
+
+    parser = Parser(tokens)
+    res = parser.parse()
+
+    assert res.node == None
+
+def test_individual_operations():
+    tokens = [
+            Token(TokenType.NUMBER,1, pos_start = Position(0,0,0,"","")),
+            Token(TokenType.END_OF_FILE, pos_start = Position(0,0,1,"",""))
+            ]
+
+    res = Parser(tokens).parse()
+
+    assert res.node.element_nodes == [
+            NumberNode(Token(TokenType.NUMBER,1))
+            ]
+
+
+    tokens = [
+            Token(TokenType.PLUS, pos_start = Position(0,0,0,"","")),
+            Token(TokenType.NUMBER,1, pos_start = Position(0,0,1,"","")),
+            Token(TokenType.END_OF_FILE, pos_start = Position(0,0,2,"",""))
+            ]
+
+    res = Parser(tokens).parse()
+
+    assert res.node.element_nodes == [
+             UnaryOperationNode(
+                 Token(TokenType.PLUS),
+                 NumberNode(Token(TokenType.NUMBER,1))
+                 )
+             ]
+
 #        tokens = [
 #                Token(TokenType.MINUS),
 #                Token(TokenType.NUMBER,1),
