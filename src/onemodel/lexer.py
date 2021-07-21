@@ -327,3 +327,18 @@ class Lexer:
             tok_type = TokenType.GREATER_EQUAL_THAN
 
         return Token(tok_type, pos_start=pos_start, pos_end=self.pos)
+
+
+if __name__ == '__main__':
+    while True:
+        text = input('lexer > ')
+        if text.strip() == "": continue
+
+        # Generate tokens
+        lexer = Lexer('<stdin>', text)
+        tokens, error = lexer.generate_tokens()
+
+        if error:
+            print(error.as_string())
+        elif tokens:
+            print(tokens)
