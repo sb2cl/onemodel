@@ -48,42 +48,52 @@ class Repl:
         self.global_symbol_table.set("RUN", BuiltInFunction.run)
         self.global_symbol_table.set("exit", BuiltInFunction.exit)
 
+    def evaluate(self, fn, text):
+        """ EVALUATE
+        @brief: Evaluate the text passed.
+        
+        @param: fn   Filename of the text.
+              : text Text to process
+                
+        @return: RunTimeResult
+        """
+
+        # Generate tokens
+        lexer = Lexer(fn, text)
+        tokens, error = lexer.generate_tokens()
+        if error: return None, error
+
+        # Generate AST
+        parser = Parser(tokens)
+        ast = parser.parse()
+        if ast.error: return None, ast.error
+
+        # Run program
+        interpreter = Interpreter()
+        context = Context('<program>')
+        context.symbol_table = self.global_symbol_table
+        result = interpreter.visit(ast.node, context)
+
+        return result
+        
     def run(self):
         """ RUN
         @brief: Run the REPL 
 
         @return: result Result value. 
         """
-
         setup_input_history()
         continue_loop = True
 
         while continue_loop:
             # 1. READ
-
             text = input('onemodel > ')
             if text.strip() == "": continue
 
             # 2. EVALUATE
-
-            # Generate tokens
-            lexer = Lexer('<stdin>', text)
-            tokens, error = lexer.generate_tokens()
-            if error: return None, error
-
-            # Generate AST
-            parser = Parser(tokens)
-            ast = parser.parse()
-            if ast.error: return None, ast.error
-
-            # Run program
-            interpreter = Interpreter()
-            context = Context('<program>')
-            context.symbol_table = self.global_symbol_table
-            result = interpreter.visit(ast.node, context)
+            result = self.evaluate('<stdin>', text)
 
             # 3. PRINT
-
             if result.error:
                 print(result.error.as_string())
             elif result.value:
@@ -93,6 +103,5 @@ class Repl:
                     print(repr(result.value))
 
             # 4. LOOP
-            
             if result.should_exit:
                 continue_loop = False

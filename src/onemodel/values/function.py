@@ -280,15 +280,18 @@ class BuiltInFunction(BaseFunction):
                 exec_ctx
                 ))
 
-        _, error = interpreter.run(fn, script)
+        repl = onemodel.repl.Repl()
+        result = repl.evaluate(fn, script)
 
-        if error:
+        if result.error:
             return RunTimeResult().failure(RunTimeError(
                 self.pos_start, self.pos_end,
                 f"Failed to finish executing script \"{fn}\"\n" +
-                error.as_string(),
+                result.error.as_string(),
                 exec_ctx
                 ))
+        elif result.should_exit is True:
+            return RunTimeResult().success_exit()
 
         return RunTimeResult().success(Number.null)
     execute_run.arg_names = ["fn"]
