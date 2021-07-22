@@ -57,18 +57,20 @@ class Repl:
         @param: fn   Filename of the text.
               : text Text to process
                 
-        @return: RunTimeResult
+        @return: value       Result value of the execution.
+               : error       Error during the execution.
+               : should_exit Should we end the REPL?
         """
 
         # Generate tokens
         lexer = Lexer(fn, text)
         tokens, error = lexer.generate_tokens()
-        if error: return None, error
+        if error: return None, error, False
 
         # Generate AST
         parser = Parser(tokens)
         ast = parser.parse()
-        if ast.error: return None, ast.error
+        if ast.error: return None, ast.error, False
 
         # Run program
         interpreter = Interpreter()
@@ -76,7 +78,7 @@ class Repl:
         context.symbol_table = self.global_symbol_table
         result = interpreter.visit(ast.node, context)
 
-        return result
+        return result.value, result.error, result.should_exit
         
     def run(self):
         """ RUN
@@ -93,19 +95,19 @@ class Repl:
             if text.strip() == "": continue
 
             # 2. EVALUATE
-            result = self.evaluate('<stdin>', text)
+            value, error, should_exit  = self.evaluate('<stdin>', text)
 
             # 3. PRINT
-            if result.error:
-                print(result.error.as_string())
-            elif result.value:
-                if len(result.value.elements) == 1:
-                    print(repr(result.value.elements[0]))
+            if error:
+                print(error.as_string())
+            elif value:
+                if len(value.elements) == 1:
+                    print(repr(value.elements[0]))
                 else:
-                    print(repr(result.value))
+                    print(repr(value))
 
             # 4. LOOP
-            if result.should_exit:
+            if should_exit:
                 continue_loop = False   
 
     def run_lexer(self):
@@ -126,7 +128,6 @@ class Repl:
             # Generate tokens
             lexer = Lexer('<stdin>', text)
             tokens, error = lexer.generate_tokens()
-            if error: return None, error
 
             # 3. PRINT
             if error:
@@ -152,7 +153,9 @@ class Repl:
             # Generate tokens
             lexer = Lexer('<stdin>', text)
             tokens, error = lexer.generate_tokens()
-            if error: return None, error
+            if error:
+                print(error.as_string())
+                continue
 
             # Generate AST
             parser = Parser(tokens)
