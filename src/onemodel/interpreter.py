@@ -126,7 +126,6 @@ class Interpreter:
         """
         raise Exception(f'No visit_{type(node).__name__} method defined')
 
-
     def visit_NumberNode(self,node,context):
         """ VISIT_NUMBERNODE
         @brief: Vist a number node.
@@ -212,26 +211,6 @@ class Interpreter:
 
         context.symbol_table.set(var_name, value)
         return res.success(value)
-
-    def visit_ModelPartAssignNode(self,node,context):
-        """ VISIT_MODELPARTASSIGNNODE
-        @brief: Visit a ModelPartAssignNode.
-        
-        @param: node    Node to visit.
-              : context Context for executing the node.
-                
-        @return: value  Execution result.
-        """
-        res = RunTimeResult()
-        name = node.var_name_tok.value
-        value = res.register(self.visit(node.value_node, context))
-
-        if res.should_return(): return res
-        
-        modelPart = ModelPart(name)
-
-        context.symbol_table.set(name, modelPart)
-        return res.success(modelPart)
 
     def visit_BinaryOperationNode(self, node, context):
         res = RunTimeResult()

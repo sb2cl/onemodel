@@ -7,6 +7,8 @@ from onemodel.parser_ import Parser
 from onemodel.interpreter import Interpreter
 from onemodel.utils.setup_input_history import setup_input_history
 
+import pdb
+
 class Repl:
     """ REPL
 

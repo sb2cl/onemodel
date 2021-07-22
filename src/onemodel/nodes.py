@@ -125,29 +125,6 @@ class VarAssignNode:
     def __repr__(self):
         return f'(Assign {self.var_name_tok} = {self.value_node})'
 
-class ModelPartAssignNode:
-    """ MODELPARTASSIGNNODE
-
-    Assign the value of a ModelPart.
-    """
-    def __init__(self,var_name_tok,value_node):
-        """ __INIT__
-        @brief: Constructor of ModelPartAssignNode.
-        
-        @param: var_name_tok Name of the ModelPart.
-              : value_node   Value to assign.
-                
-        @return: VarAssignNode
-        """
-        self.var_name_tok = var_name_tok
-        self.value_node = value_node
-
-        self.pos_start = self.var_name_tok.pos_start
-        self.pos_end = self.value_node.pos_end
-
-    def __repr__(self):
-        return f'(AssignModelPart {self.var_name_tok} = {self.value_node})'
-
 class BinaryOperationNode:
     """ BINARYOPERATIONNODE
 
