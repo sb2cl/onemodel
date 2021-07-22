@@ -87,7 +87,7 @@ class Repl:
 
         while continue_loop:
             # 1. READ
-            text = input('onemodel > ')
+            text = input('onemodel> ')
             if text.strip() == "": continue
 
             # 2. EVALUATE
@@ -104,4 +104,60 @@ class Repl:
 
             # 4. LOOP
             if result.should_exit:
-                continue_loop = False
+                continue_loop = False   
+
+    def run_lexer(self):
+        """ RUN_LEXER
+        @brief: Run just the lexer.
+
+        @return: result Result value. 
+        """
+        setup_input_history()
+
+        while True:
+            # 1. READ
+            text = input('lexer> ')
+            if text.strip() == "": continue
+
+            # 2. EVALUATE
+
+            # Generate tokens
+            lexer = Lexer('<stdin>', text)
+            tokens, error = lexer.generate_tokens()
+            if error: return None, error
+
+            # 3. PRINT
+            if error:
+                print(error.as_string())
+            elif tokens:
+                print(tokens)
+
+    def run_parser(self):
+        """ RUN_LEXER
+        @brief: Run just the lexer and the parser.
+
+        @return: result Result value. 
+        """
+        setup_input_history()
+
+        while True:
+            # 1. READ
+            text = input('parser> ')
+            if text.strip() == "": continue
+
+            # 2. EVALUATE
+
+            # Generate tokens
+            lexer = Lexer('<stdin>', text)
+            tokens, error = lexer.generate_tokens()
+            if error: return None, error
+
+            # Generate AST
+            parser = Parser(tokens)
+            ast = parser.parse()
+
+            # 3. PRINT
+            if ast.error:
+                print(ast.error.as_string())
+            elif ast.node:
+                print(ast.node.element_nodes)
