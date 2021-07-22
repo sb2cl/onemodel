@@ -1,0 +1,4 @@
+
+  variable i(inicio = 0) "La corriente a través del resistivo".
+---------
+  variable i(start = 0) "The current through the resistive".

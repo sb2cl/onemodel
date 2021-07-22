@@ -1,0 +1,50 @@
+class Resistor
+    # Linear Resistor
+    # The voltage-current (V-I) relationship for a linear resistor is V=I*R,
+    # where R is the constant resistance in ohms.
+    #
+    # The positive and negative terminals of the resistor are denoted by the
+    # + and - signs respectively.
+
+    # +:left
+    node p = foundation.electrical.electrical
+
+    # -:right
+    node n = foundation.electrical.electrical
+
+    variable i = [0, 'A']    "The current through the resisitor."
+    variable v = [0, 'V']    "The voltage in the resisitor."
+
+    parameter R = [1, 'Ohm'] "The resistance of the resisitor."
+
+    # The resistance must be greater than zero.
+    assert R > 0 
+
+    branch i : p.i -> n.i
+
+    equation eq_1 = v == p.v - n.v  "The voltage between the pins."
+    equation eq_2 = v == i*R        "Equation of a linear resistor."
+end
+
+standalone Resistor
+    # Stand alone model for the resistor class.
+    # A resistor is connected directly to a voltage source.
+
+    VoltageSource source;
+    my_resistor   resistor;
+    
+    connect(source.p, resistor.p);
+    connect(source.n, resistor.n);
+end
+
+test Resistor
+     # Place your code here to test the Resitor model.
+
+end
+
+extrainfo Resistor
+    # Extra information you want to define in the Resistor
+    # but that you want to hide for clarity from the main definition.
+    i.description = "Full description of i"
+    i.reference = "Reference for the value, start and units of i"
+end
