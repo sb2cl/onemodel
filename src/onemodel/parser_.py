@@ -961,26 +961,3 @@ class Parser:
             left = BinaryOperationNode(left, operation_token, right)
 
         return res.success(left)
-
-if __name__ == '__main__':
-    from onemodel.lexer import Lexer
-    from onemodel.utils.setup_input_history import setup_input_history
-
-    setup_input_history()
-
-    while True:
-        text = input('parser > ')
-        if text.strip() == "": continue
-
-        # Generate tokens
-        lexer = Lexer('<stdin>', text)
-        tokens, error = lexer.generate_tokens()
-
-        # Generate AST
-        parser = Parser(tokens)
-        ast = parser.parse()
-
-        if ast.error:
-            print(ast.error.as_string())
-        elif ast.node:
-            print(ast.node.element_nodes)
