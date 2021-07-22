@@ -235,6 +235,7 @@ class Parser:
         """
         res = ParseResult()
 
+        # KEYWORD:VAR IDENTIFIER EQ expr
         if self.current_token.matches(TokenType.KEYWORD, 'VAR'):
             res.register_advancement()
             self.advance()
@@ -261,6 +262,34 @@ class Parser:
             if res.error: return res
             return res.success(VarAssignNode(var_name, expr))
 
+        # KEYWORD:ModelPart IDENTIFIER EQ expr
+        if self.current_token.matches(TokenType.KEYWORD, 'ModelPart'):
+            res.register_advancement()
+            self.advance()
+
+            if self.current_token.type != TokenType.IDENTIFIER:
+                return res.failure(InvalidSyntaxError(
+                self.current_token.pos_start, self.current_token.pos_end,
+                "Expected identifier"
+                ))
+
+            var_name = self.current_token
+            res.register_advancement()
+            self.advance()
+
+            if self.current_token.type != TokenType.EQUAL:
+                return res.failure(InvalidSyntaxError(
+                self.current_token.pos_start, self.current_token.pos_end,
+                "Expected '='"
+                ))
+
+            res.register_advancement()
+            self.advance()
+            expr = res.register(self.expr())
+            if res.error: return res
+            return res.success(ModelPartAssignNode(var_name, expr))
+
+        # comp-expr ((KEYWORD:AND|KEYWORD:OR) comp-expr)*
         node = res.register(self.binary_operation(
             self.comp_expr,
             ((TokenType.KEYWORD, 'AND'), (TokenType.KEYWORD, 'OR'))
