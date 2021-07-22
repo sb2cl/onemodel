@@ -12,6 +12,7 @@ LETTERS_DIGITS = LETTERS + DIGITS
 # Keywords reserved.
 KEYWORDS = [
         'VAR',
+        'ModelPart',
         'AND',
         'OR',
         'NOT',

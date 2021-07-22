@@ -1,17 +1,18 @@
 statements  : NEWLINE* statement (NEWLINE+ statement)* NEWLINE*
 
-statement		: KEYWORD:RETURN expr?
-						: KEYWORD:CONTINUE
-						: KEYWORD:BREAK
-						: expr
+statement   : KEYWORD:RETURN expr?
+            : KEYWORD:CONTINUE
+            : KEYWORD:BREAK
+            : expr
 
 expr        : KEYWORD:VAR IDENTIFIER EQ expr
+            : KEYWORD:ModelPart IDENTIFIER EQ expr
             : comp-expr ((KEYWORD:AND|KEYWORD:OR) comp-expr)*
 
 comp-expr   : NOT comp-expr
             : arith-expr ((EE|LT|GT|LTE|GTE) arith-expr)*
 
-arith-expr  :	term ((PLUS|MINUS) term)*
+arith-expr  : term ((PLUS|MINUS) term)*
 
 term        : factor ((MUL|DIV) factor)*
 
