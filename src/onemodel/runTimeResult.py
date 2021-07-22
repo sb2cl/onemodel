@@ -12,12 +12,15 @@ class RunTimeResult:
         self.func_return_value = None
         self.loop_should_continue = False
         self.loop_should_break = False
+        # Should we exit the execution of onemodel?
+        self.should_exit = False
 
     def register(self, res):
         self.error = res.error
         self.func_return_value = res.func_return_value
         self.loop_should_continue = res.loop_should_continue
         self.loop_should_break = res.loop_should_break
+        self.should_exit = res.should_exit
         return res.value
 
     def success(self, value):
@@ -40,6 +43,11 @@ class RunTimeResult:
         self.loop_should_break = True
         return self
 
+    def success_exit(self):
+        self.reset()
+        self.should_exit = True
+        return self
+
     def failure(self, error):
         self.reset()
         self.error = error
@@ -51,5 +59,6 @@ class RunTimeResult:
             self.error or
             self.func_return_value or
             self.loop_should_continue or
-            self.loop_should_break
+            self.loop_should_break or
+            self.should_exit
             )

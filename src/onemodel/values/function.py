@@ -242,7 +242,7 @@ class BuiltInFunction(BaseFunction):
         if isinstance(list_, List):
             return RunTimeResult().success(Number(len(list_.elements)))
 
-        return RTResult().success(Number(len(list_.value)))
+        return RunTimeResult().success(Number(len(list_.value)))
     execute_len.arg_names = ["list"]
 
     def execute_run(self, exec_ctx):
@@ -293,6 +293,11 @@ class BuiltInFunction(BaseFunction):
         return RunTimeResult().success(Number.null)
     execute_run.arg_names = ["fn"]
 
+    def execute_exit(self, exec_ctx):
+        return RunTimeResult().success_exit()
+    execute_exit.arg_names = []
+
+
 BuiltInFunction.print       = BuiltInFunction("print")
 BuiltInFunction.print_ret   = BuiltInFunction("print_ret")
 BuiltInFunction.input       = BuiltInFunction("input")
@@ -307,3 +312,4 @@ BuiltInFunction.pop         = BuiltInFunction("pop")
 BuiltInFunction.extend      = BuiltInFunction("extend")
 BuiltInFunction.len         = BuiltInFunction("len")
 BuiltInFunction.run         = BuiltInFunction("run")
+BuiltInFunction.exit        = BuiltInFunction("exit")

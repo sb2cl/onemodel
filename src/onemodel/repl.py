@@ -46,6 +46,7 @@ class Repl:
         self.global_symbol_table.set("EXTEND", BuiltInFunction.extend)
         self.global_symbol_table.set("LEN", BuiltInFunction.len)
         self.global_symbol_table.set("RUN", BuiltInFunction.run)
+        self.global_symbol_table.set("exit", BuiltInFunction.exit)
 
     def run(self):
         """ RUN
@@ -92,4 +93,6 @@ class Repl:
                     print(repr(result.value))
 
             # 4. LOOP
-            continue_loop = True
+            
+            if result.should_exit:
+                continue_loop = False
