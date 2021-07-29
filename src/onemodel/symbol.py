@@ -1,4 +1,4 @@
-from ModelPart import ModelPart
+from onemodel.model_part import ModelPart
 
 class Symbol(ModelPart):
     """ SYMBOL(MODELPART)
