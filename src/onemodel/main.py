@@ -1,12 +1,15 @@
 from onemodel.onemodel import OneModel
-from onemodel.model_part import ModelPart
 from onemodel.symbol import Symbol
 
 om = OneModel()
 
-mp = Symbol(om,"test")
+mp = Symbol(om,"std::Omega_A")
 
-mp.name = "Omega_A"
+mp.name = "std::Omega_A"
 
-print(mp.name)
-print(mp.reference)
+#print(mp.name)
+#print(mp.reference)
+#print(mp)
+
+print(Symbol.__doc__)
+print(Symbol.name.__doc__)

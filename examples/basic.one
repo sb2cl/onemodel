@@ -1,0 +1,21 @@
+# Variables definition.
+
+variable x1 = {0, 'molec'}               "Sigma unit expressed constitively"
+variable x2 = {0, 'molec'}               "Anti-sigma unit expressed dependent of the process"
+variable x3 = {0, 'molec'}               "Protein of interest"
+
+# Parameter definition.
+
+parameter k1 = {1.0, 'molec/t'}           "Sigma production"
+parameter k2 = {1.0, '1/t'}               "Anti-sigma production"
+parameter k3 = {1.0, '1/t'}               "Protein production"
+parameter d1 = {1.0, '1/t'}               "Sigma degradation"
+parameter d2 = {1.0, '1/t'}               "Anti-sigma degradation"
+parameter d3 = {1.0, '1/t'}               "Protein degradation"
+parameter gamma12 = {1.0, '1/molec/t'}    "Sigma and anti-sigma anhiquilaiton rate"
+
+# Ecuation definition.
+
+equation eq_1 = der_x1 == k1    - gamma12*x1*x2 - d1*x1  "Dynamic of sigma"
+equation eq_2 = der_x2 == k2*x3 - gamma12*x1*x2 - d2*x2  "Dynamic of anti-sigma"
+equation eq_3 = der_x3 == k3*x1 - d3*x3                  "Dynamic of protein"

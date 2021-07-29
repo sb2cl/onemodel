@@ -1,21 +1,79 @@
-from onemodel.model_part import ModelPart
+from dataclasses import dataclass
 
-class Symbol(ModelPart):
-    """ SYMBOL(MODELPART)
+from onemodel.onemodel import OneModel
+   
+@dataclass
+class Symbol:
+    """ Base class for model objects like: parameters, variables or equations.
 
-    This class is the base for the implementation of Parameters and Variables.
+    This class is the base for defining the rest of the model objects that
+    populate onemodel models. Symbol defines the basic attributes for 
+    identifing a symbol in the model (name, namebase) and also extra
+    about the symbol itself like: comment, description, reference, etc.
+
+    Attributes:
+        name: str
+            Symbol name with the namespace.
+        namebase: str
+            Symbol name without the namespace.
     """
 
-    def __init__(self,om,name):
+    def __init__(self, om, name):
+        """ Inits Symbol.
+
+        Args:
+            om: OneModel
+                Parent OneModel object where this Symbol is included.
+            name: str
+                Symbol name (the namespace is added in name.setter).
         """
-        @brief: Constructor of Symbol.
-        
-        @param: om   OneModel object.
-                name String Name for the Symbol.
+        self.om = om
+        self.name = name  
+
+    @property
+    def name(self):
+        """ Symbol name.
+
+        The name associated to the Symbol, the name must be unique in the model
+        because it will be used to find the Symbol in the symbol table in the
+        onemodel model.
+        """
+        return self._name
+
+    @name.setter
+    def name(self, n):
+        """
+        @brief: Setter for name.
+
+        @param: n New name to set.
+        """
+        if(type(n) != str):
+            raise ValueError("'%s' is not a valid type for the name. Use string type instead." % str(n))
+
+        if(n == ""):
+            raise ValueError("The name of the ModelPart is empty.") 
+
+        # Check if the name already has an namespace.
+        if n.find("::")==-1:
+            # If not, add it.
+            self._name = self.om.namespace + n
+        else:
+            self._name = n
+
+    @property
+    def namebase(self):
+        """
+        @brief: The name without the namespace.
         """
 
-        # Call parent constructor.
-        ModelPart.__init__(self,om,name)
+        ind = self._name.rfind("::")
+
+        if ind != -1:
+            namebase = self._name[ind+2:]
+        else:
+            namebase = self._name
+
+        return namebase
 
     @property
     def nameTex(self):
