@@ -1,6 +1,6 @@
 from enum import Enum, auto
 from dataclasses import dataclass
-from onemodel.position import Position
+from onemodel.dsl.position import Position
 
 class TokenType(Enum):
     """ TOKENTYPE

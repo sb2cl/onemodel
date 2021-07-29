@@ -1,5 +1,5 @@
-from onemodel.tokens import Token, TokenType
-from onemodel.lexer import Lexer
+from onemodel.dsl.tokens import Token, TokenType
+from onemodel.dsl.lexer import Lexer
 
 def test_empty():
     tokens, error = list(Lexer('<stdin>',"").generate_tokens())

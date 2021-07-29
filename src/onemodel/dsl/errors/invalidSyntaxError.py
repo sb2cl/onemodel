@@ -1,4 +1,4 @@
-from onemodel.errors.error import Error
+from onemodel.dsl.errors.error import Error
 
 class InvalidSyntaxError(Error):
     """ INVALIDSYNTAXERROR(ERROR)

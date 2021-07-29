@@ -1,12 +1,12 @@
-from onemodel.errors import *
-from onemodel.values import *
+from onemodel.dsl.errors import *
+from onemodel.dsl.values import *
 
-from onemodel.nodes import *
-from onemodel.tokens import TokenType
-from onemodel.values import *
-from onemodel.lexer import Lexer
-from onemodel.parser_ import Parser
-from onemodel.runTimeResult import RunTimeResult
+from onemodel.dsl.nodes import *
+from onemodel.dsl.tokens import TokenType
+from onemodel.dsl.values import *
+from onemodel.dsl.lexer import Lexer
+from onemodel.dsl.parser_ import Parser
+from onemodel.dsl.runTimeResult import RunTimeResult
 
 import math
 

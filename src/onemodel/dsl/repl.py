@@ -1,11 +1,11 @@
-from onemodel.interpreter import SymbolTable
-from onemodel.values.number import Number
-from onemodel.values.function import BuiltInFunction
-from onemodel.interpreter import Context
-from onemodel.lexer import Lexer
-from onemodel.parser_ import Parser
-from onemodel.interpreter import Interpreter
-from onemodel.utils.setup_input_history import setup_input_history
+from onemodel.dsl.interpreter import SymbolTable
+from onemodel.dsl.values.number import Number
+from onemodel.dsl.values.function import BuiltInFunction
+from onemodel.dsl.interpreter import Context
+from onemodel.dsl.lexer import Lexer
+from onemodel.dsl.parser_ import Parser
+from onemodel.dsl.interpreter import Interpreter
+from onemodel.dsl.utils.setup_input_history import setup_input_history
 
 import pdb
 

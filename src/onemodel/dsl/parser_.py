@@ -1,7 +1,7 @@
-from onemodel.errors import *
+from onemodel.dsl.errors import *
 
-from onemodel.tokens import TokenType
-from onemodel.nodes import *
+from onemodel.dsl.tokens import TokenType
+from onemodel.dsl.nodes import *
 
 class ParseResult:
     """ PARSERESULT

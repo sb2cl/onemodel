@@ -1,5 +1,5 @@
-from onemodel.errors import *
-from onemodel.runTimeResult import RunTimeResult
+from onemodel.dsl.errors import *
+from onemodel.dsl.runTimeResult import RunTimeResult
 
 class Value:
     def __init__(self):

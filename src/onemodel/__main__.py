@@ -1,6 +1,6 @@
 if __name__ == '__main__':
     from sys import argv
-    from onemodel.repl import Repl
+    from onemodel.dsl.repl import Repl
 
     repl = Repl()
 

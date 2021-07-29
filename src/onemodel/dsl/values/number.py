@@ -1,6 +1,6 @@
-from onemodel.values.value import Value
-from onemodel.errors import *
-from onemodel.runTimeResult import RunTimeResult
+from onemodel.dsl.values.value import Value
+from onemodel.dsl.errors import *
+from onemodel.dsl.runTimeResult import RunTimeResult
 import math
 
 class Number(Value):

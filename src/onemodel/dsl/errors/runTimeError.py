@@ -1,5 +1,5 @@
-from onemodel.errors.error import Error
-from onemodel.errors.string_with_arrows import string_with_arrows
+from onemodel.dsl.errors.error import Error
+from onemodel.dsl.errors.string_with_arrows import string_with_arrows
 
 class RunTimeError(Error):
     """ RUNTIMEERROR(ERROR)

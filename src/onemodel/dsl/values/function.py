@@ -1,10 +1,10 @@
-from onemodel.values.value import Value
-from onemodel.values.number import Number
-from onemodel.values.string import String
-from onemodel.values.list import List
-from onemodel.errors import *
-from onemodel.runTimeResult import RunTimeResult
-from onemodel import interpreter
+from onemodel.dsl.values.value import Value
+from onemodel.dsl.values.number import Number
+from onemodel.dsl.values.string import String
+from onemodel.dsl.values.list import List
+from onemodel.dsl.errors import *
+from onemodel.dsl.runTimeResult import RunTimeResult
+from onemodel.dsl import interpreter
 import onemodel
 import os
 

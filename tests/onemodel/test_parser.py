@@ -1,6 +1,6 @@
-from onemodel.parser_ import Parser
-from onemodel.tokens import Token, TokenType
-from onemodel.nodes import *
+from onemodel.dsl.parser_ import Parser
+from onemodel.dsl.tokens import Token, TokenType
+from onemodel.dsl.nodes import *
 
 import pdb
 

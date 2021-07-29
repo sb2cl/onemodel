@@ -1,5 +1,5 @@
-from onemodel.position import Position
-from onemodel.errors.string_with_arrows import string_with_arrows
+from onemodel.dsl.position import Position
+from onemodel.dsl.errors.string_with_arrows import string_with_arrows
 
 class Error:
     """ ERROR
