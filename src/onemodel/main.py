@@ -7,9 +7,7 @@ mp = Symbol(om,"std::Omega_A")
 
 mp.name = "std::Omega_A"
 
-#print(mp.name)
-#print(mp.reference)
-#print(mp)
-
-print(Symbol.__doc__)
-print(Symbol.name.__doc__)
+print(mp.name)
+print(mp.reference)
+print(mp)
+print(mp)

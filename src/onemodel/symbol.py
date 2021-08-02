@@ -272,3 +272,19 @@ class Symbol:
             property of '%s'. Use string type instead.""" % (str(reference),self._name))
 
         self._reference = reference
+    
+    def __repr__(self):
+        """ Representation method.
+        
+        """
+        out = f'{self.name}\n'
+        out += f'\tname = {self.name}\n'
+        out += f'\tnamebase = {self.namebase}\n'
+        out += f'\tnametex = {self.nametex}\n'
+        out += f'\tunits = {self.units}\n'
+        out += f'\tcomment = {self.comment}\n'
+        out += f'\tdescription = {self.description}\n'
+        out += f'\treference = {self.reference}\n'
+        return out
+                
+        
