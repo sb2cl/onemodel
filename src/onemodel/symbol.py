@@ -41,33 +41,44 @@ class Symbol:
         return self._name
 
     @name.setter
-    def name(self, n):
-        """
-        @brief: Setter for name.
+    def name(self, name):
+        """ Set the symbol name.
+        
+        Set the symbol name and check that it its a valid name.
+        
+        Args:
+            name: str
+                New name to set.
 
-        @param: n New name to set.
+        Raises:
+            ValueError: The passed name is not valid.
         """
-        if(type(n) != str):
-            raise ValueError("'%s' is not a valid type for the name. Use string type instead." % str(n))
+        # Name must be a str
+        if(type(name) != str):
+            raise ValueError("""'%s' is not a valid type for the name. Use string
+                    type instead.""" % str(name))
 
-        if(n == ""):
+        # Name cannot be an empty st
+        if(name == ""):
             raise ValueError("The name of the ModelPart is empty.") 
 
         # Check if the name already has an namespace.
-        if n.find("::")==-1:
+        if name.find("::")==-1:
             # If not, add it.
-            self._name = self.om.namespace + n
+            self._name = self.om.namespace + name
         else:
-            self._name = n
+            self._name = name
 
     @property
     def namebase(self):
-        """
-        @brief: The name without the namespace.
-        """
+        """ The symbol name without the namespace
 
+        Example: the namebase of "std::my_var" is "my_var".
+        """
+        # Find where the namespace ends
         ind = self._name.rfind("::")
 
+        # Remove the namespace
         if ind != -1:
             namebase = self._name[ind+2:]
         else:
@@ -76,38 +87,42 @@ class Symbol:
         return namebase
 
     @property
-    def nameTex(self):
-        """
-        @brief: Name used for LaTeX generation.
+    def nametex(self):
+        """ The name used for LaTeX generation.
+
         """
 
-        # Check if nameTex is not defined.
+        # Check if nametex is not defined.
         try:
-            self._nameTex
+            self._nametex
         except AttributeError:
             # If not defined, just return the name.
             return self._name
         else:
-            # Otherwise, return the nameTex.
-            return self._nameTex
+            # Otherwise, return the nametex.
+            return self._nametex
                 
-    @nameTex.setter
-    def nameTex(self, nameTex):
+    @nametex.setter
+    def nametex(self, nametex):
         """
-        @brief: Setter for nameTex.
+        @brief: Setter for nametex.
 
-        @param: nameTex New nameTex to set.
+        @param: nametex New nametex to set.
         """
 
-        if(type(nameTex) != str):
-            raise ValueError("'%s' is not a valid type for the 'nameTex' property of '%s'. Use string type instead." % (str(nameTex),self._name))
+        if(type(nametex) != str):
+            raise ValueError("""'%s' is not a valid type for the 'nametex'
+                    property of '%s'. Use string type instead."""
+                    % (str(nametex),self._name))
 
-        self._nameTex = nameTex
+        self._nametex = nametex
 
     @property
     def units(self):
-        """
-        @brief: Units of the symbol.
+        """ Units of the symbol.
+
+        The units related to the symbol. For parameters and variables is the
+        unit of its value. Units is not defined in equations.
         """
 
         # Check if units is not defined.
@@ -122,23 +137,31 @@ class Symbol:
                 
     @units.setter
     def units(self, units):
-        """
-        @brief: Setter for units.
+        """ Set the units.
 
-        @param: units New units to set.
-        """
+        Set the units of the symbol and check they are valid.
 
+        Args:
+            units: str
+                New units to set.
+
+        Raises:
+            ValueError: The units are not valid.
+        """
+        # Units must be an str
         if(type(units) != str):
-            raise ValueError("'%s' is not a valid type for the 'units' property of '%s'. Use string type instead." % (str(units),self._name))
+            raise ValueError("""'%s' is not a valid type for the 'units' property
+                    of '%s'. Use string type instead."""
+                    % (str(units),self._name))
 
         self._units = units
 
     @property
     def comment(self):
-        """
-        @brief: Comment of the symbol.
-        """
+        """ One-line comment for the symbol.
 
+        One-line comment which explains what is this symbol.
+        """
         # Check if comment is not defined.
         try:
             self._comment
@@ -151,23 +174,75 @@ class Symbol:
                 
     @comment.setter
     def comment(self, comment):
-        """
-        @brief: Setter for comment.
+        """ Set the comment.
 
-        @param: comment New comment to set.
-        """
+        Set the comment and check it is valid.
 
+        Args:
+            comment: str
+                New comment to set.
+
+        Raises:
+            ValueError: The comment is not valid.
+        """
+        # Must be an str
         if(type(comment) != str):
-            raise ValueError("'%s' is not a valid type for the 'comment' property of '%s'. Use string type instead." % (str(units),self._name))
+            raise ValueError("""'%s' is not a valid type for the 'comment'
+                    property of '%s'. Use string type instead."""
+                    % (str(comment),self._name))
+
+        # TODO: Check that the comment is one-line.
 
         self._comment = comment
 
     @property
-    def reference(self):
-        """
-        @brief: Reference of the symbol value.
-        """
+    def description(self):
+        """ Multi-line description of the symbol.
 
+        Multi-line description of the symbol which explains in depth all the
+        information realted to the symbol.
+        """
+        # Check if description is not defined.
+        try:
+            self._description
+        except AttributeError:
+            # If not defined, just return and empty string.
+            return ""
+        else:
+            # Otherwise, return the description.
+            return self._description
+                
+    @description.setter
+    def description(self, description):
+        """ Set the description.
+
+        Set the description and check it is valid.
+
+        Args:
+            description: str
+                New description to set.
+
+        Raises:
+            ValueError: The description is not valid.
+        """
+        # Must be an str
+        if(type(description) != str):
+            raise ValueError("""'%s' is not a valid type for the 'description'
+                    property of '%s'. Use string type instead."""
+                    % (str(description),self._name))
+
+        self._description = description
+
+    @property
+    def reference(self):
+        """ The reference of the symbol.
+
+        The reference of the symbol is a multi-line str with all the
+        information to track the reference of the value or the definition of
+        the symbol.
+
+        It could be the reference to a paper, to a bionumber or a book.
+        """
         # Check if reference is not defined.
         try:
             self._reference
@@ -180,13 +255,20 @@ class Symbol:
                 
     @reference.setter
     def reference(self, reference):
-        """
-        @brief: Setter for reference.
+        """ Set the reference.
 
-        @param: reference New reference to set.
+        Set the reference and check if it is valid.
+
+        Args:
+            reference: str
+                New reference to set.
+
+        Raises:
+            ValueError: The reference is not valid.
         """
 
         if(type(reference) != str):
-            raise ValueError("'%s' is not a valid type for the 'reference' property of '%s'. Use string type instead." % (str(reference),self._name))
+            raise ValueError("""'%s' is not a valid type for the 'reference'
+            property of '%s'. Use string type instead.""" % (str(reference),self._name))
 
         self._reference = reference
