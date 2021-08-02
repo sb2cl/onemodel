@@ -53,12 +53,12 @@ class Symbol:
         Raises:
             ValueError: The passed name is not valid.
         """
-        # Name must be a str
+        # Name must be a str.
         if(type(name) != str):
             raise ValueError("""'%s' is not a valid type for the name. Use string
                     type instead.""" % str(name))
 
-        # Name cannot be an empty st
+        # Name cannot be an empty str.
         if(name == ""):
             raise ValueError("The name of the ModelPart is empty.") 
 
