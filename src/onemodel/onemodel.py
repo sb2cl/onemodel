@@ -1,3 +1,5 @@
+from onemodel.symbol import SymbolType
+
 class OneModel:
     """ ONEMODEL
 
@@ -61,6 +63,12 @@ class OneModel:
         Returns:
             A List with all the parameters.
         """
-        return 1
+        params = []
+
+        for name, symbol in self.symbol_table.items():
+            if symbol.type == SymbolType.PARAMETER:
+                params.append(symbol) 
+
+        return params
                 
         
