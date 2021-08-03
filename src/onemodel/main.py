@@ -11,3 +11,5 @@ onemodel.add(p)
 symbol = onemodel.get('std.Omega_A')
 
 print(symbol)
+
+print(onemodel.parameters)

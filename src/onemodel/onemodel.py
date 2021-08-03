@@ -53,3 +53,14 @@ class OneModel:
                 The name of the symbol to be removed.
         """
         del self.symbol_table[name]
+
+    @property
+    def parameters(self):
+        """ Return all the parameters of the model.
+        
+        Returns:
+            A List with all the parameters.
+        """
+        return 1
+                
+        
