@@ -109,6 +109,39 @@ class Symbol:
         self._value = value
 
     @property
+    def valuetex(self):
+        """ Value used for latex generation.
+        
+        """
+        # Try returning type.
+        try:
+            return self._valuetex
+
+        except AttributeError:
+            # If not defined, just return value.
+            return self.value
+                
+    @valuetex.setter
+    def valuetex(self, valuetex):
+        """ Setter for valuetex.
+        
+        Set valuetex and check it is valid.
+        
+        Args:
+            valuetex: str
+                New valuetex to set
+                
+        Raises:
+            ValueError: 
+        """
+        if(type(valuetex) != str):
+            raise ValueError("""'%s' is not a valid type for the 'valuetex'
+                    property of '%s'. Use str type instead."""
+                    % (str(valuetex_),self._name))
+
+        self._valuetex = valuetex
+
+    @property
     def type(self):
         """ The type of the symbol.
 
@@ -340,6 +373,7 @@ class Symbol:
         out += f'\ttype = {self.type.name}\n'
         out += f'\tnamebase = {self.namebase}\n'
         out += f'\tnametex = {self.nametex}\n'
+        out += f'\tvaluetex = {self.valuetex}\n'
         out += f'\tunits = {self.units}\n'
         out += f'\tcomment = {self.comment}\n'
         out += f'\tdescription = {self.description}\n'
