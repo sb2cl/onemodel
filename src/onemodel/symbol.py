@@ -1,3 +1,15 @@
+from enum import Enum, auto
+
+class SymbolType(Enum):
+    """ Enum for all the valid symbol types.
+
+    This enum is used for identifing the type of the symbols in the
+    symbol_table in the onemodel models.
+    """
+    PARAMETER = 1
+    VARIABLE  = auto()
+    EQUATION  = auto()
+    
 class Symbol:
     """ Base class for model objects like: parameters, variables or equations.
 
@@ -21,36 +33,6 @@ class Symbol:
                 Symbol name
         """
         self.name = name  
-
-    @property
-    def value(self):
-        """ Value of the symbol.
-        
-        The value associated to the Symbol. This value changes dependening on
-        the type of symbol, for a parameter it will be a real number, for
-        a varible if will be a real number o a math expression and for
-        a equation it will be a math expression with and equality.
-        """
-        # Try returning value.
-        try:
-            return self._value
-
-        except AttributeError:
-            # If not defined, just return None.
-            return None
-
-    @value.setter
-    def value(self, value):
-        """ Set the value.
-        
-        Set the value and check that it is valid. This method has to be
-        overriden by the parameter, variable and equation classes.
-        
-        Args:
-            value: any
-                New value to set.
-        """
-        self._value = value
 
     @property
     def name(self):
@@ -95,6 +77,69 @@ class Symbol:
             raise ValueError("The name of the ModelPart is empty.") 
 
         self._name = name
+
+    @property
+    def value(self):
+        """ Value of the symbol.
+        
+        The value associated to the Symbol. This value changes dependening on
+        the type of symbol, for a parameter it will be a real number, for
+        a varible if will be a real number o a math expression and for
+        a equation it will be a math expression with and equality.
+        """
+        # Try returning value.
+        try:
+            return self._value
+
+        except AttributeError:
+            # If not defined, just return None.
+            return None
+
+    @value.setter
+    def value(self, value):
+        """ Set the value.
+        
+        Set the value and check that it is valid. This method has to be
+        overriden by the parameter, variable and equation classes.
+        
+        Args:
+            value: any
+                New value to set.
+        """
+        self._value = value
+
+    @property
+    def type(self):
+        """ The type of the symbol.
+
+        """
+        # Try returning type.
+        try:
+            return self._type
+
+        except AttributeError:
+            # If not defined, just return None.
+            return None
+
+    @type.setter
+    def type(self, type_):
+        """ Setter for type.
+        
+        Set the type and check it is valid.
+        
+        Args:
+            type_: SymbolType
+                Type to set
+                
+        Raises:
+            Error: An error.
+        """
+        if(type(type_) != SymbolType):
+            raise ValueError("""'%s' is not a valid type for the 'type'
+                    property of '%s'. Use SymbolType type instead."""
+                    % (str(type_),self._name))
+
+        self._type = type_
 
     @property
     def namebase(self):
@@ -290,8 +335,9 @@ class Symbol:
         
         """
         out = f'{self.name}\n'
-        out += f'\tvalue = {self.value}\n'
         out += f'\tname = {self.name}\n'
+        out += f'\tvalue = {self.value}\n'
+        out += f'\ttype = {self.type.name}\n'
         out += f'\tnamebase = {self.namebase}\n'
         out += f'\tnametex = {self.nametex}\n'
         out += f'\tunits = {self.units}\n'

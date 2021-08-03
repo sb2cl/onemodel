@@ -1,5 +1,5 @@
 from onemodel.onemodel import OneModel
-from onemodel.symbol import Parameter
+from onemodel.parameter import Parameter
 
 onemodel = OneModel()
 

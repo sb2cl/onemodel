@@ -1,4 +1,4 @@
-from onemodel.symbol import Symbol
+from onemodel.symbol import Symbol, SymbolType
 
 class Parameter(Symbol):
     """ This class defines a onemodel parameter.
@@ -19,6 +19,4 @@ class Parameter(Symbol):
                 Parameter name
         """
         super().__init__(name)
-                
-        
-        
+        self.type = SymbolType.PARAMETER
