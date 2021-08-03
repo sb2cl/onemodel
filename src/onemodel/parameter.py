@@ -25,7 +25,7 @@ class Parameter(Symbol):
     def value(self, value):
         """ Set value for a parameter.
         
-        Set value and check it is valid.
+        Set value and check if it is valid.
         
         Args:
             value: str

@@ -1,7 +1,28 @@
 from onemodel.onemodel import OneModel
 from onemodel.parameter import Parameter
+from onemodel.variable import Variable
 
 onemodel = OneModel()
+
+# Variable definiton.
+
+v = Variable("x1")
+v.value = 0
+v.units = 'molec'
+v.comment = 'Sigma unit'
+onemodel.add(v)
+
+v = Variable("x2")
+v.value = 0
+v.units = 'molec'
+v.comment = 'Anti-sigma unit'
+onemodel.add(v)
+
+v = Variable("x3")
+v.value = 0
+v.units = 'molec'
+v.comment = 'Protein of interest'
+onemodel.add(v)
 
 # Parameter definiton.
 
@@ -50,3 +71,4 @@ onemodel.add(p)
 print(onemodel.parameters)
 print(onemodel.parameters_name)
 print(onemodel.parameters_value)
+print(onemodel.get('x1'))
