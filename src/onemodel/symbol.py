@@ -91,16 +91,13 @@ class Symbol:
         """ The name used for LaTeX generation.
 
         """
-
-        # Check if nametex is not defined.
+        # Try returning nametex.
         try:
-            self._nametex
+            return self._nametex
+
         except AttributeError:
             # If not defined, just return the name.
             return self._name
-        else:
-            # Otherwise, return the nametex.
-            return self._nametex
                 
     @nametex.setter
     def nametex(self, nametex):
@@ -125,15 +122,12 @@ class Symbol:
         unit of its value. Units is not defined in equations.
         """
 
-        # Check if units is not defined.
+        # Try returning units.
         try:
-            self._units
+            return self._units
         except AttributeError:
             # If not defined, just return and empty string.
             return ""
-        else:
-            # Otherwise, return the units.
-            return self._units
                 
     @units.setter
     def units(self, units):
@@ -162,15 +156,12 @@ class Symbol:
 
         One-line comment which explains what is this symbol.
         """
-        # Check if comment is not defined.
+        # Try returning comment.
         try:
-            self._comment
-        except AttributeError:
-            # If not defined, just return and empty string.
-            return "TODO: One-line comment of the symbol."
-        else:
-            # Otherwise, return the comment.
             return self._comment
+        except AttributeError:
+            # If not defined, just return a default comment.
+            return "TODO: One-line comment of the symbol."
                 
     @comment.setter
     def comment(self, comment):
@@ -202,15 +193,12 @@ class Symbol:
         Multi-line description of the symbol which explains in depth all the
         information realted to the symbol.
         """
-        # Check if description is not defined.
+        # Try returning description.
         try:
-            self._description
-        except AttributeError:
-            # If not defined, just return and empty string.
-            return "TODO: Multi-line description of the symbol."
-        else:
-            # Otherwise, return the description.
             return self._description
+        except AttributeError:
+            # If not defined, just return an default description.
+            return "TODO: Multi-line description of the symbol."
                 
     @description.setter
     def description(self, description):
@@ -243,15 +231,12 @@ class Symbol:
 
         It could be the reference to a paper, to a bionumber or a book.
         """
-        # Check if reference is not defined.
+        # Try returning reference.
         try:
-            self._reference
-        except AttributeError:
-            # If not defined, just return and empty string.
-            return "TODO: Reference to a paper for tracking symbol value or definition."
-        else:
-            # Otherwise, return the reference.
             return self._reference
+        except AttributeError:
+            # If not defined, just return a default reference.
+            return "TODO: Reference to a paper for tracking symbol value or definition."
                 
     @reference.setter
     def reference(self, reference):
