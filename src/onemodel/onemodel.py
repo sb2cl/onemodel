@@ -100,3 +100,19 @@ class OneModel:
             params_value.append(param.value)
 
         return params_value
+
+    @property
+    def variables(self):
+        """ Return a list with all the variables of the model.
+        
+        Returns:
+            A List with all the variables.
+        """
+        vars_ = []
+
+        for name, symbol in self.symbol_table.items():
+            if symbol.type == SymbolType.VARIABLE:
+                vars_.append(symbol) 
+
+        return vars_
+ 

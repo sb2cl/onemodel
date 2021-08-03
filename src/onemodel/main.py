@@ -68,7 +68,4 @@ p.units = '1/molec/t'
 p.comment = 'Sigma and anti-sigma secuestration rate'
 onemodel.add(p)
 
-print(onemodel.parameters)
-print(onemodel.parameters_name)
-print(onemodel.parameters_value)
-print(onemodel.get('x1'))
+print(onemodel.variables)
