@@ -42,3 +42,14 @@ class OneModel:
             None
         """
         self.symbol_table[symbol.name] = symbol
+
+    def remove(self, name):
+        """ Remove a symbol from the symbol_table.
+        
+        Remove a symbol by its name from the symbol_table.
+        
+        Args:
+            name: str
+                The name of the symbol to be removed.
+        """
+        del self.symbol_table[name]
