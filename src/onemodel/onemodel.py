@@ -9,5 +9,3 @@ class OneModel:
         @brief: Constructor of OneModel.
         """
                 
-        # Actual namespace being used.
-        self.namespace = "std::"

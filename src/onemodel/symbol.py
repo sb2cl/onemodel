@@ -1,8 +1,5 @@
-from dataclasses import dataclass
-
 from onemodel.onemodel import OneModel
    
-@dataclass
 class Symbol:
     """ Base class for model objects like: parameters, variables or equations.
 
