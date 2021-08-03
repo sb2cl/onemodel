@@ -49,3 +49,4 @@ onemodel.add(p)
 
 print(onemodel.parameters)
 print(onemodel.parameters_name)
+print(onemodel.parameters_value)

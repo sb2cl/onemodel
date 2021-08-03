@@ -85,3 +85,18 @@ class OneModel:
             params_name.append(param.name)
 
         return params_name
+
+    @property
+    def parameters_value(self):
+        """ Return a list with the values of all the parameters.
+        
+        Returns:
+            List(str)
+        """
+        params_value = []
+        params = self.parameters
+
+        for param in params:
+            params_value.append(param.value)
+
+        return params_value
