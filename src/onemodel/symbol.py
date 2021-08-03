@@ -25,6 +25,36 @@ class Symbol:
         self.name = name  
 
     @property
+    def value(self):
+        """ Value of the symbol.
+        
+        The value associated to the Symbol. This value changes dependening on
+        the type of symbol, for a parameter it will be a real number, for
+        a varible if will be a real number o a math expression and for
+        a equation it will be a math expression with and equality.
+        """
+        # Try returning value.
+        try:
+            return self._value
+
+        except AttributeError:
+            # If not defined, just return None.
+            return None
+
+    @value.setter
+    def value(self, value):
+        """ Set the value.
+        
+        Set the value and check that it is valid. This method has to be
+        overriden by the parameter, variable and equation classes.
+        
+        Args:
+            value: any
+                New value to set.
+        """
+        self._value = value
+
+    @property
     def name(self):
         """ Symbol name.
 
@@ -125,8 +155,8 @@ class Symbol:
         try:
             return self._units
         except AttributeError:
-            # If not defined, just return and empty string.
-            return ""
+            # If not defined, just return None.
+            return None
                 
     @units.setter
     def units(self, units):
@@ -262,11 +292,12 @@ class Symbol:
         
         """
         out = f'{self.name}\n'
+        out += f'\tvalue = {self.value}\n'
         out += f'\tname = {self.name}\n'
         out += f'\tnamebase = {self.namebase}\n'
         out += f'\tnametex = {self.nametex}\n'
-        out += f'\tunits = "{self.units}"\n'
-        out += f'\tcomment = "{self.comment}"\n'
-        out += f'\tdescription = "{self.description}"\n'
-        out += f'\treference = "{self.reference}"\n'
+        out += f'\tunits = {self.units}\n'
+        out += f'\tcomment = {self.comment}\n'
+        out += f'\tdescription = {self.description}\n'
+        out += f'\treference = {self.reference}\n'
         return out
