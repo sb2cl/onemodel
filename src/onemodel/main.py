@@ -3,11 +3,10 @@ from onemodel.symbol import Symbol
 
 om = OneModel()
 
-mp = Symbol(om,"std::Omega_A")
+mp = Symbol("std.Omega_A")
 
-mp.name = "std::Omega_A"
+om.set(mp)
 
-print(mp.name)
-print(mp.reference)
-print(mp)
-print(mp)
+symbol = om.get('std.Omega_A')
+
+print(symbol)

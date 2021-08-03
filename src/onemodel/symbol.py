@@ -15,16 +15,13 @@ class Symbol:
             Symbol name without the namespace.
     """
 
-    def __init__(self, om, name):
+    def __init__(self, name):
         """ Inits Symbol.
 
         Args:
-            om: OneModel
-                Parent OneModel object where this Symbol is included.
             name: str
                 Symbol name (the namespace is added in name.setter).
         """
-        self.om = om
         self.name = name  
 
     @property
@@ -34,6 +31,10 @@ class Symbol:
         The name associated to the Symbol, the name must be unique in the model
         because it will be used to find the Symbol in the symbol table in the
         onemodel model.
+
+        The symbol name cannot be changed once it is initialized. If you want
+        to change the symbol name, copy this symbol with the new name and
+        remove it from the symbol_table in the onemodel model.
         """
         return self._name
 
@@ -48,8 +49,14 @@ class Symbol:
                 New name to set.
 
         Raises:
+            ValueError: Symbol name cannot be changed once it is initialized.
             ValueError: The passed name is not valid.
         """
+        # Check if the name is defined.
+        if hasattr(self, '_name'):
+            # Name cannot be changed once it is defined, return an error.
+            raise ValueError("Cannot change name of '%s' into '%s', symbol name cannot be changed once it is initialized." % (self._name, name))
+
         # Name must be a str.
         if(type(name) != str):
             raise ValueError("""'%s' is not a valid type for the name. Use string
@@ -59,12 +66,7 @@ class Symbol:
         if(name == ""):
             raise ValueError("The name of the ModelPart is empty.") 
 
-        # Check if the name already has an namespace.
-        if name.find("::")==-1:
-            # If not, add it.
-            self._name = self.om.namespace + name
-        else:
-            self._name = name
+        self._name = name
 
     @property
     def namebase(self):
@@ -73,11 +75,11 @@ class Symbol:
         Example: the namebase of "std::my_var" is "my_var".
         """
         # Find where the namespace ends
-        ind = self._name.rfind("::")
+        ind = self._name.rfind(".")
 
         # Remove the namespace
         if ind != -1:
-            namebase = self._name[ind+2:]
+            namebase = self._name[ind+1:]
         else:
             namebase = self._name
 
@@ -158,7 +160,7 @@ class Symbol:
             return self._comment
         except AttributeError:
             # If not defined, just return a default comment.
-            return "TODO: One-line comment of the symbol."
+            return f"TODO: One-line comment of \'{self.name}\'."
                 
     @comment.setter
     def comment(self, comment):
@@ -195,7 +197,7 @@ class Symbol:
             return self._description
         except AttributeError:
             # If not defined, just return an default description.
-            return "TODO: Multi-line description of the symbol."
+            return f"TODO: Multi-line description of \'{self.name}\'."
                 
     @description.setter
     def description(self, description):
@@ -233,7 +235,7 @@ class Symbol:
             return self._reference
         except AttributeError:
             # If not defined, just return a default reference.
-            return "TODO: Reference to a paper for tracking symbol value or definition."
+            return f"TODO: Reference to a paper for tracking \'{self.name}\' value and/or definition."
                 
     @reference.setter
     def reference(self, reference):
