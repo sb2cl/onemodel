@@ -1,11 +1,11 @@
 from onemodel.onemodel import OneModel
-from onemodel.symbol import Symbol
+from onemodel.symbol import Parameter
 
 onemodel = OneModel()
 
-symbol = Symbol("std.Omega_A")
+p = Parameter("std.Omega_A")
 
-onemodel.add(symbol)
+onemodel.add(p)
 
 symbol = onemodel.get('std.Omega_A')
 

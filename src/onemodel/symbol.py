@@ -1,5 +1,3 @@
-from onemodel.onemodel import OneModel
-   
 class Symbol:
     """ Base class for model objects like: parameters, variables or equations.
 
@@ -20,7 +18,7 @@ class Symbol:
 
         Args:
             name: str
-                Symbol name (the namespace is added in name.setter).
+                Symbol name
         """
         self.name = name  
 
@@ -102,7 +100,7 @@ class Symbol:
     def namebase(self):
         """ The symbol name without the namespace
 
-        Example: the namebase of "std::my_var" is "my_var".
+        Example: the namebase of "std.my_var" is "my_var".
         """
         # Find where the namespace ends
         ind = self._name.rfind(".")
