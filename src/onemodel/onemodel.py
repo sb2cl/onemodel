@@ -28,11 +28,11 @@ class OneModel:
 
         return symbol
     
-    def set(self, symbol):
-        """ Set a symbol in the symbol_table.
+    def add(self, symbol):
+        """ Add a symbol in the symbol_table.
         
-        Set a new symbol in the symbol_table. It the name of that symbol was
-        already been used, it will overwrite the old symbol with the new one.
+        Add a new symbol in the symbol_table. It the name of that symbol was
+        already been used in the symbol_table, it will overwrite the old symbol with the new one.
         
         Args:
             symbol:

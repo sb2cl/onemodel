@@ -1,12 +1,12 @@
 from onemodel.onemodel import OneModel
 from onemodel.symbol import Symbol
 
-om = OneModel()
+onemodel = OneModel()
 
-mp = Symbol("std.Omega_A")
+symbol = Symbol("std.Omega_A")
 
-om.set(mp)
+onemodel.add(symbol)
 
-symbol = om.get('std.Omega_A')
+symbol = onemodel.get('std.Omega_A')
 
 print(symbol)

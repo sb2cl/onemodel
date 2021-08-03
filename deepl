@@ -1,4 +1,4 @@
 
-  variable i(inicio = 0) "La corriente a través del resistivo".
+        """ Añade un símbolo en la tabla_símbolo.
 ---------
-  variable i(start = 0) "The current through the resistive".
+        """ Adds a symbol in the symbol_table.
