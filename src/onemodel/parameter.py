@@ -20,3 +20,20 @@ class Parameter(Symbol):
         """
         super().__init__(name)
         self.type = SymbolType.PARAMETER
+
+    @Symbol.value.setter
+    def value(self, value):
+        """ Set value for a parameter.
+        
+        Set value and check it is valid.
+        
+        Args:
+            value: str
+                
+        Raises:
+            Error: An error.
+        """
+        # TODO: Check valid type.
+        self._value = value
+                
+        

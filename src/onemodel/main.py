@@ -4,6 +4,7 @@ from onemodel.parameter import Parameter
 onemodel = OneModel()
 
 p = Parameter("std.Omega_A")
+p.value = 5        
 
 onemodel.add(p)
 
