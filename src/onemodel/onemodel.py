@@ -115,4 +115,18 @@ class OneModel:
                 vars_.append(symbol) 
 
         return vars_
- 
+
+    @property
+    def variables_name(self):
+        """ Return a list with the names of all the variables.
+        
+        Returns:
+            List(str)
+        """
+        vars_name = []
+        vars_ = self.variables
+
+        for var in vars_:
+            vars_name.append(var.name)
+
+        return vars_name
