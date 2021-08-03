@@ -58,7 +58,7 @@ class OneModel:
 
     @property
     def parameters(self):
-        """ Return all the parameters of the model.
+        """ Return a list with all the parameters of the model.
         
         Returns:
             A List with all the parameters.
@@ -70,5 +70,3 @@ class OneModel:
                 params.append(symbol) 
 
         return params
-                
-        

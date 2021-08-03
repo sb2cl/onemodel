@@ -12,7 +12,7 @@ parameter k3 = {1.0, '1/t'}               "Protein production"
 parameter d1 = {1.0, '1/t'}               "Sigma degradation"
 parameter d2 = {1.0, '1/t'}               "Anti-sigma degradation"
 parameter d3 = {1.0, '1/t'}               "Protein degradation"
-parameter gamma12 = {1.0, '1/molec/t'}    "Sigma and anti-sigma anhiquilaiton rate"
+parameter gamma12 = {1.0, '1/molec/t'}    "Sigma and anti-sigma secuestration rate"
 
 # Ecuation definition.
 
