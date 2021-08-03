@@ -167,7 +167,7 @@ class Symbol:
             self._comment
         except AttributeError:
             # If not defined, just return and empty string.
-            return ""
+            return "TODO: One-line comment of the symbol."
         else:
             # Otherwise, return the comment.
             return self._comment
@@ -207,7 +207,7 @@ class Symbol:
             self._description
         except AttributeError:
             # If not defined, just return and empty string.
-            return ""
+            return "TODO: Multi-line description of the symbol."
         else:
             # Otherwise, return the description.
             return self._description
@@ -248,7 +248,7 @@ class Symbol:
             self._reference
         except AttributeError:
             # If not defined, just return and empty string.
-            return ""
+            return "TODO: Reference to a paper for tracking symbol value or definition."
         else:
             # Otherwise, return the reference.
             return self._reference
@@ -281,10 +281,8 @@ class Symbol:
         out += f'\tname = {self.name}\n'
         out += f'\tnamebase = {self.namebase}\n'
         out += f'\tnametex = {self.nametex}\n'
-        out += f'\tunits = {self.units}\n'
-        out += f'\tcomment = {self.comment}\n'
-        out += f'\tdescription = {self.description}\n'
-        out += f'\treference = {self.reference}\n'
+        out += f'\tunits = "{self.units}"\n'
+        out += f'\tcomment = "{self.comment}"\n'
+        out += f'\tdescription = "{self.description}"\n'
+        out += f'\treference = "{self.reference}"\n'
         return out
-                
-        
