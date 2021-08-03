@@ -69,3 +69,4 @@ p.comment = 'Sigma and anti-sigma secuestration rate'
 onemodel.add(p)
 
 print(onemodel.variables_name)
+print(onemodel.variables_value)
