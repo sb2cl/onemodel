@@ -56,6 +56,7 @@ class Matlab:
         while i < i_max:
             f.write('\t')
             f.write('0 '*i)
+            # TODO: Write if the variable is algebraic o not.
             f.write('1 ')
             f.write('0 '*(i_max-i-1))
             f.write('\n')
