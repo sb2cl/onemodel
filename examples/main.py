@@ -2,8 +2,9 @@ from onemodel.onemodel import OneModel
 from onemodel.parameter import Parameter
 from onemodel.variable import Variable
 from onemodel.equation import Equation
+from onemodel.export.matlab.matlab import Matlab
 
-onemodel = OneModel()
+onemodel = OneModel("antithetic")
 
 # Variable definiton.
 
@@ -86,5 +87,5 @@ e.value = 'der_x3 == k2*x3 - d3*x3'
 e.comment = 'Dynamic of protein'
 onemodel.add(e)
 
-print(onemodel.equations_name)
-print(onemodel.equations_value)
+matlab = Matlab(onemodel)
+matlab.generate_param()

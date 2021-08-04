@@ -6,10 +6,14 @@ class OneModel:
     This class implements OneModel models.
     """
 
-    def __init__(self):
+    def __init__(self, name):
         """ Inits OneModel.
 
+        Args:
+            name: srt
+                Name of this onemodel model.
         """
+        self.name = name
         self.symbol_table = {}
 
     def get(self, name):
