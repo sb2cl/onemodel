@@ -89,3 +89,4 @@ onemodel.add(e)
 
 matlab = Matlab(onemodel)
 matlab.generate_param()
+matlab.generate_ode()
