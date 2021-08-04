@@ -176,4 +176,17 @@ class OneModel:
 
         return eqns_name
 
+    @property
+    def equations_value(self):
+        """ Return a list with the values of all the equations.
+        
+        Returns:
+            List(str)
+        """
+        eqns_value = []
+        eqns = self.equations
 
+        for eqn in eqns:
+            eqns_value.append(eqn.value)
+
+        return eqns_value

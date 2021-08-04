@@ -87,3 +87,4 @@ e.comment = 'Dynamic of protein'
 onemodel.add(e)
 
 print(onemodel.equations_name)
+print(onemodel.equations_value)
