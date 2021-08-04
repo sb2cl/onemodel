@@ -1,3 +1,5 @@
+import sympy as sym
+
 from onemodel.symbol import Symbol, SymbolType
 
 class Parameter(Symbol):
@@ -33,7 +35,14 @@ class Parameter(Symbol):
         Raises:
             Error: An error.
         """
-        # TODO: Check valid type.
-        self._value = value
-                
-        
+        # The value must be a string.
+        if type(value) != str:
+            raise ValueError(f"'{value}' is not a valid type for the 'value' property of '{self._name}', use 'str' type instead.")
+
+        # Sympyfy the value and check it is a real number.
+        value_sym = sym.sympify(value)
+
+        if not value_sym.is_real:
+            raise ValueError(f"'{value}' must be a real number for the 'value' property of '{self._name}'.")
+
+        self._value = value_sym
