@@ -1,6 +1,7 @@
 from onemodel.onemodel import OneModel
 from onemodel.parameter import Parameter
 from onemodel.variable import Variable
+from onemodel.equation import Equation
 
 onemodel = OneModel()
 
@@ -67,6 +68,23 @@ p.value = 1.0
 p.units = '1/molec/t'
 p.comment = 'Sigma and anti-sigma secuestration rate'
 onemodel.add(p)
+
+# Equation definition.
+
+e = Equation('eq_1')
+e.value = 'der_x1 == k1 - gamma12*x1*x2 - d1*x1'
+e.comment = 'Dynamic of sigma'
+onemodel.add(e)
+
+e = Equation('eq_2')
+e.value = 'der_x2 == k2*x3 - gamma12*x1*x2 - d1*x1'
+e.comment = 'Dynamic of anti-sigma'
+onemodel.add(e)
+
+e = Equation('eq_3')
+e.value = 'der_x3 == k2*x3 - d3*x3'
+e.comment = 'Dynamic of protein'
+onemodel.add(e)
 
 print(onemodel.variables_name)
 print(onemodel.variables_value)
