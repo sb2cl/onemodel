@@ -86,5 +86,4 @@ e.value = 'der_x3 == k2*x3 - d3*x3'
 e.comment = 'Dynamic of protein'
 onemodel.add(e)
 
-print(onemodel.variables_name)
-print(onemodel.variables_value)
+print(onemodel.equations_name)

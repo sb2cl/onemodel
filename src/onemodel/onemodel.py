@@ -146,3 +146,34 @@ class OneModel:
 
         return vars_value
 
+    @property
+    def equations(self):
+        """ Return a list with all the equations of the model.
+        
+        Returns:
+            A List with all the equations.
+        """
+        eqns = []
+
+        for name, symbol in self.symbol_table.items():
+            if symbol.type == SymbolType.EQUATION:
+                eqns.append(symbol) 
+
+        return eqns
+
+    @property
+    def equations_name(self):
+        """ Return a list with the names of all the equations.
+        
+        Returns:
+            List(str)
+        """
+        eqns_name = []
+        eqns = self.equations
+
+        for eqn in eqns:
+            eqns_name.append(eqn.name)
+
+        return eqns_name
+
+
