@@ -44,6 +44,7 @@ class Equation(Symbol):
         """
         super().__init__(name)
         self.type = SymbolType.EQUATION
+        self.variable = None
                 
     @Symbol.value.setter
     def value(self, value):

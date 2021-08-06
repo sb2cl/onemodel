@@ -60,6 +60,35 @@ class OneModel:
         """
         del self.symbol_table[name]
 
+    def check(self):
+        """ Checks that the model is valid and matches variables to equations.
+        
+        Checks that the model is valid (same number of variable and equations)
+        and matches each of the variable to the corresponding equation that
+        calculates its value.
+        
+        Raises:
+            Error: An error.
+        """
+        vars_ = self.variables
+        eqns = self.equations
+        # 1. Check model is balanced.
+        if len(vars_) != len(eqns):
+            raise ValueError('The number of variables and equations is not balanced in the model.')
+
+        # 2. Match equations to variables.
+        # ODE equations have the variable name which they will calculate.
+        for eqn in eqns:
+            var = self.get(eqn.variable_name)
+
+            if var == None:
+                # We didn't find the var.
+                raise ValueError('Variable does not exist.')
+
+            # Save the match!
+            eqn.variable = var
+            var.equation = eqn
+
     @property
     def parameters(self):
         """ Return a list with all the parameters of the model.

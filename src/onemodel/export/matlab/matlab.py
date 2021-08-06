@@ -18,6 +18,7 @@ class Matlab:
                 OneModel object to export into Matlab syntax.
         """
         self.onemodel = onemodel
+        self.onemodel.check()
 
     def generate_param(self):
         """ Generate Matlab function which returns the default parameters.
@@ -103,15 +104,14 @@ class Matlab:
             f.write(f'%\t x(i,:) = {vars_[i].name} \t "{vars_[i].comment}"\n')
             i += 1
         
-        # ODE.
+        # Generate ODE equations.
         f.write(f'\n')
         i = 0
         while i < len(vars_):
-            f.write(f'% der({vars_[i].name}) "{self.onemodel.equations[i].comment}"\n')
-            f.write(f'dx(i,1) = {self.onemodel.equations[i].value}\n\n')
+            f.write(f'% der({vars_[i].name}) "{vars_[i].equation.comment}"\n')
+            f.write(f'dx(i,1) = {vars_[i].equation.value}\n\n')
             i += 1
 
         f.write(f'end\n')
-
 
         f.close()

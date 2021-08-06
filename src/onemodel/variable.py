@@ -23,6 +23,7 @@ class Variable(Symbol):
         """
         super().__init__(name)
         self.type = SymbolType.VARIABLE
+        self.equation = None
     
     @Symbol.value.setter
     def value(self, value):
