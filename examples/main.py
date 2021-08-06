@@ -80,13 +80,13 @@ onemodel.add(e)
 
 e = Equation('eq_2')
 e.variable_name = 'x2'
-e.value = 'k2*x3 - gamma12*x1*x2 - d1*x1'
+e.value = 'k2*x3 - gamma12*x1*x2 - d2*x2'
 e.comment = 'Dynamic of anti-sigma'
 onemodel.add(e)
 
 e = Equation('eq_3')
 e.variable_name = 'x3'
-e.value = 'k2*x3 - d3*x3'
+e.value = 'k3*x1 - d3*x3'
 e.comment = 'Dynamic of protein'
 onemodel.add(e)
 

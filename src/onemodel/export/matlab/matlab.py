@@ -101,15 +101,20 @@ class Matlab:
         i = 0
         while i < len(vars_):
             # TODO: indicate if var is algebraic or not.
-            f.write(f'%\t x(i,:) = {vars_[i].name} \t "{vars_[i].comment}"\n')
+            f.write(f'{vars_[i].name} = x({i+1},:);\t % {vars_[i].comment}\n')
             i += 1
-        
+
+        # Comment parameters.
+        f.write(f'\n% Parameters.\n')
+        for par in self.onemodel.parameters:
+            f.write(f'{par.name} = p.{par.name};\t % {par.comment}\n')
+       
         # Generate ODE equations.
         f.write(f'\n')
         i = 0
         while i < len(vars_):
             f.write(f'% der({vars_[i].name}) "{vars_[i].equation.comment}"\n')
-            f.write(f'dx(i,1) = {vars_[i].equation.value}\n\n')
+            f.write(f'dx({i+1},1) = {vars_[i].equation.value};\n\n')
             i += 1
 
         f.write(f'end\n')
