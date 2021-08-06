@@ -22,6 +22,7 @@ class EquationType(Enum):
     """
     EQUALITY = auto()
     SUBSTITUTION = auto()
+    ODE = auto()
 
 class Equation(Symbol):
     """ This class defines a onemodel equation.
@@ -60,29 +61,24 @@ class Equation(Symbol):
         if type(value) != str:
             raise ValueError(f"'{value}' is not a valid type for the 'value' property of '{self._name}', use 'str' type instead.")
 
-        # Check the type of the equation.
-        try:
-            left, right = value.split('==')
-
-        except: 
-            raise ValueError(f"'{value}' must have just one equality sign '==' for the 'value' property of '{self._name}'.")
-
-        # Sympyfy the value and check it is a real number.
-        left = sym.sympify(left)
-        right = sym.sympify(right)
-        eq = sym.Eq(left, right)
+        # Sympify the value.
+        value_sym = sym.sympify(value)
 
         # Just save the evaluation value.
-        self._value = eq
+        self._value = value_sym
 
     @property
-    def left(self):
-        """ Get left side of the equation.
+    def variable_name(self):
+        """ The name of the varible which is calculated with this equation.
+
         """
-        return self.value.lhs
-                
-    @property
-    def right(self):
-        """ Get right side of the equation.
+        return self._variable_name
+
+    @variable_name.setter
+    def variable_name(self, variable_name):
+        """ Setter for variable_name
+        
+        Args:
+            variable_name: str
         """
-        return self.value.rhs
+        self._variable_name = variable_name

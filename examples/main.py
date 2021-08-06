@@ -73,17 +73,20 @@ onemodel.add(p)
 # Equation definition.
 
 e = Equation('eq_1')
-e.value = 'der_x1 == k1 - gamma12*x1*x2 - d1*x1'
+e.variable_name = 'x1'
+e.value = 'k1 - gamma12*x1*x2 - d1*x1'
 e.comment = 'Dynamic of sigma'
 onemodel.add(e)
 
 e = Equation('eq_2')
-e.value = 'der_x2 == k2*x3 - gamma12*x1*x2 - d1*x1'
+e.variable_name = 'x2'
+e.value = 'k2*x3 - gamma12*x1*x2 - d1*x1'
 e.comment = 'Dynamic of anti-sigma'
 onemodel.add(e)
 
 e = Equation('eq_3')
-e.value = 'der_x3 == k2*x3 - d3*x3'
+e.variable_name = 'x3'
+e.value = 'k2*x3 - d3*x3'
 e.comment = 'Dynamic of protein'
 onemodel.add(e)
 
