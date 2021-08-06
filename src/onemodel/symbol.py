@@ -6,7 +6,7 @@ class SymbolType(Enum):
     This enum is used for identifing the type of the symbols in the
     symbol_table in the onemodel models.
     """
-    PARAMETER = 1
+    PARAMETER = auto()
     VARIABLE  = auto()
     EQUATION  = auto()
     
