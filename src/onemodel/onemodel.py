@@ -1,4 +1,5 @@
 from onemodel.symbol import SymbolType
+from onemodel.equation import EquationType
 
 class OneModel:
     """ ONEMODEL
@@ -77,17 +78,22 @@ class OneModel:
             raise ValueError('The number of variables and equations is not balanced in the model.')
 
         # 2. Match equations to variables.
-        # ODE equations have the variable name which they will calculate.
+
+        # ODE and SUBSTITUTION equations have the variable name which they will calculate.
         for eqn in eqns:
-            var = self.get(eqn.variable_name)
 
-            if var == None:
-                # We didn't find the var.
-                raise ValueError('Variable does not exist.')
+            if eqn.equation_type == EquationType.ODE or \
+            eqn.equation_type == EquationType.SUBSTITUTION:
 
-            # Save the match!
-            eqn.variable = var
-            var.equation = eqn
+                var = self.get(eqn.variable_name)
+
+                if var == None:
+                    # We didn't find the var.
+                    raise ValueError('Variable does not exist.')
+
+                # Save the match!
+                eqn.variable = var
+                var.equation = eqn
 
     @property
     def parameters(self):

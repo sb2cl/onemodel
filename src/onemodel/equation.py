@@ -45,6 +45,7 @@ class Equation(Symbol):
         super().__init__(name)
         self.type = SymbolType.EQUATION
         self.variable = None
+        self.equation_type = None
                 
     @Symbol.value.setter
     def value(self, value):
@@ -83,3 +84,19 @@ class Equation(Symbol):
             variable_name: str
         """
         self._variable_name = variable_name
+
+    @property
+    def equation_type(self):
+        """ The type of the equation.
+
+        """
+        return self._equation_type
+
+    @equation_type.setter
+    def equation_type(self, equation_type):
+        """ Setter for equation_type
+        
+        Args:
+            equation_type: EquationType
+        """
+        self._equation_type = equation_type

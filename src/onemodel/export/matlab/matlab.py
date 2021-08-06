@@ -1,4 +1,7 @@
 import os
+import sympy as sym
+
+from onemodel.equation import EquationType
 
 class Matlab:
     """ This class exports a onemodel model into Matlab syntax.
@@ -19,6 +22,23 @@ class Matlab:
         """
         self.onemodel = onemodel
         self.onemodel.check()
+
+    def sympy2matlab(self, expr):
+        """ Convert a sympy expression into a matlab expression.
+        
+        Args:
+            expr: sympy or str
+                
+        Returns:
+            A string with translated into matlab expression.
+        """
+        # 'k1/k2'
+        print(sym.symbols(expr))
+        # 'p.k1./p.k1'
+
+
+                
+        
 
     def generate_param(self):
         """ Generate Matlab function which returns the default parameters.
@@ -46,14 +66,21 @@ class Matlab:
         f.write(f'\n% Default initial conditions.\n')
         f.write(f'x0 = [\n')
         for var in self.onemodel.variables:
-            f.write(f'\t{var.value} % {var.name}\n')
+            if var.equation.equation_type == EquationType.ODE:
+                f.write(f'\t{var.value} % {var.name}\n')
         f.write(f'];\n')
 
         # Mass matrix.
         f.write(f'\n% Mass matrix for algebraic simulations.\n')
         f.write(f'M = [\n')
+        vars_ = self.onemodel.variables
+        M = []
+        for var in vars_:
+            if var.equation.equation_type == EquationType.ODE:
+                M.append(1)
+
         i = 0
-        i_max = len(self.onemodel.variables)
+        i_max = len(M)
         while i < i_max:
             f.write('\t')
             f.write('0 '*i)
@@ -62,6 +89,7 @@ class Matlab:
             f.write('0 '*(i_max-i-1))
             f.write('\n')
             i += 1
+
         f.write(f'];\n')
 
         f.write(f'\nend\n')
@@ -101,7 +129,8 @@ class Matlab:
         i = 0
         while i < len(vars_):
             # TODO: indicate if var is algebraic or not.
-            f.write(f'{vars_[i].name} = x({i+1},:);\t % {vars_[i].comment}\n')
+            if vars_[i].equation.equation_type == EquationType.ODE:
+                f.write(f'{vars_[i].name} = x({i+1},:);\t % {vars_[i].comment}\n')
             i += 1
 
         # Comment parameters.
@@ -113,8 +142,9 @@ class Matlab:
         f.write(f'\n')
         i = 0
         while i < len(vars_):
-            f.write(f'% der({vars_[i].name}) "{vars_[i].equation.comment}"\n')
-            f.write(f'dx({i+1},1) = {vars_[i].equation.value};\n\n')
+            if vars_[i].equation.equation_type == EquationType.ODE:
+                f.write(f'% der({vars_[i].name}) "{vars_[i].equation.comment}"\n')
+                f.write(f'dx({i+1},1) = {vars_[i].equation.value};\n\n')
             i += 1
 
         f.write(f'end\n')
@@ -150,13 +180,20 @@ class Matlab:
         i = 0
         vars_ = self.onemodel.variables
         while i < len(vars_):
-            f.write(f'out.{vars_[i].name} = x(:,{i+1}); % {vars_[i].comment}\n')
+            if vars_[i].equation.equation_type == EquationType.ODE:
+                f.write(f'out.{vars_[i].name} = x(:,{i+1}); % {vars_[i].comment}\n')
             i += 1
 
         # Save parameters.
         f.write(f'\n% Save parameters.\n')
         for param in self.onemodel.parameters:
             f.write(f'out.{param.name} = p.{param.name}*ones(size(t)); % {param.comment}\n')
+
+        # Save extra states.
+        f.write(f'\n% Calculate and save extended states.\n')
+        for var in self.onemodel.variables:
+            if var.equation.equation_type == EquationType.SUBSTITUTION:
+                f.write(f'out.{var.name} = {var.equation.value}; % {var.comment}\n')
 
         f.write(f'\nend\n')
         f.close()

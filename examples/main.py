@@ -1,7 +1,7 @@
 from onemodel.onemodel import OneModel
 from onemodel.parameter import Parameter
 from onemodel.variable import Variable
-from onemodel.equation import Equation
+from onemodel.equation import Equation, EquationType
 from onemodel.export.matlab.matlab import Matlab
 
 onemodel = OneModel("antithetic")
@@ -25,6 +25,13 @@ v.value = '0'
 v.units = 'molec'
 v.comment = 'Protein of interest'
 onemodel.add(v)
+
+v = Variable("ref")
+v.value = '0'
+v.units = 'molec'
+v.comment = 'Reference of the antithetic controller'
+onemodel.add(v)
+
 
 # Parameter definiton.
 
@@ -73,21 +80,31 @@ onemodel.add(p)
 # Equation definition.
 
 e = Equation('eq_1')
+e.equation_type = EquationType.ODE
 e.variable_name = 'x1'
 e.value = 'k1 - gamma12*x1*x2 - d1*x1'
 e.comment = 'Dynamic of sigma'
 onemodel.add(e)
 
 e = Equation('eq_2')
+e.equation_type = EquationType.ODE
 e.variable_name = 'x2'
 e.value = 'k2*x3 - gamma12*x1*x2 - d2*x2'
 e.comment = 'Dynamic of anti-sigma'
 onemodel.add(e)
 
 e = Equation('eq_3')
+e.equation_type = EquationType.ODE
 e.variable_name = 'x3'
 e.value = 'k3*x1 - d3*x3'
 e.comment = 'Dynamic of protein'
+onemodel.add(e)
+
+e = Equation('eq_4')
+e.equation_type = EquationType.SUBSTITUTION
+e.variable_name = 'ref'
+e.value = 'k1/k2'
+e.comment = 'Reference of the antithetic controller'
 onemodel.add(e)
 
 matlab = Matlab(onemodel)
@@ -95,3 +112,4 @@ matlab.generate_param()
 matlab.generate_ode()
 matlab.generate_driver()
 matlab.generate_states()
+matlab.sympy2matlab('k1/k2')
