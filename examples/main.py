@@ -9,19 +9,19 @@ onemodel = OneModel("antithetic")
 # Variable definiton.
 
 v = Variable("x1")
-v.value = 0
+v.value = '0'
 v.units = 'molec'
 v.comment = 'Sigma unit'
 onemodel.add(v)
 
 v = Variable("x2")
-v.value = 0
+v.value = '0'
 v.units = 'molec'
 v.comment = 'Anti-sigma unit'
 onemodel.add(v)
 
 v = Variable("x3")
-v.value = 0
+v.value = '0'
 v.units = 'molec'
 v.comment = 'Protein of interest'
 onemodel.add(v)
