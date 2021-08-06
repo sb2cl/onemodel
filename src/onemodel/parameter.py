@@ -45,4 +45,5 @@ class Parameter(Symbol):
         if not value_sym.is_real:
             raise ValueError(f"'{value}' must be a real number for the 'value' property of '{self._name}'.")
 
-        self._value = value_sym
+        # Just save the evaluation value.
+        self._value = value_sym.evalf()
