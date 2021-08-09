@@ -5,6 +5,7 @@ WHITESPACE = ' \t'
 DIGITS = '0123456789'
 LETTERS = string.ascii_letters
 LETTERS_DIGITS = LETTERS + DIGITS
+OPERATORS = '+-*/^'
 
 class MathTokenType(Enum):
     """ Math token types that compose a math expression in onemodel.
@@ -99,6 +100,10 @@ class MathLexer:
 
             elif self.current_char == '.' or self.current_char in DIGITS:
                 tokens.append(self.generate_number())
+
+            elif self.current_char in OPERATORS:
+                tokens.append(MathToken(MathTokenType.OPERATOR, self.current_char))
+                self.advance()
 
         return tokens
 
