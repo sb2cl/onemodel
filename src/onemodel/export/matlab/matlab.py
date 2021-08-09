@@ -37,16 +37,22 @@ class Matlab:
         tokens = MathLexer(str(expr)).generate_tokens()
         matlab_expr = ''
 
-        for token in tokens:
-            if token.type == MathTokenType.IDENTIFIER:
-                if token.value in self.onemodel.parameters_name:
-                    matlab_expr += 'p.' + token.value
+        i = 0
+        while i < len(tokens):
+            if tokens[i].type == MathTokenType.IDENTIFIER:
+                if tokens[i].value in self.onemodel.parameters_name:
+                    matlab_expr += 'p.' + tokens[i].value
 
-                if token.value in self.onemodel.variables_name:
-                    matlab_expr += token.value
+                if tokens[i].value in self.onemodel.variables_name:
+                    matlab_expr += tokens[i].value
 
-            if token.type == MathTokenType.OPERATOR:
-                matlab_expr += '.' + token.value
+            elif tokens[i].type == MathTokenType.OPERATOR and tokens[i].value in '*/^':
+                matlab_expr += '.' + tokens[i].value
+
+            else:
+                matlab_expr += tokens[i].value
+
+            i += 1
         
         return matlab_expr
 
@@ -143,18 +149,13 @@ class Matlab:
                 f.write(f'{vars_[i].name} = x({i+1},:);\t % {vars_[i].comment}\n')
             i += 1
 
-        # Comment parameters.
-        f.write(f'\n% Parameters.\n')
-        for par in self.onemodel.parameters:
-            f.write(f'{par.name} = p.{par.name};\t % {par.comment}\n')
-       
         # Generate ODE equations.
         f.write(f'\n')
         i = 0
         while i < len(vars_):
             if vars_[i].equation.equation_type == EquationType.ODE:
                 f.write(f'% der({vars_[i].name}) "{vars_[i].equation.comment}"\n')
-                f.write(f'dx({i+1},1) = {vars_[i].equation.value};\n\n')
+                f.write(f'dx({i+1},1) = {self.math2matlab(vars_[i].equation.value)};\n\n')
             i += 1
 
         f.write(f'end\n')
