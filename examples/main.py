@@ -3,6 +3,7 @@ from onemodel.parameter import Parameter
 from onemodel.variable import Variable
 from onemodel.equation import Equation, EquationType
 from onemodel.export.matlab.matlab import Matlab
+from onemodel.math_expr import MathToken, MathTokenType, MathLexer
 
 onemodel = OneModel("antithetic")
 
@@ -112,4 +113,8 @@ matlab.generate_param()
 matlab.generate_ode()
 matlab.generate_driver()
 matlab.generate_states()
+
 matlab.sympy2matlab('k1/k2')
+
+mp = MathLexer('1.0 200 .01 1.')
+print(mp.generate_tokens())

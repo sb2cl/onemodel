@@ -36,10 +36,6 @@ class Matlab:
         print(sym.symbols(expr))
         # 'p.k1./p.k1'
 
-
-                
-        
-
     def generate_param(self):
         """ Generate Matlab function which returns the default parameters.
         
