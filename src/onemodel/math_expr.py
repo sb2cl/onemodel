@@ -16,6 +16,8 @@ class MathTokenType(Enum):
     NUMBER = auto()
     OPERATOR = auto()
     IDENTIFIER = auto()
+    LEFT_PAREN = auto()
+    RIGHT_PAREN = auto()
 
 class MathToken:
     """ This class defines the propeties of MathTokens.
@@ -107,6 +109,14 @@ class MathLexer:
 
             elif self.current_char in LETTERS:
                 tokens.append(self.generate_identifier())
+
+            elif self.current_char == '(':
+                tokens.append(MathToken(MathTokenType.LEFT_PAREN,'('))
+                self.advance()
+
+            elif self.current_char == ')':
+                tokens.append(MathToken(MathTokenType.RIGHT_PAREN,')'))
+                self.advance()
 
             else:
                 raise ValueError(f"'{self.current_char}' is a illegal character.")

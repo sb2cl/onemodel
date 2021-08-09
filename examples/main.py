@@ -116,5 +116,5 @@ matlab.generate_states()
 
 matlab.sympy2matlab('k1/k2')
 
-mp = MathLexer('a hola_a + 1.0 - 200 ^.01 */1.')
+mp = MathLexer('(a + b)*c')
 print(mp.generate_tokens())
