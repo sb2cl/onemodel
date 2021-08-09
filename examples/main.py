@@ -113,8 +113,3 @@ matlab.generate_param()
 matlab.generate_ode()
 matlab.generate_driver()
 matlab.generate_states()
-
-matlab.sympy2matlab('k1/k2')
-
-mp = MathLexer('(a + b)*c')
-print(mp.generate_tokens())

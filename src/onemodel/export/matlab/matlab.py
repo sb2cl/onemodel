@@ -2,6 +2,7 @@ import os
 import sympy as sym
 
 from onemodel.equation import EquationType
+from onemodel.math_expr import MathLexer, MathTokenType
 
 class Matlab:
     """ This class exports a onemodel model into Matlab syntax.
@@ -23,8 +24,8 @@ class Matlab:
         self.onemodel = onemodel
         self.onemodel.check()
 
-    def sympy2matlab(self, expr):
-        """ Convert a sympy expression into a matlab expression.
+    def math2matlab(self, expr):
+        """ Convert a mathematical expresion into a matlab expression.
         
         Args:
             expr: sympy or str
@@ -33,8 +34,21 @@ class Matlab:
             A string with translated into matlab expression.
         """
         # 'k1/k2'
-        print(sym.symbols(expr))
-        # 'p.k1./p.k1'
+        tokens = MathLexer(str(expr)).generate_tokens()
+        matlab_expr = ''
+
+        for token in tokens:
+            if token.type == MathTokenType.IDENTIFIER:
+                if token.value in self.onemodel.parameters_name:
+                    matlab_expr += 'p.' + token.value
+
+                if token.value in self.onemodel.variables_name:
+                    matlab_expr += token.value
+
+            if token.type == MathTokenType.OPERATOR:
+                matlab_expr += '.' + token.value
+        
+        return matlab_expr
 
     def generate_param(self):
         """ Generate Matlab function which returns the default parameters.
@@ -189,7 +203,7 @@ class Matlab:
         f.write(f'\n% Calculate and save extended states.\n')
         for var in self.onemodel.variables:
             if var.equation.equation_type == EquationType.SUBSTITUTION:
-                f.write(f'out.{var.name} = {var.equation.value}; % {var.comment}\n')
+                f.write(f'out.{var.name} = {self.math2matlab(var.equation.value)}.*ones(size(t)); % {var.comment}\n')
 
         f.write(f'\nend\n')
         f.close()
