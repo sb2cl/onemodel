@@ -105,6 +105,12 @@ class MathLexer:
                 tokens.append(MathToken(MathTokenType.OPERATOR, self.current_char))
                 self.advance()
 
+            elif self.current_char in LETTERS:
+                tokens.append(self.generate_identifier())
+
+            else:
+                raise ValueError(f"'{self.current_char}' is a illegal character.")
+
         return tokens
 
     def generate_number(self):
@@ -114,6 +120,9 @@ class MathLexer:
                 
         Returns:
             A MathToken.
+        
+        Raise:
+            ValueError: if number is not valid.
         """
         decimal_point_count = 0
         number_str = self.current_char
@@ -136,3 +145,17 @@ class MathLexer:
             number_str = number_str + '0'
 
         return MathToken(MathTokenType.NUMBER, number_str)
+
+    def generate_identifier(self):
+        """ Generate a identifier (it can be a parameter or a variable).
+        
+        Returns:
+            A MathToken.
+        """
+        id_str = ''
+
+        while self.current_char != None and self.current_char in LETTERS_DIGITS+'_':
+            id_str += self.current_char
+            self.advance()
+
+        return MathToken(MathTokenType.IDENTIFIER, id_str)
