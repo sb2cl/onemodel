@@ -67,7 +67,7 @@ class MathLexer:
             math_expr: str
                 String math equation representation .
         """
-        self.math_expr = math_expr
+        self.math_expr = str(math_expr)
         # Init the position.
         self.pos = -1
         # Current char to be processed by the MathLexer.
@@ -85,6 +85,18 @@ class MathLexer:
             self.current_char = self.math_expr[self.pos]
         else:
             self.current_char = None
+
+    def identifier_names(self):
+        """ Return only the identifier names of the mathematical expression.
+        """
+        names = []
+        tokens = self.generate_tokens()
+
+        for token in tokens:
+            if token.type == MathTokenType.IDENTIFIER:
+                names.append(token.value)
+
+        return names
 
     def generate_tokens(self):
         """ Process the math_expr and make the corresponding MathTokens list.

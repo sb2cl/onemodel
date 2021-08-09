@@ -33,10 +33,10 @@ v.units = 'molec'
 v.comment = 'Reference of the antithetic controller'
 onemodel.add(v)
 
-v = Variable("dx1")
+v = Variable("ref_10")
 v.value = '0'
-v.units = 'molec/t'
-v.comment = 'Degradation of x1'
+v.units = 'molec'
+v.comment = 'Reference mult 10.'
 onemodel.add(v)
 
 # Parameter definiton.
@@ -88,7 +88,7 @@ onemodel.add(p)
 e = Equation('eq_1')
 e.equation_type = EquationType.ODE
 e.variable_name = 'x1'
-e.value = 'k1 - gamma12*x1*x2 - dx1'
+e.value = 'k1 - gamma12*x1*x2 - d1*x1'
 e.comment = 'Dynamic of sigma'
 onemodel.add(e)
 
@@ -115,9 +115,9 @@ onemodel.add(e)
 
 e = Equation('eq_5')
 e.equation_type = EquationType.SUBSTITUTION
-e.variable_name = 'dx1'
-e.value = 'd1*x1'
-e.comment = 'Equation that bla bla bla...'
+e.variable_name = 'ref_10'
+e.value = '10*ref'
+e.comment = 'Reference of the antithetic controller'
 onemodel.add(e)
 
 
