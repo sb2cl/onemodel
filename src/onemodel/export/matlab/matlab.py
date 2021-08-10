@@ -258,14 +258,15 @@ class Matlab:
         f.write(f'\n% Save simulation time.\n')
         f.write(f'out.t = t;\n')
 
-        # Save ODE variables.
+        # Save ODE and ALGEBRAIC variables.
         f.write(f'\n% Save ODE variables.\n')
-        i = 0
         vars_ = self.onemodel.variables
-        while i < len(vars_):
-            if vars_[i].equation.equation_type == EquationType.ODE:
-                f.write(f'out.{vars_[i].name} = {vars_[i].name}; % {vars_[i].comment}\n')
-            i += 1
+        for var in vars_:
+            if var.equation.equation_type == EquationType.ODE:
+                f.write(f'out.{var.name} = {var.name}; % {var.comment}\n')
+
+            if var.equation.equation_type == EquationType.ALGEBRAIC:
+                f.write(f'out.{var.name} = {var.name}; % {var.comment} (Algebraic)\n')
 
         # Save parameters.
         f.write(f'\n% Save parameters.\n')
