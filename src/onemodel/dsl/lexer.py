@@ -8,26 +8,14 @@ WHITESPACE = ' \t'
 DIGITS = '0123456789'
 LETTERS = string.ascii_letters
 LETTERS_DIGITS = LETTERS + DIGITS
+OPERATORS = '+-*/^'
 
 # Keywords reserved.
 KEYWORDS = [
-        'VAR',
-        'AND',
-        'OR',
-        'NOT',
-        'IF',
-        'ELIF',
-        'ELSE',
-        'FOR',
-        'TO',
-        'STEP',
-        'WHILE',
-        'FUN',
-        'THEN',
-        'END',
-        'RETURN',
-        'CONTINUE',
-        'BREAK',
+        'parameter',
+        'variable',
+        'equation',
+        'der',
         ]
 
 class Lexer:
@@ -81,71 +69,69 @@ class Lexer:
             elif self.current_char == '#':
                 self.skip_comment()
 
-            elif self.current_char in ';\n':
-                tokens.append(Token(TokenType.NEW_LINE, pos_start=self.pos))
-                self.advance()
-
             elif self.current_char == '.' or self.current_char in DIGITS:
                 tokens.append(self.generate_number())
 
-            elif self.current_char == '"':
+            elif self.current_char in ('"'):
                 tokens.append(self.generate_string())
 
             elif self.current_char in LETTERS:
                 tokens.append(self.generate_identifier())
-
-            elif self.current_char == '+':
-                tokens.append(Token(TokenType.PLUS, pos_start=self.pos))
-                self.advance()
-
-            elif self.current_char == '-':
-                tokens.append(self.generate_minus_or_arrow())
-
-            elif self.current_char == '*':
-                tokens.append(Token(TokenType.MULTIPLICATION, pos_start=self.pos))
-                self.advance()
-
-            elif self.current_char == '/':
-                tokens.append(Token(TokenType.DIVISION, pos_start=self.pos))
-                self.advance()
-
-            elif self.current_char == '^':
-                tokens.append(Token(TokenType.POWER, pos_start=self.pos))
+            
+            elif self.current_char in OPERATORS:
+                type_ = TokenType.MATH_OPERATOR
+                value = self.current_char
+                token = Token(type_, value, self.pos) 
+                tokens.append(token)
                 self.advance()
 
             elif self.current_char == '(':
-                tokens.append(Token(TokenType.LEFT_PAREN, pos_start=self.pos))
+                tokens.append(Token(TokenType.L_PAREN, pos_start=self.pos))
                 self.advance()
 
             elif self.current_char == ')':
-                tokens.append(Token(TokenType.RIGHT_PAREN, pos_start=self.pos))
+                tokens.append(Token(TokenType.R_PAREN, pos_start=self.pos))
                 self.advance()
 
             elif self.current_char == '[':
-                tokens.append(Token(TokenType.LEFT_SQUARE, pos_start=self.pos))
+                tokens.append(Token(TokenType.L_SQUARE, pos_start=self.pos))
                 self.advance()
 
             elif self.current_char == ']':
-                tokens.append(Token(TokenType.RIGHT_SQUARE, pos_start=self.pos))
+                tokens.append(Token(TokenType.R_SQUARE, pos_start=self.pos))
+                self.advance()
+
+            elif self.current_char == '{':
+                tokens.append(Token(TokenType.L_BRACKET, pos_start=self.pos))
+                self.advance()
+
+            elif self.current_char == '}':
+                tokens.append(Token(TokenType.R_BRACKET, pos_start=self.pos))
                 self.advance()
 
             elif self.current_char == '=':
                 tokens.append(self.generate_equals())
 
-            elif self.current_char == '!':
-                token, error = self.generate_not_equal()
-                if error: return [], error
-                tokens.append(token)
-
-            elif self.current_char == '<':
-                tokens.append(self.generate_less_than())
-
-            elif self.current_char == '>':
-                tokens.append(self.generate_greater_than())
+            elif self.current_char == ':':
+                self.advance()
+                if self.current_char == '=':
+                    tokens.append(Token(TokenType.ASSIGN, pos_start=self.pos))
+                    self.advance()
+                else:
+                    pos_start = self.pos.copy()
+                    char = self.current_char
+                    msg = "':' mustbe followed by a '='."
+                    self.advance()
+                    return [], IllegalCharError(pos_start, self.pos, msg)
 
             elif self.current_char == ',':
                 tokens.append(Token(TokenType.COMMA, pos_start=self.pos))
                 self.advance()
+
+            elif self.current_char in ';\n':
+                tokens.append(Token(TokenType.NEW_LINE, pos_start=self.pos))
+                self.advance()
+
             else:
                 pos_start = self.pos.copy()
                 char = self.current_char
@@ -248,22 +234,6 @@ class Lexer:
         tok_type = TokenType.KEYWORD if id_str in KEYWORDS else TokenType.IDENTIFIER
         return Token(tok_type, id_str, pos_start, self.pos)
 
-    def generate_minus_or_arrow(self):
-        """ GENERATE_MINUS_OR_ARROW
-        @brief: Generate a minus token or an arrow token.
-        
-        @return: Token
-        """
-        tok_type = TokenType.MINUS
-        pos_start = self.pos.copy()
-        self.advance()
-
-        if self.current_char == '>':
-            self.advance()
-            tok_type = TokenType.ARROW
-
-        return Token(tok_type, pos_start=pos_start, pos_end=self.pos)
-
     def generate_equals(self):
         """ GENERATE_EQUALS
         @brief: Generate equal and is_equal tokens.
@@ -276,55 +246,6 @@ class Lexer:
 
         if self.current_char == '=':
             self.advance()
-            tok_type = TokenType.IS_EQUAL
-
-        return Token(tok_type, pos_start=pos_start, pos_end=self.pos)
-
-    def generate_not_equal(self):
-        """ GENERATE_NOT_EQUAL
-        @brief: Generate not_equal token.
-        
-        @return: Token
-               : error
-        """
-        pos_start = self.pos.copy()
-        self.advance()
-
-        if self.current_char == '=':
-            self.advance()
-            return Token(TokenType.NOT_EQUAL, pos_start=pos_start, pos_end=self.pos), None
-    
-        self.advance()
-        return None, ExpectedCharError(pos_start, self.pos, "'=' (after '!')")
-
-    def generate_less_than(self):
-        """ GENERATE_LESS_THAN
-        @brief: Generate less_than and less_equal_tokens.
-        
-        @return: Token
-        """
-        tok_type = TokenType.LESS_THAN
-        pos_start = self.pos.copy()
-        self.advance()
-
-        if self.current_char == '=':
-            self.advance()
-            tok_type = TokenType.LESS_EQUAL_THAN
-
-        return Token(tok_type, pos_start=pos_start, pos_end=self.pos)
-
-    def generate_greater_than(self):
-        """ GENERATE_GREATER_THAN
-        @brief: Generate greater_than and greater_equal_tokens.
-        
-        @return: Token
-        """
-        tok_type = TokenType.GREATER_THAN
-        pos_start = self.pos.copy()
-        self.advance()
-
-        if self.current_char == '=':
-            self.advance()
-            tok_type = TokenType.GREATER_EQUAL_THAN
+            tok_type = TokenType.EQUALITY
 
         return Token(tok_type, pos_start=pos_start, pos_end=self.pos)

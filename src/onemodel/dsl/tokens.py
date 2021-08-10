@@ -3,54 +3,40 @@ from dataclasses import dataclass
 from onemodel.dsl.position import Position
 
 class TokenType(Enum):
-    """ TOKENTYPE
+    """ This class defines all the token types available for the lexer.
 
-    This class defines all the token types available for the lexer.
     """
-    NUMBER              = auto()
-    STRING              = auto()
-    IDENTIFIER          = auto()
-    KEYWORD             = auto()
-    PLUS                = auto()
-    MINUS               = auto()
-    MULTIPLICATION      = auto()
-    DIVISION            = auto()
-    POWER               = auto()
-    EQUAL               = auto()
-    LEFT_PAREN          = auto()
-    RIGHT_PAREN         = auto()
-    LEFT_SQUARE         = auto()
-    RIGHT_SQUARE        = auto()
-    IS_EQUAL            = auto()
-    NOT_EQUAL           = auto()
-    LESS_THAN           = auto()
-    GREATER_THAN        = auto()
-    LESS_EQUAL_THAN     = auto()
-    GREATER_EQUAL_THAN  = auto()
-    COMMA               = auto()
-    ARROW               = auto()
-    NEW_LINE            = auto()
-    END_OF_FILE         = auto()
+    NUMBER        = auto()
+    STRING        = auto()
+    IDENTIFIER    = auto()
+    KEYWORD       = auto()
+    MATH_OPERATOR = auto() # '+' '-' '*' '/' '^'
+    EQUAL         = auto() # '='
+    EQUALITY      = auto() # '=='
+    ASSIGN        = auto() # ':='
+    L_PAREN       = auto() # '('
+    R_PAREN       = auto() # ')'
+    L_SQUARE      = auto() # '['
+    R_SQUARE      = auto() # ']'
+    L_BRACKET     = auto() # '{'
+    R_BRACKET     = auto() # '}'
+    COMMA         = auto() # ','
+    NEW_LINE      = auto()
+    END_OF_FILE   = auto()
 
 @dataclass
 class Token:
-    """ TOKEN
+    """ This class implements a Token for the Lexer.
 
-    This class implements a Token.
     """
-    type:       TokenType           # Token type.
-    value:      any         = None  # Token value.
-    pos_start:  Position    = None  # Token start position in file.
-    pos_end:    Position    = None  # Token end position in file.
-
     def __init__(self, type_, value=None, pos_start=None, pos_end=None):
         """ __INIT__
         @brief: Constructor of Token class.
         
-        @param: type_      TokenType of the token.
-              : value=None The value of the token.
-              : pos_start  The start position of the token.
-              : pos_end    The end position of the token.
+        @param: type_: TokenType TokenType of the token.
+              : value: Any The value of the token.
+              : pos_start: Positon The start position of the token.
+              : pos_end: Positon The end position of the token.
         """
         self.type = type_
         self.value = value
