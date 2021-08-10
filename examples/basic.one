@@ -1,8 +1,10 @@
 # Variables definition.
 
-variable x1 = {0.0, 'molec'} 'Sigma unit expressed constitively'
-variable x2 = {0.0, 'molec'} 'Anti-sigma unit expressed dependent of the process'
-variable x3 = {0.0, 'molec'} 'Protein of interest'
+variable x1  = {0.0, 'molec'} 'Sigma unit expressed constitively'
+variable x2  = {0.0, 'molec'} 'Anti-sigma unit expressed dependent of the process'
+variable x3  = {0.0, 'molec'} 'Protein of interest'
+variable ref = {0.0, 'molec'} 'Reference of the antithetic controller'
+variable x4  = {0.0, 'molec'} 'Free cell resources'
 
 # Parameter definition.
 
@@ -19,3 +21,5 @@ parameter gamma12 = {1.0, '1/molec/t'} 'Sigma and anti-sigma secuestration rate'
 equation der(x1) == k1    - gamma12*x1*x2 - d1*x1 'Dynamic of sigma'
 equation der(x2) == k2*x3 - gamma12*x1*x2 - d2*x2 'Dynamic of anti-sigma'
 equation der(x3) == k3*x1 - d3*x3                 'Dynamic of protein'
+equation ref := k3*x1 - d3*x3                     'Anithetic reference equation'
+equation x4 == 10 - x3                            'Free resources equation'

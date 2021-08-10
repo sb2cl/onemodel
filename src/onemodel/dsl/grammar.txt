@@ -1,15 +1,37 @@
 # OneModel Syntax
 
-statements : NEWLINE* statement (NEWLINE+ statement)* NEWLINE*
+statement  : 'parameter' parameter;
+           : 'variable'  variable;
+           : 'equation'  equation;
 
-statement  : KEYWORD:parameter IDENTIFIER EQ expr STRING
-           : KEYWORD:variable IDENTIFIER EQ expr STRING
-           : KEYWORD:equation KEYWORD:der LEFT_PAREN IDENTIFIER RIGHT_PAREN EQ EQ expr STRING
-           : KEYWORD:equation IDENTIFIER EQ EQ expr STRING
-           : KEYWORD:equation IDENTIFIER SEMICOLON EQ expr STRING
-           : expr
+parameter  : Identifier '=' '{' Number ',' String '}' String?;
 
-expr       :
+variable   : Identifier '=' '{' Number ',' String '}' String?;
+
+equation   : 'der' '(' Identifier ')' '==' math_expr String?;
+           : Identifier '==' math_expr String?;
+           : Identifier ':=' math_expr String?;
+
+math_expr  : ( Number | Identifier | Operator | '(' | ')' )+;
+
+# Kleene operators
+
+ |  : aternative           e.g.: email | tel
+ *  : none or more         e.g.: tel*
+ +  : one or more          e.g.: email+
+ ?  : optional             e.g.: fullname?
+ ~  : up-tp                e.g.: ~'}'
+ .. : range                e.g.: '0'..'9'
+ /  : ordered alternative  e.g.: us_tel / raw_tel
+
+# Example book
+
+contact      : 'contact' username '{' fullname? email+ tel* '}' ;
+username     : Identifier ;
+fullname     : QuotedString ;
+email        : 'email:' emailAddress ;
+tel          : 'tel:' telephoneNumber ;
+emailAddress : localPart '@' domain ;
 
 # Old syntax
 
