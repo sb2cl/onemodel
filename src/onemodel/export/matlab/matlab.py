@@ -75,16 +75,22 @@ class Matlab:
         # Define ODE and algebraic variables in the workspace.
         exprs += f'\n% States:\n'
         vars_ = self.onemodel.variables
-        i = 0
-        while i < len(vars_):
 
-            # TODO: indicate if var is algebraic or not.
-            if vars_[i].equation.equation_type == EquationType.ODE:
-                exprs += f'{vars_[i].name} = x({i+1},:);\t % {vars_[i].comment}\n'
+        i = 1
+        for var in vars_:
+
+            if var.equation.equation_type == EquationType.ODE:
+                exprs += f'{var.name} = x({i},:);\t % {var.comment}\n'
                 # Add this var to known variables.
-                known_vars.append(vars_[i].name)
+                known_vars.append(var.name)
+                i += 1
 
-            i += 1
+            if var.equation.equation_type == EquationType.ALGEBRAIC:
+                exprs += f'{var.name} = x({i},:);\t % (algebraic) {var.comment}\n'
+                # Add this var to known variables.
+                known_vars.append(var.name)
+                i += 1
+
 
         # Calculate substitution variables.
         exprs += f'\n% Calculate substitution variables.\n'
@@ -119,8 +125,8 @@ class Matlab:
         
     def generate_param(self):
         """ Generate Matlab function which returns the default parameters.
-        
         """
+
         # Check if build folder exists
         dirName = './build/'
         if not os.path.exists(dirName):
@@ -145,6 +151,8 @@ class Matlab:
         for var in self.onemodel.variables:
             if var.equation.equation_type == EquationType.ODE:
                 f.write(f'\t{var.value} % {var.name}\n')
+            if var.equation.equation_type == EquationType.ALGEBRAIC:
+                f.write(f'\t{var.value} % {var.name} (Algebraic)\n')
         f.write(f'];\n')
 
         # Mass matrix.
@@ -155,6 +163,8 @@ class Matlab:
         for var in vars_:
             if var.equation.equation_type == EquationType.ODE:
                 M.append(1)
+            if var.equation.equation_type == EquationType.ALGEBRAIC:
+                M.append(0)
 
         i = 0
         i_max = len(M)
@@ -162,7 +172,7 @@ class Matlab:
             f.write('\t')
             f.write('0 '*i)
             # TODO: Write if the variable is algebraic o not.
-            f.write('1 ')
+            f.write(f'{M[i]} ')
             f.write('0 '*(i_max-i-1))
             f.write('\n')
             i += 1
@@ -205,12 +215,17 @@ class Matlab:
         # Generate ODE equations.
         vars_ = self.onemodel.variables
         f.write(f'\n')
-        i = 0
-        while i < len(vars_):
-            if vars_[i].equation.equation_type == EquationType.ODE:
-                f.write(f'% der({vars_[i].name}) "{vars_[i].equation.comment}"\n')
-                f.write(f'dx({i+1},1) = {self.math2matlab(vars_[i].equation.value)};\n\n')
-            i += 1
+        i = 1
+        for var in vars_:
+            if var.equation.equation_type == EquationType.ODE:
+                f.write(f'% der({var.name}) "{var.equation.comment}"\n')
+                f.write(f'dx({i},1) = {self.math2matlab(var.equation.value)};\n\n')
+                i += 1
+
+            if var.equation.equation_type == EquationType.ALGEBRAIC:
+                f.write(f'% der({var.name}) (algebraic) "{var.equation.comment}"\n')
+                f.write(f'dx({i},1) = -{var.name} + {self.math2matlab(var.equation.value)};\n\n')
+                i += 1
 
         f.write(f'end\n')
         f.close()

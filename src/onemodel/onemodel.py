@@ -83,7 +83,8 @@ class OneModel:
         for eqn in eqns:
 
             if eqn.equation_type == EquationType.ODE or \
-            eqn.equation_type == EquationType.SUBSTITUTION:
+                eqn.equation_type == EquationType.ALGEBRAIC or \
+                eqn.equation_type == EquationType.SUBSTITUTION:
 
                 var = self.get(eqn.variable_name)
 

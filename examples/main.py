@@ -39,6 +39,12 @@ v.units = 'molec'
 v.comment = 'Reference mult 10.'
 onemodel.add(v)
 
+v = Variable("x4")
+v.value = '1'
+v.units = 'molec'
+v.comment = 'x3 + x4 suman una constante.'
+onemodel.add(v)
+
 # Parameter definiton.
 
 p = Parameter('k1')
@@ -120,6 +126,12 @@ e.value = '10*ref'
 e.comment = 'Reference of the antithetic controller'
 onemodel.add(e)
 
+e = Equation('eq_6')
+e.equation_type = EquationType.ALGEBRAIC
+e.variable_name = 'x4'
+e.value = '10 - x3'
+e.comment = 'Equation of x4'
+onemodel.add(e)
 
 matlab = Matlab(onemodel)
 matlab.generate_param()

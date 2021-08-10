@@ -20,9 +20,9 @@ class EquationType(Enum):
         a variable, without intoducing more algebraic loops that have to be
         satisfied in simulation time.
     """
-    EQUALITY = auto()
-    SUBSTITUTION = auto()
     ODE = auto()
+    ALGEBRAIC = auto()
+    SUBSTITUTION = auto()
 
 class Equation(Symbol):
     """ This class defines a onemodel equation.
