@@ -1,3 +1,18 @@
+# OneModel Syntax
+
+statements : NEWLINE* statement (NEWLINE+ statement)* NEWLINE*
+
+statement  : KEYWORD:parameter IDENTIFIER EQ expr STRING
+           : KEYWORD:variable IDENTIFIER EQ expr STRING
+           : KEYWORD:equation KEYWORD:der LEFT_PAREN IDENTIFIER RIGHT_PAREN EQ EQ expr STRING
+           : KEYWORD:equation IDENTIFIER EQ EQ expr STRING
+           : KEYWORD:equation IDENTIFIER SEMICOLON EQ expr STRING
+           : expr
+
+expr       :
+
+# Old syntax
+
 statements  : NEWLINE* statement (NEWLINE+ statement)* NEWLINE*
 
 statement   : KEYWORD:RETURN expr?
