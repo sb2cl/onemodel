@@ -1,6 +1,62 @@
 from dataclasses import dataclass
 from onemodel.dsl.position import Position
 
+class MathExprNode:
+    """ TODO: Class one-line summary.
+
+    TODO: Long description.
+
+    Attributes:
+        variable: type
+    """
+    def __init__(self, math_str):
+        """ TODO: One-line summary.
+        
+        TODO: Long description.
+        
+        Args:
+            math_str
+                
+        Returns:
+            None
+        
+        Raises:
+            Error: An error.
+        """
+        self.value = math_str
+        self.pos_start = None
+        self.pos_end = None
+
+class ParameterNode:
+    """ TODO: Class one-line summary.
+
+    TODO: Long description.
+
+    Attributes:
+        variable: type
+    """
+    def __init__(self):
+        """ TODO: One-line summary.
+        
+        TODO: Long description.
+        
+        Args:
+            
+            
+                
+        Returns:
+            None
+        
+        Raises:
+            Error: An error.
+        """
+        self.name = None
+        self.value = None
+        self.units = None
+        self.comment = None
+        self.pos_start = None
+        self.pos_end = None
+    
 class NumberNode:
     """ NUMBERNODE
 

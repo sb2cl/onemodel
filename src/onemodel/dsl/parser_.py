@@ -136,7 +136,7 @@ class Parser:
         
         @return: ParseResult Result of the parser (AST and error)
         """
-        res = self.statements()
+        res = self.parameter()
 
         if not res.error and self.current_token.type != TokenType.END_OF_FILE:
             return res.failure(InvalidSyntaxError(
@@ -145,6 +145,152 @@ class Parser:
             ))
 
         return res
+
+    def parameter(self):
+        """ Parse a paremeter rule.
+
+        Returns:
+            ParseResult
+        """
+        res = ParseResult()
+        pos_start = self.current_token.pos_start.copy()
+        node = ParameterNode()
+
+        node.pos_start = self.current_token.pos_start
+        
+        # Identifier '=' '{' Number ',' String '}' String?;
+        if self.current_token.type != TokenType.IDENTIFIER:
+            pos_start = self.current_token.pos_start
+            pos_end = self.current_token.pos_end
+            msg = 'Expected indentifier'
+            error = InvalidSyntaxError(pos_start, pos_end, msg)
+            return res.failure(error)
+
+        node.name = self.current_token
+        res.register_advancement()
+        self.advance()
+
+        if self.current_token.type != TokenType.EQUAL:
+            pos_start = self.current_token.pos_start
+            pos_end = self.current_token.pos_end
+            msg = 'Expected "="'
+            error = InvalidSyntaxError(pos_start, pos_end, msg)
+            return res.failure(error)
+
+        res.register_advancement()
+        self.advance()
+
+        if self.current_token.type != TokenType.L_BRACKET:
+            pos_start = self.current_token.pos_start
+            pos_end = self.current_token.pos_end
+            msg = 'Expected "{"'
+            error = InvalidSyntaxError(pos_start, pos_end, msg)
+            return res.failure(error)
+
+        res.register_advancement()
+        self.advance()
+
+        if self.current_token.type != TokenType.NUMBER:
+            pos_start = self.current_token.pos_start
+            pos_end = self.current_token.pos_end
+            msg = 'Expected the value of the parameter (number)'
+            error = InvalidSyntaxError(pos_start, pos_end, msg)
+            return res.failure(error)
+        
+        node.value = self.current_token
+        res.register_advancement()
+        self.advance()
+
+        if self.current_token.type != TokenType.COMMA:
+            pos_start = self.current_token.pos_start
+            pos_end = self.current_token.pos_end
+            msg = 'Expected ","'
+            error = InvalidSyntaxError(pos_start, pos_end, msg)
+            return res.failure(error)
+
+        res.register_advancement()
+        self.advance()
+
+        if self.current_token.type != TokenType.STRING:
+            pos_start = self.current_token.pos_start
+            pos_end = self.current_token.pos_end
+            msg = 'Expected the units of the parameter (string)'
+            error = InvalidSyntaxError(pos_start, pos_end, msg)
+            return res.failure(error)
+        
+        node.units = self.current_token
+        res.register_advancement()
+        self.advance()
+
+        if self.current_token.type != TokenType.R_BRACKET:
+            pos_start = self.current_token.pos_start
+            pos_end = self.current_token.pos_end
+            msg = 'Expected "}"'
+            error = InvalidSyntaxError(pos_start, pos_end, msg)
+            return res.failure(error)
+        
+        res.register_advancement()
+        self.advance()
+
+        if self.current_token.type == TokenType.STRING:
+            node.comment = self.current_token
+            res.register_advancement()
+            self.advance()
+
+        node.pos_end = self.current_token.pos_end
+
+        return res.success(node)
+        
+    def math_expr(self):
+        """ Parse a math expression.
+        
+        Returns:
+            ParseResult
+        """
+        res = ParseResult()
+        pos_start = self.current_token.pos_start.copy()
+
+        # We save the math expression as a string.
+        math_str = ''
+
+        while True:
+            if self.current_token.type == TokenType.NUMBER:
+                math_str += self.current_token.value
+                res.register_advancement()
+                self.advance()
+                continue
+
+            if self.current_token.type == TokenType.IDENTIFIER:
+                math_str += self.current_token.value
+                res.register_advancement()
+                self.advance()
+                continue
+
+            if self.current_token.type == TokenType.MATH_OPERATOR:
+                math_str += self.current_token.value
+                res.register_advancement()
+                self.advance()
+                continue
+
+            if self.current_token.type == TokenType.L_PAREN:
+                math_str += '('
+                res.register_advancement()
+                self.advance()
+                continue
+
+            if self.current_token.type == TokenType.R_PAREN:
+                math_str += ')'
+                res.register_advancement()
+                self.advance()
+                continue
+
+            break
+
+        node = MathExprNode(math_str)
+        node.pos_start = pos_start
+        node.pos_end = self.current_token.pos_end
+
+        return res.success(node)
 
     def statements(self):
         """ STATEMENTS
@@ -190,42 +336,42 @@ class Parser:
             self.current_token.pos_end.copy()
             ))
 
-    def statement(self):
-        """ STATEMENT
-        @brief: Find statement.
-        
-        @return: ParseResult
-        """
-        res = ParseResult()
-        pos_start = self.current_token.pos_start.copy()
-
-        if self.current_token.matches(TokenType.KEYWORD, 'RETURN'):
-            res.register_advancement()
-            self.advance()
-
-            expr = res.try_register(self.expr())
-            if not expr:
-                self.reverse(res.to_reverse_count)
-            return res.success(ReturnNode(expr, pos_start, self.current_token.pos_start.copy()))
-
-        if self.current_token.matches(TokenType.KEYWORD, 'CONTINUE'):
-            res.register_advancement()
-            self.advance()
-            return res.success(ContinueNode(pos_start, self.current_token.pos_start.copy()))
-
-        if self.current_token.matches(TokenType.KEYWORD, 'BREAK'):
-            res.register_advancement()
-            self.advance()
-            return res.success(BreakNode(pos_start, self.current_token.pos_start.copy()))
-
-        expr = res.register(self.expr())
-        if res.error:
-            return res.failure(InvalidSyntaxError(
-                self.current_token.pos_start, self.current_token.pos_end,
-                "Expected 'RETURN', 'CONTINUE', 'BREAK', 'VAR', 'IF', 'FOR', 'WHILE', 'FUN', int, float, identifier, '+', '-', '(', '[' or 'NOT'"
-            ))
-
-        return res.success(expr)
+#    def statement(self):
+#        """ STATEMENT
+#        @brief: Find statement.
+#        
+#        @return: ParseResult
+#        """
+#        res = ParseResult()
+#        pos_start = self.current_token.pos_start.copy()
+#
+#        if self.current_token.matches(TokenType.KEYWORD, 'RETURN'):
+#            res.register_advancement()
+#            self.advance()
+#
+#            expr = res.try_register(self.expr())
+#            if not expr:
+#                self.reverse(res.to_reverse_count)
+#            return res.success(ReturnNode(expr, pos_start, self.current_token.pos_start.copy()))
+#
+#        if self.current_token.matches(TokenType.KEYWORD, 'CONTINUE'):
+#            res.register_advancement()
+#            self.advance()
+#            return res.success(ContinueNode(pos_start, self.current_token.pos_start.copy()))
+#
+#        if self.current_token.matches(TokenType.KEYWORD, 'BREAK'):
+#            res.register_advancement()
+#            self.advance()
+#            return res.success(BreakNode(pos_start, self.current_token.pos_start.copy()))
+#
+#        expr = res.register(self.expr())
+#        if res.error:
+#            return res.failure(InvalidSyntaxError(
+#                self.current_token.pos_start, self.current_token.pos_end,
+#                "Expected 'RETURN', 'CONTINUE', 'BREAK', 'VAR', 'IF', 'FOR', 'WHILE', 'FUN', int, float, identifier, '+', '-', '(', '[' or 'NOT'"
+#            ))
+#
+#        return res.success(expr)
         
     def expr(self):
         """ EXPR

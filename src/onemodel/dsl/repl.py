@@ -1,6 +1,5 @@
 from onemodel.dsl.interpreter import SymbolTable
 from onemodel.dsl.values.number import Number
-from onemodel.dsl.values.function import BuiltInFunction
 from onemodel.dsl.interpreter import Context
 from onemodel.dsl.lexer import Lexer
 from onemodel.dsl.parser_ import Parser
@@ -33,22 +32,22 @@ class Repl:
         self.global_symbol_table.set("FALSE", Number.false)
         self.global_symbol_table.set("TRUE", Number.true)
         self.global_symbol_table.set("MATH_PI", Number.math_PI)
-        self.global_symbol_table.set("PRINT", BuiltInFunction.print)
-        self.global_symbol_table.set("PRINT_RET", BuiltInFunction.print_ret)
-        self.global_symbol_table.set("INPUT", BuiltInFunction.input)
-        self.global_symbol_table.set("INPUT_INT", BuiltInFunction.input_int)
-        self.global_symbol_table.set("CLEAR", BuiltInFunction.clear)
-        self.global_symbol_table.set("CLS", BuiltInFunction.clear)
-        self.global_symbol_table.set("IS_NUM", BuiltInFunction.is_number)
-        self.global_symbol_table.set("IS_STR", BuiltInFunction.is_string)
-        self.global_symbol_table.set("IS_LIST", BuiltInFunction.is_list)
-        self.global_symbol_table.set("IS_FUN", BuiltInFunction.is_function)
-        self.global_symbol_table.set("APPEND", BuiltInFunction.append)
-        self.global_symbol_table.set("POP", BuiltInFunction.pop)
-        self.global_symbol_table.set("EXTEND", BuiltInFunction.extend)
-        self.global_symbol_table.set("LEN", BuiltInFunction.len)
-        self.global_symbol_table.set("RUN", BuiltInFunction.run)
-        self.global_symbol_table.set("exit", BuiltInFunction.exit)
+        # self.global_symbol_table.set("PRINT", BuiltInFunction.print)
+        # self.global_symbol_table.set("PRINT_RET", BuiltInFunction.print_ret)
+        # self.global_symbol_table.set("INPUT", BuiltInFunction.input)
+        # self.global_symbol_table.set("INPUT_INT", BuiltInFunction.input_int)
+        # self.global_symbol_table.set("CLEAR", BuiltInFunction.clear)
+        # self.global_symbol_table.set("CLS", BuiltInFunction.clear)
+        # self.global_symbol_table.set("IS_NUM", BuiltInFunction.is_number)
+        # self.global_symbol_table.set("IS_STR", BuiltInFunction.is_string)
+        # self.global_symbol_table.set("IS_LIST", BuiltInFunction.is_list)
+        # self.global_symbol_table.set("IS_FUN", BuiltInFunction.is_function)
+        # self.global_symbol_table.set("APPEND", BuiltInFunction.append)
+        # self.global_symbol_table.set("POP", BuiltInFunction.pop)
+        # self.global_symbol_table.set("EXTEND", BuiltInFunction.extend)
+        # self.global_symbol_table.set("LEN", BuiltInFunction.len)
+        # self.global_symbol_table.set("RUN", BuiltInFunction.run)
+        # self.global_symbol_table.set("exit", BuiltInFunction.exit)
 
     def evaluate(self, fn, text):
         """ EVALUATE
@@ -165,4 +164,4 @@ class Repl:
             if ast.error:
                 print(ast.error.as_string())
             elif ast.node:
-                print(ast.node.element_nodes)
+                print(ast.node)
