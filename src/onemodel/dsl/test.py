@@ -33,24 +33,28 @@ class OnemodelSemantics(object):
 
 def main(data):
     line = 'd1 = {1 , "1/t"} "Degradation time"'
-    line = '1 # This is a comment.'
+    line = '''
+    1 
+    2 
+    3
+    '''
 
     grammar = open('/home/nobel/Sync/python/workspace/onemodel/src/onemodel/dsl/grammars/onemodel.ebnf').read()
 
     semantics = OnemodelSemantics()
 
     parser = tatsu.compile(grammar)
-    result = parser.parse(line, semantics=semantics)
+    result = parser.parse(data, semantics=semantics)
 
     print(result)
 
-    #onemodel = semantics.onemodel
+    onemodel = semantics.onemodel
 
-    #matlab = Matlab(onemodel)
-    #matlab.generate_param()
-    #matlab.generate_ode()
-    #matlab.generate_driver()
-    #matlab.generate_states()
+    matlab = Matlab(onemodel)
+    matlab.generate_param()
+    matlab.generate_ode()
+    matlab.generate_driver()
+    matlab.generate_states()
 
 if __name__ == '__main__':
     from sys import argv

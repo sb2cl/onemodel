@@ -1,10 +1,22 @@
 @@grammar::CALC
+
+# TatSu by default defines newline as whitespace but onemodel syntax
+# uses newlines as separators. So we have removed the intro from the
+# whitespace characters in TatSu.
+@@whitespace :: /[\t ]+/
+
+# This allows us to use comments like in python.
 @@eol_comments:: /#.*?$/
 
-start = expression $ ;
+# Principal rule that TatSu will start looking for it.
+start = statements $ ;
+
+statements = {newline}* statement {{newline}+ statement}* {newline}*;
+
+statement = expression ;
 
 expression =
-  | parameter
+  | 'parameter' parameter
   | number
   | string
   | identifier
@@ -22,4 +34,9 @@ number = /\d+(?:\.\d+)?(?:e(?:\+|\-)\d+)?/ ;
 string = 
   | /"(.*?)"/
   | /'(.*?)'/
+  ;
+
+newline = 
+  | ';'
+  | /\n/
   ;
