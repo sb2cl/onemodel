@@ -1,0 +1,18 @@
+@@grammar::CALC
+
+start = expression $ ;
+
+expression =
+  | parameter
+  | number
+  | string
+  ;
+
+parameter = name:identifier '=' '{' value:number ',' units:string '}' [comment:string] ;
+
+@name
+identifier = /(?!\d)\w+/ ;
+
+number = /\d+(?:\.\d+)?(?:e(?:\+|\-)\d+)?/ ;
+
+string = /"(.*?)"/ ;
