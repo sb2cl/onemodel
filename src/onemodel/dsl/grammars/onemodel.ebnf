@@ -13,6 +13,13 @@ parameter = name:identifier '=' '{' value:number ',' units:string '}' [comment:s
 @name
 identifier = /(?!\d)\w+/ ;
 
+# Definition of numbers, e.g.: '1', '1.0', '1e-1'.
 number = /\d+(?:\.\d+)?(?:e(?:\+|\-)\d+)?/ ;
 
-string = /"(.*?)"/ ;
+# Definition of strings (they can be formed with ' and ").
+string = 
+  | /"(.*?)"/
+  | /'(.*?)'/
+  ;
+
+
