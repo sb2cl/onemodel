@@ -8,6 +8,9 @@ from onemodel.dsl.lexer import Lexer
 from onemodel.dsl.parser_ import Parser
 from onemodel.dsl.runTimeResult import RunTimeResult
 
+from onemodel.onemodel import OneModel
+from onemodel.parameter import Parameter
+
 import math
 
 class Context:
@@ -34,7 +37,7 @@ class Context:
 class SymbolTable:
     """ SYMBOLTABLE
 
-    SymbolTable keeps track of the worspace variables and functions.
+    SymbolTable keeps track of the workspace variables and functions.
     """
     def __init__(self,parent=None):
         """ __INIT__
@@ -125,6 +128,26 @@ class Interpreter:
         @return: None
         """
         raise Exception(f'No visit_{type(node).__name__} method defined')
+
+    def visit_ParameterNode(self, node, context):
+        """ Visit and execute a ParameterNode
+        
+        Args:
+            Node
+            Context
+                
+        Returns:
+            RunTimeResult
+        """
+        runTimeResult = RunTimeResult()
+
+        parameter = Parameter(node.name.value)
+        parameter.value = node.value.value
+        parameter.units = node.units.value
+        if node.comment != None:
+            parameter.comment = node.comment.value 
+
+        return runTimeResult.success(parameter)
 
     def visit_NumberNode(self,node,context):
         """ VISIT_NUMBERNODE

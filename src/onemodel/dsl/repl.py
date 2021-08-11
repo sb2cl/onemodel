@@ -100,10 +100,11 @@ class Repl:
             if error:
                 print(error.as_string())
             elif value:
-                if len(value.elements) == 1:
-                    print(repr(value.elements[0]))
-                else:
-                    print(repr(value))
+                print(value)
+                # if len(value.elements) == 1:
+                    # print(repr(value.elements[0]))
+                # else:
+                    # print(repr(value))
 
             # 4. LOOP
             if should_exit:
