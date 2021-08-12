@@ -12,7 +12,7 @@
 # Principal rule that TatSu will start looking for it.
 start 
   =
-  parameter $ 
+  {newline | statement} $ 
   ;
 
 
@@ -29,8 +29,9 @@ statement
 
 
 expression 
-  = parameter
-  #| 'variable' variable
+  = 
+  | parameter
+  | variable
   #| 'equation' equation
   #| math_expr
   ;
@@ -42,9 +43,9 @@ parameter::DefineParameter
   ;
 
 
-variable 
+variable::DefineVariable
   = 
-  name:identifier '=' '{' value:number ',' units:string '}' [comment:string] 
+  'variable' name:identifier '=' '{' value:number ',' units:string '}' [comment:string] 
   ;
 
 

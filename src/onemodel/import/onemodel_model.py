@@ -17,6 +17,23 @@ class OneModelWalker(NodeWalker):
     def walk_object(self, node):
         return node
 
+    def walk_closure(self, nodes):
+        # print('TuplaMethod')
+        walked_nodes = []
+
+        for node in nodes:
+            result = self.walk(node)
+
+            if result == '\n' or result == ';':
+                continue
+
+            walked_nodes.append(result)
+
+        if len(walked_nodes) == 1:
+            walked_nodes = walked_nodes[0]
+
+        return walked_nodes
+
     def walk_DefineParameter(self, node):
         p = Parameter(self.walk(node.name))
         p.value = str(self.walk(node.value))
@@ -24,6 +41,15 @@ class OneModelWalker(NodeWalker):
         p.comment = self.walk(node.comment)
         self.onemodel.add(p)
         return p
+
+    def walk_DefineVariable(self, node):
+        v = Variable(self.walk(node.name))
+        v.value = str(self.walk(node.value))
+        v.units = self.walk(node.units)
+        v.comment = self.walk(node.comment)
+        self.onemodel.add(v)
+        return v
+
 
     #def string(self, ast):
     #    return str(ast)
@@ -83,7 +109,7 @@ class OneModelWalker(NodeWalker):
 def main(data):
     grammar = open('/home/nobel/Sync/python/workspace/onemodel/src/onemodel/import/onemodel_model.ebnf').read()
 
-    data = 'parameter d1 = {1, "hola"} "adios"'
+    # data = 'variable d1 = {1, "hola"} "adios"'
 
     parser = tatsu.compile(grammar, asmodel=True)
     walker = OneModelWalker()
@@ -91,18 +117,20 @@ def main(data):
     model = parser.parse(data)
     result = walker.walk(model)
     
-    #print(model)
-    #print(type(model))
+    # print(data)
+
+    print(type(model))
+    print(model)
 
     print('# WALKER RESULT IS:')
     print(result)
     print()
 
-    matlab = Matlab(walker.onemodel)
-    matlab.generate_param()
-    matlab.generate_ode()
-    matlab.generate_driver()
-    matlab.generate_states()
+    # matlab = Matlab(walker.onemodel)
+    # matlab.generate_param()
+    # matlab.generate_ode()
+    # matlab.generate_driver()
+    # matlab.generate_states()
 
 
     # try:
