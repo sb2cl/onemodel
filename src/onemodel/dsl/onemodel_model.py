@@ -1,5 +1,3 @@
-import json
-
 import tatsu
 from tatsu.walkers import NodeWalker
 
@@ -79,7 +77,6 @@ class OneModelWalker(NodeWalker):
         self.onemodel.add(e)
         return e
 
-
     def walk_MathExpression(self, node):
         result = ''
 
@@ -87,46 +84,6 @@ class OneModelWalker(NodeWalker):
             result += str(self.walk(item))
 
         return result
-
-    #def string(self, ast):
-    #    return str(ast)
-
-    #def operator(self, ast):
-    #    return str(ast)
-    #
-    #def identifier(self, ast):
-    #    return str(ast)
-
-    #def variable(self, ast):
-    #    v = Variable(ast.name)
-    #    v.value = str(ast.value)
-    #    v.units = ast.units
-    #    v.comment = ast.comment
-    #    self.onemodel.add(v)
-
-    #    return v
-
-    #def equation_ode(self, ast):
-    #def equation_susbtitution(self, ast):
-    #    e = Equation(f'eq_{self.equation_num}')
-    #    self.equation_num += 1
-    #    e.equation_type = EquationType.SUBSTITUTION
-    #    e.variable_name = ast.name
-    #    e.value = ast.eqn
-    #    e.comment = ast.comment
-    #    self.onemodel.add(e)
-
-    #def equation_algebraic(self, ast):
-    #    e = Equation(f'eq_{self.equation_num}')
-    #    self.equation_num += 1
-    #    e.equation_type = EquationType.ALGEBRAIC
-    #    e.variable_name = ast.name
-    #    e.value = ast.eqn
-    #    e.comment = ast.comment
-    #    self.onemodel.add(e)
-
-    #def statement(self, ast):
-    #    return ast
 
 def main(data):
     grammar = open('/home/nobel/Sync/python/workspace/onemodel/src/onemodel/import/onemodel_model.ebnf').read()
@@ -153,14 +110,6 @@ def main(data):
     matlab.generate_ode()
     matlab.generate_driver()
     matlab.generate_states()
-
-
-    # try:
-    #     result = parser.parse(data, semantics=semantics)
-    # except Exception as e:
-    #     print(str(e))
-
-    # print(result)
 
 if __name__ == '__main__':
     from sys import argv
