@@ -17,12 +17,34 @@ statement = expression ;
 
 expression =
   | 'parameter' parameter
-  | number
-  | string
-  | identifier
+  | 'variable' variable
+  | 'equation' equation
+  | math_expr
   ;
 
 parameter = name:identifier '=' '{' value:number ',' units:string '}' [comment:string] ;
+
+variable = name:identifier '=' '{' value:number ',' units:string '}' [comment:string] ;
+
+equation = 
+  | equation_ode 
+  | equation_susbtitution
+  | equation_algebraic
+  ;
+
+equation_ode = 
+  'der' '(' name:identifier ')' '==' eqn:math_expr [comment:string] 
+  ;
+
+equation_susbtitution =
+  name:identifier ':=' eqn:math_expr [comment:string] 
+  ;
+
+equation_algebraic =
+  name:identifier '==' eqn:math_expr [comment:string] 
+  ;
+
+math_expr = {number|operator|identifier|'('|')'}+ ;
 
 @name
 identifier = /(?!\d)\w+/ ;
@@ -34,6 +56,15 @@ number = /\d+(?:\.\d+)?(?:e(?:\+|\-)\d+)?/ ;
 string = 
   | /"(.*?)"/
   | /'(.*?)'/
+  ;
+
+# Math operators used to define equations.
+operator = 
+  | '+'
+  | '-'
+  | '*'
+  | '/'
+  | '^'
   ;
 
 newline = 
