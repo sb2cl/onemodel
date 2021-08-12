@@ -3,6 +3,8 @@ import json
 import tatsu
 from tatsu.walkers import NodeWalker
 
+from onemodel.utils.setup_input_history import setup_input_history
+
 class Repl:
     """ REPL
 
