@@ -32,7 +32,7 @@ expression
   = 
   | parameter
   | variable
-  | math_expr
+  | equation
   ;
 
 
@@ -62,15 +62,15 @@ equation_ode::DefineEquationOde
   ;
 
 
-equation_susbtitution 
+equation_susbtitution::DefineEquationSubstitution
   =
-  name:identifier ':=' eqn:math_expr [comment:string] 
+  'equation' name:identifier ':=' eqn:math_expr [comment:string] 
   ;
 
 
-equation_algebraic 
+equation_algebraic::DefineEquationAlgebraic
   =
-  name:identifier '==' eqn:math_expr [comment:string] 
+  'equation' name:identifier '==' eqn:math_expr [comment:string] 
   ;
 
 

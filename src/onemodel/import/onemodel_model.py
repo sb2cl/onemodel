@@ -49,6 +49,34 @@ class OneModelWalker(NodeWalker):
         self.onemodel.add(v)
         return v
 
+    def walk_DefineEquationOde(self, node):
+        e = Equation(f'eq_{self.equation_num}')
+        self.equation_num += 1
+        e.equation_type = EquationType.ODE
+        e.variable_name = self.walk(node.name)
+        e.value = self.walk(node.eqn)
+        e.comment = self.walk(node.comment)
+        self.onemodel.add(e)
+
+    def walk_DefineEquationSubstitution(self, node):
+        e = Equation(f'eq_{self.equation_num}')
+        self.equation_num += 1
+        e.equation_type = EquationType.SUBSTITUTION
+        e.variable_name = self.walk(node.name)
+        e.value = self.walk(node.eqn)
+        e.comment = self.walk(node.comment)
+        self.onemodel.add(e)
+
+    def walk_DefineEquationAlgebraic(self, node):
+        e = Equation(f'eq_{self.equation_num}')
+        self.equation_num += 1
+        e.equation_type = EquationType.ALGEBRAIC
+        e.variable_name = self.walk(node.name)
+        e.value = self.walk(node.eqn)
+        e.comment = self.walk(node.comment)
+        self.onemodel.add(e)
+
+
     def walk_MathExpression(self, node):
         result = ''
 
@@ -76,14 +104,6 @@ class OneModelWalker(NodeWalker):
     #    return v
 
     #def equation_ode(self, ast):
-    #    e = Equation(f'eq_{self.equation_num}')
-    #    self.equation_num += 1
-    #    e.equation_type = EquationType.ODE
-    #    e.variable_name = ast.name
-    #    e.value = ast.eqn
-    #    e.comment = ast.comment
-    #    self.onemodel.add(e)
-
     #def equation_susbtitution(self, ast):
     #    e = Equation(f'eq_{self.equation_num}')
     #    self.equation_num += 1
@@ -108,7 +128,7 @@ class OneModelWalker(NodeWalker):
 def main(data):
     grammar = open('/home/nobel/Sync/python/workspace/onemodel/src/onemodel/import/onemodel_model.ebnf').read()
 
-    data = '(a+b)*10'
+    # data = '(a+b)*10'
 
     parser = tatsu.compile(grammar, asmodel=True)
     walker = OneModelWalker()
@@ -125,11 +145,11 @@ def main(data):
     print(result)
     print()
 
-    # matlab = Matlab(walker.onemodel)
-    # matlab.generate_param()
-    # matlab.generate_ode()
-    # matlab.generate_driver()
-    # matlab.generate_states()
+    matlab = Matlab(walker.onemodel)
+    matlab.generate_param()
+    matlab.generate_ode()
+    matlab.generate_driver()
+    matlab.generate_states()
 
 
     # try:
