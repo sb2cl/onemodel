@@ -4,6 +4,7 @@ import tatsu
 from tatsu.walkers import NodeWalker
 
 from onemodel.utils.setup_input_history import setup_input_history
+from onemodel.dsl.onemodel_model import OneModelWalker
 
 class Repl:
     """ REPL
@@ -36,7 +37,7 @@ class Repl:
         continue_loop = True
 
         # Load the parser.
-        grammar = open('/home/nobel/Sync/python/workspace/onemodel/src/onemodel/import/onemodel_model.ebnf').read()
+        grammar = open('/home/nobel/Sync/python/workspace/onemodel/src/onemodel/dsl/onemodel_model.ebnf').read()
         parser = tatsu.compile(grammar, asmodel=True)
         
         # Init the model walker.
@@ -55,6 +56,7 @@ class Repl:
             # Walk the ast model.
             result = walker.walk(model)
             error = None
+            should_exit = False
 
             # 3. PRINT
             if error:
