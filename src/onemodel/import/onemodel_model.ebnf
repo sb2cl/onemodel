@@ -16,12 +16,6 @@ start
   ;
 
 
-statements
-  =
-  {newline}* statement {{newline}+ statement}* {newline}*
-  ;
-
-
 statement
   =
   expression
@@ -117,5 +111,3 @@ newline
   | ';'
   | /\n/
   ;
-
-

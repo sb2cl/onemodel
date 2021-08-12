@@ -57,6 +57,7 @@ class OneModelWalker(NodeWalker):
         e.value = self.walk(node.eqn)
         e.comment = self.walk(node.comment)
         self.onemodel.add(e)
+        return e
 
     def walk_DefineEquationSubstitution(self, node):
         e = Equation(f'eq_{self.equation_num}')
@@ -66,6 +67,7 @@ class OneModelWalker(NodeWalker):
         e.value = self.walk(node.eqn)
         e.comment = self.walk(node.comment)
         self.onemodel.add(e)
+        return e
 
     def walk_DefineEquationAlgebraic(self, node):
         e = Equation(f'eq_{self.equation_num}')
@@ -75,6 +77,7 @@ class OneModelWalker(NodeWalker):
         e.value = self.walk(node.eqn)
         e.comment = self.walk(node.comment)
         self.onemodel.add(e)
+        return e
 
 
     def walk_MathExpression(self, node):
