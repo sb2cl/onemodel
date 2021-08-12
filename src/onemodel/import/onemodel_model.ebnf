@@ -1,0 +1,121 @@
+@@grammar::OneModel
+
+# TatSu by default defines newline as whitespace but onemodel syntax
+# uses newlines as separators. So we have removed the intro from the
+# whitespace characters in TatSu.
+@@whitespace::/[\t ]+/
+
+# This allows us to use comments like in python.
+@@eol_comments::/#.*?$/
+
+
+# Principal rule that TatSu will start looking for it.
+start 
+  =
+  parameter $ 
+  ;
+
+
+statements
+  =
+  {newline}* statement {{newline}+ statement}* {newline}*
+  ;
+
+
+statement
+  =
+  expression
+  ;
+
+
+expression 
+  = parameter
+  #| 'variable' variable
+  #| 'equation' equation
+  #| math_expr
+  ;
+
+
+parameter::DefineParameter
+  = 
+  'parameter' name:identifier '=' '{' value:number ',' units:string '}' [comment:string] 
+  ;
+
+
+variable 
+  = 
+  name:identifier '=' '{' value:number ',' units:string '}' [comment:string] 
+  ;
+
+
+equation 
+  = 
+  | equation_ode 
+  | equation_susbtitution
+  | equation_algebraic
+  ;
+
+
+equation_ode 
+  = 
+  'der' '(' name:identifier ')' '==' eqn:math_expr [comment:string] 
+  ;
+
+
+equation_susbtitution 
+  =
+  name:identifier ':=' eqn:math_expr [comment:string] 
+  ;
+
+
+equation_algebraic 
+  =
+  name:identifier '==' eqn:math_expr [comment:string] 
+  ;
+
+
+math_expr 
+  = 
+  {number|operator|identifier|'('|')'}+ 
+  ;
+
+
+@name
+identifier 
+  = /(?!\d)\w+/ 
+  ;
+
+
+# Definition of numbers, e.g.: '1', '1.0', '1e-1'.
+number::float
+  =
+  /\d+(?:\.\d+)?(?:e(?:\+|\-)\d+)?/ 
+  ;
+
+
+# Definition of strings (they can be formed with ' and ").
+string::str
+  = 
+  | /"(.*?)"/
+  | /'(.*?)'/
+  ;
+
+
+# Math operators used to define equations.
+operator 
+  = 
+  | '+'
+  | '-'
+  | '*'
+  | '/'
+  | '^'
+  ;
+
+
+newline 
+  = 
+  | ';'
+  | /\n/
+  ;
+
+
