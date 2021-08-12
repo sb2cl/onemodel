@@ -32,8 +32,7 @@ expression
   = 
   | parameter
   | variable
-  #| 'equation' equation
-  #| math_expr
+  | math_expr
   ;
 
 
@@ -57,9 +56,9 @@ equation
   ;
 
 
-equation_ode 
+equation_ode::DefineEquationOde
   = 
-  'der' '(' name:identifier ')' '==' eqn:math_expr [comment:string] 
+  'equation' 'der' '(' name:identifier ')' '==' eqn:math_expr [comment:string] 
   ;
 
 
@@ -75,7 +74,7 @@ equation_algebraic
   ;
 
 
-math_expr 
+math_expr::MathExpression
   = 
   {number|operator|identifier|'('|')'}+ 
   ;

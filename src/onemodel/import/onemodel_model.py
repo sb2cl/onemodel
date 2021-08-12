@@ -18,8 +18,7 @@ class OneModelWalker(NodeWalker):
         return node
 
     def walk_closure(self, nodes):
-        # print('TuplaMethod')
-        walked_nodes = []
+        results = []
 
         for node in nodes:
             result = self.walk(node)
@@ -27,12 +26,12 @@ class OneModelWalker(NodeWalker):
             if result == '\n' or result == ';':
                 continue
 
-            walked_nodes.append(result)
+            results.append(result)
 
-        if len(walked_nodes) == 1:
-            walked_nodes = walked_nodes[0]
+        if len(results) == 1:
+            results = results[0]
 
-        return walked_nodes
+        return results
 
     def walk_DefineParameter(self, node):
         p = Parameter(self.walk(node.name))
@@ -50,6 +49,13 @@ class OneModelWalker(NodeWalker):
         self.onemodel.add(v)
         return v
 
+    def walk_MathExpression(self, node):
+        result = ''
+
+        for item in node.ast:
+            result += str(self.walk(item))
+
+        return result
 
     #def string(self, ast):
     #    return str(ast)
@@ -59,13 +65,6 @@ class OneModelWalker(NodeWalker):
     #
     #def identifier(self, ast):
     #    return str(ast)
-
-    #def math_expr(self, ast):
-    #    expr = ''
-    #    for item in ast:
-    #        expr += str(item)
-
-    #    return expr
 
     #def variable(self, ast):
     #    v = Variable(ast.name)
@@ -109,7 +108,7 @@ class OneModelWalker(NodeWalker):
 def main(data):
     grammar = open('/home/nobel/Sync/python/workspace/onemodel/src/onemodel/import/onemodel_model.ebnf').read()
 
-    # data = 'variable d1 = {1, "hola"} "adios"'
+    data = '(a+b)*10'
 
     parser = tatsu.compile(grammar, asmodel=True)
     walker = OneModelWalker()
