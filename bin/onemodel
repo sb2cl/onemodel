@@ -1,5 +1,0 @@
-#!/usr/bin/env python
-from onemodel.dsl.repl import Repl
-
-repl = Repl()
-repl.run()
