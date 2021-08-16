@@ -7,7 +7,7 @@ class OneModel:
     This class implements OneModel models.
     """
 
-    def __init__(self, name):
+    def __init__(self, name, export_path):
         """ Inits OneModel.
 
         Args:
@@ -15,6 +15,7 @@ class OneModel:
                 Name of this onemodel model.
         """
         self.name = name
+        self.export_path = export_path
         self.symbol_table = {}
 
     def get(self, name):

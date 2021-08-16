@@ -7,9 +7,9 @@ from onemodel.variable import Variable
 from onemodel.equation import Equation, EquationType
 from onemodel.export.matlab.matlab import Matlab
 
-class OneModelWalker(NodeWalker, basename):
-    def __init__(self):
-        self.onemodel = OneModel(basename)
+class OneModelWalker(NodeWalker):
+    def __init__(self, basename, export_path):
+        self.onemodel = OneModel(basename, export_path)
         self.equation_num = 0
 
     def walk_object(self, node):

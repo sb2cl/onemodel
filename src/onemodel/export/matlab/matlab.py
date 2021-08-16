@@ -127,14 +127,13 @@ class Matlab:
         """ Generate Matlab function which returns the default parameters.
         """
 
-        # Check if build folder exists
-        dirName = './build/'
-        if not os.path.exists(dirName):
-            # Create it.
-            os.mkdir(dirName)
+        filepath = self.onemodel.export_path
+        filepath += '/'
+        filepath += self.onemodel.name
+        filepath += '_param.m'
 
         # Create and open the file to export.
-        f = open(dirName + self.onemodel.name + '_param.m', "w")
+        f = open(filepath, "w")
 
         # Function header.
         f.write(f'function [p,x0,M] = {self.onemodel.name}_param()\n')
@@ -183,18 +182,19 @@ class Matlab:
 
         f.close()
 
+        return filepath
+
     def generate_ode(self):
         """ Generate a Matlab function which evaluates the ODE.
 
         """
-        # Check if build folder exists
-        dirName = './build/'
-        if not os.path.exists(dirName):
-            # Create it.
-            os.mkdir(dirName)
+        filepath = self.onemodel.export_path
+        filepath += '/'
+        filepath += self.onemodel.name
+        filepath += '_ode.m'
 
         # Create and open the file to export.
-        f = open(dirName + self.onemodel.name + '_ode.m', "w")
+        f = open(filepath, "w")
 
         # Function header.
         f.write(f'function [dx] = {self.onemodel.name}_ode(t,x,p)\n')
@@ -230,6 +230,8 @@ class Matlab:
         f.write(f'end\n')
         f.close()
 
+        return filepath
+
     def generate_states(self):
         """ Generate a function which calculates all the states of the model.
         
@@ -238,14 +240,14 @@ class Matlab:
         is just simulated the reduced model. Then after the simulation we have
         to recalculate the rest of the states.
         """
-         # Check if build folder exists
-        dirName = './build/'
-        if not os.path.exists(dirName):
-            # Create it.
-            os.mkdir(dirName)
+
+        filepath = self.onemodel.export_path
+        filepath += '/'
+        filepath += self.onemodel.name
+        filepath += '_states.m'
 
         # Create and open the file to export.
-        f = open(dirName + self.onemodel.name + '_states.m', "w")
+        f = open(filepath, "w")
 
         # Function header.
         f.write(f'function [out] = {self.onemodel.name}_states(t,x,p)\n')
@@ -282,6 +284,8 @@ class Matlab:
         f.write(f'\nend\n')
         f.close()
 
+        return filepath
+
     def generate_driver(self):
         """ Generate an example driver script.
         
@@ -289,14 +293,13 @@ class Matlab:
         functions and will perform a basic simulation of the model and plot the
         result.
         """
-        # Check if build folder exists
-        dirName = './build/'
-        if not os.path.exists(dirName):
-            # Create it.
-            os.mkdir(dirName)
+        filepath = self.onemodel.export_path
+        filepath += '/'
+        filepath += self.onemodel.name
+        filepath += '_driver.m'
 
         # Create and open the file to export.
-        f = open(dirName + self.onemodel.name + '_driver.m', "w")
+        f = open(filepath, "w")
 
         # Function header.
         f.write(f'%% Example driver script for simulating "{self.onemodel.name}" model.\n')
@@ -328,3 +331,5 @@ class Matlab:
         f.write(f'plot(t,x);\n')
         f.write(f'grid on;\n')
         # TODO: Add a legend.
+
+        return filepath

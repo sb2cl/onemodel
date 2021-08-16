@@ -6,6 +6,7 @@ import tatsu
 import onemodel
 from onemodel.dsl.repl import Repl
 from onemodel.dsl.onemodel_model import OneModelWalker
+from onemodel.export.matlab.matlab import Matlab
 
 @click.group()
 def cli():
@@ -43,7 +44,12 @@ def export(input_file, output):
 
     # Default value of output is './build/'
     if output == None:
-        output = './build/'
+        output = './build'
+    
+    # Create build dir if it doesn't exist.
+    if not os.path.isdir(output):
+        os.mkdir(output)
+        print(f'Created dir "{output}"')
 
     output = os.path.abspath(output)
 
@@ -59,20 +65,30 @@ def export(input_file, output):
     parser = tatsu.compile(grammar, asmodel=True)
     print('Parser initialized with "onemodel" syntax.')
 
-    # Load the Semantic Model.
-    walker = OneModelWalker(filename)
-    print('Semantic model intialized for "onemodel" syntax.')
-
     # Parse the data into an AST model.
     model = parser.parse(open(input_file).read())
     print('Parsed input file into an AST model.')
+
+    # Load the AST model walker.
+    walker = OneModelWalker(filename, output)
+    print('AST model walker initialized for "onemodel" syntax.')
 
     # Walk the AST model.
     result = walker.walk(model)
     print('Walk the AST model.')
 
+    # Expor the model into Matlab.
     matlab = Matlab(walker.onemodel)
+    print('Load MATLAB export module.')
 
+    filepath = matlab.generate_param()
+    print(f'Generated "{filepath}"')
+    filepath = matlab.generate_ode()
+    print(f'Generated "{filepath}"')
+    filepath = matlab.generate_driver()
+    print(f'Generated "{filepath}"')
+    filepath = matlab.generate_states()
+    print(f'Generated "{filepath}"')
 
 if __name__ == '__main__':
     cli(obj={})
