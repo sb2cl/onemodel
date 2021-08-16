@@ -1,10 +1,11 @@
-import click
 import os
 
+import click
+import tatsu
+
 import onemodel
-
 from onemodel.dsl.repl import Repl
-
+from onemodel.dsl.onemodel_model import OneModelWalker
 
 @click.group()
 def cli():
@@ -17,14 +18,15 @@ def cli():
 
 @cli.command(short_help='Run REPL')
 def repl():
-    """ Run an interactive REPL (Read Evaluate Print Loop)
+    """ Run an interactive REPL (Read Evaluate Print Loop) session.
 
     """
     repl = Repl()
     repl.run()
 
 @cli.command(short_help='Export the model')
-@click.argument('input_file', type=click.File('r'))
+@click.argument('input_file', 
+        type=click.Path(exists=True))
 @click.option('-o','--output', 
         type=click.Path(exists=True), 
         help="Set the output path for the exported model.")
@@ -34,6 +36,10 @@ def export(input_file, output):
     By default the exported model will be saved in the 'build' directory of the
     current path (if 'build' dir doesn't exist, it will be created).
     """
+
+    # Get the filename (without extension) and the extension.
+    base = os.path.basename(input_file)
+    (filename, extension) = os.path.splitext(base)
 
     # Default value of output is './build/'
     if output == None:
@@ -46,10 +52,26 @@ def export(input_file, output):
         print(f'Created output directory "{output}".')
         os.mkdir(output)
     
+    # Load the grammar.
+    grammar = open('/home/nobel/Sync/python/workspace/onemodel/src/onemodel/dsl/onemodel_model.ebnf').read()
 
-    print(input_file)
-    print(output)
+    # Load the parser with the grammar.
+    parser = tatsu.compile(grammar, asmodel=True)
+    print('Parser initialized with "onemodel" syntax.')
 
+    # Load the Semantic Model.
+    walker = OneModelWalker(filename)
+    print('Semantic model intialized for "onemodel" syntax.')
+
+    # Parse the data into an AST model.
+    model = parser.parse(open(input_file).read())
+    print('Parsed input file into an AST model.')
+
+    # Walk the AST model.
+    result = walker.walk(model)
+    print('Walk the AST model.')
+
+    matlab = Matlab(walker.onemodel)
 
 
 if __name__ == '__main__':
