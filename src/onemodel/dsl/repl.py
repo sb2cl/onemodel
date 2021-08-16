@@ -1,10 +1,11 @@
 import json
+from importlib_resources import files
 
 import tatsu
 from tatsu.walkers import NodeWalker
 
 from onemodel.utils.setup_input_history import setup_input_history
-from onemodel.dsl.onemodel_model import OneModelWalker
+from onemodel.dsl.onemodel_walker import OneModelWalker
 
 class Repl:
     """ REPL
@@ -37,11 +38,11 @@ class Repl:
         continue_loop = True
 
         # Load the parser.
-        grammar = open('/home/nobel/Sync/python/workspace/onemodel/src/onemodel/dsl/onemodel_model.ebnf').read()
+        grammar = files('onemodel.dsl').joinpath('onemodel.ebnf').read_text()
         parser = tatsu.compile(grammar, asmodel=True)
         
         # Init the model walker.
-        walker = OneModelWalker()
+        walker = OneModelWalker('repl','.')
 
         while continue_loop:
             # 1. READ

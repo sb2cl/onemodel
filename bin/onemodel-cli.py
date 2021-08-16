@@ -6,7 +6,7 @@ import tatsu
 
 import onemodel
 from onemodel.dsl.repl import Repl
-from onemodel.dsl.onemodel_model import OneModelWalker
+from onemodel.dsl.onemodel_walker import OneModelWalker
 from onemodel.export.matlab.matlab import Matlab
 
 @click.group()

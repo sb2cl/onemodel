@@ -5,7 +5,6 @@ from onemodel.onemodel import OneModel
 from onemodel.parameter import Parameter
 from onemodel.variable import Variable
 from onemodel.equation import Equation, EquationType
-from onemodel.export.matlab.matlab import Matlab
 
 class OneModelWalker(NodeWalker):
     def __init__(self, basename, export_path):
@@ -84,40 +83,3 @@ class OneModelWalker(NodeWalker):
             result += str(self.walk(item))
 
         return result
-
-def main(data):
-    grammar = open('/home/nobel/Sync/python/workspace/onemodel/src/data/grammar/onemodel_model.ebnf').read()
-
-    # data = '(a+b)*10'
-
-    parser = tatsu.compile(grammar, asmodel=True)
-    walker = OneModelWalker()
-
-    model = parser.parse(data)
-    result = walker.walk(model)
-    
-    # print(data)
-
-    print(type(model))
-    print(model)
-
-    print('# WALKER RESULT IS:')
-    print(result)
-    print()
-
-    matlab = Matlab(walker.onemodel)
-    matlab.generate_param()
-    matlab.generate_ode()
-    matlab.generate_driver()
-    matlab.generate_states()
-
-if __name__ == '__main__':
-    from sys import argv
-
-    if len(argv) > 1:
-        filename = str(argv[1])
-        data = open(filename).read()
-
-        main(data)
-    else:
-        print('Error: no filename passed.')
