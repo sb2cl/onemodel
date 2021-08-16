@@ -86,7 +86,7 @@ class OneModelWalker(NodeWalker):
         return result
 
 def main(data):
-    grammar = open('/home/nobel/Sync/python/workspace/onemodel/src/onemodel/import/onemodel_model.ebnf').read()
+    grammar = open('/home/nobel/Sync/python/workspace/onemodel/src/data/grammar/onemodel_model.ebnf').read()
 
     # data = '(a+b)*10'
 

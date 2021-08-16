@@ -1,4 +1,5 @@
 import os
+from importlib_resources import files
 
 import click
 import tatsu
@@ -59,7 +60,7 @@ def export(input_file, output):
         os.mkdir(output)
     
     # Load the grammar.
-    grammar = open('/home/nobel/Sync/python/workspace/onemodel/src/onemodel/dsl/onemodel_model.ebnf').read()
+    grammar = files('onemodel.dsl').joinpath('onemodel.ebnf').read_text()
 
     # Load the parser with the grammar.
     parser = tatsu.compile(grammar, asmodel=True)
