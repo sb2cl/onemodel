@@ -1,12 +1,10 @@
-#!/usr/bin/env python
 import click
 import os
 
-# from onemodel.dsl.repl import Repl
+import onemodel
 
+from onemodel.dsl.repl import Repl
 
-# repl = Repl()
-# repl.run()
 
 @click.group()
 def cli():
@@ -16,6 +14,14 @@ def cli():
     syntax preferabily, and exports the model information into a file (or set of 
     files) for being executed in other programming language (i.e. MATLAB).
     """
+
+@cli.command(short_help='Run REPL')
+def repl():
+    """ Run an interactive REPL (Read Evaluate Print Loop)
+
+    """
+    repl = Repl()
+    repl.run()
 
 @cli.command(short_help='Export the model')
 @click.argument('input_file', type=click.File('r'))
@@ -43,6 +49,7 @@ def export(input_file, output):
 
     print(input_file)
     print(output)
+
 
 
 if __name__ == '__main__':
