@@ -91,7 +91,7 @@ class OneModel:
 
                 if var == None:
                     # We didn't find the var.
-                    raise ValueError('Variable does not exist.')
+                    raise ValueError(f'Variable "{eqn.variable_name}" does not exist.')
 
                 # Save the match!
                 eqn.variable = var

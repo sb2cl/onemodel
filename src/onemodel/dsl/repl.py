@@ -52,7 +52,11 @@ class Repl:
             # 2. EVALUATE
 
             # Generate the ast model.
-            model = parser.parse(text)
+            try:
+                model = parser.parse(text)
+            except Exception as e:
+                print(str(e))
+                continue
 
             # Walk the ast model.
             result = walker.walk(model)

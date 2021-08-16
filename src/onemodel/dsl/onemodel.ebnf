@@ -27,6 +27,7 @@ expression
   | parameter
   | variable
   | equation
+  | identifier
   ;
 
 
@@ -75,8 +76,8 @@ math_expr::MathExpression
 
 
 @name
-identifier 
-  = /(?!\d)\w+/ 
+identifier::AccessIdentifier
+  = name:/(?!\d)\w+/ 
   ;
 
 

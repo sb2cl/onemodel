@@ -367,15 +367,15 @@ class Symbol:
         """ Representation method.
         
         """
-        out = f'{self.name}\n'
-        out += f'\tname = {self.name}\n'
-        out += f'\tvalue = {self.value}\n'
-        out += f'\ttype = {self.type.name}\n'
-        out += f'\tnamebase = {self.namebase}\n'
-        out += f'\tnametex = {self.nametex}\n'
-        out += f'\tvaluetex = {self.valuetex}\n'
-        out += f'\tunits = {self.units}\n'
-        out += f'\tcomment = {self.comment}\n'
-        out += f'\tdescription = {self.description}\n'
-        out += f'\treference = {self.reference}\n'
+        out = ''
+        out += f'         name : {self.name}\n'
+        out += f'        value : {self.value}\n'
+        out += f'         type : {self.type.name}\n'
+        out += f'     namebase : {self.namebase}\n'
+        out += f'      nametex : {self.nametex}\n'
+        out += f'     valuetex : {self.valuetex}\n'
+        out += f'        units : {self.units}\n'
+        out += f'      comment : {self.comment}\n'
+        out += f'  description : {self.description}\n'
+        out += f'    reference : {self.reference}'
         return out
