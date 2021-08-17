@@ -362,7 +362,7 @@ class Symbol:
             property of '%s'. Use string type instead.""" % (str(reference),self._name))
 
         self._reference = reference
-    
+   
     def __repr__(self):
         """ Representation method.
         
