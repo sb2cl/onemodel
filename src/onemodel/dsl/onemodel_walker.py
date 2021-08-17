@@ -25,9 +25,6 @@ class OneModelWalker(NodeWalker):
     def walk_object(self, node):
         return node
 
-    def walk_String(self, node):
-        return str(node.value)
-
     def walk_BinaryOperation(self,node):
         left = self.walk(node.left)
         right = self.walk(node.right)

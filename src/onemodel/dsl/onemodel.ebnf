@@ -59,7 +59,14 @@ division::BinaryOperation
 
 factor
   = 
-  atom
+  | subexpression
+  | atom
+  ;
+
+
+subexpression
+  = 
+  '(' @:expression ')'
   ;
 
 
@@ -87,9 +94,9 @@ float::float
 
 
 # Definition of strings.
-string::String
+string::str
   = 
-  "'" value:/[^\\\r\n\f']*/ "'"
+  "'" @:/[^\\\r\n\f']*/ "'"
   ;
 
 
