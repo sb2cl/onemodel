@@ -13,7 +13,20 @@
 
 start
   = 
-  expression $
+  statement $
+  ;
+
+
+statement
+  = 
+  | assign_identifier
+  | expression
+  ;
+
+
+assign_identifier::AssignIdentifier
+  = 
+  'let' name:identifier '=' value:expression
   ;
 
 
