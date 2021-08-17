@@ -1,38 +1,67 @@
 @@grammar::OneModel
 
+
 # TatSu by default defines newline as whitespace but onemodel syntax
 # uses newlines as separators. So we have removed the intro from the
 # whitespace characters in TatSu.
 @@whitespace::/[\t ]+/
 
+
 # This allows us to use comments like in python.
 @@eol_comments::/#.*?$/
+
 
 start
   = 
   expression $
   ;
 
+
 expression
   = 
   | addition
+  | substraction
   | term
   ;
 
-addition::Add
+
+addition::BinaryOperation
   = 
   left:term op:'+' right:expression
   ;
 
+
+substraction::BinaryOperation
+  = 
+  left:term op:'-' right:expression
+  ;
+
+
 term 
   = 
-  factor
+  | multiplication
+  | division
+  | factor
   ;
+
+
+multiplication::BinaryOperation
+  = 
+  left:term op:'*' right:expression
+  ;
+
+
+division::BinaryOperation
+  = 
+  left:term op:'/' right:expression
+  ;
+
 
 factor
   = 
   atom
   ;
+
 
 atom
   = 
@@ -41,11 +70,13 @@ atom
   | string
   ;
 
+
 # Definition of integers.
 integer::int
   = 
   /\d+/
   ;
+
 
 # Definition of floats.
 float::float
@@ -54,13 +85,13 @@ float::float
   | /\d*\.\d+/                        # Regular floats.
   ;
 
-# Definition of strings (either ' and " can be used).
+
+# Definition of strings.
 string::String
   = 
   "'" value:/[^\\\r\n\f']*/ "'"
-  #| /"(.*?)"/
-  #| /'(.*?)'/
   ;
+
 
 # # Principal rule that TatSu will start looking for it.
 # start 

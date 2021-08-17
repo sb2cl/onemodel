@@ -28,11 +28,22 @@ class OneModelWalker(NodeWalker):
     def walk_String(self, node):
         return str(node.value)
 
-    def walk_Add(self,node):
+    def walk_BinaryOperation(self,node):
         left = self.walk(node.left)
         right = self.walk(node.right)
+        op = node.op
 
-        return left + right
+        if op == '+':
+            return left + right
+
+        if op == '-':
+            return left - right
+
+        if op == '*':
+            return left * right
+
+        if op == '/':
+            return left / right
 
 #    def walk_closure(self, nodes):
 #        results = []

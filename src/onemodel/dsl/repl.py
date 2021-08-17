@@ -66,7 +66,7 @@ class Repl:
             # 3. PRINT
             if error:
                 print(error.as_string())
-            elif result:
+            else:
                 if type(result) == str:
                     print("'" + result + "'")
                 else:
