@@ -61,6 +61,28 @@ class OneModelWalker(NodeWalker):
         if op == '/':
             return left / right
 
+    def walk_Parameter(self, node):
+        p = Parameter(node.name)
+        p.value = str(self.walk(node.value))
+        p.units = node.units
+        if node.comment != None:
+            p.comment = node.comment
+
+        self.symbol_table.set(node.name, p)
+
+        return 
+
+    def walk_Variable(self, node):
+        v = Variable(node.name)
+        v.value = str(self.walk(node.value))
+        v.units = node.units
+        if node.comment != None:
+            v.comment = node.comment
+
+        self.symbol_table.set(node.name, v)
+
+        return 
+
     def walk_AssignIdentifier(self, node):
         name = node.name
         value = self.walk(node.value)
@@ -72,6 +94,7 @@ class OneModelWalker(NodeWalker):
     def walk_AccessIdentifier(self, node):
         name = node.name
         value = self.symbol_table.get(name)
+
         return value
 
 #    def walk_closure(self, nodes):

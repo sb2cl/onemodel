@@ -19,8 +19,22 @@ start
 
 statement
   = 
+  | parameter
+  | variable
   | assign_identifier
   | expression
+  ;
+
+
+parameter::Parameter
+  =
+  'parameter' name:identifier '=' '{' value:expression ',' units:string '}' [comment:string] 
+   ;
+
+
+variable::Variable
+  = 
+  'variable' name:identifier '=' '{' value:expression ',' units:string '}' [comment:string] 
   ;
 
 
