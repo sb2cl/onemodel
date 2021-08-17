@@ -10,6 +10,9 @@
 # This allows us to use comments like in python.
 @@eol_comments::/#.*?$/
 
+# Keywords reserved.
+@@keyword:: parameter variable equation let
+
 
 start
   = 
@@ -21,6 +24,7 @@ statement
   = 
   | 'parameter' @:parameter
   | 'variable'  @:variable
+  | assign_property
   | 'let'       @:assign_identifier
   | expression
   ;
@@ -35,6 +39,12 @@ parameter::Parameter
 variable::Variable
   = 
   name:identifier '=' '{' value:expression ',' units:string '}' [comment:string] 
+  ;
+
+
+assign_property::AssignProperty
+  = 
+  name:identifier '.' property_name:identifier '=' value:expression
   ;
 
 
@@ -141,6 +151,8 @@ access_identifier::AccessIdentifier
   ;
 
 
+# Definition of identifiers
+# Identifiers cannot have a keyword name.
 @name
 identifier::str
   =

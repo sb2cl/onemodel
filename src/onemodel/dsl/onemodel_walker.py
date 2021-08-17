@@ -72,6 +72,17 @@ class OneModelWalker(NodeWalker):
 
         return 
 
+    def walk_AssignProperty(self, node):
+        name = node.name
+        property_name = node.property_name
+        value = self.walk(node.value)
+
+        symbol = self.symbol_table.get(name)
+
+        setattr(symbol, property_name, value)
+
+        return
+
     def walk_AssignIdentifier(self, node):
         name = node.name
         value = self.walk(node.value)
