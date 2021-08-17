@@ -19,28 +19,28 @@ start
 
 statement
   = 
-  | parameter
-  | variable
-  | assign_identifier
+  | 'parameter' @:parameter
+  | 'variable'  @:variable
+  | 'let'       @:assign_identifier
   | expression
   ;
 
 
 parameter::Parameter
   =
-  'parameter' name:identifier '=' '{' value:expression ',' units:string '}' [comment:string] 
+  name:identifier '=' '{' value:expression ',' units:string '}' [comment:string] 
    ;
 
 
 variable::Variable
   = 
-  'variable' name:identifier '=' '{' value:expression ',' units:string '}' [comment:string] 
+  name:identifier '=' '{' value:expression ',' units:string '}' [comment:string] 
   ;
 
 
 assign_identifier::AssignIdentifier
   = 
-  'let' name:identifier '=' value:expression
+  name:identifier '=' value:expression
   ;
 
 
@@ -102,6 +102,7 @@ atom
   | float
   | integer
   | string
+  | access_property
   | access_identifier
   ;
 
@@ -125,6 +126,12 @@ float::float
 string::str
   = 
   "'" @:/[^\\\r\n\f']*/ "'"
+  ;
+
+
+access_property::AccessProperty
+  = 
+  name:identifier '.' property_name:identifier
   ;
 
 

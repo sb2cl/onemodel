@@ -6,17 +6,6 @@ from onemodel.parameter import Parameter
 from onemodel.variable import Variable
 from onemodel.equation import Equation, EquationType
 
-# class Identifier():
-#     def __init__(self, name, value=None):
-#         self.name = name
-#         self.value = value
-# 
-#     def __repr__(self):
-#         out = '\n'
-#         out += f'{self.name} =\n\n'
-#         out += f'{self.value}\n'
-#         return out
-         
 class SymbolTable:
   def __init__(self, parent=None):
     self.symbols = {}
@@ -90,6 +79,14 @@ class OneModelWalker(NodeWalker):
         self.symbol_table.set(name, value)
 
         return
+
+    def walk_AccessProperty(self, node):
+        name = node.name
+        value = self.symbol_table.get(name)
+        property_name = node.property_name
+        value = getattr(value, property_name)
+
+        return value
 
     def walk_AccessIdentifier(self, node):
         name = node.name
