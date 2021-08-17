@@ -27,6 +27,8 @@ expression
   | parameter
   | variable
   | equation
+  | change_property
+  | property
   | identifier
   ;
 
@@ -78,6 +80,16 @@ math_expr::MathExpression
 @name
 identifier::AccessIdentifier
   = name:/(?!\d)\w+/ 
+  ;
+
+change_property::ChangeProperty
+  = 
+  var:identifier '.' prop:identifier '=' value:number
+  ;
+
+property::AccessProperty
+  = 
+  var:identifier '.' prop:identifier
   ;
 
 

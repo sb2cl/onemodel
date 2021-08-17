@@ -14,7 +14,7 @@ class Identifier():
     def __repr__(self):
         out = '\n'
         out += f'{self.name} =\n\n'
-        out += f'  {self.value}\n'
+        out += f'{self.value}\n'
         return out
         
 class OneModelWalker(NodeWalker):
@@ -44,6 +44,23 @@ class OneModelWalker(NodeWalker):
     def walk_AccessIdentifier(self, node):
         value = self.onemodel.get(node.name)
         return Identifier(node.name, value)
+
+    def walk_AccessProperty(self, node):
+        symbol = self.walk(node.var)
+        property_ = self.walk(node.prop)
+
+        value = getattr(symbol.value, property_.name) 
+
+        return Identifier('ans', value)
+
+    def walk_ChangeProperty(self, node):
+        symbol = self.walk(node.var)
+        property_ = self.walk(node.prop)
+        value = str(self.walk(node.value))
+
+        setattr(symbol.value, property_.name, value) 
+
+        return Identifier(symbol.name, symbol.value)
 
     def walk_DefineParameter(self, node):
         p = Parameter(self.walk(node.name).name)
