@@ -75,6 +75,7 @@ atom
   | float
   | integer
   | string
+  | access_identifier
   ;
 
 
@@ -97,6 +98,19 @@ float::float
 string::str
   = 
   "'" @:/[^\\\r\n\f']*/ "'"
+  ;
+
+
+access_identifier::AccessIdentifier
+  = 
+  name:identifier
+  ;
+
+
+@name
+identifier::str
+  =
+  /(?!\d)\w+/ 
   ;
 
 

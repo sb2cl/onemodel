@@ -17,15 +17,34 @@ from onemodel.equation import Equation, EquationType
 #         out += f'{self.value}\n'
 #         return out
          
+class SymbolTable:
+  def __init__(self, parent=None):
+    self.symbols = {}
+    self.parent = parent
+
+  def get(self, name):
+    value = self.symbols.get(name, None)
+    if value == None and self.parent:
+      return self.parent.get(name)
+    return value
+
+  def set(self, name, value):
+    self.symbols[name] = value
+
+  def remove(self, name):
+    del self.symbols[name]
+
 class OneModelWalker(NodeWalker):
     def __init__(self, basename, export_path):
         self.onemodel = OneModel(basename, export_path)
         self.equation_num = 0
+        self.symbol_table = SymbolTable()
+        self.symbol_table.set('a', 1.0)
 
     def walk_object(self, node):
         return node
 
-    def walk_BinaryOperation(self,node):
+    def walk_BinaryOperation(self, node):
         left = self.walk(node.left)
         right = self.walk(node.right)
         op = node.op
@@ -41,6 +60,11 @@ class OneModelWalker(NodeWalker):
 
         if op == '/':
             return left / right
+
+    def walk_AccessIdentifier(self, node):
+        name = node.name
+        value = self.symbol_table.get(name)
+        return value
 
 #    def walk_closure(self, nodes):
 #        results = []
