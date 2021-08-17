@@ -8,119 +8,172 @@
 # This allows us to use comments like in python.
 @@eol_comments::/#.*?$/
 
+start
+  = 
+  expression $
+  ;
 
-# Principal rule that TatSu will start looking for it.
-start 
+expression
+  = 
+  | addition
+  | term
+  ;
+
+addition::Add
+  = 
+  left:term op:'+' right:expression
+  ;
+
+term 
+  = 
+  factor
+  ;
+
+factor
+  = 
+  atom
+  ;
+
+atom
+  = 
+  | float
+  | integer
+  | string
+  ;
+
+# Definition of integers.
+integer::int
+  = 
+  /\d+/
+  ;
+
+# Definition of floats.
+float::float
   =
-  {newline | statement} $ 
+  | /\d*(?:\.\d+)?(?:e(?:\+|\-)\d+)/  # Scientific notation.
+  | /\d*\.\d+/                        # Regular floats.
   ;
 
-
-statement
-  =
-  expression
-  ;
-
-
-expression 
+# Definition of strings (either ' and " can be used).
+string::String
   = 
-  | parameter
-  | variable
-  | equation
-  | change_property
-  | property
-  | identifier
+  "'" value:/[^\\\r\n\f']*/ "'"
+  #| /"(.*?)"/
+  #| /'(.*?)'/
   ;
 
-
-parameter::DefineParameter
-  = 
-  'parameter' name:identifier '=' '{' value:number ',' units:string '}' [comment:string] 
-  ;
-
-
-variable::DefineVariable
-  = 
-  'variable' name:identifier '=' '{' value:number ',' units:string '}' [comment:string] 
-  ;
-
-
-equation 
-  = 
-  | equation_ode 
-  | equation_susbtitution
-  | equation_algebraic
-  ;
-
-
-equation_ode::DefineEquationOde
-  = 
-  'equation' 'der' '(' name:identifier ')' '==' eqn:math_expr [comment:string] 
-  ;
-
-
-equation_susbtitution::DefineEquationSubstitution
-  =
-  'equation' name:identifier ':=' eqn:math_expr [comment:string] 
-  ;
-
-
-equation_algebraic::DefineEquationAlgebraic
-  =
-  'equation' name:identifier '==' eqn:math_expr [comment:string] 
-  ;
-
-
-math_expr::MathExpression
-  = 
-  {number|operator|identifier|'('|')'}+ 
-  ;
-
-
-@name
-identifier::AccessIdentifier
-  = name:/(?!\d)\w+/ 
-  ;
-
-change_property::ChangeProperty
-  = 
-  var:identifier '.' prop:identifier '=' value:number
-  ;
-
-property::AccessProperty
-  = 
-  var:identifier '.' prop:identifier
-  ;
-
-
-# Definition of numbers, e.g.: '1', '1.0', '1e-1'.
-number::float
-  =
-  /\d+(?:\.\d+)?(?:e(?:\+|\-)\d+)?/ 
-  ;
-
-
-# Definition of strings (they can be formed with ' and ").
-string::str
-  = 
-  | /"(.*?)"/
-  | /'(.*?)'/
-  ;
-
-
-# Math operators used to define equations.
-operator 
-  = 
-  | '+'
-  | '-'
-  | '*'
-  | '/'
-  | '^'
-  ;
-
-
-newline 
-  = 
-  | ';'
-  | /\n/
-  ;
+# # Principal rule that TatSu will start looking for it.
+# start 
+#   =
+#   {newline | statement} $ 
+#   ;
+# 
+# 
+# statement
+#   =
+#   expression
+#   ;
+# 
+# 
+# expression 
+#   = 
+#   | parameter
+#   | variable
+#   | equation
+#   | change_property
+#   | property
+#   | identifier
+#   ;
+# 
+# 
+# parameter::DefineParameter
+#   = 
+#   'parameter' name:identifier '=' '{' value:number ',' units:string '}' [comment:string] 
+#   ;
+# 
+# 
+# variable::DefineVariable
+#   = 
+#   'variable' name:identifier '=' '{' value:number ',' units:string '}' [comment:string] 
+#   ;
+# 
+# 
+# equation 
+#   = 
+#   | equation_ode 
+#   | equation_susbtitution
+#   | equation_algebraic
+#   ;
+# 
+# 
+# equation_ode::DefineEquationOde
+#   = 
+#   'equation' 'der' '(' name:identifier ')' '==' eqn:math_expr [comment:string] 
+#   ;
+# 
+# 
+# equation_susbtitution::DefineEquationSubstitution
+#   =
+#   'equation' name:identifier ':=' eqn:math_expr [comment:string] 
+#   ;
+# 
+# 
+# equation_algebraic::DefineEquationAlgebraic
+#   =
+#   'equation' name:identifier '==' eqn:math_expr [comment:string] 
+#   ;
+# 
+# 
+# math_expr::MathExpression
+#   = 
+#   {number|operator|identifier|'('|')'}+ 
+#   ;
+# 
+# 
+# @name
+# identifier::AccessIdentifier
+#   = name:/(?!\d)\w+/ 
+#   ;
+# 
+# change_property::ChangeProperty
+#   = 
+#   var:identifier '.' prop:identifier '=' value:number
+#   ;
+# 
+# property::AccessProperty
+#   = 
+#   var:identifier '.' prop:identifier
+#   ;
+# 
+# 
+# # Definition of numbers, e.g.: '1', '1.0', '1e-1'.
+# number::float
+#   =
+#   /\d+(?:\.\d+)?(?:e(?:\+|\-)\d+)?/ 
+#   ;
+# 
+# 
+# # Definition of strings (they can be formed with ' and ").
+# string::str
+#   = 
+#   | /"(.*?)"/
+#   | /'(.*?)'/
+#   ;
+# 
+# 
+# # Math operators used to define equations.
+# operator 
+#   = 
+#   | '+'
+#   | '-'
+#   | '*'
+#   | '/'
+#   | '^'
+#   ;
+# 
+# 
+# newline 
+#   = 
+#   | ';'
+#   | /\n/
+#   ;

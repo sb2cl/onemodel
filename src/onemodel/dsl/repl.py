@@ -67,7 +67,10 @@ class Repl:
             if error:
                 print(error.as_string())
             elif result:
-                print(result)
+                if type(result) == str:
+                    print("'" + result + "'")
+                else:
+                    print(result)
 
             # 4. LOOP
             if should_exit:
