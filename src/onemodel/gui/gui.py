@@ -1,20 +1,26 @@
 #!/usr/bin/env python3
 import sys
 
+import os
+from os import path
+
 # importing required libraries
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtPrintSupport import *
-import os
 
 from onemodel.gui.text_editor import TextEditor
 from onemodel.gui.directory_tree import DirectoryTree
 from onemodel.gui.path_field import PathField
 
 class MainWindow(QMainWindow):
+
     def __init__(self, *args, **kwargs):
         super(MainWindow, self).__init__(*args, **kwargs)
+
+        # Current path to work at.
+        self.current_path = ''
 
         # Set window geometry.
         self.setGeometry(0, 0, 1200, 800)
@@ -30,7 +36,7 @@ class MainWindow(QMainWindow):
         grid_layout.setColumnStretch(1, 2)
 
         # Init the directory tree.
-        self.dirTree = DirectoryTree()
+        self.dirTree = DirectoryTree(self)
         grid_layout.addWidget(self.dirTree.tree, 1, 0, 3, 1)
 
         # Init the text editor.
@@ -39,9 +45,7 @@ class MainWindow(QMainWindow):
 
         # Init the path field.
         self.pathField = PathField(self)
-        self.pathField.dirTree = self.dirTree
-        self.dirTree.pathField = self.pathField
-        grid_layout.addWidget(self.pathField.field, 0, 0, 1, 3)
+        grid_layout.addWidget(self.pathField, 0, 0, 1, 3)
 
 
         # creating a QPlainTextEdit object
@@ -77,6 +81,37 @@ class MainWindow(QMainWindow):
         file_menu = self.menuBar().addMenu("&File")
 
         self.setWindowTitle('OneModel Editor')
+
+        # Init the current_path to the home directory.
+        self.set_path(QDir.homePath())
+
+
+    def set_path(self, new_path):
+        """ Set a new current path.
+        """
+        # Check that the new path is valid.
+        if path.isdir(new_path):
+            # Update current path.
+            self.current_path = new_path
+            
+            # Update path field.
+            self.pathField.setText(self.current_path)
+
+            # Update directory tree.
+            self.dirTree.tree.setRootIndex(self.dirTree.model.index(self.current_path))
+
+        else:
+            # If not, show error message.
+            title = 'Error Changing Folder'
+            msg = f'Cannot find folder "{new_path}".\n'
+            msg += 'Check the spelling and try again.'
+
+            QMessageBox.about(self, title, msg) 
+
+    def restore_path(self):
+        """ Restore the path to the last valid path.
+        """
+        self.set_path(self.current_path)
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)

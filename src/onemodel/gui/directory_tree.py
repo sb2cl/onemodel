@@ -6,9 +6,11 @@ from PyQt5.QtCore import QDir
 class DirectoryTree:
     """ Directory tree.
     """
-    def __init__(self):
+    def __init__(self, window):
         """ Init the directory tree.
         """
+        self.window = window
+
         # Create directory view.
         self.model = QFileSystemModel()
         self.model.setRootPath('')
@@ -37,5 +39,4 @@ class DirectoryTree:
 
         elif path.isdir(item_path):
             # Change the current path.
-            print('Selected item is a dir')
-            self.pathField.set_path(item_path)
+            self.window.set_path(item_path)
