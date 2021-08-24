@@ -95,6 +95,7 @@ class OneModelWalker(NodeWalker):
         name = node.name
         value = self.symbol_table.get(name)
         property_name = node.property_name
+
         value = getattr(value, property_name)
 
         return value

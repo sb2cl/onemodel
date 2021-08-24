@@ -33,7 +33,7 @@ statement
 parameter::Parameter
   =
   name:identifier '=' '{' value:expression ',' units:string '}' [comment:string] 
-   ;
+  ;
 
 
 variable::Variable
