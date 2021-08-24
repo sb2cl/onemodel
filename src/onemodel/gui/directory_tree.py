@@ -1,4 +1,5 @@
 from PyQt5.QtWidgets import QFileSystemModel, QTreeView
+from PyQt5.QtCore import QDir
 
 class DirectoryTree:
     """ Directory tree.
@@ -12,6 +13,7 @@ class DirectoryTree:
 
         self.tree = QTreeView()
         self.tree.setModel(self.model)
+        self.tree.setRootIndex(self.model.index(QDir.homePath()))
 
         self.tree.setAnimated(False)
         self.tree.setIndentation(20)

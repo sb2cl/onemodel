@@ -33,12 +33,12 @@ class MainWindow(QMainWindow):
         self.dirTree = DirectoryTree()
         grid_layout.addWidget(self.dirTree.tree, 1, 0, 3, 1)
 
-        # creating a QPlainTextEdit object
+        # Init the text editor.
         self.textEditor = TextEditor()
         grid_layout.addWidget(self.textEditor.editor, 1, 1, 1, 1)
 
-        # creating a QPlainTextEdit object
-        self.pathField = PathField()
+        # Init the path field.
+        self.pathField = PathField(self)
         grid_layout.addWidget(self.pathField.field, 0, 0, 1, 3)
 
 
