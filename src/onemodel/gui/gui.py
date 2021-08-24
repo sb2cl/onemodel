@@ -40,6 +40,7 @@ class MainWindow(QMainWindow):
         # Init the path field.
         self.pathField = PathField(self)
         self.pathField.dirTree = self.dirTree
+        self.dirTree.pathField = self.pathField
         grid_layout.addWidget(self.pathField.field, 0, 0, 1, 3)
 
 
