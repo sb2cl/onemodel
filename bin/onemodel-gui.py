@@ -1,81 +1,66 @@
 #!/usr/bin/env python3
-
 import sys
-from PyQt5.QtWidgets import QWidget, QApplication, QVBoxLayout, QHBoxLayout
-from PyQt5.QtWidgets import QTextEdit, QLabel, QShortcut, QFileDialog, QMessageBox
-from PyQt5.QtGui import QKeySequence
-from PyQt5 import Qt
 
-class Window(QWidget):
+# importing required libraries
+from PyQt5.QtGui import *
+from PyQt5.QtWidgets import *
+from PyQt5.QtCore import *
+from PyQt5.QtPrintSupport import *
+import os
+
+class MainWindow(QWidget):
     def __init__(self):
         super().__init__()
 
-        self.file_path = None
+        # Set window geometry.
+        self.setGeometry(0, 0, 1200, 800)
 
-        self.open_new_file_shortcut = QShortcut(QKeySequence('Ctrl+O'), self)
-        self.open_new_file_shortcut.activated.connect(self.open_new_file)
+        # Move the window to the center of the screen.
+        centerPoint = QDesktopWidget().availableGeometry().center()
+        qtRectangle = self.frameGeometry()
+        qtRectangle.moveCenter(centerPoint)
+        self.move(qtRectangle.topLeft())
 
-        self.save_current_file_shortcut = QShortcut(QKeySequence('Ctrl+S'), self)
-        self.save_current_file_shortcut.activated.connect(self.save_current_file)
+        # Create the layout. 
+        grid_layout = QGridLayout()
+        self.setLayout(grid_layout)
+        grid_layout.setColumnStretch(1, 2)
 
-        vbox = QVBoxLayout()
-        text = "Untitled File"
-        self.title = QLabel(text)
-        self.title.setWordWrap(True)
-        self.title.setAlignment(Qt.Qt.AlignCenter)
-        vbox.addWidget(self.title)
-        self.setLayout(vbox)
+        # Create directory view.
+        self.model = QFileSystemModel()
+        self.model.setRootPath('')
 
-        self.scrollable_text_area = QTextEdit()
-        vbox.addWidget(self.scrollable_text_area)
+        self.tree = QTreeView()
+        self.tree.setModel(self.model)
 
-    def open_new_file(self):
-        self.file_path, filter_type = QFileDialog.getOpenFileName(self, "Open new file", "", "All files (*)")
-        if self.file_path:
-            with open(self.file_path, "r") as f:
-                file_contents = f.read()
-                self.title.setText(self.file_path)
-                self.scrollable_text_area.setText(file_contents)
-        else:
-            self.invalid_path_alert_message()
+        self.tree.setAnimated(False)
+        self.tree.setIndentation(20)
+        self.tree.setSortingEnabled(True)
 
-    def save_current_file(self):
-        if not self.file_path:
-            new_file_path, filter_type = QFileDialog.getSaveFileName(self, "Save this file as...", "", "All files (*)")
-            if new_file_path:
-                self.file_path = new_file_path
-            else:
-                self.invalid_path_alert_message()
-                return False
-        file_contents = self.scrollable_text_area.toPlainText()
-        with open(self.file_path, "w") as f:
-            f.write(file_contents)
-        self.title.setText(self.file_path)
+        # Hide all columns, but name.
+        self.tree.setColumnHidden(1, True)
+        self.tree.setColumnHidden(2, True)
+        self.tree.setColumnHidden(3, True)
 
-    def closeEvent(self, event):
-        messageBox = QMessageBox()
-        title = "Quit Application?"
-        message = "WARNING !!\n\nIf you quit without saving, any changes made to the file will be lost.\n\nSave file before quitting?"
-       
-        reply = messageBox.question(self, title, message, messageBox.Yes | messageBox.No |
-                messageBox.Cancel, messageBox.Cancel)
-        if reply == messageBox.Yes:
-            return_value = self.save_current_file()
-            if return_value == False:
-                event.ignore()
-        elif reply == messageBox.No:
-            event.accept()
-        else:
-            event.ignore()
+        grid_layout.addWidget(self.tree, 0, 0, 3, 1)
 
-    def invalid_path_alert_message(self):
-        messageBox = QMessageBox()
-        messageBox.setWindowTitle("Invalid file")
-        messageBox.setText("Selected filename or path is not valid. Please select a valid file.")
-        messageBox.exec()
+        # creating a QPlainTextEdit object
+        self.editor = QPlainTextEdit()
+        grid_layout.addWidget(self.editor, 0, 1, 1, 1)
+
+        # creating a QPlainTextEdit object
+        self.editor = QPlainTextEdit()
+        grid_layout.addWidget(self.editor, 1, 1, 2, 1)
+
+        # creating a QPlainTextEdit object
+        self.editor = QPlainTextEdit()
+        grid_layout.addWidget(self.editor, 0, 2, 3, 1)
+
+        self.setWindowTitle('OneModel Editor')
+
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-    w = Window()
-    w.showMaximized()
-    sys.exit(app.exec_())
+    windowExample = MainWindow()
+    windowExample.show()
+    app.exec_()
