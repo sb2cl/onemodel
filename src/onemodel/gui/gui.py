@@ -83,10 +83,10 @@ class MainWindow(QMainWindow):
         # creating a file menu
         file_menu = self.menuBar().addMenu("&File")
 
-        self.setWindowTitle('OneModel Editor')
-
         # Init the current_path to the home directory.
         self.set_path(QDir.homePath())
+
+        self.update_title()
 
     def set_path(self, new_path):
         """ Set a new current path.
@@ -138,7 +138,7 @@ class MainWindow(QMainWindow):
             self.dialog_critical(str(e))
 
         self.file_path = file_path
-        self.TextEditor.editor.setPlainText(text)
+        self.textEditor.editor.setPlainText(text)
        
     def dialog_critical(self, msg):
         """ Shows a critical error dialog message.
@@ -152,19 +152,23 @@ class MainWindow(QMainWindow):
         """
         # creating a QMessageBox object
         dlg = QMessageBox(self)
-
         # setting text to the dlg
         dlg.setText(msg)
-
         # setting icon to it
         dlg.setIcon(QMessageBox.Critical)
-
         # showing it
         dlg.show()
 
-       
-        
+    def update_title(self):
+        """ Uptade the window title.
+        """
+        if self.file_path == None:
+            basename = 'Untitled'
+        else:
+            basename = path.basename(self.file_path)
 
+        self.setWindowTitle(f'{basename} - OneModel Editor')
+        
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     window = MainWindow()

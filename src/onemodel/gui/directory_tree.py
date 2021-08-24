@@ -34,8 +34,8 @@ class DirectoryTree:
         item_path = self.model.filePath(index)
 
         if path.isfile(item_path):
-            # TODO: Open the file in the text editor
-            pass
+            # Open the file in the text editor
+            self.window.open_file(item_path)
 
         elif path.isdir(item_path):
             # Change the current path.
