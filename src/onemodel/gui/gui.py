@@ -10,6 +10,7 @@ import os
 
 from onemodel.gui.text_editor import TextEditor
 from onemodel.gui.directory_tree import DirectoryTree
+from onemodel.gui.path_field import PathField
 
 class MainWindow(QMainWindow):
     def __init__(self, *args, **kwargs):
@@ -33,13 +34,13 @@ class MainWindow(QMainWindow):
         grid_layout.addWidget(self.dirTree.tree, 1, 0, 3, 1)
 
         # creating a QPlainTextEdit object
-        self.editor = QLineEdit()
-        grid_layout.addWidget(self.editor, 0, 0, 1, 3)
-
-
-        # creating a QPlainTextEdit object
         self.textEditor = TextEditor()
         grid_layout.addWidget(self.textEditor.editor, 1, 1, 1, 1)
+
+        # creating a QPlainTextEdit object
+        self.pathField = PathField()
+        grid_layout.addWidget(self.pathField.field, 0, 0, 1, 3)
+
 
         # creating a QPlainTextEdit object
         self.editor = QPlainTextEdit()
