@@ -22,6 +22,7 @@ class PathField:
         """
         self.last_valid_path = self.field.text()
         self.field.setText(path)
+        self.dirTree.tree.setRootIndex(self.dirTree.model.index(path))
 
     def check_path(self):
         """ Check that the path is valid.
