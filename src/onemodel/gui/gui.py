@@ -8,6 +8,8 @@ from PyQt5.QtCore import *
 from PyQt5.QtPrintSupport import *
 import os
 
+from onemodel.gui.text_editor import TextEditor
+
 class MainWindow(QMainWindow):
     def __init__(self, *args, **kwargs):
         super(MainWindow, self).__init__(*args, **kwargs)
@@ -48,8 +50,8 @@ class MainWindow(QMainWindow):
         grid_layout.addWidget(self.tree, 1, 0, 3, 1)
 
         # creating a QPlainTextEdit object
-        self.editor = QPlainTextEdit()
-        grid_layout.addWidget(self.editor, 1, 1, 1, 1)
+        self.textEditor = TextEditor()
+        grid_layout.addWidget(self.textEditor.editor, 1, 1, 1, 1)
 
         # creating a QPlainTextEdit object
         self.editor = QPlainTextEdit()
@@ -83,10 +85,7 @@ class MainWindow(QMainWindow):
         # creating a file menu
         file_menu = self.menuBar().addMenu("&File")
 
-
-
         self.setWindowTitle('OneModel Editor')
-
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
