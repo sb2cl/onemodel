@@ -11,7 +11,6 @@ class PathField(QLineEdit):
         super().__init__()
 
         self.window = window
-        # self.field = QLineEdit()
 
         self.returnPressed.connect(self.update_path)
         self.editingFinished.connect(window.restore_path)
