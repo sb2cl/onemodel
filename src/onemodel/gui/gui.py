@@ -9,6 +9,7 @@ from PyQt5.QtPrintSupport import *
 import os
 
 from onemodel.gui.text_editor import TextEditor
+from onemodel.gui.directory_tree import DirectoryTree
 
 class MainWindow(QMainWindow):
     def __init__(self, *args, **kwargs):
@@ -27,27 +28,14 @@ class MainWindow(QMainWindow):
         grid_layout = QGridLayout()
         grid_layout.setColumnStretch(1, 2)
 
-        # Create directory view.
-        self.model = QFileSystemModel()
-        self.model.setRootPath('')
-
-        self.tree = QTreeView()
-        self.tree.setModel(self.model)
-
-        self.tree.setAnimated(False)
-        self.tree.setIndentation(20)
-        self.tree.setSortingEnabled(True)
-
-        # Hide all columns, but name.
-        self.tree.setColumnHidden(1, True)
-        self.tree.setColumnHidden(2, True)
-        self.tree.setColumnHidden(3, True)
+        # Init the directory tree.
+        self.dirTree = DirectoryTree()
+        grid_layout.addWidget(self.dirTree.tree, 1, 0, 3, 1)
 
         # creating a QPlainTextEdit object
         self.editor = QLineEdit()
         grid_layout.addWidget(self.editor, 0, 0, 1, 3)
 
-        grid_layout.addWidget(self.tree, 1, 0, 3, 1)
 
         # creating a QPlainTextEdit object
         self.textEditor = TextEditor()
