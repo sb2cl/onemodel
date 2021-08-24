@@ -10,7 +10,7 @@ class TextEditor:
         # Create a Plain Text Edit.
         self.editor = QPlainTextEdit()
 
-        # Set the font.
+        # Set font.
         fixedfont = QFontDatabase.systemFont(QFontDatabase.FixedFont)
         fixedfont.setPointSize(12)
         self.editor.setFont(fixedfont)

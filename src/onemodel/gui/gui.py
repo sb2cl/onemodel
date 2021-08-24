@@ -13,6 +13,7 @@ from PyQt5.QtPrintSupport import *
 from onemodel.gui.text_editor import TextEditor
 from onemodel.gui.directory_tree import DirectoryTree
 from onemodel.gui.path_field import PathField
+from onemodel.gui.console_window import ConsoleWindow
 
 class MainWindow(QMainWindow):
 
@@ -40,7 +41,7 @@ class MainWindow(QMainWindow):
 
         # Init the directory tree.
         self.dirTree = DirectoryTree(self)
-        grid_layout.addWidget(self.dirTree.tree, 1, 0, 3, 1)
+        grid_layout.addWidget(self.dirTree.tree, 1, 0, 4, 1)
 
         # Init the text editor.
         self.textEditor = TextEditor()
@@ -48,16 +49,17 @@ class MainWindow(QMainWindow):
 
         # Init the path field.
         self.pathField = PathField(self)
-        grid_layout.addWidget(self.pathField, 0, 0, 1, 3)
+        grid_layout.addWidget(self.pathField, 0, 0, 1, 4)
 
+        # Init the console window.
+        self.console = ConsoleWindow(self)
+
+        grid_layout.addWidget(self.console.output, 2, 1, 2, 1)
+        grid_layout.addWidget(self.console.input, 4, 1, 1, 1)
 
         # creating a QPlainTextEdit object
         self.editor = QPlainTextEdit()
-        grid_layout.addWidget(self.editor, 2, 1, 2, 1)
-
-        # creating a QPlainTextEdit object
-        self.editor = QPlainTextEdit()
-        grid_layout.addWidget(self.editor, 1, 2, 3, 1)
+        grid_layout.addWidget(self.editor, 1, 2, 4, 1)
 
         # creating a QWidget layout
         container = QWidget()
