@@ -19,8 +19,11 @@ class MainWindow(QMainWindow):
     def __init__(self, *args, **kwargs):
         super(MainWindow, self).__init__(*args, **kwargs)
 
-        # Current path to work at.
-        self.current_path = ''
+        # Current working directory path.
+        self.current_path = None
+        # Current open file in the text editor.
+        # If none, we haven't got a file open yet (or creating new).
+        self.file_path = None
 
         # Set window geometry.
         self.setGeometry(0, 0, 1200, 800)
@@ -85,7 +88,6 @@ class MainWindow(QMainWindow):
         # Init the current_path to the home directory.
         self.set_path(QDir.homePath())
 
-
     def set_path(self, new_path):
         """ Set a new current path.
         """
@@ -112,6 +114,56 @@ class MainWindow(QMainWindow):
         """ Restore the path to the last valid path.
         """
         self.set_path(self.current_path)
+
+    def open_file(self, file_path):
+        """ Open a file in the text editor.
+        
+        TODO: Long description.
+        
+        Args:
+            file_path: str
+                Path to the file
+                
+        Returns:
+            None
+        """
+
+        try:
+            with open(file_path, 'rU') as f:
+                # Read the file
+                text = f.read()
+
+        except Exception as e:
+            # show error using critical method
+            self.dialog_critical(str(e))
+
+        self.file_path = file_path
+        self.TextEditor.editor.setPlainText(text)
+       
+    def dialog_critical(self, msg):
+        """ Shows a critical error dialog message.
+        
+        Args:
+            msg: str
+                Message to show.
+                
+        Returns:
+            None
+        """
+        # creating a QMessageBox object
+        dlg = QMessageBox(self)
+
+        # setting text to the dlg
+        dlg.setText(msg)
+
+        # setting icon to it
+        dlg.setIcon(QMessageBox.Critical)
+
+        # showing it
+        dlg.show()
+
+       
+        
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
