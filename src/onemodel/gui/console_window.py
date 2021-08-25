@@ -44,3 +44,9 @@ class ConsoleWindow:
         """ Print the string into the console.
         """
         self.output.appendPlainText(string)
+
+    def export_model(self):
+        """ Export current model into matlab.
+        """
+        cmd = 'onemodel-cli.py export
+        self.print('Export')

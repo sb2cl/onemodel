@@ -13,10 +13,9 @@
 # Keywords reserved.
 @@keyword:: parameter variable equation let
 
-
 start
   = 
-  statement $
+  {newline | statement} $
   ;
 
 
@@ -159,6 +158,11 @@ identifier::str
   /(?!\d)\w+/ 
   ;
 
+newline 
+  = 
+  | ';'
+  | /\n/
+  ;
 
 # # Principal rule that TatSu will start looking for it.
 # start 

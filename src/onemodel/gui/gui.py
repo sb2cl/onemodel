@@ -14,6 +14,7 @@ from onemodel.gui.text_editor import TextEditor
 from onemodel.gui.directory_tree import DirectoryTree
 from onemodel.gui.path_field import PathField
 from onemodel.gui.console_window import ConsoleWindow
+from onemodel.gui.menu import Menu
 
 class MainWindow(QMainWindow):
 
@@ -22,6 +23,7 @@ class MainWindow(QMainWindow):
 
         # Current working directory path.
         self.current_path = None
+
         # Current open file in the text editor.
         # If none, we haven't got a file open yet (or creating new).
         self.file_path = None
@@ -49,17 +51,12 @@ class MainWindow(QMainWindow):
 
         # Init the path field.
         self.pathField = PathField(self)
-        grid_layout.addWidget(self.pathField, 0, 0, 1, 4)
+        grid_layout.addWidget(self.pathField, 0, 0, 1, 2)
 
         # Init the console window.
         self.console = ConsoleWindow(self)
-
         grid_layout.addWidget(self.console.output, 2, 1, 2, 1)
         grid_layout.addWidget(self.console.input, 4, 1, 1, 1)
-
-        # creating a QPlainTextEdit object
-        self.editor = QPlainTextEdit()
-        grid_layout.addWidget(self.editor, 1, 2, 4, 1)
 
         # creating a QWidget layout
         container = QWidget()
@@ -76,18 +73,13 @@ class MainWindow(QMainWindow):
         # setting stats bar to the window
         self.setStatusBar(self.status)
 
-        # creating a file tool bar
-        file_toolbar = QToolBar("File")
-
-        # adding file tool bar to the window
-        self.addToolBar(file_toolbar)
-
-        # creating a file menu
-        file_menu = self.menuBar().addMenu("&File")
+        self.menu = Menu(self)
 
         # Init the current_path to the home directory.
         self.set_path(QDir.homePath())
-
+        self.set_path('/home/nobel/Sync/python/workspace/onemodel')
+        
+        # Init the title of the window.
         self.update_title()
 
     def set_path(self, new_path):
@@ -117,7 +109,7 @@ class MainWindow(QMainWindow):
         """
         self.set_path(self.current_path)
 
-    def open_file(self, file_path):
+    def open_file(self, file_path=None):
         """ Open a file in the text editor.
         
         TODO: Long description.
@@ -130,17 +122,27 @@ class MainWindow(QMainWindow):
             None
         """
 
+        if file_path == None:
+            # getting path and bool value
+            file_path, _ = QFileDialog.getOpenFileName(
+                    self,
+                    "Open file",
+                    "",
+                    "Text documents (*.txt);All files (*.*)"
+                    )
+
         try:
             with open(file_path, 'rU') as f:
                 # Read the file
                 text = f.read()
+                self.file_path = file_path
+                self.textEditor.editor.setPlainText(text)
 
         except Exception as e:
             # show error using critical method
             self.dialog_critical(str(e))
 
-        self.file_path = file_path
-        self.textEditor.editor.setPlainText(text)
+        self.update_title()
        
     def dialog_critical(self, msg):
         """ Shows a critical error dialog message.
@@ -162,7 +164,7 @@ class MainWindow(QMainWindow):
         dlg.show()
 
     def update_title(self):
-        """ Uptade the window title.
+        """ Update the window title.
         """
         if self.file_path == None:
             basename = 'Untitled'
