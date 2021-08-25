@@ -55,6 +55,19 @@ class OneModelWalker(NodeWalker):
         if op == '/':
             return left / right
 
+        if op == '^':
+            return left ** right
+        
+    def walk_UnaryOperation(self, node):
+        right = self.walk(node.right)
+        op = node.op
+        
+        if op == '+':
+            return right
+
+        if op == '-':
+            return -right
+
     def walk_Parameter(self, node):
         p = Parameter(node.name)
         p.value = str(self.walk(node.value))

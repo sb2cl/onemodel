@@ -13,11 +13,12 @@
 # Keywords reserved.
 @@keyword:: parameter variable equation let
 
-start
-  = 
-  {newline | statement} $
-  ;
+#start
+#  = 
+#  {newline | statement} $
+#  ;
 
+start = statement $ ;
 
 statement
   = 
@@ -83,26 +84,40 @@ term
 
 multiplication::BinaryOperation
   = 
-  left:term op:'*' right:expression
+  left:factor op:'*' right:term
   ;
 
 
 division::BinaryOperation
   = 
-  left:term op:'/' right:expression
+  left:factor op:'/' right:term
   ;
 
 
 factor
   = 
-  | subexpression
+  | positive_factor
+  | negative_factor
+  | power
   | atom
   ;
 
 
-subexpression
+positive_factor::UnaryOperation
+  =
+  op:'+' right:factor
+  ;
+
+
+negative_factor::UnaryOperation
+  =
+  op:'-' right:factor
+  ;
+
+
+power::BinaryOperation
   = 
-  '(' @:expression ')'
+  left:atom op:'^' right:factor
   ;
 
 
@@ -111,8 +126,15 @@ atom
   | float
   | integer
   | string
+  | subexpression
   | access_property
   | access_identifier
+  ;
+
+
+subexpression
+  = 
+  '(' @:expression ')'
   ;
 
 
