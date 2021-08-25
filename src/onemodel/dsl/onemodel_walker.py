@@ -13,8 +13,13 @@ class SymbolTable:
 
   def get(self, name):
     value = self.symbols.get(name, None)
+
     if value == None and self.parent:
-      return self.parent.get(name)
+        return self.parent.get(name)
+    
+    if value == None:
+        raise NameError(f"NameError: name '{name}' is not defined")
+    
     return value
 
   def set(self, name, value):

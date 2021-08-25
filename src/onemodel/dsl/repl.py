@@ -59,7 +59,12 @@ class Repl:
                 continue
 
             # Walk the ast model.
-            result = walker.walk(model)
+            try:
+                result = walker.walk(model)
+            except Exception as e:
+                print(str(e))
+                continue
+
             error = None
             should_exit = False
 
