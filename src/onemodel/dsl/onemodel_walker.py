@@ -90,6 +90,17 @@ class OneModelWalker(NodeWalker):
 
         return 
 
+    def walk_EquationOde(self, node):
+        e = Equation(f'eq_{self.equation_num}')
+        self.equation_num += 1
+        e.equation_type = EquationType.ODE
+        e.variable_name = node.name
+        e.value = self.walk(node.value)
+        if node.comment != None:
+            e.comment = node.comment
+
+        self.symbol_table.set(f'eq_{self.equation_num}', e)
+
     def walk_AssignProperty(self, node):
         name = node.name
         property_name = node.property_name

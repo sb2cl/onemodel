@@ -50,3 +50,54 @@ class Variable(Symbol):
         # Just save the evaluation value.
         self._value = value_sym.evalf()
 
+    def __add__(self, other):
+        """ Define __add__ method.
+        """
+        return sym.sympify(self.name) + other
+
+    def __radd__(self, other):
+        """ Define __radd__ method.
+        """
+        return self.__add__(other)
+
+    def __sub__(self, other):
+        """ Define __sub__ method.
+        """
+        return sym.sympify(self.name) - other
+
+    def __rsub__(self, other):
+        """ Define __rsub__ method.
+        """
+        return self.__sub__(other)
+
+    def __mul__(self, other):
+        """ Define __mul__ method.
+        """
+        return sym.sympify(self.name) * other
+
+    def __rmul__(self, other):
+        """ Define __rmul__ method.
+        """
+        return self.__mul__(other)
+
+    def __truediv__(self, other):
+        """ Define __div__ method.
+        """
+        return sym.sympify(self.name) / other
+
+    def __rtruediv__(self, other):
+        """ Define __rtruediv__ method.
+        """
+        return other / sym.sympify(self.name)
+
+    def __pow__(self, other):
+        """ Define __pow__ method.
+        """
+        return sym.sympify(self.name) ** other
+
+    def __rpow__(self, other):
+        """ Define __rpow__ method.
+        """
+        return other ** sym.sympify(self.name)
+
+ 

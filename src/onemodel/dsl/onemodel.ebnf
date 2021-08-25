@@ -11,7 +11,7 @@
 @@eol_comments::/#.*?$/
 
 # Keywords reserved.
-@@keyword:: parameter variable equation let
+@@keyword:: parameter variable equation let der
 
 #start
 #  = 
@@ -24,6 +24,7 @@ statement
   = 
   | 'parameter' @:parameter
   | 'variable'  @:variable
+  | 'equation'  @:equation
   | assign_property
   | 'let'       @:assign_identifier
   | expression
@@ -41,6 +42,15 @@ variable::Variable
   name:identifier '=' '{' value:expression ',' units:string '}' [comment:string] 
   ;
 
+equation
+  =
+  equation_ode
+  ;
+
+equation_ode::EquationOde
+  = 
+  'der' '(' name:identifier ')' '==' value:expression [comment:string] 
+  ;
 
 assign_property::AssignProperty
   = 
