@@ -1,5 +1,6 @@
 from PyQt5.QtWidgets import QLineEdit, QPlainTextEdit
 from PyQt5.QtGui import QFontDatabase
+from PyQt5.QtCore import QProcess
 
 class ConsoleWindow:
     """ Console Window for executing the ondemodel REPL.
@@ -20,11 +21,24 @@ class ConsoleWindow:
 
         self.input.returnPressed.connect(self.process_input)
 
+        self.process = QProcess()
+        self.process.setProcessChannelMode(QProcess.MergedChannels)
+        self.process.readyRead.connect(self.on_read)
+        self.process.start('onemodel-cli.py repl')
+
+    def on_read(self):
+        result = self.process.readAll().data().decode()
+        self.print(result)
+
     def process_input(self):
         """ Process the command in the input box.
         """
-        self.print('>> ' + self.input.text())
+        text = self.input.text()
         self.input.setText('')
+
+        self.print(text)
+        text += '\n'
+        self.process.write(text.encode())
 
     def print(self, string):
         """ Print the string into the console.
