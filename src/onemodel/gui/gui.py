@@ -96,6 +96,9 @@ class MainWindow(QMainWindow):
             # Update directory tree.
             self.dirTree.tree.setRootIndex(self.dirTree.model.index(self.current_path))
 
+            # Change the working path of the app.
+            os.chdir(self.current_path)
+
         else:
             # If not, show error message.
             title = 'Error Changing Folder'

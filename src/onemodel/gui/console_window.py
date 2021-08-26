@@ -24,7 +24,11 @@ class ConsoleWindow:
         self.process = QProcess()
         self.process.setProcessChannelMode(QProcess.MergedChannels)
         self.process.readyRead.connect(self.on_read)
-        self.process.start('onemodel-cli.py repl')
+        # self.process.start('onemodel-cli.py repl')
+
+    def execute_command(self, cmd):
+        self.print(f'>> {cmd}')
+        self.process.start(cmd)
 
     def on_read(self):
         result = self.process.readAll().data().decode()
@@ -46,7 +50,9 @@ class ConsoleWindow:
         self.output.appendPlainText(string)
 
     def export_model(self):
-        """ Export current model into matlab.
+        """ Export current model.
         """
-        cmd = 'onemodel-cli.py export
-        self.print('Export')
+
+        cmd = f'python -m onemodel.cli.cli export {self.window.file_path}'
+
+        self.execute_command(cmd)
