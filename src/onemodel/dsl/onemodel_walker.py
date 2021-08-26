@@ -2,6 +2,7 @@ import tatsu
 from tatsu.walkers import NodeWalker
  
 from onemodel.onemodel import OneModel
+from onemodel.symbol import Symbol
 from onemodel.parameter import Parameter
 from onemodel.variable import Variable
 from onemodel.equation import Equation, EquationType
@@ -32,8 +33,13 @@ class OneModelWalker(NodeWalker):
     def __init__(self, basename, export_path):
         self.onemodel = OneModel(basename, export_path)
         self.equation_num = 0
+
         self.symbol_table = SymbolTable()
-        self.symbol_table.set('a', 1.0)
+
+    def populate_model(self):
+        for name, symbol in self.symbol_table.symbols.items():
+            if isinstance(symbol, Symbol):
+                self.onemodel.add(symbol)
 
     def walk_object(self, node):
         return node
@@ -137,6 +143,17 @@ class OneModelWalker(NodeWalker):
         value = self.symbol_table.get(name)
 
         return value
+
+    def walk_list(self, nodes):
+        results = []
+
+        for node in nodes:
+            results.append(self.walk(node))
+
+        if len(results) == 1:
+            results = results[0]
+
+        return results
 
 #    def walk_closure(self, nodes):
 #        results = []

@@ -78,7 +78,12 @@ def export(input_file, output):
     result = walker.walk(model)
     print('Walk the AST model.')
 
-    # Expor the model into Matlab.
+    # Populate onemodel model.
+    walker.populate_model()
+    print('Populated OneModel model.')
+    
+
+    # Export the model into Matlab.
     matlab = Matlab(walker.onemodel)
     print('Load MATLAB export module.')
 

@@ -10,15 +10,16 @@
 # This allows us to use comments like in python.
 @@eol_comments::/#.*?$/
 
+
 # Keywords reserved.
 @@keyword:: parameter variable equation let der
 
-#start
-#  = 
-#  {newline | statement} $
-#  ;
 
-start = statement $ ;
+start
+  = 
+  {newline | @:statement} $
+  ;
+
 
 statement
   = 
@@ -42,15 +43,18 @@ variable::Variable
   name:identifier '=' '{' value:expression ',' units:string '}' [comment:string] 
   ;
 
+
 equation
   =
   equation_ode
   ;
 
+
 equation_ode::EquationOde
   = 
   'der' '(' name:identifier ')' '==' value:expression [comment:string] 
   ;
+
 
 assign_property::AssignProperty
   = 
@@ -74,13 +78,13 @@ expression
 
 addition::BinaryOperation
   = 
-  left:term op:'+' right:expression
+  left:expression op:'+' right:term
   ;
 
 
 substraction::BinaryOperation
   = 
-  left:term op:'-' right:expression
+  left:expression op:'-' right:term
   ;
 
 
@@ -94,13 +98,13 @@ term
 
 multiplication::BinaryOperation
   = 
-  left:factor op:'*' right:term
+  left:term op:'*' right:factor
   ;
 
 
 division::BinaryOperation
   = 
-  left:factor op:'/' right:term
+  left:term op:'/' right:factor
   ;
 
 
@@ -127,7 +131,7 @@ negative_factor::UnaryOperation
 
 power::BinaryOperation
   = 
-  left:atom op:'^' right:factor
+  left:factor op:'^' right:atom
   ;
 
 
