@@ -71,7 +71,7 @@ class Equation(Symbol):
             self._value = sym.sympify(value)
             return
 
-        raise ValueError(f"'{value}' is not a valid type for the 'value' property of '{self._name}', use 'str' type instead.")
+        raise ValueError(f"'{value}' is not a valid type for the 'value' property of '{self._name}', use 'sympy.Expr', 'int', 'float' or 'str' instead.")
 
     @property
     def variable_name(self):
