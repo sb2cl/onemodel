@@ -92,14 +92,17 @@ class OneModelWalker(NodeWalker):
 
     def walk_EquationOde(self, node):
         e = Equation(f'eq_{self.equation_num}')
-        self.equation_num += 1
         e.equation_type = EquationType.ODE
         e.variable_name = node.name
-        e.value = self.walk(node.value)
+
+        # '0+value' makes the value into a math_expr in case just a Symbol is
+        # passed.
+        e.value = 0+self.walk(node.value)
         if node.comment != None:
             e.comment = node.comment
 
         self.symbol_table.set(f'eq_{self.equation_num}', e)
+        self.equation_num += 1
 
     def walk_AssignProperty(self, node):
         name = node.name

@@ -59,15 +59,19 @@ class Equation(Symbol):
         Raises:
             Error: An error.
         """
-        # The value must be a string.
-        if type(value) != str:
-            raise ValueError(f"'{value}' is not a valid type for the 'value' property of '{self._name}', use 'str' type instead.")
 
-        # Sympify the value.
-        value_sym = sym.sympify(value)
+        # Check if value is already a sympy expression.
+        if isinstance(value, sym.Expr):
+            self._value = value
+            return
 
-        # Just save the evaluation value.
-        self._value = value_sym
+        # If the value is a str.
+        if type(value) in (int, float, str):
+            # Convert it into a sympy value.
+            self._value = sym.sympify(value)
+            return
+
+        raise ValueError(f"'{value}' is not a valid type for the 'value' property of '{self._name}', use 'str' type instead.")
 
     @property
     def variable_name(self):
