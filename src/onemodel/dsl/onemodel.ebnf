@@ -46,13 +46,27 @@ variable::Variable
 
 equation
   =
-  equation_ode
+  | equation_ode
+  | equation_substitution
+  | equation_algebraic
   ;
 
 
 equation_ode::EquationOde
   = 
   'der' '(' name:identifier ')' '==' value:expression [comment:string] 
+  ;
+
+
+equation_substitution::EquationSubstitution
+  = 
+  name:identifier ':=' value:expression [comment:string] 
+  ;
+
+
+equation_algebraic::EquationAlgebraic
+  = 
+  name:identifier '==' value:expression [comment:string] 
   ;
 
 

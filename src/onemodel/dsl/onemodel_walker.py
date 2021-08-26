@@ -110,6 +110,34 @@ class OneModelWalker(NodeWalker):
         self.symbol_table.set(f'eq_{self.equation_num}', e)
         self.equation_num += 1
 
+    def walk_EquationSubstitution(self, node):
+        e = Equation(f'eq_{self.equation_num}')
+        e.equation_type = EquationType.SUBSTITUTION
+        e.variable_name = node.name
+
+        # '0+value' makes the value into a math_expr in case just a Symbol is
+        # passed.
+        e.value = 0+self.walk(node.value)
+        if node.comment != None:
+            e.comment = node.comment
+
+        self.symbol_table.set(f'eq_{self.equation_num}', e)
+        self.equation_num += 1
+
+    def walk_EquationAlgebraic(self, node):
+        e = Equation(f'eq_{self.equation_num}')
+        e.equation_type = EquationType.ALGEBRAIC
+        e.variable_name = node.name
+
+        # '0+value' makes the value into a math_expr in case just a Symbol is
+        # passed.
+        e.value = 0+self.walk(node.value)
+        if node.comment != None:
+            e.comment = node.comment
+
+        self.symbol_table.set(f'eq_{self.equation_num}', e)
+        self.equation_num += 1
+
     def walk_AssignProperty(self, node):
         name = node.name
         property_name = node.property_name

@@ -1,5 +1,7 @@
 from enum import Enum, auto
 
+import sympy as sym
+
 class SymbolType(Enum):
     """ Enum for all the valid symbol types.
 
@@ -379,3 +381,55 @@ class Symbol:
         out += f'  description : {self.description}\n'
         out += f'    reference : {self.reference}'
         return out
+
+    def __add__(self, other):
+        """ Define __add__ method.
+        """
+        return sym.sympify(self.name) + other
+
+    def __radd__(self, other):
+        """ Define __radd__ method.
+        """
+        return self.__add__(other)
+
+    def __sub__(self, other):
+        """ Define __sub__ method.
+        """
+        return sym.sympify(self.name) - other
+
+    def __rsub__(self, other):
+        """ Define __rsub__ method.
+        """
+        return other - sym.sympify(self.name)
+
+    def __mul__(self, other):
+        """ Define __mul__ method.
+        """
+        return sym.sympify(self.name) * other
+
+    def __rmul__(self, other):
+        """ Define __rmul__ method.
+        """
+        return self.__mul__(other)
+
+    def __truediv__(self, other):
+        """ Define __div__ method.
+        """
+        return sym.sympify(self.name) / other
+
+    def __rtruediv__(self, other):
+        """ Define __rtruediv__ method.
+        """
+        return other / sym.sympify(self.name)
+
+    def __pow__(self, other):
+        """ Define __pow__ method.
+        """
+        return sym.sympify(self.name) ** other
+
+    def __rpow__(self, other):
+        """ Define __rpow__ method.
+        """
+        return other ** sym.sympify(self.name)
+
+ 
