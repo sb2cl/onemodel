@@ -2,6 +2,11 @@ from PyQt5.QtWidgets import QLineEdit, QPlainTextEdit
 from PyQt5.QtGui import QFontDatabase
 from PyQt5.QtCore import QProcess
 
+from PyQt5 import QtGui
+from PyQt5 import QtCore
+
+from onemodel.gui.syntax_highlight import COLORS
+
 class ConsoleWindow:
     """ Console Window for executing the ondemodel REPL.
     """
@@ -19,9 +24,11 @@ class ConsoleWindow:
         self.input.setFont(fixedfont)
         self.output.setFont(fixedfont)
 
-        self.output.setStyleSheet("""QPlainTextEdit{
-	        color: #ccc;
-	        background-color: #2b2b2b;}""")
+        css  = 'QPlainTextEdit{\n'
+        css += f'color: {COLORS["base03"]};\n'
+        css += f'background-color: {COLORS["base06"]};\n'
+        css += '}'
+        self.output.setStyleSheet(css)
 
         self.input.returnPressed.connect(self.process_input)
 

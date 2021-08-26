@@ -77,7 +77,7 @@ class MainWindow(QMainWindow):
 
         # Init the current_path to the home directory.
         self.set_path(QDir.homePath())
-        self.set_path('/home/nobel/Sync/python/workspace/onemodel')
+        self.set_path('/home/nobel/Sync/python/workspace/onemodel/examples')
         
         # Init the title of the window.
         self.update_title()

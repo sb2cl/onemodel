@@ -2,16 +2,35 @@ import sys
 from PyQt5.QtCore import QRegExp
 from PyQt5.QtGui import QColor, QTextCharFormat, QFont, QSyntaxHighlighter
 
+import re
+
+def hex_to_rgb(hx, hsl=False):
+    """Converts a HEX code into RGB or HSL.
+    Args:
+        hx (str): Takes both short as well as long HEX codes.
+        hsl (bool): Converts the given HEX code into HSL value if True.
+    Return:
+        Tuple of length 3 consisting of either int or float values.
+    Raise:
+        ValueError: If given value is not a valid HEX code."""
+    if re.compile(r'#[a-fA-F0-9]{3}(?:[a-fA-F0-9]{3})?$').match(hx):
+        div = 255.0 if hsl else 0
+        if len(hx) <= 4:
+            return tuple(int(hx[i]*2, 16) / div if div else
+                         int(hx[i]*2, 16) for i in (1, 2, 3))
+        return tuple(int(hx[i:i+2], 16) / div if div else
+                     int(hx[i:i+2], 16) for i in (1, 3, 5))
+    raise ValueError(f'"{hx}" is not a valid HEX code.')
 
 def format(color, style=''):
     """
     Return a QTextCharFormat with the given attributes.
     """
     _color = QColor()
-    if type(color) is not str:
-        _color.setRgb(color[0], color[1], color[2])
-    else:
-        _color.setNamedColor(color)
+
+    rgb = hex_to_rgb(color)
+
+    _color.setRgb(rgb[0], rgb[1], rgb[2])
 
     _format = QTextCharFormat()
     _format.setForeground(_color)
@@ -23,28 +42,35 @@ def format(color, style=''):
     return _format
 
 COLORS = {
-
-    'red': [202, 18, 67],
-    'orange': [215, 95, 0],
-    'yellow': [193, 132, 1],
-    'green': [80, 161, 79],
-    'blue': [1, 132, 188],
-    'drakBlue': [64, 120, 242],
-    'purple': [166, 38, 164],
-    'brown': [152, 104, 1],
+    'base00': '#fafafa', # white
+    'base01': '#f0f0f1',
+    'base02': '#e5e5e6',
+    'base03': '#a0a1a7', # light gray
+    'base04': '#696c77', # gray
+    'base05': '#383a42', # drak gray
+    'base06': '#202227',
+    'base07': '#090a0b', # black
+    'base08': '#ca1243', # red
+    'base09': '#d75f00', # orange
+    'base0A': '#c18401', # yellow
+    'base0B': '#50a14f', # green
+    'base0C': '#0184bc', # blue
+    'base0D': '#4078f2', # dark blue
+    'base0E': '#a626a4', # purple
+    'base0F': '#986801', # brown
 }
 
 # Syntax styles that can be shared by all languages
 STYLES = {
-    'keyword': format(COLORS['blue'], 'bold'),
-    'operator': format([150, 150, 150]),
-    'brace': format('darkGray'),
-    'defclass': format([220, 220, 255], 'bold'),
-    'string': format(COLORS['green']),
-    'string2': format([30, 120, 110]),
-    'comment': format([128, 128, 128]),
-    'self': format([150, 85, 140], 'italic'),
-    'numbers': format([100, 150, 190]),
+    'keyword':  format(COLORS['base08'], 'bold'),
+    'operator': format(COLORS['base07']),
+    'brace':    format(COLORS['base07']),
+    'defclass': format(COLORS['base07'], 'bold'),
+    'string':   format(COLORS['base0B']),
+    'string2':  format(COLORS['base0B']),
+    'comment':  format(COLORS['base04']),
+    'self':     format(COLORS['base07'], 'italic'),
+    'numbers':  format(COLORS['base07']),
 }
 
 class OneModelHighlighter(QSyntaxHighlighter):
