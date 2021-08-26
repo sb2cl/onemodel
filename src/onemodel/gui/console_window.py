@@ -19,6 +19,10 @@ class ConsoleWindow:
         self.input.setFont(fixedfont)
         self.output.setFont(fixedfont)
 
+        self.output.setStyleSheet("""QPlainTextEdit{
+	        color: #ccc;
+	        background-color: #2b2b2b;}""")
+
         self.input.returnPressed.connect(self.process_input)
 
         self.process = QProcess()
