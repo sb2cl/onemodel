@@ -24,7 +24,8 @@ class Ui_MainWindow(object):
 
         # Init widgets.
         self.pathField = QtWidgets.QLineEdit()
-        self.directoryTree = DirectoryTree()
+        self.pathField.setText(MainWindow._model.current_path)
+        self.directoryTree = DirectoryTree(MainWindow._model.current_path)
         self.textEditor = TextEditor()
         self.console = Console()
 

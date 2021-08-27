@@ -6,7 +6,7 @@ from PyQt5.QtCore import QDir
 class DirectoryTree:
     """ Directory tree.
     """
-    def __init__(self):
+    def __init__(self, path=''):
         """ Init the directory tree.
         """
         # Create directory view.
@@ -15,7 +15,7 @@ class DirectoryTree:
 
         self.tree = QTreeView()
         self.tree.setModel(self.model)
-        self.tree.setRootIndex(self.model.index(QDir.homePath()))
+        self.tree.setRootIndex(self.model.index(path))
 
         self.tree.setAnimated(False)
         self.tree.setIndentation(20)
