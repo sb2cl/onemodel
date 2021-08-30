@@ -33,6 +33,12 @@ class MainView(QMainWindow):
         self._ui.directoryTree.tree.doubleClicked.connect(
                 self.on_double_click_directoryTree
                 )
+
+        # Triggered open_file_action.
+        self._ui.open_file_action.triggered.connect(
+                self.on_triggered_open_file_action
+                )
+
         ####################################################################
         #   listen for model event signals
         ####################################################################
@@ -79,4 +85,17 @@ class MainView(QMainWindow):
     def on_file_path_changed(self, file_path):
         self._ui.update_editor_label()
         self._ui.textEditor.open_file(file_path)
+
+
+    def on_triggered_open_file_action(self):
+        # getting path and bool value
+        file_path, _ = QtWidgets.QFileDialog.getOpenFileName(
+                self,
+                "Open file",
+                "",
+                "Text documents (*.txt);All files (*.*)"
+                )
+
+        if file_path != '':
+            self._main_controller.open_file(file_path)
 

@@ -65,6 +65,19 @@ class Ui_MainWindow(object):
         # setting stats bar to the window
         MainWindow.setStatusBar(self.status)
 
+        # Add file_menu.
+        self.file_menu = MainWindow.menuBar().addMenu('&File')
+
+        # Add file_toolbar
+        self.file_toolbar = QtWidgets.QToolBar('File')
+        MainWindow.addToolBar(self.file_toolbar)
+
+        # creating a open file action
+        self.open_file_action = QtWidgets.QAction("Open file", MainWindow)
+        self.open_file_action.setStatusTip("Open file")
+        self.file_menu.addAction(self.open_file_action)
+        self.file_toolbar.addAction(self.open_file_action)
+
         # Set window title.
         # TODO: Place version of onemodel here.
         self.mainWindow.setWindowTitle(f'OneModel Editor')
