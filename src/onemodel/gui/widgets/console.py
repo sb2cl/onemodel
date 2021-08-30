@@ -27,14 +27,11 @@ class Console:
         css += '}'
         self.output.setStyleSheet(css)
 
-#    def execute_command(self, cmd):
-#        self.print(f'>> {cmd}')
-#        self.process.start(cmd)
-#
-#    def on_read(self):
-#        result = self.process.readAll().data().decode()
-#        self.print(result)
-#
+    def print(self, string):
+        """ Print the string into the console.
+        """
+        self.output.appendPlainText(string)
+
 #    def process_input(self):
 #        """ Process the command in the input box.
 #        """
@@ -44,16 +41,4 @@ class Console:
 #        self.print(text)
 #        text += '\n'
 #        self.process.write(text.encode())
-#
-    def print(self, string):
-        """ Print the string into the console.
-        """
-        self.output.appendPlainText(string)
-#
-#    def export_model(self):
-#        """ Export current model.
-#        """
-#
-#        cmd = f'python -m onemodel.cli.cli export {self.window.file_path}'
-#
-#        self.execute_command(cmd)
+

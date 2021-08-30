@@ -127,7 +127,3 @@ class MainView(QMainWindow):
 
     def on_cli_ready_read(self, text):
         self._ui.console.print(text)
-
-
-
-
