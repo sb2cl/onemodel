@@ -1,3 +1,5 @@
+import os
+
 from PyQt5 import QtCore
 from PyQt5.QtCore import QObject, pyqtSignal
 
@@ -15,6 +17,11 @@ class Model(QObject):
 
     @current_path.setter
     def current_path(self, value):
+        # Save new current_path.
         self._current_path = value
-        # update in model is reflected in view by sending a signal to view
+
+        # Change the working path of the app.
+        os.chdir(value)
+
+        # Update in model is reflected in view by sending a signal to view.
         self.current_path_changed.emit(value)

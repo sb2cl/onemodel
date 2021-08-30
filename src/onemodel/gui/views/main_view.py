@@ -42,9 +42,9 @@ class MainView(QMainWindow):
     def on_return_pressed_pathField(self):
         new_path = self._ui.pathField.text()
 
-        if path.isdir(new_path):
-            self._main_controller.current_path_changed(new_path)
-        else:
+        error = self._main_controller.current_path_changed(new_path)
+
+        if error:
             # If not, show error message.
             title = 'Error Changing Folder'
             msg = f'Cannot find folder "{new_path}".\n'
@@ -68,8 +68,6 @@ class MainView(QMainWindow):
             self._main_controller.current_path_changed(item_path)
 
     def on_current_path_changed(self, path):
-        print('on_current_path_changed')
-        print(path)
         self._ui.pathField.setText(path)
         self._ui.directoryTree.tree.setRootIndex(
                 self._ui.directoryTree.model.index(path)
