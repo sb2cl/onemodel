@@ -64,7 +64,7 @@ class MainView(QMainWindow):
         item_path = self._ui.directoryTree.model.filePath(index)
 
         if path.isfile(item_path):
-            self._main_controller.change_file_path(item_path)
+            self._main_controller.open_file(item_path)
 
         elif path.isdir(item_path):
             # Change current path.
@@ -78,4 +78,5 @@ class MainView(QMainWindow):
 
     def on_file_path_changed(self, file_path):
         self._ui.update_title()
+        self._ui.textEditor.open_file(file_path)
 

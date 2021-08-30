@@ -25,3 +25,9 @@ class TextEditor:
 
         self.highlight = OneModelHighlighter(self.editor.document())
         self.editor.show()
+
+    def open_file(self, file_path):
+        with open(file_path, 'rU') as f:
+            # Read the file
+            text = f.read()
+            self.editor.setPlainText(text)
