@@ -9,16 +9,23 @@ class Controller(QObject):
         self._model = model
 
     @pyqtSlot(str)
-    def current_path_changed(self, new_path):
+    def change_current_path(self, new_path):
         """ Change the current path in the model.
 
         Returns:
             error: bool
                 True if the new_path is not valid.
         """
-
+        # Check if the path is valid.
         if path.isdir(new_path):
+            # Update current path.
             self._model.current_path = new_path
             return False
+
         else:
+            # Path is not valid, do not update it.
             return True
+
+    @pyqtSlot(str)
+    def change_file_path(self, new_file_path):
+        self._model.file_path = new_file_path

@@ -14,6 +14,7 @@ class MainView(QMainWindow):
         self._main_controller = main_controller
         self._ui = Ui_MainWindow()
         self._ui.setup_ui(self)
+
         ####################################################################
         #   connect widgets to controllers
         ####################################################################
@@ -39,10 +40,13 @@ class MainView(QMainWindow):
         # Current path is updated.
         self._model.current_path_changed.connect(self.on_current_path_changed)
 
+        # File path is updated.
+        self._model.file_path_changed.connect(self.on_file_path_changed)
+
     def on_return_pressed_pathField(self):
         new_path = self._ui.pathField.text()
 
-        error = self._main_controller.current_path_changed(new_path)
+        error = self._main_controller.change_current_path(new_path)
 
         if error:
             # If not, show error message.
@@ -60,12 +64,11 @@ class MainView(QMainWindow):
         item_path = self._ui.directoryTree.model.filePath(index)
 
         if path.isfile(item_path):
-            # TODO: Open file in the textEditor.
-            pass
+            self._main_controller.change_file_path(item_path)
 
         elif path.isdir(item_path):
             # Change current path.
-            self._main_controller.current_path_changed(item_path)
+            self._main_controller.change_current_path(item_path)
 
     def on_current_path_changed(self, path):
         self._ui.pathField.setText(path)
@@ -73,4 +76,6 @@ class MainView(QMainWindow):
                 self._ui.directoryTree.model.index(path)
                 )
 
+    def on_file_path_changed(self, file_path):
+        self._ui.update_title()
 

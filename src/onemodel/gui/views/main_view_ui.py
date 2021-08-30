@@ -1,3 +1,5 @@
+from os import path
+
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 from onemodel.gui.widgets.directory_tree import DirectoryTree
@@ -6,6 +8,7 @@ from onemodel.gui.widgets.console import Console
 
 class Ui_MainWindow(object):
     def setup_ui(self, MainWindow):
+        self.mainWindow = MainWindow
 
         MainWindow.setObjectName("MainWindow")
 
@@ -51,3 +54,17 @@ class Ui_MainWindow(object):
         # setting stats bar to the window
         MainWindow.setStatusBar(self.status)
 
+        # Init title.
+        self.update_title()
+
+    def update_title(self):
+        """ Update the window title.
+        """
+        file_path = self.mainWindow._model.file_path
+
+        if file_path == None:
+            basename = 'Untitled'
+        else:
+            basename = path.basename(file_path)
+
+        self.mainWindow.setWindowTitle(f'{basename} - OneModel Editor')
