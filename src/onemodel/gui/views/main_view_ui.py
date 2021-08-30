@@ -68,15 +68,20 @@ class Ui_MainWindow(object):
         # Add file_menu.
         self.file_menu = MainWindow.menuBar().addMenu('&File')
 
-        # Add file_toolbar
+        # Add file_toolbar.
         self.file_toolbar = QtWidgets.QToolBar('File')
         MainWindow.addToolBar(self.file_toolbar)
 
-        # creating a open file action
+        # Create open file action.
         self.open_file_action = QtWidgets.QAction("Open file", MainWindow)
-        self.open_file_action.setStatusTip("Open file")
+        self.open_file_action.setStatusTip("Open file in the text editor")
         self.file_menu.addAction(self.open_file_action)
         self.file_toolbar.addAction(self.open_file_action)
+
+        # Create export action.
+        self.export_action = QtWidgets.QAction('Export', MainWindow)
+        self.export_action.setStatusTip("Export current model into Matlab code")
+        self.file_toolbar.addAction(self.export_action)
 
         # Set window title.
         # TODO: Place version of onemodel here.

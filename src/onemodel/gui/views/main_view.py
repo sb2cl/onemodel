@@ -39,6 +39,11 @@ class MainView(QMainWindow):
                 self.on_triggered_open_file_action
                 )
 
+        # Triggered export_action.
+        self._ui.export_action.triggered.connect(
+                self.on_triggered_export_action
+                )
+
         ####################################################################
         #   listen for model event signals
         ####################################################################
@@ -48,6 +53,9 @@ class MainView(QMainWindow):
 
         # File path is updated.
         self._model.file_path_changed.connect(self.on_file_path_changed)
+
+        # onemodel-cli ready to read.
+        self._model.onemodel_cli_read.connect(self.on_cli_ready_read)
 
     def on_return_pressed_pathField(self):
         new_path = self._ui.pathField.text()
@@ -98,4 +106,28 @@ class MainView(QMainWindow):
 
         if file_path != '':
             self._main_controller.open_file(file_path)
+
+    def on_triggered_export_action(self):
+        file_path = self._model._file_path
+
+        if file_path != None:
+            cmd = 'python -m onemodel.cli.cli'
+            cmd += f' export {self._model._file_path}'
+
+            self._ui.console.print(f'>> {cmd}')
+            self._main_controller.execute_cmd(cmd)
+
+        else:
+            # If not, show error message.
+            title = 'Error Exporting Model'
+            msg = f'Not model open in Editor.\n'
+            msg += 'Please open a model before exporting.'
+
+            QtWidgets.QMessageBox.about(self, title, msg) 
+
+    def on_cli_ready_read(self, text):
+        self._ui.console.print(text)
+
+
+
 

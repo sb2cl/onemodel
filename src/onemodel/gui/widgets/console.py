@@ -16,7 +16,6 @@ class Console:
         self.input = QLineEdit()
         self.output = QPlainTextEdit()
 
-
         fixedfont = QFontDatabase.systemFont(QFontDatabase.FixedFont)
         fixedfont.setPointSize(12)
         self.input.setFont(fixedfont)
@@ -27,10 +26,6 @@ class Console:
         css += f'background-color: {COLORS["base06"]};\n'
         css += '}'
         self.output.setStyleSheet(css)
-
-        self.process = QProcess()
-        self.process.setProcessChannelMode(QProcess.MergedChannels)
-        # self.process.start('onemodel-cli.py repl')
 
 #    def execute_command(self, cmd):
 #        self.print(f'>> {cmd}')
@@ -50,10 +45,10 @@ class Console:
 #        text += '\n'
 #        self.process.write(text.encode())
 #
-#    def print(self, string):
-#        """ Print the string into the console.
-#        """
-#        self.output.appendPlainText(string)
+    def print(self, string):
+        """ Print the string into the console.
+        """
+        self.output.appendPlainText(string)
 #
 #    def export_model(self):
 #        """ Export current model.

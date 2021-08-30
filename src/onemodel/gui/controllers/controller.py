@@ -34,3 +34,7 @@ class Controller(QObject):
     def open_file(self, file_path):
         # TODO: Check if there was a not saved previous open file.
         self.change_file_path(file_path)
+
+    @pyqtSlot()
+    def execute_cmd(self, cmd):
+        self._model._onemodel_cli.start(cmd)
