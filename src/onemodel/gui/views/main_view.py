@@ -77,6 +77,6 @@ class MainView(QMainWindow):
                 )
 
     def on_file_path_changed(self, file_path):
-        self._ui.update_title()
+        self._ui.update_editor_label()
         self._ui.textEditor.open_file(file_path)
 
