@@ -1,4 +1,5 @@
 import os
+from importlib.metadata import version
 
 from PyQt5 import QtCore
 from PyQt5.QtCore import QObject, pyqtSignal
@@ -24,6 +25,9 @@ class Model(QObject):
         self._onemodel_cli = QProcess()
         self._onemodel_cli.setProcessChannelMode(QProcess.MergedChannels)
         self._onemodel_cli.readyRead.connect(self.on_onemodel_cli_read)
+
+        # Version of the onemodel package.
+        self.version = version('onemodel')
 
     @property
     def current_path(self):

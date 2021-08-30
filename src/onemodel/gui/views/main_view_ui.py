@@ -83,9 +83,11 @@ class Ui_MainWindow(object):
         self.export_action.setStatusTip("Export current model into Matlab code")
         self.file_toolbar.addAction(self.export_action)
 
-        # Set window title.
-        # TODO: Place version of onemodel here.
-        self.mainWindow.setWindowTitle(f'OneModel Editor')
+        self.set_title()
+
+    def set_title(self):
+        version = self.mainWindow._model.version
+        self.mainWindow.setWindowTitle(f'OneModel Editor v{version}')
 
     def update_editor_label(self):
         """ Update the window title.
