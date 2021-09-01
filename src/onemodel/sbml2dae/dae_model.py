@@ -79,24 +79,6 @@ class DaeModel:
                         state['equation'] += equation
         return states
 
-    def getStatesDae(self):
-        """ Return a list of the equation which evaluate each of the states.
-        """
-        dae = {}
-
-        for state in self.getStatesId():
-            dae[state] = ''
-
-        for reaction in self.model.getListOfReactions():
-            ast = reaction.getKineticLaw().math
-            equation = formulaToL3String(ast)
-
-            for state in self.getStatesId():
-                for product in reaction.getListOfProducts():
-                    if state == product.getSpecies():
-                        dae[state] += equation
-        return dae
-
 if __name__ == '__main__':
     dae = DaeModel(
         '/home/nobel/Sync/python/workspace/onemodel/examples/antithetic.xml'
