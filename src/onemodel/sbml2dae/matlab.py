@@ -169,7 +169,60 @@ class Matlab:
         f.close()
 
         return filepath
-                
+
+    def exportStates(self):
+        """ Generate Matlab function which calculates all model states.
+        """
+
+        filepath = self.output_path
+        filepath += '/'
+        filepath += self.dae.getModelName()
+        filepath += '_states.m'
+
+        # Create and open the file to export.
+        f = open(filepath, "w")
+
+        # Function header.
+        f.write(f'function [out] = {self.dae.getModelName()}_states(t,x,p)\n')
+        self.writeWarning(f)
+
+        # Assign the states.
+        f.write(f'% States:\n')
+        i = 1
+        for item in self.dae.getStates():
+            f.write(f'{item["id"]} = x({i},:);\n')
+            i += 1
+        f.write(f'\n')
+
+        # Save the time.
+        f.write(f'% Save simulation time.\n')
+        f.write(f'out.t = t;')
+        f.write(f'\n')
+
+        # Save ODE and ALGEBRAIC variables.
+        f.write(f'\n% Save states.\n')
+        for item in self.dae.getStates():
+            if item['type'] == StateType.ODE:
+                f.write(f'out.{item["id"]} = {item["id"]};\n')
+
+            if item['type'] == StateType.ALGEBRAIC:
+                f.write(f'out.{item["id"]} = {item["id"]}; % (algebraic)\n')
+        f.write(f'\n')
+
+        # Save parameters.
+        f.write(f'% Save parameters.\n')
+        for item in self.dae.getParameters():
+            f.write(f'out.{item["id"]} = p.{item["id"]}*ones(size(t));\n')
+        f.write(f'\n')
+
+        f.write(f'end\n')
+
+        f.close()
+
+        return filepath
+
+
+       
 if __name__ == '__main__':
     dae = DaeModel(
         '/home/nobel/Sync/python/workspace/onemodel/examples/antithetic.xml'
@@ -182,5 +235,6 @@ if __name__ == '__main__':
 
     matlab.exportDefaultParameters()
     matlab.exportDae()
+    matlab.exportStates()
 
 
