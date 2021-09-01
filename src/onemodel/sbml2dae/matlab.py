@@ -19,7 +19,6 @@ class Matlab:
     def exportDefaultParameters(self):
         """ Generate Matlab function which returns the default parameters.
         """
-
         filepath = self.output_path
         filepath += '/'
         filepath += self.dae.getModelName()
@@ -79,7 +78,59 @@ class Matlab:
 
         return filepath
 
+    def exportDae(self):
+        """ Generate Matlab function which evaluates the DAE.
+        """
+        filepath = self.output_path
+        filepath += '/'
+        filepath += self.dae.getModelName()
+        filepath += '_dae.m'
 
+        # Create and open the file to export.
+        f = open(filepath, "w")
+
+        # Function header.
+        f.write(f'function [dx] = {self.dae.getModelName()}_dae(t,x,p)\n')
+        self.writeWarning(f)
+
+        # Comment arguments.
+        f.write(f'\n% Args:\n')
+        f.write(f'%\t t Current time in the simulation.\n')
+        f.write(f'%\t x Array with the state value.\n')
+        f.write(f'%\t p Struct with the parameters.\n')
+
+        # Comment return.
+        f.write(f'\n% Return:\n')
+        f.write(f'%\t dx Array with the ODE.\n')
+        f.write(f'\n')
+
+        # Assign the states.
+        f.write(f'% States:\n')
+        i = 1
+        for item in self.dae.getStates():
+            f.write(f'{item["id"]} = x({i},:);\n')
+            i += 1
+        f.write(f'\n')
+        
+        # Generate ODE equations.
+        i = 1
+        for item in self.dae.getStates():
+            string = f'% der({item["id"]})\n'
+
+            if item['type'] == StateType.ODE:
+                string += f'dx({i},1) = {item["equation"]};\n\n'
+                f.write(string)
+
+            elif item['type'] == StateType.ALGEBRAIC:
+                string += f'dx({i},1) = -{item["id"]} + {item["equation"]};\n\n'
+                f.write(string)
+
+            i += 1
+
+        f.write(f'end\n')
+        f.close()
+
+        return filepath
                 
 if __name__ == '__main__':
     dae = DaeModel(
@@ -92,4 +143,5 @@ if __name__ == '__main__':
     )
 
     matlab.exportDefaultParameters()
+    matlab.exportDae()
 

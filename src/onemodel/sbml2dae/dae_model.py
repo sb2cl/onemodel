@@ -39,6 +39,7 @@ class DaeModel:
         """
         parameters = []
 
+        # Assign properties.
         for item in self.model.getListOfParameters():
             if item.getConstant() == True:
                 parameter = {}
@@ -54,14 +55,28 @@ class DaeModel:
         """
         states = []
 
+        # Assign properties.
+        i = 0
         for item in self.model.getListOfSpecies():
             state = {}
             state['id'] = item.id
             state['initialCondition'] = item.getInitialConcentration()
             state['type'] = StateType.ODE
+            state['equation'] = ''
+            state['ind'] = i
 
             states.append(state)
+            i += 1
 
+        # Assign equation property.
+        for reaction in self.model.getListOfReactions():
+            ast = reaction.getKineticLaw().getMath()
+            equation = formulaToL3String(ast)
+
+            for state in states:
+                for product in reaction.getListOfProducts():
+                    if state['id'] == product.getSpecies():
+                        state['equation'] += equation
         return states
 
     def getStatesDae(self):
