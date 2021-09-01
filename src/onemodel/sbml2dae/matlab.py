@@ -114,19 +114,19 @@ class Matlab:
 
         return filepath
 
-    def exportDae(self):
-        """ Generate Matlab function which evaluates the DAE.
+    def exportOde(self):
+        """ Generate Matlab function which evaluates the Ode.
         """
         filepath = self.output_path
         filepath += '/'
         filepath += self.dae.getModelName()
-        filepath += '_dae.m'
+        filepath += '_ode.m'
 
         # Create and open the file to export.
         f = open(filepath, "w")
 
         # Function header.
-        f.write(f'function [dx] = {self.dae.getModelName()}_dae(t,x,p)\n')
+        f.write(f'function [dx] = {self.dae.getModelName()}_ode(t,x,p)\n')
         self.writeWarning(f)
 
         # Comment arguments.
@@ -173,7 +173,6 @@ class Matlab:
     def exportStates(self):
         """ Generate Matlab function which calculates all model states.
         """
-
         filepath = self.output_path
         filepath += '/'
         filepath += self.dae.getModelName()
@@ -221,6 +220,54 @@ class Matlab:
 
         return filepath
 
+    def exportDriver(self):
+        """ Generate an example driver script.
+        """
+        filepath = self.output_path
+        filepath += '/'
+        filepath += self.dae.getModelName()
+        filepath += '_driver.m'
+
+        # Create and open the file to export.
+        f = open(filepath, "w")
+
+        # Function header.
+        name = self.dae.getModelName() 
+        f.write(f'%% Example driver script for simulating "{name}" model.\n')
+        self.writeWarning(f)
+
+        # Clear and close all.
+        f.write(f'clear all;\n')
+        f.write(f'close all;\n')
+
+        # Default parameters.
+        f.write(f'\n% Default parameters.\n')
+        f.write(f'[p,x0,M] = {name}_param();\n')
+
+        # Solver options.
+        f.write(f'\n% Solver options.\n')
+        f.write(f"opt = odeset('AbsTol',1e-8,'RelTol',1e-8);\n")
+        f.write(f"opt = odeset(opt,'Mass',M);\n")
+
+        # Simulation time span.
+        f.write(f'\n% Simulation time span.\n')
+        f.write(f'tspan = [0 10];\n')
+
+        # Simulate.
+        f.write(f'\n[t,x] = ode15s(@(t,x) {name}_ode(t,x,p),tspan,x0,opt);\n')
+        f.write(f'out = {name}_states(t,x,p);\n')
+        
+        # Plot.
+        f.write(f'\n% Plot result.\n')
+        f.write(f'plot(t,x);\n')
+        f.write(f'grid on;\n')
+        # TODO: Add a legend.
+
+
+        f.close()
+
+        return filepath
+
 
        
 if __name__ == '__main__':
@@ -234,7 +281,8 @@ if __name__ == '__main__':
     )
 
     matlab.exportDefaultParameters()
-    matlab.exportDae()
+    matlab.exportOde()
     matlab.exportStates()
+    matlab.exportDriver()
 
 
