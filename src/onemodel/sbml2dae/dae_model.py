@@ -1,4 +1,5 @@
 from enum import Enum, auto
+from math import isnan
 
 from libsbml import *
 
@@ -65,6 +66,12 @@ class DaeModel:
             state['equation'] = ''
             state['ind'] = i
 
+            # When the initial condition is not defined, it returns nan.
+            # Check if initial condition is nan.
+            if isnan(state['initialCondition']):
+                # If so, set default initial condition to zero.
+                state['initialCondition'] = 0
+
             states.append(state)
             i += 1
 
@@ -74,9 +81,21 @@ class DaeModel:
             equation = formulaToL3String(ast)
 
             for state in states:
+
                 for product in reaction.getListOfProducts():
                     if state['id'] == product.getSpecies():
-                        state['equation'] += equation
+                        state['equation'] += '+ (' + equation + ')'
+
+                for reactant in reaction.getListOfReactants():
+                    if state['id'] == reactant.getSpecies():
+                        state['equation'] += '- (' + equation + ')'
+
+        # Check if a state has an empty equation.
+        for item in states:
+            if item['equation'] == '':
+                # Set the state constant.
+                item['equation'] = '0'
+
         return states
 
 if __name__ == '__main__':

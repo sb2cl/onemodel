@@ -251,7 +251,7 @@ class Matlab:
 
         # Simulation time span.
         f.write(f'\n% Simulation time span.\n')
-        f.write(f'tspan = [0 10];\n')
+        f.write(f'tspan = [0 50];\n')
 
         # Simulate.
         f.write(f'\n[t,x] = ode15s(@(t,x) {name}_ode(t,x,p),tspan,x0,opt);\n')
@@ -272,7 +272,7 @@ class Matlab:
        
 if __name__ == '__main__':
     dae = DaeModel(
-        '/home/nobel/Sync/python/workspace/onemodel/examples/antithetic.xml'
+        '/home/nobel/Sync/python/workspace/onemodel/examples/sbml/example_01.xml'
     )
 
     matlab = Matlab(
