@@ -12,7 +12,7 @@
 
 
 # Keywords reserved.
-@@keyword:: parameter variable equation let der
+@@keyword:: species parameter 
 
 
 start
@@ -25,6 +25,7 @@ statement
   = 
   | 'species' @:species
   | 'parameter' @:parameter
+  | function
   | atom
   ;
 
@@ -34,10 +35,24 @@ species::Species
   name:identifier '=' value:atom
   ;
 
+
 parameter::Parameter
   = 
   name:identifier '=' value:atom
   ;
+
+
+function
+ =
+ printSBML
+ ;
+
+
+printSBML::PrintSBML
+  =
+  'printSBML'
+  ;
+
 
 atom
   = 

@@ -333,5 +333,10 @@ class OneModelWalker(NodeWalker):
 
         return p
 
+    def walk_PrintSBML(self, node):
+        print(self.getSBML())
+        return
+
+
 if __name__ == '__main__':
     print(create_model())
