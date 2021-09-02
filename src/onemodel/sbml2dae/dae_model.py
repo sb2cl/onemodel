@@ -32,7 +32,7 @@ class DaeModel:
     def getModelName(self):
         """ Return the SBML model name.
         """
-        return 'Antithetic'
+        return self.model.getId()
 
     def getParameters(self):
         """ Return a list with the constant parameters.
@@ -81,8 +81,9 @@ class DaeModel:
 
 if __name__ == '__main__':
     dae = DaeModel(
-        '/home/nobel/Sync/python/workspace/onemodel/examples/antithetic.xml'
+        '/home/nobel/Sync/python/workspace/onemodel/examples/sbml/example_00.xml'
     )
+    print(dae.getModelName())
 
     print(dae.getParameters())
     print(dae.getParameters()[0]['id'])
