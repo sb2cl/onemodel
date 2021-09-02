@@ -25,6 +25,7 @@ statement
   = 
   | 'species' @:species
   | 'parameter' @:parameter
+  | 'reaction' @:reaction
   | function
   | atom
   ;
@@ -42,10 +43,21 @@ parameter::Parameter
   ;
 
 
+# S1 + S2 -> S1 + S3; k1*S1(S1+h1)
+reaction::Reaction
+  =
+  {'+' | reactants:identifier} 
+  '->' 
+  {'+' | products:identifier} 
+  ';' 
+  kinetic_law:formula
+  ;
+
+
 function
- =
- printSBML
- ;
+  =
+  printSBML
+  ;
 
 
 printSBML::PrintSBML
@@ -90,6 +102,12 @@ string::str
 identifier::str
   =
   /(?!\d)\w+/ 
+  ;
+
+
+formula::str
+  =
+  /[^\\\r\n\f'\;]*/
   ;
 
 

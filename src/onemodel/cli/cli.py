@@ -78,23 +78,37 @@ def export(input_file, output):
     result = walker.walk(model)
     print('Walk the AST model.')
 
-    # Populate onemodel model.
-    walker.populate_model()
-    print('Populated OneModel model.')
+    # Get SBML representation.
+    sbml = walker.getSBML()
+    print('Export into SBML')
+
+    # Save file.
+    model_name = 'test'
+    filename = f'{output}/{model_name}.xml' 
+    f = open(filename, "a")
+    f.write(sbml)
+    f.close()
+    print(f'Generated {filename}')
+
+
+
+    ## Populate onemodel model.
+    #walker.populate_model()
+    #print('Populated OneModel model.')
     
 
-    # Export the model into Matlab.
-    matlab = Matlab(walker.onemodel)
-    print('Load MATLAB export module.')
+    ## Export the model into Matlab.
+    #matlab = Matlab(walker.onemodel)
+    #print('Load MATLAB export module.')
 
-    filepath = matlab.generate_param()
-    print(f'Generated "{filepath}"')
-    filepath = matlab.generate_ode()
-    print(f'Generated "{filepath}"')
-    filepath = matlab.generate_driver()
-    print(f'Generated "{filepath}"')
-    filepath = matlab.generate_states()
-    print(f'Generated "{filepath}"')
+    #filepath = matlab.generate_param()
+    #print(f'Generated "{filepath}"')
+    #filepath = matlab.generate_ode()
+    #print(f'Generated "{filepath}"')
+    #filepath = matlab.generate_driver()
+    #print(f'Generated "{filepath}"')
+    #filepath = matlab.generate_states()
+    #print(f'Generated "{filepath}"')
 
 if __name__ == '__main__':
     cli(obj={})

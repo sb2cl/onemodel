@@ -271,7 +271,7 @@ class Matlab:
 
 if __name__ == '__main__':
     dae = DaeModel(
-        '/home/nobel/Sync/python/workspace/onemodel/examples/sbml/example_01.xml'
+        '/home/nobel/Sync/python/workspace/onemodel/examples/build/test.xml'
     )
 
     matlab = Matlab(

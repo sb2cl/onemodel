@@ -1,31 +1,21 @@
-# This a comment.
+species x1 = 0
+species x2 = 0
+species x3 = 0
 
-FUN oopify(prefix) -> prefix + "oop"
+parameter k1 = 1
+parameter k2 = 1
+parameter k3 = 1
+parameter d1 = 1
+parameter d2 = 1
+parameter d3 = 1
+parameter gamma12 = 1
 
-FUN join(elements, separator)
-  VAR result = ""
-  VAR len = LEN(elements)
+reaction -> x1; k1
+reaction x3 -> x3 + x2; k2*x3
+reaction x1 -> x1+ x3; k3*x1
 
-  FOR i = 0 TO len THEN
-    VAR result = result + elements/i
-    IF i != len - 1 THEN VAR result = result + separator
-  END
+reaction x1 -> ; d1*x1
+reaction x2 -> ; d2*x2
+reaction x3 -> ; d3*x3
 
-  RETURN result
-END
-
-FUN map(elements, func)
-  VAR new_elements = []
-
-  FOR i = 0 TO LEN(elements) THEN
-    APPEND(new_elements, func(elements/i))
-  END
-
-  RETURN new_elements
-END
-
-PRINT("Greeting universe!")
-
-FOR i = 0 TO 5 THEN
-  PRINT(join(map(["l","sp"], oopify), ", "))
-END
+reaction x1 + x2 -> ; gamma12*x1*x2

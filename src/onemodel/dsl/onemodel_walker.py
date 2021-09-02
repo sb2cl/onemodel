@@ -310,7 +310,7 @@ class OneModelWalker(NodeWalker):
         )
 
         check(
-            p.setId('k'),
+            p.setId(name),
             f'set parameter {name} id'
         )
 
@@ -332,6 +332,104 @@ class OneModelWalker(NodeWalker):
         self.checkConsistency()
 
         return p
+
+    def walk_Reaction(self, node):
+        reactants = node.reactants
+        products = node.products
+        kinetic_law = node.kinetic_law
+
+        if type(reactants) != list:
+            reactants = [reactants] 
+
+        if type(products) != list:
+            products = [products] 
+
+        name = f'_J{self.model.getNumReactions()}'
+
+        r = self.model.createReaction()
+
+        check(
+            r,
+            f'create reaction {name}'
+        )
+
+        check(
+            r.setId(name), 
+            f'set reaction id {name}'
+        )
+
+        check(
+            r.setReversible(False), 
+            'set reaction reversibility flag'
+        )
+
+        check(
+            r.setFast(False),
+            'set reaction "fast" attribute'
+        )
+
+        for item in reactants:
+            if item == None: continue
+
+            species_ref = r.createReactant()
+
+            check(
+                species_ref,
+                'create reactant'
+            )
+
+            check(
+                species_ref.setSpecies(item),
+                f'assign reactant species {item}'
+            )
+
+            check(
+                species_ref.setConstant(True),
+                f'set "constant" on species {item}'
+            )
+
+        for item in products:
+            if item == None: continue
+
+            species_ref = r.createProduct()
+
+            check(
+                species_ref,
+                'create product'
+            )
+
+            check(
+                species_ref.setSpecies(item),
+                'assign product species'
+            )
+
+            check(
+                species_ref.setConstant(True),
+                f'set "constant" on species {item}'
+            )
+ 
+        math_ast = parseL3Formula(kinetic_law)
+
+        check(
+            math_ast,
+            'create AST for rate expression'
+        )
+ 
+        kinetic_law = r.createKineticLaw()
+
+        check(
+            kinetic_law,
+            'create kinetic law'
+        )
+
+        check(
+            kinetic_law.setMath(math_ast),
+            'set math on kinetic law'
+        )
+
+        self.checkConsistency()
+
+        return r
 
     def walk_PrintSBML(self, node):
         print(self.getSBML())
