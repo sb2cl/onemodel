@@ -1,11 +1,167 @@
+import sys
+
 import tatsu
 from tatsu.walkers import NodeWalker
+from libsbml import *
  
-from onemodel.onemodel import OneModel
-from onemodel.symbol import Symbol
-from onemodel.parameter import Parameter
-from onemodel.variable import Variable
-from onemodel.equation import Equation, EquationType
+def check(value, message):
+    """If 'value' is None, prints an error message constructed using
+    'message' and then exits with status code 1.  If 'value' is an integer,
+    it assumes it is a libSBML return status code.  If the code value is
+    LIBSBML_OPERATION_SUCCESS, returns without further action; if it is not,
+    prints an error message constructed using 'message' along with text from
+    libSBML explaining the meaning of the code, and exits with status code 1.
+    """
+    if value == None:
+        raise SystemExit(
+            'LibSBML returned a null value trying to ' + message + '.'
+        )
+    elif type(value) is int:
+        if value == LIBSBML_OPERATION_SUCCESS:
+            return
+        else:
+            err_msg = 'Error encountered trying to ' + message + '.' \
+                 + 'LibSBML returned error code ' + str(value) + ': "' \
+                 + OperationReturnValue_toString(value).strip() + '"'
+        raise SystemExit(err_msg)
+    else:
+        return
+
+def create_model():
+    """Returns a simple but complete SBML Level 3 model for illustration."""
+ 
+    # Create an empty SBMLDocument object.  It's a good idea to check for
+    # possible errors.  Even when the parameter values are hardwired like
+    # this, it is still possible for a failure to occur (e.g., if the
+    # operating system runs out of memory).
+ 
+    try:
+        document = SBMLDocument(3, 1)
+    except ValueError:
+        raise SystemExit('Could not create SBMLDocumention object')
+ 
+    # Create the basic Model object inside the SBMLDocument object.  To
+    # produce a model with complete units for the reaction rates, we need
+    # to set the 'timeUnits' and 'extentUnits' attributes on Model.  We
+    # set 'substanceUnits' too, for good measure, though it's not strictly
+    # necessary here because we also set the units for invididual species
+    # in their definitions.
+ 
+    model = document.createModel()
+    check(model,                              'create model')
+    check(model.setTimeUnits("second"),       'set model-wide time units')
+    check(model.setExtentUnits("mole"),       'set model units of extent')
+    check(model.setSubstanceUnits('mole'),    'set model substance units')
+ 
+    # Create a unit definition we will need later.  Note that SBML Unit
+    # objects must have all four attributes 'kind', 'exponent', 'scale'
+    # and 'multiplier' defined.
+ 
+    per_second = model.createUnitDefinition()
+    check(per_second,                         'create unit definition')
+    check(per_second.setId('per_second'),     'set unit definition id')
+    unit = per_second.createUnit()
+    check(unit,                               'create unit on per_second')
+    check(unit.setKind(UNIT_KIND_SECOND),     'set unit kind')
+    check(unit.setExponent(-1),               'set unit exponent')
+    check(unit.setScale(0),                   'set unit scale')
+    check(unit.setMultiplier(1),              'set unit multiplier')
+ 
+    # Create a compartment inside this model, and set the required
+    # attributes for an SBML compartment in SBML Level 3.
+ 
+    c1 = model.createCompartment()
+    check(c1,                                 'create compartment')
+    check(c1.setId('c1'),                     'set compartment id')
+    check(c1.setConstant(True),               'set compartment "constant"')
+    check(c1.setSize(1),                      'set compartment "size"')
+    check(c1.setSpatialDimensions(3),         'set compartment dimensions')
+    check(c1.setUnits('litre'),               'set compartment size units')
+ 
+    # Create two species inside this model, set the required attributes
+    # for each species in SBML Level 3 (which are the 'id', 'compartment',
+    # 'constant', 'hasOnlySubstanceUnits', and 'boundaryCondition'
+    # attributes), and initialize the amount of the species along with the
+    # units of the amount.
+ 
+    s1 = model.createSpecies()
+    check(s1,                                 'create species s1')
+    check(s1.setId('s1'),                     'set species s1 id')
+    check(s1.setCompartment('c1'),            'set species s1 compartment')
+    check(s1.setConstant(False),              'set "constant" attribute on s1')
+    check(s1.setInitialAmount(5),             'set initial amount for s1')
+    check(s1.setSubstanceUnits('mole'),       'set substance units for s1')
+    check(s1.setBoundaryCondition(False),     'set "boundaryCondition" on s1')
+    check(s1.setHasOnlySubstanceUnits(False), 'set "hasOnlySubstanceUnits" on s1')
+ 
+    s2 = model.createSpecies()
+    check(s2,                                 'create species s2')
+    check(s2.setId('s2'),                     'set species s2 id')
+    check(s2.setCompartment('c1'),            'set species s2 compartment')
+    check(s2.setConstant(False),              'set "constant" attribute on s2')
+    check(s2.setInitialAmount(0),             'set initial amount for s2')
+    check(s2.setSubstanceUnits('mole'),       'set substance units for s2')
+    check(s2.setBoundaryCondition(False),     'set "boundaryCondition" on s2')
+    check(s2.setHasOnlySubstanceUnits(False), 'set "hasOnlySubstanceUnits" on s2')
+ 
+    # Create a parameter object inside this model, set the required
+    # attributes 'id' and 'constant' for a parameter in SBML Level 3, and
+    # initialize the parameter with a value along with its units.
+ 
+    k = model.createParameter()
+    check(k,                                  'create parameter k')
+    check(k.setId('k'),                       'set parameter k id')
+    check(k.setConstant(True),                'set parameter k "constant"')
+    check(k.setValue(1),                      'set parameter k value')
+    check(k.setUnits('per_second'),           'set parameter k units')
+ 
+    # Create a reaction inside this model, set the reactants and products,
+    # and set the reaction rate expression (the SBML "kinetic law").  We
+    # set the minimum required attributes for all of these objects.  The
+    # units of the reaction rate are determined from the 'timeUnits' and
+    # 'extentUnits' attributes on the Model object.
+ 
+    r1 = model.createReaction()
+    check(r1,                                 'create reaction')
+    check(r1.setId('r1'),                     'set reaction id')
+    check(r1.setReversible(False),            'set reaction reversibility flag')
+    check(r1.setFast(False),                  'set reaction "fast" attribute')
+ 
+    species_ref1 = r1.createReactant()
+    check(species_ref1,                       'create reactant')
+    check(species_ref1.setSpecies('s1'),      'assign reactant species')
+    check(species_ref1.setConstant(True),     'set "constant" on species ref 1')
+ 
+    species_ref2 = r1.createProduct()
+    check(species_ref2,                       'create product')
+    check(species_ref2.setSpecies('s2'),      'assign product species')
+    check(species_ref2.setConstant(True),     'set "constant" on species ref 2')
+ 
+    math_ast = parseL3Formula('k * s1 * c1')
+    check(math_ast,                           'create AST for rate expression')
+ 
+    kinetic_law = r1.createKineticLaw()
+    check(kinetic_law,                        'create kinetic law')
+    check(kinetic_law.setMath(math_ast),      'set math on kinetic law')
+ 
+    # And we're done creating the basic model.
+    # Now return a text string containing the model in XML format.
+
+    print('Check checkConsistency')
+    if document.checkConsistency():
+        document.printErrors()
+
+    elem = model.getElementBySId('s1')
+    elem.setId('s2')
+    elem.setInitialAmount(5000)
+    print(elem)
+
+    print('Check checkConsistency')
+    if document.checkConsistency():
+        document.printErrors()
+ 
+    return
+    return writeSBMLToString(document)
 
 class SymbolTable:
   def __init__(self, parent=None):
@@ -29,148 +185,53 @@ class SymbolTable:
   def remove(self, name):
     del self.symbols[name]
 
+
 class OneModelWalker(NodeWalker):
     def __init__(self, basename, export_path):
-        self.onemodel = OneModel(basename, export_path)
-        self.equation_num = 0
+        # Create and empty SBMLDocument object.
+        try:
+            self.document = SBMLDocument(3, 1)
+        except ValueError:
+            raise SystemExit('Could not create SBMLDocument object')
 
-        self.symbol_table = SymbolTable()
+        # Create the basic Model object inside the SBMLDocument object.
+        self.model = self.document.createModel()
+        check(self.model, 'create model')
+        check(self.model.setTimeUnits('second'), 'set model-wide time units')
+        check(self.model.setExtentUnits('mole'), 'set model units of extent')
+        check(self.model.setSubstanceUnits('mole'), 'set model substance units')
 
-    def populate_model(self):
-        for name, symbol in self.symbol_table.symbols.items():
-            if isinstance(symbol, Symbol):
-                self.onemodel.add(symbol)
+        # Create a unit definition we will need later.
+        per_second = self.model.createUnitDefinition()
+        check(per_second, 'create unit definition')
+        check(per_second.setId('per_second'),'set unit definition id')
+
+        unit = per_second.createUnit()
+        check(unit, 'create unit on per_second')
+        check(unit.setKind(UNIT_KIND_SECOND),'set unit kind')
+        check(unit.setExponent(-1), 'set unit exponent')
+        check(unit.setScale(0), 'set unit scale')
+        check(unit.setMultiplier(1), 'set unit multiplier')
+
+        # Create a default_compartment.
+        c = self.model.createCompartment()
+        check(c, 'create default compartment')
+        check(c.setId('default_compartment'), 'set compartment id')
+        check(c.setConstant(True), 'set compartment "constant"')
+        check(c.setSize(1), 'set compartment "size"')
+        check(c.setSpatialDimensions(3), 'set compartment dimensions')
+        check(c.setUnits('litre'), 'set compartment size units')
+
+    def checkConsistency(self):
+        if self.document.checkConsistency():
+            self.document.printErrors()
+
+    def getSBML(self):
+        self.checkConsistency()
+        return writeSBMLToString(self.document)
 
     def walk_object(self, node):
         return node
-
-    def walk_BinaryOperation(self, node):
-        left = self.walk(node.left)
-        right = self.walk(node.right)
-        op = node.op
-
-        if op == '+':
-            return left + right
-
-        if op == '-':
-            return left - right
-
-        if op == '*':
-            return left * right
-
-        if op == '/':
-            return left / right
-
-        if op == '^':
-            return left ** right
-        
-    def walk_UnaryOperation(self, node):
-        right = self.walk(node.right)
-        op = node.op
-        
-        if op == '+':
-            return right
-
-        if op == '-':
-            return -right
-
-    def walk_Parameter(self, node):
-        p = Parameter(node.name)
-        p.value = str(self.walk(node.value))
-        p.units = node.units
-        if node.comment != None:
-            p.comment = node.comment
-
-        self.symbol_table.set(node.name, p)
-
-        return 
-
-    def walk_Variable(self, node):
-        v = Variable(node.name)
-        v.value = str(self.walk(node.value))
-        v.units = node.units
-        if node.comment != None:
-            v.comment = node.comment
-
-        self.symbol_table.set(node.name, v)
-
-        return 
-
-    def walk_EquationOde(self, node):
-        e = Equation(f'eq_{self.equation_num}')
-        e.equation_type = EquationType.ODE
-        e.variable_name = node.name
-
-        # '0+value' makes the value into a math_expr in case just a Symbol is
-        # passed.
-        e.value = 0+self.walk(node.value)
-        if node.comment != None:
-            e.comment = node.comment
-
-        self.symbol_table.set(f'eq_{self.equation_num}', e)
-        self.equation_num += 1
-
-    def walk_EquationSubstitution(self, node):
-        e = Equation(f'eq_{self.equation_num}')
-        e.equation_type = EquationType.SUBSTITUTION
-        e.variable_name = node.name
-
-        # '0+value' makes the value into a math_expr in case just a Symbol is
-        # passed.
-        e.value = 0+self.walk(node.value)
-        if node.comment != None:
-            e.comment = node.comment
-
-        self.symbol_table.set(f'eq_{self.equation_num}', e)
-        self.equation_num += 1
-
-    def walk_EquationAlgebraic(self, node):
-        e = Equation(f'eq_{self.equation_num}')
-        e.equation_type = EquationType.ALGEBRAIC
-        e.variable_name = node.name
-
-        # '0+value' makes the value into a math_expr in case just a Symbol is
-        # passed.
-        e.value = 0+self.walk(node.value)
-        if node.comment != None:
-            e.comment = node.comment
-
-        self.symbol_table.set(f'eq_{self.equation_num}', e)
-        self.equation_num += 1
-
-    def walk_AssignProperty(self, node):
-        name = node.name
-        property_name = node.property_name
-        value = self.walk(node.value)
-
-        symbol = self.symbol_table.get(name)
-
-        setattr(symbol, property_name, value)
-
-        return
-
-    def walk_AssignIdentifier(self, node):
-        name = node.name
-        value = self.walk(node.value)
-
-        self.symbol_table.set(name, value)
-
-        return
-
-    def walk_AccessProperty(self, node):
-        name = node.name
-        value = self.symbol_table.get(name)
-        property_name = node.property_name
-
-        value = getattr(value, property_name)
-
-        return value
-
-    def walk_AccessIdentifier(self, node):
-        name = node.name
-        value = self.symbol_table.get(name)
-
-        return value
 
     def walk_list(self, nodes):
         results = []
@@ -183,101 +244,94 @@ class OneModelWalker(NodeWalker):
 
         return results
 
-#    def walk_closure(self, nodes):
-#        results = []
-#
-#        for node in nodes:
-#            result = self.walk(node)
-#
-#            if result == '\n' or result == ';':
-#                continue
-#
-#            results.append(result)
-#
-#        if len(results) == 1:
-#            results = results[0]
-#
-#        return results
-#
-#    def walk_AccessIdentifier(self, node):
-#        value = self.onemodel.get(node.name)
-#        return Identifier(node.name, value)
-#
-#    def walk_AccessProperty(self, node):
-#        symbol = self.walk(node.var)
-#        property_ = self.walk(node.prop)
-#
-#        value = getattr(symbol.value, property_.name) 
-#
-#        return Identifier('ans', value)
-#
-#    def walk_ChangeProperty(self, node):
-#        symbol = self.walk(node.var)
-#        property_ = self.walk(node.prop)
-#        value = str(self.walk(node.value))
-#
-#        setattr(symbol.value, property_.name, value) 
-#
-#        return Identifier(symbol.name, symbol.value)
-#
-#    def walk_DefineParameter(self, node):
-#        p = Parameter(self.walk(node.name).name)
-#        p.value = str(self.walk(node.value))
-#        p.units = self.walk(node.units)
-#        p.comment = self.walk(node.comment)
-#        self.onemodel.add(p)
-#
-#        return Identifier(p.name, p)
-#
-#    def walk_DefineVariable(self, node):
-#        v = Variable(self.walk(node.name).name)
-#        v.value = str(self.walk(node.value))
-#        v.units = self.walk(node.units)
-#        v.comment = self.walk(node.comment)
-#        self.onemodel.add(v)
-#        
-#        return Identifier(v.name, v)
-#
-#    def walk_DefineEquationOde(self, node):
-#        e = Equation(f'eq_{self.equation_num}')
-#        self.equation_num += 1
-#        e.equation_type = EquationType.ODE
-#        e.variable_name = self.walk(node.name).name
-#        e.value = self.walk(node.eqn)
-#        e.comment = self.walk(node.comment)
-#        self.onemodel.add(e)
-#
-#        return Identifier(e.name, e)
-#
-#    def walk_DefineEquationSubstitution(self, node):
-#        e = Equation(f'eq_{self.equation_num}')
-#        self.equation_num += 1
-#        e.equation_type = EquationType.SUBSTITUTION
-#        e.variable_name = self.walk(node.name).name
-#        e.value = self.walk(node.eqn)
-#        e.comment = self.walk(node.comment)
-#        self.onemodel.add(e)
-#        return e
-#
-#    def walk_DefineEquationAlgebraic(self, node):
-#        e = Equation(f'eq_{self.equation_num}')
-#        self.equation_num += 1
-#        e.equation_type = EquationType.ALGEBRAIC
-#        e.variable_name = self.walk(node.name).name
-#        e.value = self.walk(node.eqn)
-#        e.comment = self.walk(node.comment)
-#        self.onemodel.add(e)
-#        return e
-#
-#    def walk_MathExpression(self, node):
-#        result = ''
-#
-#        for item in node.ast:
-#            item = self.walk(item)
-#            if isinstance(item, float):
-#                item = str(item)
-#            if isinstance(item, Identifier):
-#                item = item.name
-#            result += item
-#
-#        return result
+    def walk_Species(self, node):
+        name = node.name
+        value = self.walk(node.value)
+
+        s = self.model.createSpecies()
+
+        check(
+            s, 
+            f'create species {name}'
+        )
+
+        check(
+            s.setId(name), 
+            f'set species {name} id'
+        )
+
+        check(
+            s.setCompartment('default_compartment'), 
+            f'set species {name} in default_compartment'
+        )
+
+        check(
+            s.setConstant(False), 
+            f'set "constant" attribute on {name}'
+        )
+
+        check(
+            s.setInitialConcentration(value), 
+            f'set initial amount for {name}'
+        )
+
+        check(
+            s.setSubstanceUnits('mole'), 
+            f'set substance units for {name}'
+        )
+
+        check(
+            s.setBoundaryCondition(False),
+            f'set "boundaryCondition" on {name}'
+        )
+
+        check(
+            s.setHasOnlySubstanceUnits(False),
+            f'set "hasOnlySubstanceUnits" on {name}'
+        )
+
+        self.checkConsistency()
+
+        return s
+
+    def walk_Parameter(self, node):
+        name = node.name
+        value = self.walk(node.value)
+
+        if not type(value) in (int, float):
+            print('Error: value must be int or float')
+            return
+            
+        p = self.model.createParameter()
+
+        check(
+            p,
+            f'create parameter {name}'
+        )
+
+        check(
+            p.setId('k'),
+            f'set parameter {name} id'
+        )
+
+        check(
+            p.setConstant(True),
+            f'set parameter {name} "constant"'
+        )
+
+        check(
+            p.setValue(value),
+            f'set parameter {name} value'
+        )
+
+        check(
+            p.setUnits('per_second'),
+            f'set parameter {name} units'
+        )
+ 
+        self.checkConsistency()
+
+        return p
+
+if __name__ == '__main__':
+    print(create_model())

@@ -77,6 +77,7 @@ class Repl:
                 else:
                     print(result)
 
+            print(walker.getSBML())
             # 4. LOOP
             if should_exit:
                 continue_loop = False   
