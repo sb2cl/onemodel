@@ -267,9 +267,8 @@ class Matlab:
         f.close()
 
         return filepath
-
-
        
+
 if __name__ == '__main__':
     dae = DaeModel(
         '/home/nobel/Sync/python/workspace/onemodel/examples/sbml/example_01.xml'
@@ -284,5 +283,3 @@ if __name__ == '__main__':
     matlab.exportOde()
     matlab.exportStates()
     matlab.exportDriver()
-
-

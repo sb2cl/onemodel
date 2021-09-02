@@ -112,7 +112,3 @@ if __name__ == '__main__':
     print(dae.getStates())
     print(dae.getStates()[0]['id'])
     print(dae.getStates()[0]['initialCondition'])
-
-    # print(dae.getStatesId())
-    # print(dae.getStatesInitialCondition())
-    # print(dae.getStatesDae())
