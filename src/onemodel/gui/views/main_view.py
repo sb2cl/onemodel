@@ -94,6 +94,18 @@ class MainView(QMainWindow):
         item_path = self._ui.directoryTree.model.filePath(index)
 
         if path.isfile(item_path):
+
+            # Check if there is a not saved file open.
+            if self._model.is_file_modified == True:
+                # If not, show error message.
+                # TODO: Finish this error message.
+                title = 'Changes Not Saved'
+                msg = 'Save changes to current document before closing?\n'
+                msg += f'If you don\'t save, changes will be permanently lost.'
+
+                QtWidgets.QMessageBox.about(self, title, msg) 
+
+
             self._main_controller.open_file(item_path)
 
         elif path.isdir(item_path):
@@ -116,7 +128,6 @@ class MainView(QMainWindow):
     def on_text_changed_textEditor(self):
         print('True')
         self._main_controller.change_is_file_modified(True)
-        
 
     def on_triggered_open_file_action(self):
         # getting path and bool value

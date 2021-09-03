@@ -44,7 +44,7 @@ class Controller(QObject):
         with open(path, 'w') as f:
             f.write(text)
         
-        self.change_file_path(path)
+        self.change_is_file_modified(False)
 
     @pyqtSlot()
     def execute_cmd(self, cmd):

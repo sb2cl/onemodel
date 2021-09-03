@@ -107,7 +107,7 @@ class Ui_MainWindow(object):
             basename = path.basename(file_path)
             basename = file_path
 
-        title = f'Edito - {basename}'
+        title = f'Edit - {basename}'
 
         if is_file_modified == True:
             title += '*'
