@@ -42,7 +42,7 @@ class Repl:
         parser = tatsu.compile(grammar, asmodel=True)
         
         # Init the model walker.
-        walker = OneModelWalker('repl','.')
+        walker = OneModelWalker('repl')
 
         while continue_loop:
             # 1. READ

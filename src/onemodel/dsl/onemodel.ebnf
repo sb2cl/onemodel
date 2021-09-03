@@ -23,9 +23,9 @@ start
 
 statement
   = 
-  | 'species' @:species
-  | 'parameter' @:parameter
-  | 'reaction' @:reaction
+  | 'species'   @:species   {',' | @:species}
+  | 'parameter' @:parameter {',' | @:parameter}
+  | 'reaction'  @:reaction 
   | function
   | atom
   ;
