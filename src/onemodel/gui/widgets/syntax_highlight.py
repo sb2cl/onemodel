@@ -62,14 +62,14 @@ COLORS = {
 
 # Syntax styles that can be shared by all languages
 STYLES = {
-    'keyword':  format(COLORS['base08'], 'bold'),
+    'keyword':  format(COLORS['base08']),
     'operator': format(COLORS['base07']),
     'brace':    format(COLORS['base07']),
     'defclass': format(COLORS['base07'], 'bold'),
     'string':   format(COLORS['base0B']),
     'string2':  format(COLORS['base0B']),
     'comment':  format(COLORS['base04']),
-    'numbers':  format(COLORS['base07']),
+    'numbers':  format(COLORS['base0C']),
 }
 
 class OneModelHighlighter(QSyntaxHighlighter):
@@ -78,7 +78,7 @@ class OneModelHighlighter(QSyntaxHighlighter):
     # OneModel keywords
 
     keywords = [
-        'species', 'parameter', 'reaction',
+        'species', 'parameter', 'reaction', 'end'
     ]
 
     # Python operators

@@ -12,7 +12,7 @@
 
 
 # Keywords reserved.
-@@keyword:: species parameter 
+@@keyword:: species parameter reaction end
 
 
 start
@@ -26,6 +26,9 @@ statement
   | 'species'   @:species   {',' | @:species}
   | 'parameter' @:parameter {',' | @:parameter}
   | 'reaction'  @:reaction 
+  | 'species'   newline {newline | @:species newline} 'end'
+  | 'parameter' newline {newline | @:parameter newline} 'end'
+  | 'reaction'  newline {newline | @:reaction newline} 'end'
   | function
   | atom
   ;
@@ -49,7 +52,7 @@ reaction::Reaction
   {'+' | reactants:identifier} 
   '->' 
   {'+' | products:identifier} 
-  ';' 
+  newline 
   kinetic_law:formula
   ;
 
