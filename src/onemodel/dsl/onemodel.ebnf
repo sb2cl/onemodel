@@ -49,6 +49,7 @@ parameter::Parameter
 # S1 + S2 -> S1 + S3; k1*S1(S1+h1)
 reaction::Reaction
   =
+  [ name:identifier ':']
   {'+' | reactants:identifier} 
   '->' 
   {'+' | products:identifier} 

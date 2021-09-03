@@ -353,6 +353,7 @@ class OneModelWalker(NodeWalker):
         return p
 
     def walk_Reaction(self, node):
+        name = node.name
         reactants = node.reactants
         products = node.products
         kinetic_law_str = node.kinetic_law
@@ -363,7 +364,8 @@ class OneModelWalker(NodeWalker):
         if type(products) != list:
             products = [products] 
 
-        name = f'_J{self.model.getNumReactions()}'
+        if name == None:
+            name = f'_J{self.model.getNumReactions()}'
 
         # Save here a list of ids of the species defined as reactans or products.
         names_defined = []
