@@ -27,6 +27,23 @@ def check(value, message):
     else:
         return
 
+def getAstNames(ast):
+    """ Returns the user defined names in a MathML ast.
+    """
+    names = []
+
+    if ast.isName():
+        names.append(ast.getName())
+
+    for i in range(ast.getNumChildren()):
+        child = ast.getChild(i)
+        child_names = getAstNames(child)
+
+        for item in child_names:
+            names.append(item)
+
+    return names
+
 def create_model():
     """Returns a simple but complete SBML Level 3 model for illustration."""
  
@@ -197,6 +214,8 @@ class OneModelWalker(NodeWalker):
         # Create the basic Model object inside the SBMLDocument object.
         self.model = self.document.createModel()
         check(self.model, 'create model')
+        check(self.model.setName('test'), 'set model name')
+        check(self.model.setId('test'), 'set model id')
         check(self.model.setTimeUnits('second'), 'set model-wide time units')
         check(self.model.setExtentUnits('mole'), 'set model units of extent')
         check(self.model.setSubstanceUnits('mole'), 'set model substance units')
@@ -336,7 +355,7 @@ class OneModelWalker(NodeWalker):
     def walk_Reaction(self, node):
         reactants = node.reactants
         products = node.products
-        kinetic_law = node.kinetic_law
+        kinetic_law_str = node.kinetic_law
 
         if type(reactants) != list:
             reactants = [reactants] 
@@ -346,6 +365,10 @@ class OneModelWalker(NodeWalker):
 
         name = f'_J{self.model.getNumReactions()}'
 
+        # Save here a list of ids of the species defined as reactans or products.
+        names_defined = []
+
+        # Create reaction.
         r = self.model.createReaction()
 
         check(
@@ -368,6 +391,7 @@ class OneModelWalker(NodeWalker):
             'set reaction "fast" attribute'
         )
 
+        # Create reactants.
         for item in reactants:
             if item == None: continue
 
@@ -388,6 +412,9 @@ class OneModelWalker(NodeWalker):
                 f'set "constant" on species {item}'
             )
 
+            names_defined.append(item)
+
+        # Create products.
         for item in products:
             if item == None: continue
 
@@ -407,8 +434,11 @@ class OneModelWalker(NodeWalker):
                 species_ref.setConstant(True),
                 f'set "constant" on species {item}'
             )
+
+            names_defined.append(item)
  
-        math_ast = parseL3Formula(kinetic_law)
+        # Create kinetic law.
+        math_ast = parseL3Formula(kinetic_law_str)
 
         check(
             math_ast,
@@ -426,6 +456,36 @@ class OneModelWalker(NodeWalker):
             kinetic_law.setMath(math_ast),
             'set math on kinetic law'
         )
+
+        # Create modifier species reference.
+        names = getAstNames(math_ast)
+        names_modifier = []
+
+        for name in names:
+            elem = self.model.getElementBySId(name)
+
+            if type(elem) != Species: 
+                continue
+
+            if name in names_defined:
+                continue
+
+            names_modifier.append(name)
+
+        for item in names_modifier:
+            if item == None: continue
+
+            modifier_ref = r.createModifier()
+
+            check(
+                modifier_ref,
+                'create modifier'
+            )
+
+            check(
+                modifier_ref.setSpecies(item),
+                'assign modifier species'
+            )
 
         self.checkConsistency()
 

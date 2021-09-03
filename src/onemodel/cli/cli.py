@@ -85,7 +85,7 @@ def export(input_file, output):
     # Save file.
     model_name = 'test'
     filename = f'{output}/{model_name}.xml' 
-    f = open(filename, "a")
+    f = open(filename, 'w')
     f.write(sbml)
     f.close()
     print(f'Generated {filename}')

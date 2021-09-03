@@ -10,9 +10,9 @@ parameter d2 = 1
 parameter d3 = 1
 parameter gamma12 = 1
 
-reaction -> x1; k1
-reaction x3 -> x3 + x2; k2*x3
-reaction x1 -> x1+ x3; k3*x1
+reaction -> x1 ; k1
+reaction -> x2 ; k2*x3
+reaction -> x3 ; k3*x1
 
 reaction x1 -> ; d1*x1
 reaction x2 -> ; d2*x2
