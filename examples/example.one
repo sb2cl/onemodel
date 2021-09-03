@@ -1,6 +1,6 @@
 # Definition of parameters.
 parameter
-  k1 = 10
+  k1 = 1
   k2 = 1
   k3 = 1
   d1 = 1

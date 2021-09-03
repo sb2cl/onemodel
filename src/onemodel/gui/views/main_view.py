@@ -54,7 +54,6 @@ class MainView(QMainWindow):
                 self.on_triggered_save_action
                 )
 
-
         ####################################################################
         #   listen for model event signals
         ####################################################################

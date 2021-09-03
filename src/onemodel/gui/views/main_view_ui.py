@@ -85,9 +85,9 @@ class Ui_MainWindow(object):
 
         # Create save action.
         self.save_action = QtWidgets.QAction('Save', MainWindow)
+        self.save_action.setShortcut('Ctrl+S')
         self.save_action.setStatusTip("Save current file.")
         self.file_menu.addAction(self.save_action)
-        self.file_toolbar.addAction(self.save_action)
 
         self.set_title()
 
