@@ -33,6 +33,11 @@ class MainView(QMainWindow):
         self._ui.directoryTree.tree.doubleClicked.connect(
                 self.on_double_click_directoryTree
                 )
+        
+        # Text changed in text editor.
+        self._ui.textEditor.editor.textChanged.connect(
+                self.on_text_changed_textEditor
+                )
 
         # Triggered open_file_action.
         self._ui.open_file_action.triggered.connect(
@@ -49,6 +54,7 @@ class MainView(QMainWindow):
                 self.on_triggered_save_action
                 )
 
+
         ####################################################################
         #   listen for model event signals
         ####################################################################
@@ -58,6 +64,11 @@ class MainView(QMainWindow):
 
         # File path is updated.
         self._model.file_path_changed.connect(self.on_file_path_changed)
+
+        # Is file modified updated.
+        self._model.is_file_modified_changed.connect(
+                self.on_is_file_modified_changed
+        )
 
         # onemodel-cli ready to read.
         self._model.onemodel_cli_read.connect(self.on_cli_ready_read)
@@ -99,6 +110,13 @@ class MainView(QMainWindow):
         self._ui.update_editor_label()
         self._ui.textEditor.open_file(file_path)
 
+    def on_is_file_modified_changed(self, value):
+        self._ui.update_editor_label()
+    
+    def on_text_changed_textEditor(self):
+        print('True')
+        self._main_controller.change_is_file_modified(True)
+        
 
     def on_triggered_open_file_action(self):
         # getting path and bool value
@@ -137,13 +155,14 @@ class MainView(QMainWindow):
             print('Call save as')
 
         else:
-            print('Save current')
             text = self._ui.textEditor.editor.toPlainText()
 
             self._main_controller.save_file_to_path(
                 text,
                 self._model.file_path
             )
+
+            self._ui.status.showMessage('Done saving.')
 
     def on_cli_ready_read(self, text):
         self._ui.console.print(text)

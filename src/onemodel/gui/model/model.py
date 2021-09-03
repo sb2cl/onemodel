@@ -9,6 +9,7 @@ from PyQt5.QtCore import QProcess
 class Model(QObject):
     current_path_changed = pyqtSignal(str)
     file_path_changed = pyqtSignal(str)
+    is_file_modified_changed = pyqtSignal(bool)
     onemodel_cli_read = pyqtSignal(str)
 
     def __init__(self):
@@ -20,6 +21,9 @@ class Model(QObject):
         # Current open file in the text editor.
         # If None, we don't have a file (or creating new).
         self._file_path = None
+
+        # Is current open file modified by the text editor?
+        self._is_file_modified = False
 
         # Process which will execute onemodel-cli.
         self._onemodel_cli = QProcess()
@@ -52,8 +56,17 @@ class Model(QObject):
     def file_path(self, value):
         self._file_path = value
         self.file_path_changed.emit(value)
+        self.is_file_modified = False
+
+    @property
+    def is_file_modified(self):
+        return self._is_file_modified
+
+    @is_file_modified.setter
+    def is_file_modified(self, value):
+        self._is_file_modified = value
+        self.is_file_modified_changed.emit(value)
 
     def on_onemodel_cli_read(self):
         text = self._onemodel_cli.readAll().data().decode()
         self.onemodel_cli_read.emit(text)
-

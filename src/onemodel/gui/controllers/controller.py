@@ -30,6 +30,9 @@ class Controller(QObject):
     def change_file_path(self, new_file_path):
         self._model.file_path = new_file_path
 
+    def change_is_file_modified(self, value):
+        self._model.is_file_modified = value
+
     @pyqtSlot(str)
     def open_file(self, file_path):
         # TODO: Check if there was a not saved previous open file.

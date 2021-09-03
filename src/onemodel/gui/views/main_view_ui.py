@@ -86,6 +86,7 @@ class Ui_MainWindow(object):
         # Create save action.
         self.save_action = QtWidgets.QAction('Save', MainWindow)
         self.save_action.setStatusTip("Save current file.")
+        self.file_menu.addAction(self.save_action)
         self.file_toolbar.addAction(self.save_action)
 
         self.set_title()
@@ -98,6 +99,7 @@ class Ui_MainWindow(object):
         """ Update the window title.
         """
         file_path = self.mainWindow._model.file_path
+        is_file_modified = self.mainWindow._model.is_file_modified
 
         if file_path == None:
             basename = 'Untitled'
@@ -105,4 +107,9 @@ class Ui_MainWindow(object):
             basename = path.basename(file_path)
             basename = file_path
 
-        self.label_textEditor.setText(f'Editor - {basename}')
+        title = f'Edito - {basename}'
+
+        if is_file_modified == True:
+            title += '*'
+        
+        self.label_textEditor.setText(title)
