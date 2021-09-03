@@ -267,6 +267,9 @@ class OneModelWalker(NodeWalker):
         name = node.name
         value = self.walk(node.value)
 
+        if value == None:
+            value = 0
+
         s = self.model.createSpecies()
 
         check(
@@ -316,6 +319,9 @@ class OneModelWalker(NodeWalker):
     def walk_Parameter(self, node):
         name = node.name
         value = self.walk(node.value)
+
+        if value == None:
+            value = 0
 
         if not type(value) in (int, float):
             print('Error: value must be int or float')

@@ -36,13 +36,13 @@ statement
 
 species::Species
   = 
-  name:identifier '=' value:atom
+  name:identifier ['=' value:atom]
   ;
 
 
 parameter::Parameter
   = 
-  name:identifier '=' value:atom
+  name:identifier ['=' value:atom]
   ;
 
 
