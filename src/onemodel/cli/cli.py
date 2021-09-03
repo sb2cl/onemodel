@@ -10,6 +10,9 @@ from onemodel.dsl.repl import Repl
 from onemodel.dsl.onemodel_walker import OneModelWalker
 from onemodel.export.matlab.matlab import Matlab
 
+from onemodel.sbml2dae.dae_model import DaeModel
+from onemodel.sbml2dae.matlab import Matlab
+
 @click.group()
 def cli():
     """ OneModel Command Line Interface (onemodel-cli).
@@ -71,72 +74,101 @@ def export(input_file, output, from_syntax, to_syntax):
             print('Please use ".one" or ".xml".')
             sys.exit()
 
-    ## Default value of output is './build/'
-    #if output == None:
-    #    output = './build'
-    #
-    ## Create build dir if it doesn't exist.
-    #if not os.path.isdir(output):
-    #    os.mkdir(output)
-    #    print(f'Created dir "{output}"')
-
-    #output = os.path.abspath(output)
-
-    ## Check if output dir doesn't exists.
-    #if not os.path.isdir(output):
-    #    print(f'Created output directory "{output}".')
-    #    os.mkdir(output)
-    #
-    ## Load the grammar.
-    #grammar = files('onemodel.dsl').joinpath('onemodel.ebnf').read_text()
-
-    ## Load the parser with the grammar.
-    #parser = tatsu.compile(grammar, asmodel=True)
-    #print('Parser initialized with "onemodel" syntax.')
-
-    ## Parse the data into an AST model.
-    #model = parser.parse(open(input_file).read())
-    #print('Parsed input file into an AST model.')
-
-    ## Load the AST model walker.
-    #walker = OneModelWalker(filename, output)
-    #print('AST model walker initialized for "onemodel" syntax.')
-
-    ## Walk the AST model.
-    #result = walker.walk(model)
-    #print('Walk the AST model.')
-
-    ## Get SBML representation.
-    #sbml = walker.getSBML()
-    #print('Export into SBML')
-
-    ## Save file.
-    #model_name = 'test'
-    #filename = f'{output}/{model_name}.xml' 
-    #f = open(filename, 'w')
-    #f.write(sbml)
-    #f.close()
-    #print(f'Generated {filename}')
-
-
-
-    ## Populate onemodel model.
-    #walker.populate_model()
-    #print('Populated OneModel model.')
+    # Default value of output is './build/'
+    if output == None:
+        output = './build'
     
+    # Create build dir if it doesn't exist.
+    if not os.path.isdir(output):
+        os.mkdir(output)
+        print(f'Created dir "{output}"')
 
-    ## Export the model into Matlab.
-    #matlab = Matlab(walker.onemodel)
-    #print('Load MATLAB export module.')
+    output = os.path.abspath(output)
 
-    #filepath = matlab.generate_param()
-    #print(f'Generated "{filepath}"')
-    #filepath = matlab.generate_ode()
-    #print(f'Generated "{filepath}"')
-    #filepath = matlab.generate_driver()
-    #print(f'Generated "{filepath}"')
-    #filepath = matlab.generate_states()
-    #print(f'Generated "{filepath}"')
+    # Check if output dir doesn't exists.
+    if not os.path.isdir(output):
+        print(f'Created output directory "{output}".')
+        os.mkdir(output)
+
+    if from_syntax == 'onemodel' and to_syntax == 'matlab':
+        sbml_filename = onemodel2sbml(input_file, filename, output)
+        sbml2matlab(sbml_filename, output)
+
+    elif from_syntax == 'onemodel' and to_syntax == 'sbml':
+        sbml_filename = onemodel2sbml(input_file, filename, output)
+
+    elif from_syntax == 'sbml' and to_syntax == 'matlab':
+        sbml2matlab(input_file, output)
+
+    else:
+        print(f'Error: exporting from "{from_syntax}" to "{to_syntax}" in not supported.')
+        sys.exit()
+
+def onemodel2sbml(input_file, filename, output):
+    """ Convert a onemodel file into sbml.
+    """
+    print('### Convert onemodel into sbml ###')
+
+    # Load the grammar.
+    grammar = files('onemodel.dsl').joinpath('onemodel.ebnf').read_text()
+
+    # Load the parser with the grammar.
+    parser = tatsu.compile(grammar, asmodel=True)
+    print('\tParser initialized with "onemodel" syntax.')
+
+    # Parse the data into an AST model.
+    model = parser.parse(open(input_file).read())
+    print('\tParsed input file into an AST model.')
+
+    # Load the AST model walker.
+    walker = OneModelWalker(filename)
+    print('\tAST model walker initialized for "onemodel" syntax.')
+
+    # Walk the AST model.
+    result = walker.walk(model)
+    print('\tWalk the AST model.')
+
+    # Get SBML representation.
+    sbml = walker.getSBML()
+    print('\tExport SBML.')
+
+    # Save SBML.
+    sbml_filename = f'{output}/{filename}.xml' 
+    f = open(sbml_filename, 'w')
+    f.write(sbml)
+    f.close()
+    print(f'\tGenerated {sbml_filename}')
+
+    return sbml_filename
+
+def sbml2matlab(sbml_filename, output):
+    """ Convert a sbml file into matlab.
+    """
+    print('### Convert sbml into matlab ###')
+
+    # Generate dae model representaion.
+    dae = DaeModel(sbml_filename)
+    print('\tExtract DAE model from sbml model.') 
+
+    # Export into matlab files.
+    matlab = Matlab(dae, output)
+
+    filepath = matlab.exportDefaultParameters()
+    print(f'\tGenerated {filepath}')
+
+    filepath = matlab.exportOde()
+    print(f'\tGenerated {filepath}')
+
+    filepath = matlab.exportStates()
+    print(f'\tGenerated {filepath}')
+
+    filepath = matlab.exportDriver()
+    print(f'\tGenerated {filepath}')
+
+
+
+
+
 
 if __name__ == '__main__':
     cli(obj={})

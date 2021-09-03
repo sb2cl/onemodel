@@ -22,7 +22,7 @@ class Matlab:
         result = ''
 
         parameters = []
-        for item in dae.getParameters():
+        for item in self.dae.getParameters():
             parameters.append(item['id'])
 
         g = tokenize(BytesIO(math_expr.encode('utf-8')).readline)

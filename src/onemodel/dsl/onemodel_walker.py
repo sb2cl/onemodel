@@ -204,7 +204,7 @@ class SymbolTable:
 
 
 class OneModelWalker(NodeWalker):
-    def __init__(self, basename, export_path):
+    def __init__(self, model_name):
         # Create and empty SBMLDocument object.
         try:
             self.document = SBMLDocument(3, 1)
@@ -214,8 +214,8 @@ class OneModelWalker(NodeWalker):
         # Create the basic Model object inside the SBMLDocument object.
         self.model = self.document.createModel()
         check(self.model, 'create model')
-        check(self.model.setName('test'), 'set model name')
-        check(self.model.setId('test'), 'set model id')
+        check(self.model.setName(model_name), 'set model name')
+        check(self.model.setId(model_name), 'set model id')
         check(self.model.setTimeUnits('second'), 'set model-wide time units')
         check(self.model.setExtentUnits('mole'), 'set model units of extent')
         check(self.model.setSubstanceUnits('mole'), 'set model substance units')
