@@ -44,6 +44,11 @@ class MainView(QMainWindow):
                 self.on_triggered_export_action
                 )
 
+        # Triggered save_action.
+        self._ui.save_action.triggered.connect(
+                self.on_triggered_save_action
+                )
+
         ####################################################################
         #   listen for model event signals
         ####################################################################
@@ -124,6 +129,21 @@ class MainView(QMainWindow):
             msg += 'Please open a model before exporting.'
 
             QtWidgets.QMessageBox.about(self, title, msg) 
+
+    def on_triggered_save_action(self):
+        if self._model.file_path == None:
+            # We are creating a new file.
+            # TODO:
+            print('Call save as')
+
+        else:
+            print('Save current')
+            text = self._ui.textEditor.editor.toPlainText()
+
+            self._main_controller.save_file_to_path(
+                text,
+                self._model.file_path
+            )
 
     def on_cli_ready_read(self, text):
         self._ui.console.print(text)

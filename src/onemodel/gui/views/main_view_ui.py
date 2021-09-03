@@ -74,14 +74,19 @@ class Ui_MainWindow(object):
 
         # Create open file action.
         self.open_file_action = QtWidgets.QAction("Open file", MainWindow)
-        self.open_file_action.setStatusTip("Open file in the text editor")
+        self.open_file_action.setStatusTip("Open file in the text editor.")
         self.file_menu.addAction(self.open_file_action)
         self.file_toolbar.addAction(self.open_file_action)
 
         # Create export action.
         self.export_action = QtWidgets.QAction('Export', MainWindow)
-        self.export_action.setStatusTip("Export current model into Matlab code")
+        self.export_action.setStatusTip("Export current model into Matlab code.")
         self.file_toolbar.addAction(self.export_action)
+
+        # Create save action.
+        self.save_action = QtWidgets.QAction('Save', MainWindow)
+        self.save_action.setStatusTip("Save current file.")
+        self.file_toolbar.addAction(self.save_action)
 
         self.set_title()
 

@@ -36,5 +36,13 @@ class Controller(QObject):
         self.change_file_path(file_path)
 
     @pyqtSlot()
+    def save_file_to_path(self, text, path):
+
+        with open(path, 'w') as f:
+            f.write(text)
+        
+        self.change_file_path(path)
+
+    @pyqtSlot()
     def execute_cmd(self, cmd):
         self._model._onemodel_cli.start(cmd)
