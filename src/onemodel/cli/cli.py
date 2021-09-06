@@ -8,7 +8,6 @@ import tatsu
 import onemodel
 from onemodel.dsl.repl import Repl
 from onemodel.dsl.onemodel_walker import OneModelWalker
-from onemodel.export.matlab.matlab import Matlab
 
 from onemodel.sbml2dae.dae_model import DaeModel
 from onemodel.sbml2dae.matlab import Matlab

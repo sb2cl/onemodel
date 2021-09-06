@@ -125,7 +125,6 @@ class MainView(QMainWindow):
         self._ui.update_editor_label()
     
     def on_text_changed_textEditor(self):
-        print('True')
         self._main_controller.change_is_file_modified(True)
 
     def on_triggered_open_file_action(self):
