@@ -1,5 +1,8 @@
 import re
 
+import tellurium as te
+import roadrunner
+
 def algebraic2tellurium(model):
     """ Replaces the algebraic rules of our extended tellurium with a dummy
     syntax of original tellurium
@@ -41,6 +44,10 @@ if __name__ == '__main__':
     P' = k2 * ES
     """
 
+    model = algebraic2tellurium(model_test)
+
     print(model_test)
     print('### CONVERTED INTO TELLURIUM ###')
-    print(algebraic2tellurium(model_test))
+    print(model)
+
+
