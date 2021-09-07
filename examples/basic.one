@@ -13,6 +13,7 @@ model antithetic_controller()
   x2 = 0
   x3 = 0
   x4 = 100
+  x5 = 0
   
   # Reactions
   -> x1 ; k1    
@@ -25,10 +26,9 @@ model antithetic_controller()
   
   # Equations
   x4 == 10 - x1
+  x5' = 2 - x5
 end
 
 model main
   A: antithetic_controller()
-  A.k1 = 10
-  B: antithetic_controller()
 end

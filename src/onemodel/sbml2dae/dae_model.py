@@ -9,6 +9,19 @@ class StateType(Enum):
     """
     ODE = auto()
     ALGEBRAIC = auto()
+    UNKOWN = auto()
+
+    def __repr__(self):
+        return self.name
+
+class DefinitionType(Enum):
+    """ Enum for the different ways a state can be defined.
+    """
+    REACTION = auto()
+    RULE = auto()
+
+    def __repr__(self):
+        return self.name
 
 class DaeModel:
     """ Takes a SBML model as input and creates a DAE model.
@@ -44,12 +57,14 @@ class DaeModel:
 
         # Assign properties.
         for item in self.model.getListOfParameters():
-            if item.getConstant() == True:
-                parameter = {}
-                parameter['id'] = item.id
-                parameter['value'] = item.value
+            # Skip not constant parameters.
+            if item.getConstant() == False: continue
 
-                parameters.append(parameter)
+            parameter = {}
+            parameter['id'] = item.id
+            parameter['value'] = item.value
+
+            parameters.append(parameter)
             
         return parameters
 
@@ -58,20 +73,46 @@ class DaeModel:
         """
         states = []
 
-        # Assign properties.
+        # Get species that can be a state.
         i = 0
-        for item in self.model.getListOfSpecies():
+        for species in self.model.getListOfSpecies():
             state = {}
-            state['id'] = item.id
-            state['initialCondition'] = item.getInitialConcentration()
+            state['id'] = species.id
+            state['initialCondition'] = species.getInitialConcentration()
+            state['type'] = StateType.UNKOWN
 
-            constant = item.getConstant()
-            boundary = item.getBoundaryCondition()
+            constant = species.getConstant()
+            boundary = species.getBoundaryCondition()
+
             if constant == False and boundary == False:
+                state['definitionType'] = DefinitionType.REACTION
                 state['type'] = StateType.ODE
-            elif constant == False and boundary == True:
-                state['type'] = StateType.ALGEBRAIC
 
+            elif constant == False and boundary == True:
+                state['definitionType'] = DefinitionType.RULE
+
+            state['equation'] = ''
+            state['ind'] = i
+
+            # When the initial condition is not defined, it returns nan.
+            # Check if initial condition is nan.
+            if isnan(state['initialCondition']):
+                # If so, set default initial condition to zero.
+                state['initialCondition'] = 0
+
+            states.append(state)
+            i += 1
+
+        # Get parameters that are states (parameters that change over time).
+        for parameter in self.model.getListOfParameters():
+            # Skip constant parameters.
+            if parameter.getConstant() == True: continue
+
+            state = {}
+            state['id'] = parameter.id
+            state['initialCondition'] = parameter.getValue()
+            state['type'] = StateType.UNKOWN
+            state['definitionType'] = DefinitionType.RULE
             state['equation'] = ''
             state['ind'] = i
 
@@ -92,34 +133,53 @@ class DaeModel:
             for state in states:
 
                 for product in reaction.getListOfProducts():
+                    # Skip not DefinitionType Reaction.
+                    if state['definitionType'] != DefinitionType.REACTION:
+                        continue
                     if state['id'] == product.getSpecies():
                         state['equation'] += '+ (' + equation + ')'
 
                 for reactant in reaction.getListOfReactants():
+                    # Skip not DefinitionType Reaction.
+                    if state['definitionType'] != DefinitionType.REACTION:
+                        continue
                     if state['id'] == reactant.getSpecies():
                         state['equation'] += '- (' + equation + ')'
 
         # Assign equation to algebraic states:
         for state in states:
             # Skip non algebraic states.
-            if state['type'] != StateType.ALGEBRAIC: continue
+            if state['definitionType'] != DefinitionType.RULE: continue
 
             # Check all algebraic rules.
             for rule in self.model.getListOfRules():
-                # Skip not algebraic rules.
-                if not rule.isAlgebraic(): continue
+                # Algebraic rules.
+                if rule.isAlgebraic():
                 
-                ast = rule.getMath()
-                equation = formulaToL3String(ast)
+                    ast = rule.getMath()
+                    equation = formulaToL3String(ast)
 
-                # Get the first variable of the equation.
-                p = re.compile('((?!\d)\w+)')
-                m = p.search(equation)
-                
-                # Check if the first variable match the state id.
-                if state['id'] == m.groups()[0]:
-                    # Then, it is the equation of this state.
-                    state['equation'] = equation
+                    # Get the first variable of the equation.
+                    p = re.compile('((?!\d)\w+)')
+                    m = p.search(equation)
+                    
+                    # Check if the first variable match the state id.
+                    if state['id'] == m.groups()[0]:
+                        # Then, it is the equation of this state.
+                        state['equation'] = equation
+                        state['type'] = StateType.ALGEBRAIC
+
+                # Rate rules. 
+                if rule.isRate():
+                    # Check if the state is the variable of the rate rule.
+                    if state['id'] == rule.getVariable():
+
+                        ast = rule.getMath()
+                        equation = formulaToL3String(ast)
+
+                        state['equation'] = equation
+                        state['type'] = StateType.ODE
+                        
 
         # Check if a state has an empty equation.
         for item in states:
@@ -131,7 +191,7 @@ class DaeModel:
 
 if __name__ == '__main__':
     dae = DaeModel(
-        '/home/nobel/Sync/python/workspace/onemodel/examples/model.xml'
+        '/home/nobel/Sync/python/workspace/onemodel/examples/build/basic.xml'
     )
 
     print(dae.getModelName())
