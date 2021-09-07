@@ -1,8 +1,0 @@
-VAR a = 1
-
-IF a == 1 THEN
-  PRINT("EXITED")
-  exit()
-END
-
-PRINT("NOT EXITED")

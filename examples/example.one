@@ -3,8 +3,8 @@ parameter
   k1 = 1
   k2 = 1
   k3 = 1
-  d1 = 1
-  d2 = 1
+  d1 = 0
+  d2 = 0
   d3 = 1
   gamma12 = 1
 end
@@ -30,4 +30,5 @@ reaction
   
   # Antithetic sequestration.
   x1 + x2 -> ; gamma12*x1*x2
+
 end
