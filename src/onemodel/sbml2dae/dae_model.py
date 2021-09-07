@@ -1,5 +1,6 @@
 from enum import Enum, auto
 from math import isnan
+import re
 
 from libsbml import *
 
@@ -33,6 +34,7 @@ class DaeModel:
     def getModelName(self):
         """ Return the SBML model name.
         """
+        return 'model'
         return self.model.getId()
 
     def getParameters(self):
@@ -62,7 +64,14 @@ class DaeModel:
             state = {}
             state['id'] = item.id
             state['initialCondition'] = item.getInitialConcentration()
-            state['type'] = StateType.ODE
+
+            constant = item.getConstant()
+            boundary = item.getBoundaryCondition()
+            if constant == False and boundary == False:
+                state['type'] = StateType.ODE
+            elif constant == False and boundary == True:
+                state['type'] = StateType.ALGEBRAIC
+
             state['equation'] = ''
             state['ind'] = i
 
@@ -75,7 +84,7 @@ class DaeModel:
             states.append(state)
             i += 1
 
-        # Assign equation property.
+        # Assign equation property from reactions.
         for reaction in self.model.getListOfReactions():
             ast = reaction.getKineticLaw().getMath()
             equation = formulaToL3String(ast)
@@ -90,6 +99,28 @@ class DaeModel:
                     if state['id'] == reactant.getSpecies():
                         state['equation'] += '- (' + equation + ')'
 
+        # Assign equation to algebraic states:
+        for state in states:
+            # Skip non algebraic states.
+            if state['type'] != StateType.ALGEBRAIC: continue
+
+            # Check all algebraic rules.
+            for rule in self.model.getListOfRules():
+                # Skip not algebraic rules.
+                if not rule.isAlgebraic(): continue
+                
+                ast = rule.getMath()
+                equation = formulaToL3String(ast)
+
+                # Get the first variable of the equation.
+                p = re.compile('((?!\d)\w+)')
+                m = p.search(equation)
+                
+                # Check if the first variable match the state id.
+                if state['id'] == m.groups()[0]:
+                    # Then, it is the equation of this state.
+                    state['equation'] = equation
+
         # Check if a state has an empty equation.
         for item in states:
             if item['equation'] == '':
@@ -100,15 +131,16 @@ class DaeModel:
 
 if __name__ == '__main__':
     dae = DaeModel(
-        '/home/nobel/Sync/python/workspace/onemodel/examples/sbml/example_00.xml'
+        '/home/nobel/Sync/python/workspace/onemodel/examples/model.xml'
     )
+
     print(dae.getModelName())
 
-    print(dae.getParameters())
-    print(dae.getParameters()[0]['id'])
-    print(dae.getParameters()[0]['value'])
+    print('### PARAMETERS ###')
+    for item in dae.getParameters():
+        print(item)
 
     print()
-    print(dae.getStates())
-    print(dae.getStates()[0]['id'])
-    print(dae.getStates()[0]['initialCondition'])
+    print('### STATES ###')
+    for item in dae.getStates():
+        print(item)

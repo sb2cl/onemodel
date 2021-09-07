@@ -160,7 +160,7 @@ class Matlab:
 
             elif item['type'] == StateType.ALGEBRAIC:
                 equation = self.string2matlab(item['equation'])
-                string += f'dx({i},1) = -{item["id"]} + {equation};\n\n'
+                string += f'dx({i},1) = {equation};\n\n'
                 f.write(string)
 
             i += 1
@@ -271,7 +271,7 @@ class Matlab:
 
 if __name__ == '__main__':
     dae = DaeModel(
-        '/home/nobel/Sync/python/workspace/onemodel/examples/build/test.xml'
+        '/home/nobel/Sync/python/workspace/onemodel/examples/model.xml'
     )
 
     matlab = Matlab(

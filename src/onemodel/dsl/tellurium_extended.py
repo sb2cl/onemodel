@@ -21,7 +21,7 @@ def algebraic2tellurium(model):
         # Create the dummy syntax for original tellurium.
         g = m.groups()
         string = f'species {g[0]}_algebraic_rule__ := {g[0]} - ({g[1]})'
-        string += f'\nspecies {g[0]} = 0'
+        string += f'\nspecies {g[0]}'
 
         # Replace algebraic rule with the dummy syntax.
         model = p.sub(string, model, count=1)
@@ -75,23 +75,33 @@ def tellurium2sbml(sbml):
 
 if __name__ == '__main__':
     model_test_str = """
-    model test_model()
-        k1_on = 100000
-        k1_off = 100000
-        k2 = 1
-        
-        P = 0
-        S = 10
-        E_tot = 1
-        
-        K_m := (k1_off + k2) / k1_on
-        
-        ES == E*S/K_m
-        E == E_tot - ES
-        
-        P' = k2 * ES
-    end
-    A: test_model()
+    
+    # Parameters
+    k1 = 1
+    k2 = 1
+    k3 = 1
+    d1 = 0
+    d2 = 0
+    d3 = 1
+    gamma12 = 1
+
+    # Species
+    x1 = 0
+    x2 = 0
+    x3 = 0
+    x4 = 100
+    
+    # Reactions
+    -> x1 ; k1    
+    -> x2 ; k2*x3
+    -> x3 ; k3*x1
+    x1 -> ; d1*x1
+    x2 -> ; d2*x2
+    x3 -> ; d3*x3
+    x1 + x2 -> ; gamma12*x1*x2
+
+    # Equations
+    x4 == 10 - x1
     """
 
     model_str = algebraic2tellurium(model_test_str)
