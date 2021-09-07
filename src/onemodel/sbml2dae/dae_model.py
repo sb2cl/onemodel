@@ -9,6 +9,7 @@ class StateType(Enum):
     """
     ODE = auto()
     ALGEBRAIC = auto()
+    ASSIGMENT = auto()
     UNKOWN = auto()
 
     def __repr__(self):
@@ -179,7 +180,16 @@ class DaeModel:
 
                         state['equation'] = equation
                         state['type'] = StateType.ODE
-                        
+
+                # Assigment rules.
+                if rule.isAssignment():
+                    # Check if the state is the variable of the rate rule.
+                    if state['id'] == rule.getVariable():
+                        ast = rule.getMath()
+                        equation = formulaToL3String(ast)
+
+                        state['equation'] = equation
+                        state['type'] = StateType.ASSIGMENT
 
         # Check if a state has an empty equation.
         for item in states:
