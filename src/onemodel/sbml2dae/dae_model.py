@@ -34,7 +34,7 @@ class DaeModel:
     def getModelName(self):
         """ Return the SBML model name.
         """
-        return 'model'
+        return 'basic'
         return self.model.getId()
 
     def getParameters(self):

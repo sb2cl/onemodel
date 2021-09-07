@@ -8,9 +8,13 @@ import tatsu
 import onemodel
 from onemodel.dsl.repl import Repl
 from onemodel.dsl.onemodel_walker import OneModelWalker
+from onemodel.dsl.tellurium_extended import algebraic2tellurium, tellurium2sbml
 
 from onemodel.sbml2dae.dae_model import DaeModel
 from onemodel.sbml2dae.matlab import Matlab
+
+import tellurium as te
+import roadrunner
 
 @click.group()
 def cli():
@@ -108,28 +112,42 @@ def onemodel2sbml(input_file, filename, output):
     """
     print('### Convert onemodel into sbml ###')
 
-    # Load the grammar.
-    grammar = files('onemodel.dsl').joinpath('onemodel.ebnf').read_text()
+    ## Load the grammar.
+    #grammar = files('onemodel.dsl').joinpath('onemodel.ebnf').read_text()
 
-    # Load the parser with the grammar.
-    parser = tatsu.compile(grammar, asmodel=True)
-    print('\tParser initialized with "onemodel" syntax.')
+    ## Load the parser with the grammar.
+    #parser = tatsu.compile(grammar, asmodel=True)
+    #print('\tParser initialized with "onemodel" syntax.')
 
-    # Parse the data into an AST model.
-    model = parser.parse(open(input_file).read())
-    print('\tParsed input file into an AST model.')
+    ## Parse the data into an AST model.
+    #model = parser.parse(open(input_file).read())
+    #print('\tParsed input file into an AST model.')
 
-    # Load the AST model walker.
-    walker = OneModelWalker(filename)
-    print('\tAST model walker initialized for "onemodel" syntax.')
+    ## Load the AST model walker.
+    #walker = OneModelWalker(filename)
+    #print('\tAST model walker initialized for "onemodel" syntax.')
 
-    # Walk the AST model.
-    result = walker.walk(model)
-    print('\tWalk the AST model.')
+    ## Walk the AST model.
+    #result = walker.walk(model)
+    #print('\tWalk the AST model.')
 
-    # Get SBML representation.
-    sbml = walker.getSBML()
-    print('\tExport SBML.')
+    ## Get SBML representation.
+    #sbml = walker.getSBML()
+    #print('\tExport SBML.')
+
+    # Read file model.
+    model_ext_str = open(input_file).read()
+
+    # Convert from tellurium_extended into tellurium.
+    model_str = algebraic2tellurium(model_ext_str)
+
+    # Convert tellurium into sbml
+    r = te.loada(model_str)
+    sbml = r.getSBML()
+    sbml = tellurium2sbml(sbml)
+
+    # Convert form tellurium sbml into tellurium-extended sbml.
+    sbml = tellurium2sbml(sbml)
 
     # Save SBML.
     sbml_filename = f'{output}/{filename}.xml' 
