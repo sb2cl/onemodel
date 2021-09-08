@@ -75,6 +75,7 @@ atom
   | float
   | integer
   | string
+  | acces_identifier
   ;
 
 
@@ -99,6 +100,11 @@ string::str
   "'" @:/[^\\\r\n\f']*/ "'"
   ;
 
+# Access the value of an identifier.
+acces_identifier::AccessIdentifier
+  = 
+  name:identifier
+  ;
 
 # Definition of identifiers
 # Identifiers cannot have a keyword name.
