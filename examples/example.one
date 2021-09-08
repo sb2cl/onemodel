@@ -35,6 +35,8 @@ reaction
   x1 + x2 -> ; gamma12*x1*x2
 end
 
-rule x4' = 0.1
-rule x5 := 90
-rule x6 == x4 + x5
+rule
+  x4'  = 0.1
+  x5  := 90
+  x6  == x4 + x5
+end

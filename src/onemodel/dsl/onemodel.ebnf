@@ -26,10 +26,11 @@ statement
   | 'species'   @:species   {',' | @:species}
   | 'parameter' @:parameter {',' | @:parameter}
   | 'reaction'  @:reaction 
-  | 'species'   newline {newline | @:species newline} 'end'
+  | 'rule'      @:rule 
+  | 'species'   newline {newline | @:species newline}   'end'
   | 'parameter' newline {newline | @:parameter newline} 'end'
-  | 'reaction'  newline {newline | @:reaction newline} 'end'
-  | 'rule' @:rule 
+  | 'reaction'  newline {newline | @:reaction newline}  'end'
+  | 'rule'      newline {newline | @:rule newline}      'end'
   | function
   | atom
   ;
