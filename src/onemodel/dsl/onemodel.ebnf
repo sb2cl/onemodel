@@ -63,6 +63,7 @@ rule
   =
   | rate_rule
   | assignment_rule 
+  | algebraic_rule
   ;
 
 
@@ -76,6 +77,12 @@ assignment_rule::AssignmentRule
   =
   | name:identifier ':' variable:identifier ':=' math:formula
   | variable:identifier ':=' math:formula
+  ;
+
+
+algebraic_rule::AlgebraicRule
+  =
+  [name:identifier ':'] variable:identifier '==' math:formula
   ;
 
 

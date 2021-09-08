@@ -207,13 +207,13 @@ class Matlab:
                 equation = self.string2matlab(item['equation'])
                 string += f'dx({i},1) = {equation};\n\n'
                 f.write(string)
+                i += 1
 
             elif item['type'] == StateType.ALGEBRAIC:
                 equation = self.string2matlab(item['equation'])
                 string += f'dx({i},1) = {equation};\n\n'
                 f.write(string)
-
-            i += 1
+                i += 1
 
         f.write(f'end\n')
         f.close()

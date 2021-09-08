@@ -450,6 +450,44 @@ class OneModelWalker(NodeWalker):
 
         return r
 
+    def walk_AlgebraicRule(self, node):
+        name = node.name
+        variable = node.variable
+        math = node.math
+
+        if name == None:
+            name = f'_R{self.model.getNumRules()}'
+
+        # We have to pass the variable to the other equation side.
+        math = f'{variable} - ({math})'
+
+        math_ast = parseL3Formula(math)
+
+        r = self.model.createAlgebraicRule ()
+
+        self.symbol_table.set(name, r)
+
+        check(
+            r,
+            f'create algebraic rule {name}'
+        )
+
+        check(
+            r.setIdAttribute(name), 
+            f'set algebraic rule id {name}'
+        )
+
+        check(
+            r.setMath(math_ast),
+            f'set math on algebraic rule {name}'
+        )
+
+        return r
+
+        print(name)
+        print(variable)
+        print(math)
+
     def walk_PrintSBML(self, node):
         print(self.getSBML())
         return
