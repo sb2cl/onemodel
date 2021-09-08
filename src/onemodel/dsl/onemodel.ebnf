@@ -61,13 +61,21 @@ reaction::Reaction
 
 rule
   =
-  rate_rule
+  | rate_rule
+  | assignment_rule 
   ;
 
 
 rate_rule::RateRule
   =
   [name:identifier ':'] variable:identifier "'" '=' math:formula
+  ;
+
+
+assignment_rule::AssignmentRule
+  =
+  | name:identifier ':' variable:identifier ':=' math:formula
+  | variable:identifier ':=' math:formula
   ;
 
 

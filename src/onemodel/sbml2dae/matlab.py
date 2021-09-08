@@ -75,7 +75,7 @@ class Matlab:
         states_num = len(self.dae.getStates())
 
         # Write ODE and ALGEBRAIC states.
-        f.write(f'% States ODE and ALGEBRAIC:\n')
+        f.write(f'% ODE and algebraic states:\n')
         i = 1
         for state in self.dae.getStates():
             # Skip not ODE or ALGEBRAIC states.
@@ -87,7 +87,7 @@ class Matlab:
             i += 1
         f.write(f'\n')
 
-        f.write(f'% States ASSIGMENT:\n')
+        f.write(f'% Assigment states:\n')
 
         while len(known_states) != states_num:
             for state in self.dae.getStates():
@@ -242,20 +242,22 @@ class Matlab:
         f.write(f'out.t = t;')
         f.write(f'\n')
 
-        # Save ODE and ALGEBRAIC variables.
+        # Crate ones vector.
+        f.write(f'\n')
+        f.write('% Vector for extending single-value states and parameters.\n')
+        f.write('ones_t = ones(size(t));\n')
+        f.write(f'\n')
+
+        # Save states.
         f.write(f'\n% Save states.\n')
         for item in self.dae.getStates():
-            if item['type'] == StateType.ODE:
-                f.write(f'out.{item["id"]} = {item["id"]};\n')
-
-            if item['type'] == StateType.ALGEBRAIC:
-                f.write(f'out.{item["id"]} = {item["id"]}; % (algebraic)\n')
+                f.write(f'out.{item["id"]} = {item["id"]}.*ones_t;\n')
         f.write(f'\n')
 
         # Save parameters.
         f.write(f'% Save parameters.\n')
         for item in self.dae.getParameters():
-            f.write(f'out.{item["id"]} = p.{item["id"]}*ones(size(t));\n')
+            f.write(f'out.{item["id"]} = p.{item["id"]}.*ones_t;\n')
         f.write(f'\n')
 
         f.write(f'end\n')

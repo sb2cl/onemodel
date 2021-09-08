@@ -414,6 +414,42 @@ class OneModelWalker(NodeWalker):
 
         return r
 
+    def walk_AssignmentRule(self, node):
+        name = node.name
+        variable = node.variable
+        math = node.math
+
+        if name == None:
+            name = f'_R{self.model.getNumRules()}'
+
+        math_ast = parseL3Formula(math)
+
+        r = self.model.createAssignmentRule ()
+
+        self.symbol_table.set(name, r)
+
+        check(
+            r,
+            f'create assignment rule {name}'
+        )
+
+        check(
+            r.setIdAttribute(name), 
+            f'set assignment rule id {name}'
+        )
+
+        check(
+            r.setVariable(variable),
+            f'set variable on assignment rule {name}'
+        )
+
+        check(
+            r.setMath(math_ast),
+            f'set math on assignment rule {name}'
+        )
+
+        return r
+
     def walk_PrintSBML(self, node):
         print(self.getSBML())
         return
