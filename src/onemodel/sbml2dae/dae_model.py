@@ -18,7 +18,11 @@ class StateType(Enum):
 class DefinitionType(Enum):
     """ Enum for the different ways a state can be defined.
     """
+    # Only reactions define the equation of the state.
     REACTION = auto()
+    # Reactions or rules can define the equation of the state, but no both.
+    REACTION_OR_RULE = auto()
+    # Only rules define the equation of the state.
     RULE = auto()
 
     def __repr__(self):
@@ -85,7 +89,7 @@ class DaeModel:
             boundary = species.getBoundaryCondition()
 
             if constant == False and boundary == False:
-                state['definitionType'] = DefinitionType.REACTION
+                state['definitionType'] = DefinitionType.REACTION_OR_RULE
                 state['type'] = StateType.ODE
 
             elif constant == False and boundary == True:
@@ -131,25 +135,38 @@ class DaeModel:
             equation = formulaToL3String(ast)
 
             for state in states:
+                # Skip states that only are defined by rules.
+                if state['definitionType'] == DefinitionType.RULE:
+                    continue
 
                 for product in reaction.getListOfProducts():
-                    # Skip not DefinitionType Reaction.
-                    if state['definitionType'] != DefinitionType.REACTION:
-                        continue
                     if state['id'] == product.getSpecies():
                         state['equation'] += '+ (' + equation + ')'
+                            
+                        # Once the species is found in a reacion.
+                        if state['definitionType'] == DefinitionType.REACTION_OR_RULE:
+                            # Set the species to be only defined by reactions.
+                            state['definitionType'] = DefinitionType.REACTION
 
                 for reactant in reaction.getListOfReactants():
-                    # Skip not DefinitionType Reaction.
-                    if state['definitionType'] != DefinitionType.REACTION:
-                        continue
                     if state['id'] == reactant.getSpecies():
                         state['equation'] += '- (' + equation + ')'
 
+                        # Once the species is found in a reacion.
+                        if state['definitionType'] == DefinitionType.REACTION_OR_RULE:
+                            # Set the species to be only defined by reactions.
+                            state['definitionType'] = DefinitionType.REACTION
+
+
         # Assign equation to algebraic states:
         for state in states:
-            # Skip non algebraic states.
-            if state['definitionType'] != DefinitionType.RULE: continue
+            # All reactions are set, so states can only be defined now by rules.
+            if state['definitionType'] == DefinitionType.REACTION_OR_RULE:
+                state['definitionType'] = DefinitionType.RULE
+
+            # Skip not rule definiton states..
+            if state['definitionType'] != DefinitionType.RULE: 
+                continue
 
             # Check all algebraic rules.
             for rule in self.model.getListOfRules():
@@ -200,7 +217,7 @@ class DaeModel:
 
 if __name__ == '__main__':
     dae = DaeModel(
-        '/home/nobel/Sync/python/workspace/onemodel/examples/build/basic.xml'
+        '/home/nobel/Sync/python/workspace/onemodel/examples/build/example.xml'
     )
 
     print(dae.getModelName())

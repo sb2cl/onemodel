@@ -76,7 +76,7 @@ class OneModelWalker(NodeWalker):
 
         # Create and empty SBMLDocument object.
         try:
-            self.document = SBMLDocument(3, 1)
+            self.document = SBMLDocument(3, 2)
         except ValueError:
             raise SystemExit('Could not create SBMLDocument object')
 
@@ -150,6 +150,8 @@ class OneModelWalker(NodeWalker):
 
         s = self.model.createSpecies()
 
+        self.symbol_table.set(name, s)
+
         check(
             s, 
             f'create species {name}'
@@ -207,6 +209,8 @@ class OneModelWalker(NodeWalker):
             
         p = self.model.createParameter()
 
+        self.symbol_table.set(name, p)
+
         check(
             p,
             f'create parameter {name}'
@@ -257,6 +261,8 @@ class OneModelWalker(NodeWalker):
         # Create reaction.
         r = self.model.createReaction()
 
+        self.symbol_table.set(name, r)
+
         check(
             r,
             f'create reaction {name}'
@@ -270,11 +276,6 @@ class OneModelWalker(NodeWalker):
         check(
             r.setReversible(False), 
             'set reaction reversibility flag'
-        )
-
-        check(
-            r.setFast(False),
-            'set reaction "fast" attribute'
         )
 
         # Create reactants.
@@ -377,10 +378,45 @@ class OneModelWalker(NodeWalker):
 
         return r
 
+    def walk_RateRule(self, node):
+        name = node.name
+        variable = node.variable
+        math = node.math
+
+        if name == None:
+            name = f'_R{self.model.getNumRules()}'
+
+        math_ast = parseL3Formula(math)
+
+        r = self.model.createRateRule()
+
+        self.symbol_table.set(name, r)
+
+        check(
+            r,
+            f'create rate rule {name}'
+        )
+
+        check(
+            r.setIdAttribute(name), 
+            f'set rate rule id {name}'
+        )
+
+        check(
+            r.setVariable(variable),
+            f'set variable on rate rule {name}'
+        )
+
+        check(
+            r.setMath(math_ast),
+            f'set math on rate rule {name}'
+        )
+
+        return r
+
     def walk_PrintSBML(self, node):
         print(self.getSBML())
         return
-
 
 if __name__ == '__main__':
     print(create_model())
