@@ -151,7 +151,7 @@ class MainView(QMainWindow):
             cmd = 'python -m onemodel.cli.cli'
             cmd += f' run {self._model._file_path}'
 
-            self._ui.console.print(f'>> {cmd}')
+            self._ui.console.printCommand(cmd)
             self._main_controller.execute_cmd(cmd)
 
     def on_triggered_export_action(self):
@@ -161,7 +161,7 @@ class MainView(QMainWindow):
             cmd = 'python -m onemodel.cli.cli'
             cmd += f' export {self._model._file_path}'
 
-            self._ui.console.print(f'>> {cmd}')
+            self._ui.console.printCommand(cmd)
             self._main_controller.execute_cmd(cmd)
 
         else:

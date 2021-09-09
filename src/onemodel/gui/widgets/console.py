@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from PyQt5.QtWidgets import QLineEdit, QPlainTextEdit
 from PyQt5.QtGui import QFontDatabase, QTextCursor
 from PyQt5.QtCore import QProcess
@@ -32,6 +34,15 @@ class Console:
         """
         self.output.appendPlainText(string)
         self.output.moveCursor(QTextCursor.End)
+
+    def printCommand(self, string):
+        """ Print a command into the console with time and >>.
+        """
+
+        now = datetime.now()
+        current_time = now.strftime("%H:%M:%S")
+        string = f'[{current_time}]>> ' + string
+        self.print(string)
 
 #    def process_input(self):
 #        """ Process the command in the input box.
