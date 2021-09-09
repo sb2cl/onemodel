@@ -33,6 +33,34 @@ def repl():
     repl = Repl()
     repl.run()
 
+@cli.command(short_help='Run a onemodel file')
+@click.argument('input_file', 
+        type=click.Path(exists=True))
+def run(input_file):
+    """ Run the INPUT_FILE with onemodel repl.
+    """
+    # Get the filename (without extension) and the extension.
+    base = os.path.basename(input_file)
+    (filename, extension) = os.path.splitext(base)
+
+    # Load the grammar.
+    grammar = files('onemodel.dsl').joinpath('onemodel.ebnf').read_text()
+
+    # Load the parser with the grammar.
+    parser = tatsu.compile(grammar, asmodel=True)
+
+    # Parse the data into an AST model.
+    model = parser.parse(open(input_file).read())
+
+    # Init context for walker.
+    context = Context('<program>')
+    context.symbol_table = GlobalSymbolTable()
+
+    # Load the AST model walker.
+    walker = OneModelWalker(filename, context)
+
+    walker.walk(model)
+
 @cli.command(short_help='Export model')
 @click.argument('input_file', 
         type=click.Path(exists=True))
