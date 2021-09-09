@@ -31,8 +31,7 @@ statement
   | 'parameter' newline {newline | @:parameter newline} 'end'
   | 'reaction'  newline {newline | @:reaction newline}  'end'
   | 'rule'      newline {newline | @:rule newline}      'end'
-  | function
-  | atom
+  | call
   ;
 
 
@@ -87,15 +86,10 @@ algebraic_rule::AlgebraicRule
   ;
 
 
-function
+call::Call
   =
-  printSBML
-  ;
-
-
-printSBML::PrintSBML
-  =
-  'printSBML'
+  | value:atom '(' [arguments:atom {',' arguments:atom}] ')'
+  | next:atom
   ;
 
 

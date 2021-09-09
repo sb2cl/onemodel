@@ -77,6 +77,12 @@ class OneModelWalker(NodeWalker):
         # model.
         self.symbol_table = SymbolTable()
 
+        function_name = 'hello_world'
+        self.symbol_table.set(
+                function_name,
+                BuiltInFunction(function_name)
+                )
+
         nest = SymbolTable(self.symbol_table)
         nest.set('var', 666)
 
@@ -157,6 +163,19 @@ class OneModelWalker(NodeWalker):
         value = base.get(name)
 
         return value
+
+    def walk_Call(self, node):
+        if node.next:
+            return self.walk(node.next)
+
+        value = self.walk(node.value)
+
+        arguments = node.arguments
+
+        # TODO: Change this to allow arguments.
+        result = value(None)
+
+        return result
 
     def walk_Species(self, node):
         name = node.name
@@ -510,5 +529,6 @@ class OneModelWalker(NodeWalker):
         return
 
 if __name__ == '__main__':
-    value = BuiltInFunction('test')
+    value = BuiltInFunction('hello_world')
     print(value)
+    value()

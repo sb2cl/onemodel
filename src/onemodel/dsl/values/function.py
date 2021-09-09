@@ -11,7 +11,7 @@ class BaseFunction(Value):
         self.name = name
 
 class BuiltInFunction(BaseFunction):
-    """ BuiltInFunctions are functions hardcoded into the symbol table.
+    """ BuiltInFunctions are functions loaded into the symbol_table.
     """
     def __init__(self, name):
         """ Initialize BuiltInFunction.
@@ -23,3 +23,22 @@ class BuiltInFunction(BaseFunction):
 
     def __repr__(self):
         return self.__str__()
+
+    def __call__(self, *args):
+        method_name = f'call_{self.name}'
+        method = getattr(self, method_name, None)
+
+        result = method(None)
+
+        return result
+
+    ### Definition of built-in functions as methods ###
+
+    def call_hello_world(self, context):
+        """ Hello world built-in function.
+        """
+        print('Hello world!')
+
+        return None
+
+    call_hello_world.arg_names = []
