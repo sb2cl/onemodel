@@ -3,6 +3,9 @@ import sys
 import tatsu
 from tatsu.walkers import NodeWalker
 from libsbml import *
+
+from onemodel.dsl.values.value import Value
+from onemodel.dsl.values.function import BuiltInFunction
  
 def check(value, message):
     """If 'value' is None, prints an error message constructed using
@@ -74,6 +77,11 @@ class OneModelWalker(NodeWalker):
         # model.
         self.symbol_table = SymbolTable()
 
+        nest = SymbolTable(self.symbol_table)
+        nest.set('var', 666)
+
+        self.symbol_table.set('nest', nest)
+
         # Create and empty SBMLDocument object.
         try:
             self.document = SBMLDocument(3, 2)
@@ -138,6 +146,15 @@ class OneModelWalker(NodeWalker):
     def walk_AccessIdentifier(self, node):
         name = node.name
         value = self.symbol_table.get(name)
+
+        return value
+
+    def walk_AccessProperty(self, node):
+        base = node.base
+        name = node.name
+        
+        base = self.symbol_table.get(base)
+        value = base.get(name)
 
         return value
 
@@ -493,4 +510,5 @@ class OneModelWalker(NodeWalker):
         return
 
 if __name__ == '__main__':
-    print(create_model())
+    value = BuiltInFunction('test')
+    print(value)
