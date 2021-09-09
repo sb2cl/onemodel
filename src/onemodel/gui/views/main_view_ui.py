@@ -78,6 +78,11 @@ class Ui_MainWindow(object):
         self.file_menu.addAction(self.open_file_action)
         self.file_toolbar.addAction(self.open_file_action)
 
+        # Create run action.
+        self.run_action = QtWidgets.QAction('Run', MainWindow)
+        self.run_action.setStatusTip("Run current model.")
+        self.file_toolbar.addAction(self.run_action)
+
         # Create export action.
         self.export_action = QtWidgets.QAction('Export', MainWindow)
         self.export_action.setStatusTip("Export current model into Matlab code.")

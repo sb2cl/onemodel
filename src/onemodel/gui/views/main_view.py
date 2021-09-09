@@ -44,6 +44,11 @@ class MainView(QMainWindow):
                 self.on_triggered_open_file_action
                 )
 
+        # Triggered run action.
+        self._ui.run_action.triggered.connect(
+                self.on_triggered_run_action
+                )
+
         # Triggered export_action.
         self._ui.export_action.triggered.connect(
                 self.on_triggered_export_action
@@ -138,6 +143,16 @@ class MainView(QMainWindow):
 
         if file_path != '':
             self._main_controller.open_file(file_path)
+
+    def on_triggered_run_action(self):
+        file_path = self._model._file_path
+
+        if file_path != None:
+            cmd = 'python -m onemodel.cli.cli'
+            cmd += f' run {self._model._file_path}'
+
+            self._ui.console.print(f'>> {cmd}')
+            self._main_controller.execute_cmd(cmd)
 
     def on_triggered_export_action(self):
         file_path = self._model._file_path

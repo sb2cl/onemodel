@@ -59,6 +59,7 @@ def run(input_file):
     # Load the AST model walker.
     walker = OneModelWalker(filename, context)
 
+    # Walk the model.
     walker.walk(model)
 
 @cli.command(short_help='Export model')
