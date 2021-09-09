@@ -12,7 +12,7 @@
 
 
 # Keywords reserved.
-@@keyword:: species parameter reaction end rule
+@@keyword:: species parameter reaction end rule function
 
 
 start
@@ -98,6 +98,7 @@ atom
   | float
   | integer
   | string
+  | function_definition
   | access_property
   | access_identifier
   ;
@@ -122,6 +123,14 @@ float::Float
 string::String
   = 
   "'" value:/[^\\\r\n\f']*/ "'"
+  ;
+
+
+function_definition::FunctionDefinition
+  =
+  'function' name:identifier '(' args:identifier {',' args:identifier} ')' newline 
+  {newline | body:statement}
+  'end'
   ;
 
 

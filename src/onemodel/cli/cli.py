@@ -8,7 +8,8 @@ import tatsu
 import onemodel
 from onemodel.dsl.repl import Repl
 from onemodel.dsl.onemodel_walker import OneModelWalker
-from onemodel.dsl.tellurium_extended import algebraic2tellurium, tellurium2sbml
+from onemodel.dsl.context import Context
+from onemodel.dsl.global_symbol_table import GlobalSymbolTable
 
 from onemodel.sbml2dae.dae_model import DaeModel
 from onemodel.sbml2dae.matlab import Matlab
@@ -123,8 +124,12 @@ def onemodel2sbml(input_file, filename, output):
     model = parser.parse(open(input_file).read())
     print('\tParsed input file into an AST model.')
 
+    # Init context for walker.
+    context = Context('<program>')
+    context.symbol_table = GlobalSymbolTable()
+
     # Load the AST model walker.
-    walker = OneModelWalker(filename)
+    walker = OneModelWalker(filename, context)
     print('\tAST model walker initialized for "onemodel" syntax.')
 
     # Walk the AST model.

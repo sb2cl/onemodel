@@ -5,6 +5,7 @@ from tatsu.walkers import NodeWalker
 from libsbml import *
 
 from onemodel.dsl.values.python_value import PythonValue
+from onemodel.dsl.values.function import Function
 
 def check(value, message):
     """If 'value' is None, prints an error message constructed using
@@ -155,7 +156,7 @@ class OneModelWalker(NodeWalker):
 
     def walk_Species(self, node):
         name = node.name
-        value = self.walk(node.value)
+        value = self.walk(node.value).value
 
         if value == None:
             value = 0
@@ -210,7 +211,7 @@ class OneModelWalker(NodeWalker):
 
     def walk_Parameter(self, node):
         name = node.name
-        value = self.walk(node.value)
+        value = self.walk(node.value).value
 
         if value == None:
             value = 0
@@ -511,3 +512,19 @@ class OneModelWalker(NodeWalker):
 
         return PythonValue(value)
 
+    def walk_FunctionDefinition(self, node):
+        name = node.name
+        args = node.args
+        body = node.body
+
+        if args == None:
+            args = []
+
+        if type(args) != list:
+            args = [args]
+
+        f = Function(name, args, body)
+
+        self.context.symbol_table.set(name, f)
+
+        return f

@@ -1,4 +1,4 @@
-from onemodel.dsl.values.function import BaseFunction
+from onemodel.dsl.values.base_function import BaseFunction
 
 class BuiltInFunction(BaseFunction):
     """ BuiltInFunctions are functions loaded into the symbol_table.

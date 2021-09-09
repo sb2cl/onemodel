@@ -1,55 +1,34 @@
-from onemodel.dsl.values.value import Value
-from onemodel.dsl.context import Context
-from onemodel.dsl.symbol_table import SymbolTable
+from onemodel.dsl.values.base_function import BaseFunction
 
-class BaseFunction(Value):
-    """ Base function class for defining builting functions and user defined
-    functions.
+class Function(BaseFunction):
+    """ User-defined function.
     """
-    def __init__(self, name = '<anonymous>'):
-        """ Initialize BaseFunction.
+    def __init__(self, name, arg_names, body_node):
+        """ Initialize Function.
         """
-        super().__init__()
-        self.name = name
+        super().__init__(name)
+        self.arg_names = arg_names
+        self.body_node = body_node
 
-    def generate_new_context(self):
-        """ Generate a new context for executing the function.
-        """
-        new_context = Context(
-            self.name, 
-            self.context
+    def __str__(self):
+         return f"<function {self.name}>"
+
+    def __repr__(self):
+         return self.__str__()
+
+    def __call__(self, args):
+        from onemodel.dsl.onemodel_walker import OneModelWalker
+
+        exec_context = self.generate_new_context()
+
+        self.check_and_populate_args(
+            self.arg_names, 
+            args,
+            exec_context
         )
 
-        new_context.symbol_table = SymbolTable(
-            new_context.parent.symbol_table
-        )
+        walker = OneModelWalker('repl', exec_context)
+        result = walker.walk(self.body_node)
 
-        return new_context
+        return result
 
-    def check_arguments(self, arg_names, args):
-        """ Check the amount of arguments passed.
-        """
-        if len(args) > len(arg_names):
-            raise Exception(
-                f'{len(args) - len(arg_names)} too many arguments passed to {self}'
-                )
-
-        if len(args) < len(arg_names):
-            raise Exception(
-                f'{len(args) - len(arg_names)} too few arguments passed to {self}'
-                )
-
-    def populate_args(self, arg_names, args, exec_context):
-        """ Populate the arguments into the context symbol table.
-        """
-        for i in range(len(args)):
-            arg_name = arg_names[i] 
-            arg_value = args[i]
-            arg_value.set_context(exec_context)
-            exec_context.symbol_table.set(arg_name, arg_value)
-
-    def check_and_populate_args(self, arg_names, args, exec_context):
-        """ Check and populate arguments.
-        """
-        self.check_arguments(arg_names, args)
-        self.populate_args(arg_names, args, exec_context)

@@ -40,3 +40,10 @@ rule
   x5  := 90
   x6  == x4 + x5
 end
+
+function greetings(name)
+  print('Greetings')
+  print(name)
+end
+
+greetings('nobel')
