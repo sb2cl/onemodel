@@ -2,7 +2,7 @@ from PyQt5.QtWidgets import QPlainTextEdit
 from PyQt5.QtGui import QFontDatabase
 
 from onemodel.gui.widgets.syntax_highlight import OneModelHighlighter, COLORS
-
+    
 class TextEditor:
     """ Main file text editor of onemodel-gui.
     """
