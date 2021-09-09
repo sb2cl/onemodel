@@ -6,6 +6,8 @@ from tatsu.walkers import NodeWalker
 
 from onemodel.utils.setup_input_history import setup_input_history
 from onemodel.dsl.onemodel_walker import OneModelWalker
+from onemodel.dsl.context import Context
+from onemodel.dsl.symbol_table import global_symbol_table
 
 class Repl:
     """ REPL
@@ -18,16 +20,10 @@ class Repl:
         
         @return: REPL
         """
-        self.init_global_symbol_table()
-    
-    def init_global_symbol_table(self):
-        """ INIT_GLOBAL_SYMBOL_TABLE
-        @brief: Inits the symbol table
-        
-        @return: SymbolTable
-        """
-        pass
-       
+        # Init context.
+        self.context = Context('<program>')
+        self.context.symbol_table = global_symbol_table
+      
     def run(self):
         """ RUN
         @brief: Run the REPL 
@@ -42,7 +38,11 @@ class Repl:
         parser = tatsu.compile(grammar, asmodel=True)
         
         # Init the model walker.
-        walker = OneModelWalker('repl')
+        walker = OneModelWalker('repl', self.context)
+
+        # Add the walker to the main context. 
+        # We will need it for some built-in functions.
+        self.context.walker = walker
 
         while continue_loop:
             # 1. READ

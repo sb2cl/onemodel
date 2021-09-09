@@ -4,9 +4,6 @@ import tatsu
 from tatsu.walkers import NodeWalker
 from libsbml import *
 
-from onemodel.dsl.values.value import Value
-from onemodel.dsl.values.function import BuiltInFunction
- 
 def check(value, message):
     """If 'value' is None, prints an error message constructed using
     'message' and then exits with status code 1.  If 'value' is an integer,
@@ -47,46 +44,12 @@ def getAstNames(ast):
 
     return names
 
-class SymbolTable:
-  def __init__(self, parent=None):
-    self.symbols = {}
-    self.parent = parent
-
-  def get(self, name):
-    value = self.symbols.get(name, None)
-
-    if value == None and self.parent:
-        return self.parent.get(name)
-    
-    if value == None:
-        raise NameError(f"NameError: name '{name}' is not defined")
-    
-    return value
-
-  def set(self, name, value):
-    self.symbols[name] = value
-
-  def remove(self, name):
-    del self.symbols[name]
-
-
 class OneModelWalker(NodeWalker):
-    def __init__(self, model_name):
-        # Create the symbol table, we will store all objects here.
+    def __init__(self, model_name, context):
+        # Create context with the symbol table where we will save all objects.
         # libSBML objects will be stored both in the symbol table and in the
         # model.
-        self.symbol_table = SymbolTable()
-
-        function_name = 'hello_world'
-        self.symbol_table.set(
-                function_name,
-                BuiltInFunction(function_name)
-                )
-
-        nest = SymbolTable(self.symbol_table)
-        nest.set('var', 666)
-
-        self.symbol_table.set('nest', nest)
+        self.context = context
 
         # Create and empty SBMLDocument object.
         try:
@@ -118,7 +81,7 @@ class OneModelWalker(NodeWalker):
         # Create a default_compartment.
         c = self.model.createCompartment()
 
-        self.symbol_table.set('default_compartment', c)
+        self.context.symbol_table.set('default_compartment', c)
 
         check(c, 'create default compartment')
         check(c.setId('default_compartment'), 'set compartment id')
@@ -151,7 +114,7 @@ class OneModelWalker(NodeWalker):
 
     def walk_AccessIdentifier(self, node):
         name = node.name
-        value = self.symbol_table.get(name)
+        value = self.context.symbol_table.get(name)
 
         return value
 
@@ -159,7 +122,7 @@ class OneModelWalker(NodeWalker):
         base = node.base
         name = node.name
         
-        base = self.symbol_table.get(base)
+        base = self.context.symbol_table.get(base)
         value = base.get(name)
 
         return value
@@ -173,7 +136,7 @@ class OneModelWalker(NodeWalker):
         arguments = node.arguments
 
         # TODO: Change this to allow arguments.
-        result = value(None)
+        result = value(self.context)
 
         return result
 
@@ -186,7 +149,7 @@ class OneModelWalker(NodeWalker):
 
         s = self.model.createSpecies()
 
-        self.symbol_table.set(name, s)
+        self.context.symbol_table.set(name, s)
 
         check(
             s, 
@@ -245,7 +208,7 @@ class OneModelWalker(NodeWalker):
             
         p = self.model.createParameter()
 
-        self.symbol_table.set(name, p)
+        self.context.symbol_table.set(name, p)
 
         check(
             p,
@@ -297,7 +260,7 @@ class OneModelWalker(NodeWalker):
         # Create reaction.
         r = self.model.createReaction()
 
-        self.symbol_table.set(name, r)
+        self.context.symbol_table.set(name, r)
 
         check(
             r,
@@ -426,7 +389,7 @@ class OneModelWalker(NodeWalker):
 
         r = self.model.createRateRule()
 
-        self.symbol_table.set(name, r)
+        self.context.symbol_table.set(name, r)
 
         check(
             r,
@@ -462,7 +425,7 @@ class OneModelWalker(NodeWalker):
 
         r = self.model.createAssignmentRule ()
 
-        self.symbol_table.set(name, r)
+        self.context.symbol_table.set(name, r)
 
         check(
             r,
@@ -501,7 +464,7 @@ class OneModelWalker(NodeWalker):
 
         r = self.model.createAlgebraicRule ()
 
-        self.symbol_table.set(name, r)
+        self.context.symbol_table.set(name, r)
 
         check(
             r,
@@ -527,8 +490,3 @@ class OneModelWalker(NodeWalker):
     def walk_PrintSBML(self, node):
         print(self.getSBML())
         return
-
-if __name__ == '__main__':
-    value = BuiltInFunction('hello_world')
-    print(value)
-    value()
