@@ -1,49 +1,49 @@
 # Definition of parameters.
 parameter
-  k1 = 1
-  k2 = 1
-  k3 = 1
-  d1 = 1
-  d2 = 1
-  d3 = 1
-  gamma12 = 1
+    k1 = 1
+    k2 = 1
+    k3 = 1
+    d1 = 1
+    d2 = 1
+    d3 = 1
+    gamma12 = 1
 end
 
 # Definition of species.
 species
-  x1 = 0
-  x2 = 0
-  x3 = 0
-  x4 = 0
-  x5 = 0
-  x6 = 0
+    x1 = 0
+    x2 = 0
+    x3 = 0
+    x4 = 0
+    x5 = 0
+    x6 = 0
 end
 
 # Definition of reactions.
 reaction
-  # Species generation.
-  -> x1 ; k1    
-  -> x2 ; k2*x3
-  -> x3 ; k3*x1
+    # Species generation.
+    -> x1 ; k1    
+    -> x2 ; k2*x3
+    -> x3 ; k3*x1
   
-  # Species degradation.
-  x1 -> ; d1*x1
-  x2 -> ; d2*x2
-  x3 -> ; d3*x3
+    # Species degradation.
+    x1 -> ; d1*x1
+    x2 -> ; d2*x2
+    x3 -> ; d3*x3
   
-  # Antithetic sequestration.
-  x1 + x2 -> ; gamma12*x1*x2
+    # Antithetic sequestration.
+    x1 + x2 -> ; gamma12*x1*x2
 end
 
 rule
-  x4'  = 0.1
-  x5  := 90
-  x6  == x4 + x5
+    x4'  = 0.1
+    x5  := 90
+    x6  == x4 + x5
 end
 
 function greetings(name)
-  print('Greetings')
-  print(name)
+    print('Greetings')
+    print(name)
 end
 
 greetings('nobel')

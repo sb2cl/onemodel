@@ -35,7 +35,7 @@ class MainView(QMainWindow):
                 )
         
         # Text changed in text editor.
-        self._ui.textEditor.editor.textChanged.connect(
+        self._ui.textEditor.textChanged.connect(
                 self.on_text_changed_textEditor
                 )
 
@@ -179,7 +179,7 @@ class MainView(QMainWindow):
             print('Call save as')
 
         else:
-            text = self._ui.textEditor.editor.toPlainText()
+            text = self._ui.textEditor.toPlainText()
 
             self._main_controller.save_file_to_path(
                 text,

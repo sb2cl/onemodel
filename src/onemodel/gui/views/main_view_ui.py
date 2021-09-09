@@ -45,7 +45,7 @@ class Ui_MainWindow(object):
         gridLayout.addWidget(self.label_directoryTree, 1, 0, 1, 1)
         gridLayout.addWidget(self.directoryTree.tree, 2, 0, 5, 1)
         gridLayout.addWidget(self.label_textEditor, 1, 1, 1, 1)
-        gridLayout.addWidget(self.textEditor.editor, 2, 1, 1, 1)
+        gridLayout.addWidget(self.textEditor, 2, 1, 1, 1)
         gridLayout.addWidget(self.label_console, 3, 1, 1, 1)
         gridLayout.addWidget(self.console.output, 4, 1, 2, 1)
         gridLayout.addWidget(self.console.input, 6, 1, 1, 1)
