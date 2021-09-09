@@ -1,4 +1,6 @@
 from onemodel.dsl.values.value import Value
+from onemodel.dsl.context import Context
+from onemodel.dsl.symbol_table import SymbolTable
 
 class BaseFunction(Value):
     """ Base function class for defining builting functions and user defined
@@ -10,54 +12,44 @@ class BaseFunction(Value):
         super().__init__()
         self.name = name
 
-class BuiltInFunction(BaseFunction):
-    """ BuiltInFunctions are functions loaded into the symbol_table.
-    """
-    def __init__(self, name):
-        """ Initialize BuiltInFunction.
+    def generate_new_context(self):
+        """ Generate a new context for executing the function.
         """
-        super().__init__(name)
+        new_context = Context(
+            self.name, 
+            self.context
+        )
 
-    def __str__(self):
-        return f'<built-in function {self.name}>'
+        new_context.symbol_table = SymbolTable(
+            new_context.parent.symbol_table
+        )
 
-    def __repr__(self):
-        return self.__str__()
+        return new_context
 
-    def __call__(self, exec_context):
-        method_name = f'call_{self.name}'
-        method = getattr(self, method_name, None)
-
-        result = method(exec_context)
-
-        return result
-
-    ### Definition of built-in functions as methods ###
-
-    def call_hello_world(self, exec_context):
-        """ Hello world built-in function.
+    def check_arguments(self, arg_names, args):
+        """ Check the amount of arguments passed.
         """
-        print('Hello world!')
+        if len(args) > len(arg_names):
+            raise Exception(
+                f'{len(args) - len(arg_names)} too many arguments passed to {self}'
+                )
 
-        return None
-    call_hello_world.arg_names = []    
+        if len(args) < len(arg_names):
+            raise Exception(
+                f'{len(args) - len(arg_names)} too few arguments passed to {self}'
+                )
 
-    def call_printSbml(self, exec_context):
-        """ printSbml built-in function.
+    def populate_args(self, arg_names, args, exec_context):
+        """ Populate the arguments into the context symbol table.
         """
-        from libsbml import writeSBMLToString
+        for i in range(len(args)):
+            arg_name = arg_names[i] 
+            arg_value = args[i]
+            arg_value.set_context(exec_context)
+            exec_context.symbol_table.set(arg_name, arg_value)
 
-        document = exec_context.walker.document
-        print(writeSBMLToString(document))
-
-        return None
-    call_printSbml.arg_names = []
-
-    def call_exit(self, exec_context):
-        """ exit built-in function.
+    def check_and_populate_args(self, arg_names, args, exec_context):
+        """ Check and populate arguments.
         """
-        import sys
-        sys.exit()
-        
-        return
-    call_exit.arg_names = []
+        self.check_arguments(arg_names, args)
+        self.populate_args(arg_names, args, exec_context)

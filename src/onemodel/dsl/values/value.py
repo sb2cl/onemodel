@@ -4,7 +4,12 @@ class Value:
     def __init__(self):
         """ Initialize Value.
         """
-        pass
+        self.set_context()
+
+    def set_context(self, context=None):
+        """ Set the context of the value.
+        """
+        self.context = context
     
     def __str__(self):
         raise Exception(

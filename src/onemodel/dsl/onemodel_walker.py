@@ -4,6 +4,8 @@ import tatsu
 from tatsu.walkers import NodeWalker
 from libsbml import *
 
+from onemodel.dsl.values.python_value import PythonValue
+
 def check(value, message):
     """If 'value' is None, prints an error message constructed using
     'message' and then exits with status code 1.  If 'value' is an integer,
@@ -81,7 +83,10 @@ class OneModelWalker(NodeWalker):
         # Create a default_compartment.
         c = self.model.createCompartment()
 
-        self.context.symbol_table.set('default_compartment', c)
+        self.context.symbol_table.set(
+            'default_compartment', 
+            PythonValue(c)
+        )
 
         check(c, 'create default compartment')
         check(c.setId('default_compartment'), 'set compartment id')
@@ -133,10 +138,18 @@ class OneModelWalker(NodeWalker):
 
         value = self.walk(node.value)
 
-        arguments = node.arguments
+        arguments = self.walk(node.arguments)
 
-        # TODO: Change this to allow arguments.
-        result = value(self.context)
+        if arguments == None:
+            arguments = []
+
+        if type(arguments) != list:
+            arguments = [arguments]
+
+        # TODO: Check that using context this way makes sense.
+        value.set_context(self.context)
+
+        result = value(arguments)
 
         return result
 
@@ -149,7 +162,7 @@ class OneModelWalker(NodeWalker):
 
         s = self.model.createSpecies()
 
-        self.context.symbol_table.set(name, s)
+        self.context.symbol_table.set(name, PythonValue(s))
 
         check(
             s, 
@@ -208,7 +221,7 @@ class OneModelWalker(NodeWalker):
             
         p = self.model.createParameter()
 
-        self.context.symbol_table.set(name, p)
+        self.context.symbol_table.set(name, PythonValue(p))
 
         check(
             p,
@@ -260,7 +273,7 @@ class OneModelWalker(NodeWalker):
         # Create reaction.
         r = self.model.createReaction()
 
-        self.context.symbol_table.set(name, r)
+        self.context.symbol_table.set(name, PythonValue(r))
 
         check(
             r,
@@ -389,7 +402,7 @@ class OneModelWalker(NodeWalker):
 
         r = self.model.createRateRule()
 
-        self.context.symbol_table.set(name, r)
+        self.context.symbol_table.set(name, PythonValue(r))
 
         check(
             r,
@@ -425,7 +438,7 @@ class OneModelWalker(NodeWalker):
 
         r = self.model.createAssignmentRule ()
 
-        self.context.symbol_table.set(name, r)
+        self.context.symbol_table.set(name, PythonValue(r))
 
         check(
             r,
@@ -464,7 +477,7 @@ class OneModelWalker(NodeWalker):
 
         r = self.model.createAlgebraicRule ()
 
-        self.context.symbol_table.set(name, r)
+        self.context.symbol_table.set(name, PythonValue(r))
 
         check(
             r,
@@ -483,10 +496,18 @@ class OneModelWalker(NodeWalker):
 
         return r
 
-        print(name)
-        print(variable)
-        print(math)
+    def walk_Integer(self, node):
+        value = int(node.value)
 
-    def walk_PrintSBML(self, node):
-        print(self.getSBML())
-        return
+        return PythonValue(value)
+
+    def walk_Float(self, node):
+        value = float(node.value)
+
+        return PythonValue(value)
+
+    def walk_String(self, node):
+        value = str(node.value)
+
+        return PythonValue(value)
+

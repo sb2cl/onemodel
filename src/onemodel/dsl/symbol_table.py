@@ -1,4 +1,3 @@
-from onemodel.dsl.values.function import BuiltInFunction
 class SymbolTable:
     def __init__(self, parent=None):
         self.symbols = {}
@@ -23,10 +22,3 @@ class SymbolTable:
     
     def addBuiltInFunction(self, name):
         self.set(name, BuiltInFunction(name))
-
-
-global_symbol_table = SymbolTable()
-
-global_symbol_table.addBuiltInFunction('hello_world')
-global_symbol_table.addBuiltInFunction('printSbml')
-global_symbol_table.addBuiltInFunction('exit')

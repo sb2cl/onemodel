@@ -104,24 +104,24 @@ atom
 
 
 # Definition of integers.
-integer::int
+integer::Integer
   = 
-  /\d+/
+  value:/\d+/
   ;
 
 
 # Definition of floats.
-float::float
+float::Float
   =
-  | /\d*(?:\.\d+)?(?:e(?:\+|\-)\d+)/  # Scientific notation.
-  | /\d*\.\d+/                        # Regular floats.
+  | value:/\d*(?:\.\d+)?(?:e(?:\+|\-)\d+)/  # Scientific notation.
+  | value:/\d*\.\d+/                        # Regular floats.
   ;
 
 
 # Definition of strings.
-string::str
+string::String
   = 
-  "'" @:/[^\\\r\n\f']*/ "'"
+  "'" value:/[^\\\r\n\f']*/ "'"
   ;
 
 

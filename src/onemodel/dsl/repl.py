@@ -7,7 +7,7 @@ from tatsu.walkers import NodeWalker
 from onemodel.utils.setup_input_history import setup_input_history
 from onemodel.dsl.onemodel_walker import OneModelWalker
 from onemodel.dsl.context import Context
-from onemodel.dsl.symbol_table import global_symbol_table
+from onemodel.dsl.global_symbol_table import GlobalSymbolTable
 
 class Repl:
     """ REPL
@@ -22,7 +22,7 @@ class Repl:
         """
         # Init context.
         self.context = Context('<program>')
-        self.context.symbol_table = global_symbol_table
+        self.context.symbol_table = GlobalSymbolTable()
       
     def run(self):
         """ RUN
