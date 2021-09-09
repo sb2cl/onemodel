@@ -1,5 +1,5 @@
 from PyQt5.QtWidgets import QLineEdit, QPlainTextEdit
-from PyQt5.QtGui import QFontDatabase
+from PyQt5.QtGui import QFontDatabase, QTextCursor
 from PyQt5.QtCore import QProcess
 
 from PyQt5 import QtGui
@@ -31,6 +31,7 @@ class Console:
         """ Print the string into the console.
         """
         self.output.appendPlainText(string)
+        self.output.moveCursor(QTextCursor.End)
 
 #    def process_input(self):
 #        """ Process the command in the input box.
