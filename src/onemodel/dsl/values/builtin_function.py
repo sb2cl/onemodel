@@ -28,6 +28,8 @@ class BuiltInFunction(BaseFunction):
 
         result = method(exec_context)
 
+        print(result)
+
         return result
 
     ### Definition of built-in functions as methods ###

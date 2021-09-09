@@ -152,6 +152,9 @@ class OneModelWalker(NodeWalker):
 
         result = value(arguments)
 
+        if type(result) == list:
+            result = result[-1]
+
         return result
 
     def walk_Species(self, node):

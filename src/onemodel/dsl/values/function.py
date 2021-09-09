@@ -31,4 +31,3 @@ class Function(BaseFunction):
         result = walker.walk(self.body_node)
 
         return result
-

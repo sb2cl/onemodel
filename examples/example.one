@@ -41,9 +41,9 @@ rule
     x6  == x4 + x5
 end
 
-function greetings(name)
-    print('Greetings')
-    print(name)
+function greetings()
+    1
 end
 
-greetings('nobel')
+greetings()
+print('hello')

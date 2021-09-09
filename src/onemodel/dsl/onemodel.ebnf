@@ -88,7 +88,7 @@ algebraic_rule::AlgebraicRule
 
 call::Call
   =
-  | value:atom '(' [arguments:atom {',' arguments:atom}] ')'
+  | value:atom '(' [arguments:statement {',' arguments:statement}] ')'
   | next:atom
   ;
 
@@ -128,7 +128,7 @@ string::String
 
 function_definition::FunctionDefinition
   =
-  'function' name:identifier '(' args:identifier {',' args:identifier} ')' newline 
+  'function' name:identifier '(' [args:identifier {',' args:identifier}] ')' newline 
   {newline | body:statement}
   'end'
   ;
