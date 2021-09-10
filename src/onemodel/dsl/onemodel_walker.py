@@ -104,58 +104,7 @@ class OneModelWalker(NodeWalker):
         self.checkConsistency()
         return writeSBMLToString(self.document)
 
-    def walk_object(self, node):
-        return node
-
-    def walk_list(self, nodes):
-        results = []
-
-        for node in nodes:
-            results.append(self.walk(node))
-
-        if len(results) == 1:
-            results = results[0]
-
-        return results
-
-    def walk_AccessIdentifier(self, node):
-        name = node.name
-        value = self.context.symbol_table.get(name)
-
-        return value
-
-    def walk_AccessProperty(self, node):
-        base = node.base
-        name = node.name
-        
-        base = self.context.symbol_table.get(base)
-        value = base.get(name)
-
-        return value
-
-    def walk_Call(self, node):
-        if node.next:
-            return self.walk(node.next)
-
-        value = self.walk(node.value)
-
-        arguments = self.walk(node.arguments)
-
-        if arguments == None:
-            arguments = []
-
-        if type(arguments) != list:
-            arguments = [arguments]
-
-        # TODO: Check that using context this way makes sense.
-        value.set_context(self.context)
-
-        result = value(arguments)
-
-        if type(result) == list:
-            result = result[-1]
-
-        return result
+    ### Walk methods ###
 
     def walk_Species(self, node):
         name = node.name
@@ -500,6 +449,30 @@ class OneModelWalker(NodeWalker):
 
         return r
 
+    def walk_Call(self, node):
+        if node.next:
+            return self.walk(node.next)
+
+        value = self.walk(node.value)
+
+        arguments = self.walk(node.arguments)
+
+        if arguments == None:
+            arguments = []
+
+        if type(arguments) != list:
+            arguments = [arguments]
+
+        # TODO: Check that using context this way makes sense.
+        value.set_context(self.context)
+
+        result = value(arguments)
+
+        if type(result) == list:
+            result = result[-1]
+
+        return result
+
     def walk_Integer(self, node):
         value = int(node.value)
 
@@ -531,3 +504,32 @@ class OneModelWalker(NodeWalker):
         self.context.symbol_table.set(name, f)
 
         return f
+
+    def walk_AccessProperty(self, node):
+        base = node.base
+        name = node.name
+        
+        base = self.context.symbol_table.get(base)
+        value = base.get(name)
+
+        return value
+
+    def walk_AccessIdentifier(self, node):
+        name = node.name
+        value = self.context.symbol_table.get(name)
+
+        return value
+
+    def walk_list(self, nodes):
+        results = []
+
+        for node in nodes:
+            results.append(self.walk(node))
+
+        if len(results) == 1:
+            results = results[0]
+
+        return results
+
+    def walk_object(self, node):
+        return node
