@@ -41,9 +41,11 @@ rule
     x6  == x4 + x5
 end
 
-function greetings()
-    1
+function createSpecies()
+    species x = 0
+    rule x' = 1
+    showContext()
 end
 
-greetings()
-print('hello')
+showContext()
+createSpecies()
