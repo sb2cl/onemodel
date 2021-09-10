@@ -59,6 +59,31 @@ class BuiltInFunction(BaseFunction):
         import sys
         sys.exit()
         
-        return
+        return None
     call_exit.arg_names = []
+
+    def call_showContext(self, exec_context):
+        """ Show the context and symbol table.
+        """
+        context = exec_context.parent
+
+        if context.parent == None:
+            parent_name = 'None'
+        else:
+            parent_name = context.parent.display_name
+
+        symbol_table = context.symbol_table
+
+        print('### Context ###')
+        print(f'%-25s %s' % ('name', context.display_name))
+        print(f'%-25s %s' % ('parent_name', parent_name))
+        print()
+        print('### Symbol table ###')
+        for symbol in symbol_table.symbols:
+            name = symbol
+            value = symbol_table.get(name)
+            print(f'%-25s %s' % (name, value))
+
+        return
+    call_showContext.arg_names = []
 
