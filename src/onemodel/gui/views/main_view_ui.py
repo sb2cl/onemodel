@@ -2,6 +2,11 @@ from os import path
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
+from PyQt5.QtCore import *
+from PyQt5.QtGui import *
+from PyQt5.QtWidgets import *
+
+
 from onemodel.gui.widgets.directory_tree import DirectoryTree
 from onemodel.gui.widgets.text_editor import TextEditor
 from onemodel.gui.widgets.console import Console
@@ -22,8 +27,7 @@ class Ui_MainWindow(object):
         MainWindow.move(qtRectangle.topLeft())
 
         # Create the layout. 
-        gridLayout = QtWidgets.QGridLayout()
-        gridLayout.setColumnStretch(1, 2)
+        hbox = QHBoxLayout()
 
         # Init widgets.
         self.pathField = QtWidgets.QLineEdit()
@@ -40,21 +44,69 @@ class Ui_MainWindow(object):
         self.label_console = QtWidgets.QLabel(MainWindow)
         self.label_console.setText('Console Log')
 
-        # Place widgets in the grid.
-        gridLayout.addWidget(self.pathField, 0, 0, 1, 2)
-        gridLayout.addWidget(self.label_directoryTree, 1, 0, 1, 1)
-        gridLayout.addWidget(self.directoryTree.tree, 2, 0, 5, 1)
-        gridLayout.addWidget(self.label_textEditor, 1, 1, 1, 1)
-        gridLayout.addWidget(self.textEditor, 2, 1, 1, 1)
-        gridLayout.addWidget(self.label_console, 3, 1, 1, 1)
-        gridLayout.addWidget(self.console.output, 4, 1, 2, 1)
-        gridLayout.addWidget(self.console.input, 6, 1, 1, 1)
+        # Vertical splitter.
+        split_v = QSplitter(Qt.Vertical)
+        split_v.setStretchFactor(0,2);
+        split_v.setStretchFactor(1,1);
+
+        # Create frame for editor.
+        frame = QFrame()
+        vbox = QVBoxLayout()
+        vbox.setContentsMargins(0, 0, 0, 0)
+        vbox.addWidget(self.label_textEditor)
+        vbox.addWidget(self.textEditor)
+        frame.setLayout(vbox)
+        # Add it to vertical splitter.
+        split_v.addWidget(frame)
+
+        # Create frame console log.
+        frame = QFrame()
+        vbox = QVBoxLayout()
+        vbox.setContentsMargins(0, 0, 0, 0)
+        vbox.addWidget(self.label_console)
+        vbox.addWidget(self.console.output)
+        frame.setLayout(vbox)
+        # Add it to vertical splitter.
+        split_v.addWidget(frame)
+
+        # Horizontal splitter.
+        split_h = QSplitter(Qt.Horizontal)
+
+        # Create frame for directory tree.
+        frame = QFrame()
+        vbox = QVBoxLayout()
+        vbox.setContentsMargins(0, 0, 0, 0)
+        vbox.addWidget(self.label_directoryTree)
+        vbox.addWidget(self.directoryTree.tree)
+        frame.setLayout(vbox)
+        # Add it to horizontal splitter.
+        split_h.addWidget(frame)
+
+        # Add the vertival splitter to the horizontal one.
+        split_h.addWidget(split_v)
+
+        # Create main frame with the pathField and the horizontal splitter.
+        frame = QFrame()
+        vbox = QVBoxLayout()
+        vbox.setContentsMargins(0, 0, 0, 0)
+        vbox.addWidget(self.pathField)
+        vbox.addWidget(split_h)
+        frame.setLayout(vbox)
+
+        # Add it to the layout.
+        hbox.addWidget(frame)
+
+        # Set initial sizes of splitters.
+        split_v.setStretchFactor(0,4);
+        split_v.setStretchFactor(1,1);
+        split_h.setStretchFactor(0,1);
+        split_h.setStretchFactor(1,4);
 
         # creating a QWidget layout
         container = QtWidgets.QWidget()
 
         # setting layout to the container
-        container.setLayout(gridLayout)
+        container.setLayout(hbox)
 
         # making container as central widget
         MainWindow.setCentralWidget(container)
