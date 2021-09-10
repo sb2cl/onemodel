@@ -17,7 +17,13 @@
 
 start
   = 
-  {newline | @:statement} $
+  {statements} $
+  ;
+
+
+statements
+  =
+  {newline} @:statement {{newline}+ @:statement} {newline}
   ;
 
 
