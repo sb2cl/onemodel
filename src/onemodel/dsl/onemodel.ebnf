@@ -29,15 +29,21 @@ statements
 
 statement
   = 
-  | 'species'   @:species   {',' | @:species}
-  | 'parameter' @:parameter {',' | @:parameter}
-  | 'reaction'  @:reaction 
-  | 'rule'      @:rule 
   | 'species'   newline {newline | @:species newline}   'end'
   | 'parameter' newline {newline | @:parameter newline} 'end'
   | 'reaction'  newline {newline | @:reaction newline}  'end'
   | 'rule'      newline {newline | @:rule newline}      'end'
-  | call
+  | expr
+  ;
+
+
+expr
+  =
+  | 'species'   @:species   {',' | @:species}
+  | 'parameter' @:parameter {',' | @:parameter}
+  | 'reaction'  @:reaction 
+  | 'rule'      @:rule 
+  | comp_expr
   ;
 
 
@@ -53,7 +59,6 @@ parameter::Parameter
   ;
 
 
-# S1 + S2 -> S1 + S3; k1*S1(S1+h1)
 reaction::Reaction
   =
   [ name:identifier ':']
@@ -92,17 +97,47 @@ algebraic_rule::AlgebraicRule
   ;
 
 
+comp_expr
+  =
+  arith_expr
+  ;
+
+
+arith_expr
+  =
+  term
+  ;
+
+
+term
+  =
+  factor
+  ;
+
+
+factor
+  =
+  power
+  ;
+
+
+power
+  =
+  call
+  ;
+
+
 call::Call
   =
-  | value:atom '(' [arguments:statement {',' arguments:statement}] ')'
+  | value:atom '(' [arguments:expr {',' arguments:expr}] ')'
   | next:atom
   ;
 
 
 atom
   = 
-  | float
   | integer
+  | float
   | string
   | function_definition
   | access_property
