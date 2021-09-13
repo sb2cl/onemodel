@@ -7,6 +7,7 @@ from libsbml import *
 
 from onemodel.dsl.values.python_value import PythonValue
 from onemodel.dsl.values.species import Species
+from onemodel.dsl.values.parameter import Parameter
 from onemodel.dsl.values.function import Function
 from onemodel.dsl.utils import check, getAstNames
 
@@ -111,36 +112,11 @@ class OneModelWalker(NodeWalker):
             print('Error: value must be int or float')
             return
             
-        p = self.model.createParameter()
+        p = Parameter()
 
-        self.context.symbol_table.set(name, PythonValue(p))
+        p.value = value
 
-        check(
-            p,
-            f'create parameter {name}'
-        )
-
-        check(
-            p.setId(name),
-            f'set parameter {name} id'
-        )
-
-        check(
-            p.setConstant(True),
-            f'set parameter {name} "constant"'
-        )
-
-        check(
-            p.setValue(value),
-            f'set parameter {name} value'
-        )
-
-        check(
-            p.setUnits('per_second'),
-            f'set parameter {name} units'
-        )
- 
-        self.checkConsistency()
+        self.context.symbol_table.set(name, p)
 
         return p
 
