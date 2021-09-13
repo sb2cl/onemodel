@@ -8,6 +8,10 @@ class PythonValue(Value):
         """
         self.value = value
     
+    def add_value_to_model(self, name, model):
+        # PythonValues are not included in SBML models.
+        pass
+
     def __str__(self):
         return str(self.value)
         

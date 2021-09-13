@@ -47,8 +47,12 @@ class BuiltInFunction(BaseFunction):
         """
         from libsbml import writeSBMLToString
 
-        document = exec_context.walker.document
-        print(writeSBMLToString(document))
+
+        main_context = exec_context.getMainParent() 
+
+        walker = main_context.walker
+        sbml = walker.getSBML()
+        print(sbml)
 
         return None
     call_printSbml.arg_names = []

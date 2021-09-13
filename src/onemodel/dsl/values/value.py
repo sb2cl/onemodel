@@ -10,7 +10,14 @@ class Value:
         """ Set the context of the value.
         """
         self.context = context
-    
+
+    def add_value_to_model(self, name, model):
+        """ Add this value to a SBML model.
+        """
+        raise Exception(
+            f'Class "{type(self).__name__}" has not defined add_value_to_model method.'
+        )
+
     def __str__(self):
         raise Exception(
             f'Class "{type(self).__name__}" has not defined __str__ method.'

@@ -2,58 +2,28 @@ import sys
 
 import tatsu
 from tatsu.walkers import NodeWalker
+
 from libsbml import *
 
 from onemodel.dsl.values.python_value import PythonValue
+from onemodel.dsl.values.species import Species
 from onemodel.dsl.values.function import Function
-
-def check(value, message):
-    """If 'value' is None, prints an error message constructed using
-    'message' and then exits with status code 1.  If 'value' is an integer,
-    it assumes it is a libSBML return status code.  If the code value is
-    LIBSBML_OPERATION_SUCCESS, returns without further action; if it is not,
-    prints an error message constructed using 'message' along with text from
-    libSBML explaining the meaning of the code, and exits with status code 1.
-    """
-    if value == None:
-        raise SystemExit(
-            'LibSBML returned a null value trying to ' + message + '.'
-        )
-    elif type(value) is int:
-        if value == LIBSBML_OPERATION_SUCCESS:
-            return
-        else:
-            err_msg = 'Error encountered trying to ' + message + '.' \
-                 + 'LibSBML returned error code ' + str(value) + ': "' \
-                 + OperationReturnValue_toString(value).strip() + '"'
-        raise SystemExit(err_msg)
-    else:
-        return
-
-def getAstNames(ast):
-    """ Returns the user defined names in a MathML ast.
-    """
-    names = []
-
-    if ast.isName():
-        names.append(ast.getName())
-
-    for i in range(ast.getNumChildren()):
-        child = ast.getChild(i)
-        child_names = getAstNames(child)
-
-        for item in child_names:
-            names.append(item)
-
-    return names
+from onemodel.dsl.utils import check, getAstNames
 
 class OneModelWalker(NodeWalker):
     def __init__(self, model_name, context):
+        # Name for generating files.
+        self.model_name = model_name
+
         # Create context with the symbol table where we will save all objects.
         # libSBML objects will be stored both in the symbol table and in the
         # model.
         self.context = context
 
+        self.document = None
+        self.model = None
+
+    def initSBMLDocument(self):
         # Create and empty SBMLDocument object.
         try:
             self.document = SBMLDocument(3, 2)
@@ -63,8 +33,8 @@ class OneModelWalker(NodeWalker):
         # Create the basic Model object inside the SBMLDocument object.
         self.model = self.document.createModel()
         check(self.model, 'create model')
-        check(self.model.setName(model_name), 'set model name')
-        check(self.model.setId(model_name), 'set model id')
+        check(self.model.setName(self.model_name), 'set model name')
+        check(self.model.setId(self.model_name), 'set model id')
         check(self.model.setTimeUnits('second'), 'set model-wide time units')
         check(self.model.setExtentUnits('mole'), 'set model units of extent')
         check(self.model.setSubstanceUnits('mole'), 'set model substance units')
@@ -96,11 +66,20 @@ class OneModelWalker(NodeWalker):
         check(c.setSpatialDimensions(3), 'set compartment dimensions')
         check(c.setUnits('litre'), 'set compartment size units')
 
+    def populateSBMLDocument(self):
+        symbol_table = self.context.symbol_table
+
+        for symbol in symbol_table.symbols:
+            value = symbol_table.get(symbol)
+            value.add_value_to_model(symbol, self.model)
+
     def checkConsistency(self):
         if self.document.checkConsistency():
             self.document.printErrors()
 
     def getSBML(self):
+        self.initSBMLDocument()
+        self.populateSBMLDocument()
         self.checkConsistency()
         return writeSBMLToString(self.document)
 
@@ -113,51 +92,11 @@ class OneModelWalker(NodeWalker):
         if value == None:
             value = 0
 
-        s = self.model.createSpecies()
+        s = Species()
 
-        self.context.symbol_table.set(name, PythonValue(s))
+        s.initialConcentration = value
 
-        check(
-            s, 
-            f'create species {name}'
-        )
-
-        check(
-            s.setId(name), 
-            f'set species {name} id'
-        )
-
-        check(
-            s.setCompartment('default_compartment'), 
-            f'set species {name} in default_compartment'
-        )
-
-        check(
-            s.setConstant(False), 
-            f'set "constant" attribute on {name}'
-        )
-
-        check(
-            s.setInitialConcentration(value), 
-            f'set initial amount for {name}'
-        )
-
-        check(
-            s.setSubstanceUnits('mole'), 
-            f'set substance units for {name}'
-        )
-
-        check(
-            s.setBoundaryCondition(False),
-            f'set "boundaryCondition" on {name}'
-        )
-
-        check(
-            s.setHasOnlySubstanceUnits(False),
-            f'set "hasOnlySubstanceUnits" on {name}'
-        )
-
-        self.checkConsistency()
+        self.context.symbol_table.set(name, s)
 
         return s
 

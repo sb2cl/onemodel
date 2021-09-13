@@ -8,3 +8,11 @@ class Context:
         self.parent = parent
         self.symbol_table = None
         self.walker = None
+
+    def getMainParent(self):
+        context = self
+
+        while context.parent != None:
+            context = context.parent
+
+        return context
