@@ -8,6 +8,7 @@ from libsbml import *
 from onemodel.dsl.values.python_value import PythonValue
 from onemodel.dsl.values.species import Species
 from onemodel.dsl.values.parameter import Parameter
+from onemodel.dsl.values.reaction import Reaction
 from onemodel.dsl.values.function import Function
 from onemodel.dsl.utils import check, getAstNames
 
@@ -23,6 +24,9 @@ class OneModelWalker(NodeWalker):
 
         self.document = None
         self.model = None
+
+        self.numReactions = 0
+        self.numRules = 0
 
     def initSBMLDocument(self):
         # Create and empty SBMLDocument object.
@@ -133,128 +137,17 @@ class OneModelWalker(NodeWalker):
             products = [products] 
 
         if name == None:
-            name = f'_J{self.model.getNumReactions()}'
-
-        # Save here a list of ids of the species defined as reactans or products.
-        names_defined = []
+            name = f'_J{self.numReactions}'
+            self.numReactions += 1
 
         # Create reaction.
-        r = self.model.createReaction()
+        r = Reaction()
 
-        self.context.symbol_table.set(name, PythonValue(r))
+        r.reactants = reactants
+        r.products = products
+        r.kinetic_law = kinetic_law_str
 
-        check(
-            r,
-            f'create reaction {name}'
-        )
-
-        check(
-            r.setId(name), 
-            f'set reaction id {name}'
-        )
-
-        check(
-            r.setReversible(False), 
-            'set reaction reversibility flag'
-        )
-
-        # Create reactants.
-        for item in reactants:
-            if item == None: continue
-
-            species_ref = r.createReactant()
-
-            check(
-                species_ref,
-                'create reactant'
-            )
-
-            check(
-                species_ref.setSpecies(item),
-                f'assign reactant species {item}'
-            )
-
-            check(
-                species_ref.setConstant(True),
-                f'set "constant" on species {item}'
-            )
-
-            names_defined.append(item)
-
-        # Create products.
-        for item in products:
-            if item == None: continue
-
-            species_ref = r.createProduct()
-
-            check(
-                species_ref,
-                'create product'
-            )
-
-            check(
-                species_ref.setSpecies(item),
-                'assign product species'
-            )
-
-            check(
-                species_ref.setConstant(True),
-                f'set "constant" on species {item}'
-            )
-
-            names_defined.append(item)
- 
-        # Create kinetic law.
-        math_ast = parseL3Formula(kinetic_law_str)
-
-        check(
-            math_ast,
-            'create AST for rate expression'
-        )
- 
-        kinetic_law = r.createKineticLaw()
-
-        check(
-            kinetic_law,
-            'create kinetic law'
-        )
-
-        check(
-            kinetic_law.setMath(math_ast),
-            'set math on kinetic law'
-        )
-
-        # Create modifier species reference.
-        names = getAstNames(math_ast)
-        names_modifier = []
-
-        for name in names:
-            elem = self.model.getElementBySId(name)
-
-            if type(elem) != Species: 
-                continue
-
-            if name in names_defined:
-                continue
-
-            names_modifier.append(name)
-
-        for item in names_modifier:
-            if item == None: continue
-
-            modifier_ref = r.createModifier()
-
-            check(
-                modifier_ref,
-                'create modifier'
-            )
-
-            check(
-                modifier_ref.setSpecies(item),
-                'assign modifier species'
-            )
-
-        self.checkConsistency()
+        self.context.symbol_table.set(name, r)
 
         return r
 

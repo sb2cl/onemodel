@@ -47,7 +47,6 @@ class BuiltInFunction(BaseFunction):
         """
         from libsbml import writeSBMLToString
 
-
         main_context = exec_context.getMainParent() 
 
         walker = main_context.walker
