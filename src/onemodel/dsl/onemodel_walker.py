@@ -197,31 +197,15 @@ class OneModelWalker(NodeWalker):
         math = node.math
 
         if name == None:
-            name = f'_R{self.model.getNumRules()}'
+            name = f'_R{self.numRules}'
+            self.numRules += 1
 
-        # We have to pass the variable to the other equation side.
-        math = f'{variable} - ({math})'
+        r = AlgebraicRule()
 
-        math_ast = parseL3Formula(math)
+        r.variable = variable
+        r.math = math
 
-        r = self.model.createAlgebraicRule ()
-
-        self.context.symbol_table.set(name, PythonValue(r))
-
-        check(
-            r,
-            f'create algebraic rule {name}'
-        )
-
-        check(
-            r.setIdAttribute(name), 
-            f'set algebraic rule id {name}'
-        )
-
-        check(
-            r.setMath(math_ast),
-            f'set math on algebraic rule {name}'
-        )
+        self.context.symbol_table.set(name, r)
 
         return r
 
