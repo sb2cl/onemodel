@@ -1,5 +1,7 @@
 import sys
 
+from importlib_resources import files
+
 import tatsu
 from tatsu.walkers import NodeWalker
 
@@ -20,17 +22,31 @@ class OneModelWalker(NodeWalker):
         # Name for generating files.
         self.model_name = model_name
 
-        # Create context with the symbol table where we will save all objects.
+        # Context with the symbol table where we will save all objects.
         self.context = context
 
         # Add this walker to the context.
         self.context.walker = self
 
+        # SBMLDocument and SBMLModel
         self.document = None
         self.model = None
 
+        # Keep track of number of unnamed reactions and rules.
         self.numReactions = 0
         self.numRules = 0
+
+        # Load the grammar.
+        self.grammar = files('onemodel.dsl').joinpath('onemodel.ebnf').read_text()
+
+        # Load the parser with the grammar.
+        self.parser = tatsu.compile(self.grammar, asmodel=True)
+
+    def run(self, text):
+        model = self.parser.parse(text)
+        result = self.walk(model)
+
+        return result
 
     def initSBMLDocument(self):
         # Create and empty SBMLDocument object.

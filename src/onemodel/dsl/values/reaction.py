@@ -141,25 +141,27 @@ class Reaction(Value):
     def __str__(self):
         reaction = ''
 
-        for item in self.reactants:
-            if item == None: continue
-            reaction += item + '+'
+        #for item in self.reactants:
+        #    if item == None: continue
+        #    reaction += item + '+'
 
-        if reaction[-1] == '+':
-            reaction = reaction[:-1]
+        #if self.reactants != []:
+        #    if reaction[-1] == '+':
+        #        reaction = reaction[:-1]
 
-        reaction += '->'
+        #reaction += '->'
 
-        for item in self.products:
-            if item == None: continue
-            reaction += '+' + item
+        #for item in self.products:
+        #    if item == None: continue
+        #    reaction += '+' + item
 
-        if reaction[-1] == '+':
-            reaction = reaction[:-1]
+        #if self.products != []:
+        #    if reaction[-1] == '+':
+        #        reaction = reaction[:-1]
 
-        reaction += ';' + self.kinetic_law
+        #reaction += ';' + self.kinetic_law
 
-        return f'<reaction {reaction}>'
+        return f'<reaction>'
     
     def __repr__(self):
         return self.__str__()

@@ -33,10 +33,6 @@ class Repl:
         setup_input_history()
         continue_loop = True
 
-        # Load the parser.
-        grammar = files('onemodel.dsl').joinpath('onemodel.ebnf').read_text()
-        parser = tatsu.compile(grammar, asmodel=True)
-        
         # Init the model walker.
         walker = OneModelWalker('repl', self.context)
 
@@ -46,17 +42,8 @@ class Repl:
             if text.strip() == "": continue
 
             # 2. EVALUATE
-
-            # Generate the ast model.
             try:
-                model = parser.parse(text)
-            except Exception as e:
-                print(str(e))
-                continue
-
-            # Walk the ast model.
-            try:
-                result = walker.walk(model)
+                result = walker.run(text)
             except Exception as e:
                 print(str(e))
                 continue

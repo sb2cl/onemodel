@@ -100,7 +100,9 @@ class BuiltInFunction(BaseFunction):
         filename = exec_context.symbol_table.get('filename').value
         text = open(filename).read()
 
-        print(text)
+        walker = context.walker
+
+        walker.run(text)
         
         return None
     call_run.arg_names = ['filename']
