@@ -10,6 +10,7 @@ from onemodel.dsl.values.species import Species
 from onemodel.dsl.values.parameter import Parameter
 from onemodel.dsl.values.reaction import Reaction
 from onemodel.dsl.values.rate_rule import RateRule
+from onemodel.dsl.values.assignment_rule import AssignmentRule
 from onemodel.dsl.values.function import Function
 from onemodel.dsl.utils import check, getAstNames
 
@@ -178,33 +179,15 @@ class OneModelWalker(NodeWalker):
         math = node.math
 
         if name == None:
-            name = f'_R{self.model.getNumRules()}'
+            name = f'_R{self.numRules}'
+            self.numRules += 1
 
-        math_ast = parseL3Formula(math)
+        r = AssignmentRule()
 
-        r = self.model.createAssignmentRule ()
+        r.variable = variable
+        r.math = math
 
-        self.context.symbol_table.set(name, PythonValue(r))
-
-        check(
-            r,
-            f'create assignment rule {name}'
-        )
-
-        check(
-            r.setIdAttribute(name), 
-            f'set assignment rule id {name}'
-        )
-
-        check(
-            r.setVariable(variable),
-            f'set variable on assignment rule {name}'
-        )
-
-        check(
-            r.setMath(math_ast),
-            f'set math on assignment rule {name}'
-        )
+        self.context.symbol_table.set(name, r)
 
         return r
 
