@@ -37,7 +37,7 @@ class RateRule(Value):
         )
 
     def __str__(self):
-        return '<rate rule xxx>'
+        return '<rate rule>'
 
     def __repr__(self):
         return self.__str__()

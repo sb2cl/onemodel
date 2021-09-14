@@ -32,3 +32,9 @@ class AlgebraicRule(Value):
             r.setMath(math_ast),
             f'set math on algebraic rule {name}'
         )
+
+    def __str__(self):
+        return '<algebraic rule>'
+
+    def __repr__(self):
+        return self.__str__()

@@ -90,3 +90,19 @@ class BuiltInFunction(BaseFunction):
         return
     call_showContext.arg_names = []
 
+    def call_run(self, exec_context):
+        """ Run a file.
+        """
+        # We will execute the file commands in parent context.
+        # This way, all values will be loaded into the parent.
+        context = exec_context.parent
+
+        filename = exec_context.symbol_table.get('filename').value
+        text = open(filename).read()
+
+        print(text)
+        
+        return None
+    call_run.arg_names = ['filename']
+
+
