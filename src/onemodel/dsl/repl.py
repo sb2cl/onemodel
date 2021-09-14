@@ -20,9 +20,7 @@ class Repl:
         
         @return: REPL
         """
-        # Init context.
-        self.context = Context('<program>')
-        self.context.symbol_table = GlobalSymbolTable()
+        pass
       
     def run(self):
         """ RUN
@@ -34,7 +32,7 @@ class Repl:
         continue_loop = True
 
         # Init the model walker.
-        walker = OneModelWalker('repl', self.context)
+        walker = OneModelWalker('repl')
 
         while continue_loop:
             # 1. READ

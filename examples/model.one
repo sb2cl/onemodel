@@ -1,0 +1,6 @@
+model TestModel
+  species x = 0
+  rule x' = 1
+end
+
+testModel = TestModel()

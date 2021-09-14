@@ -7,6 +7,8 @@ from tatsu.walkers import NodeWalker
 
 from libsbml import *
 
+from onemodel.dsl.context import Context
+from onemodel.dsl.global_symbol_table import GlobalSymbolTable
 from onemodel.dsl.values.python_value import PythonValue
 from onemodel.dsl.values.species import Species
 from onemodel.dsl.values.parameter import Parameter
@@ -15,15 +17,22 @@ from onemodel.dsl.values.rate_rule import RateRule
 from onemodel.dsl.values.assignment_rule import AssignmentRule
 from onemodel.dsl.values.algebraic_rule import AlgebraicRule
 from onemodel.dsl.values.function import Function
+from onemodel.dsl.values.model import Model
 from onemodel.dsl.utils import check, getAstNames
 
 class OneModelWalker(NodeWalker):
-    def __init__(self, model_name, context):
+    def __init__(self, model_name, context = None):
         # Name for generating files.
         self.model_name = model_name
 
-        # Context with the symbol table where we will save all objects.
-        self.context = context
+        # If context is passed.
+        if context:
+            # Save it.
+            self.context = context
+        else:
+            # If not, generate a main context.
+            self.context = Context('<program>')
+            self.context.symbol_table = GlobalSymbolTable()
 
         # Add this walker to the context.
         self.context.walker = self
@@ -226,6 +235,14 @@ class OneModelWalker(NodeWalker):
 
         return r
 
+    def walk_AssignValue(self, node):
+        name = node.name
+        value = self.walk(node.value)
+
+        self.context.symbol_table.set(name, value)
+
+        return value
+
     def walk_Call(self, node):
         if node.next:
             return self.walk(node.next)
@@ -281,6 +298,16 @@ class OneModelWalker(NodeWalker):
         self.context.symbol_table.set(name, f)
 
         return f
+
+    def walk_ModelDefinition(self, node):
+        name = node.name
+        body = node.body
+
+        m = Model(name, body)
+
+        self.context.symbol_table.set(name, m)
+
+        return m
 
     def walk_AccessProperty(self, node):
         base = node.base

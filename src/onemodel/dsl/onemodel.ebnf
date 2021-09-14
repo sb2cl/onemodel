@@ -43,6 +43,7 @@ expr
   | 'parameter' @:parameter {',' | @:parameter}
   | 'reaction'  @:reaction 
   | 'rule'      @:rule 
+  | 'let'       @:assign_value
   | comp_expr
   ;
 
@@ -97,6 +98,12 @@ algebraic_rule::AlgebraicRule
   ;
 
 
+assign_value::AssignValue
+  =
+  name:identifier '=' value:expr
+  ;
+
+
 comp_expr
   =
   arith_expr
@@ -140,6 +147,7 @@ atom
   | float
   | string
   | function_definition
+  | model_definition
   | access_property
   | access_identifier
   ;
@@ -170,6 +178,14 @@ string::String
 function_definition::FunctionDefinition
   =
   'function' name:identifier '(' [args:identifier {',' args:identifier}] ')' newline 
+  {newline | body:statement}
+  'end'
+  ;
+
+
+model_definition::ModelDefinition
+  =
+  'model' name:identifier newline 
   {newline | body:statement}
   'end'
   ;

@@ -46,12 +46,8 @@ def run(input_file):
     # Read text from input_file.
     text = open(input_file).read()
 
-    # Init context for walker.
-    context = Context('<program>')
-    context.symbol_table = GlobalSymbolTable()
-
     # Load the AST model walker.
-    walker = OneModelWalker(filename, context)
+    walker = OneModelWalker(filename)
 
     # Run.
     walker.run(text)
@@ -141,13 +137,9 @@ def onemodel2sbml(input_file, filename, output):
     text = open(input_file).read()
     print('\tRead input file.')
 
-    # Init context for walker.
-    context = Context('<program>')
-    context.symbol_table = GlobalSymbolTable()
-
     # Load the AST model walker.
-    walker = OneModelWalker(filename, context)
-    print('\tOneModel walker initialized.')
+    walker = OneModelWalker(filename)
+    print('\tOneModel interpreter initialized.')
 
     # Walk the AST model.
     result = walker.run(text)
