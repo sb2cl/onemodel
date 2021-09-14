@@ -11,6 +11,7 @@ from onemodel.dsl.values.parameter import Parameter
 from onemodel.dsl.values.reaction import Reaction
 from onemodel.dsl.values.rate_rule import RateRule
 from onemodel.dsl.values.assignment_rule import AssignmentRule
+from onemodel.dsl.values.algebraic_rule import AlgebraicRule
 from onemodel.dsl.values.function import Function
 from onemodel.dsl.utils import check, getAstNames
 

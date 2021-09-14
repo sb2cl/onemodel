@@ -38,7 +38,7 @@ end
 rule
     x4'  = 0.1
     x5  := -1
-#    x6  == x4 + x5
+    x6  == x4 + x5
 end
 #
 #function createSpecies()
