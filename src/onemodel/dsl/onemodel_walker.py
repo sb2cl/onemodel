@@ -314,7 +314,7 @@ class OneModelWalker(NodeWalker):
         name = node.name
         
         base = self.context.symbol_table.get(base)
-        value = base.get(name)
+        value = base.value.get(name)
 
         return value
 

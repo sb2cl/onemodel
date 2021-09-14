@@ -97,7 +97,7 @@ class Ui_MainWindow(object):
         hbox.addWidget(frame)
 
         # Set initial sizes of splitters.
-        split_v.setStretchFactor(0,4);
+        split_v.setStretchFactor(0,2);
         split_v.setStretchFactor(1,1);
         split_h.setStretchFactor(0,1);
         split_h.setStretchFactor(1,4);

@@ -40,13 +40,13 @@ rule
     x5  := -1
     x6  == x4 + x5
 end
-#
+
 #function createSpecies()
 #    species x = 0
 #    rule x' = 1
 #    showContext()
 #end
-#
+
 #showContext()
 #createSpecies()
 
