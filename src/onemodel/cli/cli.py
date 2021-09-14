@@ -43,14 +43,8 @@ def run(input_file):
     base = os.path.basename(input_file)
     (filename, extension) = os.path.splitext(base)
 
-    # Load the grammar.
-    grammar = files('onemodel.dsl').joinpath('onemodel.ebnf').read_text()
-
-    # Load the parser with the grammar.
-    parser = tatsu.compile(grammar, asmodel=True)
-
-    # Parse the data into an AST model.
-    model = parser.parse(open(input_file).read())
+    # Read text from input_file.
+    text = open(input_file).read()
 
     # Init context for walker.
     context = Context('<program>')
@@ -59,8 +53,8 @@ def run(input_file):
     # Load the AST model walker.
     walker = OneModelWalker(filename, context)
 
-    # Walk the model.
-    walker.walk(model)
+    # Run.
+    walker.run(text)
 
 @cli.command(short_help='Export model')
 @click.argument('input_file', 
@@ -142,16 +136,10 @@ def onemodel2sbml(input_file, filename, output):
     """
     print('### Convert onemodel into sbml ###')
 
-    # Load the grammar.
-    grammar = files('onemodel.dsl').joinpath('onemodel.ebnf').read_text()
 
-    # Load the parser with the grammar.
-    parser = tatsu.compile(grammar, asmodel=True)
-    print('\tParser initialized with "onemodel" syntax.')
-
-    # Parse the data into an AST model.
-    model = parser.parse(open(input_file).read())
-    print('\tParsed input file into an AST model.')
+    # Read input file.
+    text = open(input_file).read()
+    print('\tRead input file.')
 
     # Init context for walker.
     context = Context('<program>')
@@ -159,15 +147,15 @@ def onemodel2sbml(input_file, filename, output):
 
     # Load the AST model walker.
     walker = OneModelWalker(filename, context)
-    print('\tAST model walker initialized for "onemodel" syntax.')
+    print('\tOneModel walker initialized.')
 
     # Walk the AST model.
-    result = walker.walk(model)
-    print('\tWalk the AST model.')
+    result = walker.run(text)
+    print('\tRun input_file.')
 
     # Get SBML representation.
     sbml = walker.getSBML()
-    print('\tExport SBML.')
+    print('\tExport to SBML.')
 
     # Save SBML.
     sbml_filename = f'{output}/{filename}.xml' 
