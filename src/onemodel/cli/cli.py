@@ -58,7 +58,6 @@ def run(input_file):
 
     # Load the AST model walker.
     walker = OneModelWalker(filename, context)
-    context.walker = walker
 
     # Walk the model.
     walker.walk(model)
@@ -160,7 +159,6 @@ def onemodel2sbml(input_file, filename, output):
 
     # Load the AST model walker.
     walker = OneModelWalker(filename, context)
-    context.walker = walker
     print('\tAST model walker initialized for "onemodel" syntax.')
 
     # Walk the AST model.

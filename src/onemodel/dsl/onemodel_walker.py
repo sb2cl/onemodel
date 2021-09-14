@@ -18,9 +18,10 @@ class OneModelWalker(NodeWalker):
         self.model_name = model_name
 
         # Create context with the symbol table where we will save all objects.
-        # libSBML objects will be stored both in the symbol table and in the
-        # model.
         self.context = context
+
+        # Add this walker to the context.
+        self.context.walker = self
 
         self.document = None
         self.model = None

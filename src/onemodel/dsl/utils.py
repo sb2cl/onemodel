@@ -39,5 +39,3 @@ def getAstNames(ast):
             names.append(item)
 
     return names
-
-

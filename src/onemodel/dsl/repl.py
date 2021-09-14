@@ -40,10 +40,6 @@ class Repl:
         # Init the model walker.
         walker = OneModelWalker('repl', self.context)
 
-        # Add the walker to the main context. 
-        # We will need it for some built-in functions.
-        self.context.walker = walker
-
         while continue_loop:
             # 1. READ
             text = input('onemodel> ')
