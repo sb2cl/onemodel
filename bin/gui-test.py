@@ -1,44 +1,39 @@
+from PyQt5.QtWidgets import QApplication, QWidget, QToolButton, QMainWindow
+from PyQt5.QtGui import QIcon
+from PyQt5.QtCore import Qt
 import sys
-from PyQt5.QtCore import *
-from PyQt5.QtGui import *
-from PyQt5.QtWidgets import *
 
-class Example(QWidget):
+class ToolButton(QMainWindow):
+
     def __init__(self):
-        super(Example, self).__init__()
+        super(ToolButton,self).__init__()
         self.initUI()
-     
+
     def initUI(self):
-        hbox = QHBoxLayout(self)
-          
-        topleft = QFrame()
-        topleft.setFrameShape(QFrame.StyledPanel)
-        bottom = QFrame()
-        bottom.setFrameShape(QFrame.StyledPanel)
-          
-        splitter1 = QSplitter(Qt.Horizontal)
-        textedit = QTextEdit()
-        splitter1.addWidget(topleft)
-        splitter1.addWidget(textedit)
-        splitter1.setSizes([1200,800])
-          
-        splitter2 = QSplitter(Qt.Vertical)
-        splitter2.addWidget(splitter1)
-        splitter2.addWidget(bottom)
-          
-        hbox.addWidget(splitter2)
-          
-        self.setLayout(hbox)
-        QApplication.setStyle(QStyleFactory.create('Cleanlooks'))
-          
-        self.setGeometry(300, 300, 300, 200)
-        self.setWindowTitle('QSplitter demo')
-        self.show()
-          
-def main():
-    app = QApplication(sys.argv)
-    ex = Example()
-    sys.exit(app.exec_())
-    
+        self.setWindowTitle("ToolButton")
+        self.setGeometry(400,400,300,260)
+
+        self.toolbar = self.addToolBar("toolBar")
+        self.statusBar()
+
+        self._detailsbutton = QToolButton()                                     
+        self._detailsbutton.setCheckable(True)                                  
+        self._detailsbutton.setChecked(False)                                   
+        self._detailsbutton.setArrowType(Qt.UpArrow)
+        self._detailsbutton.setAutoRaise(True)
+        #self._detailsbutton.setIcon(QIcon("test.jpg"))
+        self._detailsbutton.setToolButtonStyle(Qt.ToolButtonIconOnly)
+        self._detailsbutton.clicked.connect(self.showDetail)
+        self.toolbar.addWidget(self._detailsbutton)
+
+    def showDetail(self):
+        if self._detailsbutton.isChecked():
+            self.statusBar().showMessage("Show Detail....")
+        else:
+            self.statusBar().showMessage("Close Detail....")
+
 if __name__ == '__main__':
-    main()
+    app = QApplication(sys.argv)
+    ex = ToolButton()
+    ex.show()
+    sys.exit(app.exec_()) 
