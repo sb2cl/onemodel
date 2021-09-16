@@ -76,9 +76,10 @@ power
   ;
 
 
-call
+call::Call
   =
-  atom
+  | value:atom '(' ')'
+  | next:atom
   ;
 
 
@@ -88,6 +89,7 @@ atom
   | integer
   | string
   | access_identifier
+  | function_definition
   ;
 
 
@@ -119,6 +121,13 @@ access_identifier::AccessIdentifier
   name:identifier
   ;
 
+
+function_definition::FunctionDefinition
+  =
+  'function' name:identifier '(' ')' newline
+  {newline | body:statement}
+  'end'
+  ;
 
 # Definition of identifiers
 # Identifiers cannot have a keyword name.

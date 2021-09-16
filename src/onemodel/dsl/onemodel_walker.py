@@ -11,6 +11,7 @@ from onemodel.dsl.context import Context
 from onemodel.dsl.context_root import ContextRoot
 
 from onemodel.dsl.symbols.variable_symbol import VariableSymbol
+from onemodel.dsl.symbols.function_symbol import FunctionSymbol
 
 class OneModelWalker(NodeWalker):
     def __init__(self, model_name, context = None):
@@ -122,13 +123,26 @@ class OneModelWalker(NodeWalker):
 
         return value
 
-    def walk_Integer(self, node):
-        value = int(node.value)
+    def walk_Call(self, node):
+        if node.next:
+            return self.walk(node.next)
 
-        return value
+        value = self.walk(node.value)
+
+        result = value.__call__(
+            self.current_context,
+            None # TODO: Here will be the arguments
+        )
+
+        return result
 
     def walk_Float(self, node):
         value = float(node.value)
+
+        return value
+
+    def walk_Integer(self, node):
+        value = int(node.value)
 
         return value
 
@@ -142,6 +156,19 @@ class OneModelWalker(NodeWalker):
         value = self.current_context.get(name)
 
         return value
+
+    def walk_FunctionDefinition(self, node):
+        name = node.name
+        body = node.body
+
+        function = FunctionSymbol(
+                name,
+                self.current_context,
+                body)
+
+        self.current_context.set(function)
+
+        return function
 
     def walk_list(self, nodes):
         results = []
