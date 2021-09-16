@@ -1,10 +1,13 @@
+model Test
+end
+
 model TestModel
-  species x = 0
-  rule x' = 1
+    species x = 0
+    rule x' = 1
+    let test = Test()
 end
 
 let a = TestModel()
-let b = TestModel()
 
-print(a.x)
-print(b.x)
+showValueContext(a)
+#showContext()

@@ -13,6 +13,9 @@ class ContextRoot(Context):
         self.addBuiltInFunction('showContext')
         self.addBuiltInFunction('showValueContext')
         self.addBuiltInFunction('run')
+        self.addBuiltInFunction('getFullName')
+
+        self.namespace = 'std_'
 
     def addBuiltInFunction(self, name):
         self.set(name, BuiltInFunction(name))

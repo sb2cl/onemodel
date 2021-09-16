@@ -24,11 +24,11 @@ class Model(BaseFunction):
     def __call__(self, args):
         from onemodel.dsl.onemodel_walker import OneModelWalker
 
-        exec_context = self.generate_new_context()
+        obj = Object()
+        obj.context.parent = self.definition_context
+        print('??????' + obj.context.parent.namespace)
 
-        walker = OneModelWalker('repl', exec_context)
+        walker = OneModelWalker('repl', obj.context)
         walker.walk(self.body_node)
 
-        result = Object(exec_context)
-
-        return result
+        return obj 

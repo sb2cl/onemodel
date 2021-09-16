@@ -13,6 +13,9 @@ class Context:
         # Reference to the walker.
         self.walker = None
 
+        # Namespace.
+        self.namespace = ''
+
     def getRootContext(self):
         """ Return root context.
         """
@@ -33,7 +36,7 @@ class Context:
         self.locals[name] = value
 
     def get(self, name):
-        """ Get a varible by its name.
+        """ Get a variable by its name.
 
         If the variable is not in self.locals, we will look for in the parent
         context.
@@ -53,6 +56,14 @@ class Context:
       
         return value
 
-    def getValueFullName(self, name):
+    def getLocal(self, name):
+        """ Get a variable by its name, but only look for it in self.locals.
+        """
+        # Find value in self.locals.
+        value = self.locals.get(name, None)
+
+        return value
+
+    def getFullName(self, name):
         # TODO: Hacer esto.
         pass

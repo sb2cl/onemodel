@@ -70,9 +70,14 @@ class BuiltInFunction(BaseFunction):
         """
         context = exec_context.parent
 
-        # print('### Context ###')
-        # print(f'%-25s %s' % ('name', context.display_name))
-        # print(f'%-25s %s' % ('parent_name', parent_name))
+        if context.parent != None:
+            parent_namespace = context.parent.namespace
+        else:
+            parent_namespace = 'None'
+
+        print('### Context ###')
+        print(f'%-25s %s' % ('namespace', f'"{context.namespace}"'))
+        print(f'%-25s %s' % ('parent_namespace',f'"{parent_namespace}"'))
         # print()
         print('### Context.locals  ###')
         for local in context.locals:
@@ -89,10 +94,17 @@ class BuiltInFunction(BaseFunction):
         object_ = exec_context.get('object')
 
         context = object_.context
+        print(context.locals)
+        print(context.parent.parent.locals)
 
-        # print('### Context ###')
-        # print(f'%-25s %s' % ('name', context.display_name))
-        # print(f'%-25s %s' % ('parent_name', parent_name))
+        if context.parent.parent != None:
+            parent_namespace = context.parent.parent.namespace
+        else:
+            parent_namespace = 'None'
+
+        print('### Context ###')
+        print(f'%-25s %s' % ('namespace', f'"{context.namespace}"'))
+        print(f'%-25s %s' % ('parent_namespace',f'"{parent_namespace}"'))
         # print()
         print('### Context.locals ###')
         for local in context.locals:
@@ -119,5 +131,15 @@ class BuiltInFunction(BaseFunction):
         
         return None
     call_run.arg_names = ['filename']
+
+    def call_getFullName(self, exec_context):
+        """ Get the fullname of a value.
+        """
+        value = exec_context.get('name')
+
+        print(value)
+
+        return None
+    call_getFullName.arg_names = ['name']
 
 

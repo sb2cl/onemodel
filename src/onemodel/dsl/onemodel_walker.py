@@ -100,7 +100,6 @@ class OneModelWalker(NodeWalker):
         check(c.setUnits('litre'), 'set compartment size units')
 
     def populateSBMLDocument(self):
-
         for local in self.context.locals:
             value = self.context.get(local)
             value.add_value_to_model(local, self.model)
@@ -237,6 +236,7 @@ class OneModelWalker(NodeWalker):
         name = node.name
         value = self.walk(node.value)
 
+        value.context.namespace = name
         self.context.set(name, value)
 
         return value
@@ -246,7 +246,6 @@ class OneModelWalker(NodeWalker):
             return self.walk(node.next)
 
         value = self.walk(node.value)
-
         arguments = self.walk(node.arguments)
 
         if arguments == None:
