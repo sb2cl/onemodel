@@ -1,5 +1,6 @@
 from onemodel.dsl.values.base_function import BaseFunction
 from onemodel.dsl.values.python_value import PythonValue
+from onemodel.dsl.values.object import Object
 
 class Model(BaseFunction):
     """ Definition of OneModel models.
@@ -9,6 +10,10 @@ class Model(BaseFunction):
         """
         super().__init__(name)
         self.body_node = body_node
+
+    def add_value_to_model(self, name, model):
+        # Models are not included in SBML models.
+        pass
 
     def __str__(self):
         return f"<model {self.name}>"
@@ -24,6 +29,6 @@ class Model(BaseFunction):
         walker = OneModelWalker('repl', exec_context)
         walker.walk(self.body_node)
 
-        result = PythonValue(exec_context.symbol_table)
+        result = Object(exec_context)
 
         return result

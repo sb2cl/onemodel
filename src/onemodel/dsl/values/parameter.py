@@ -18,6 +18,8 @@ class Parameter(Value):
             model: LibSBML model
                 Model to include this value.
         """
+        name = self.namespace + name
+
         p = model.createParameter()
 
         check(

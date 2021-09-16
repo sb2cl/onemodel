@@ -9,6 +9,7 @@ class GlobalSymbolTable(SymbolTable):
         self.addBuiltInFunction('printSbml')
         self.addBuiltInFunction('exit')
         self.addBuiltInFunction('showContext')
+        self.addBuiltInFunction('showValueContext')
         self.addBuiltInFunction('run')
 
     def addBuiltInFunction(self, name):

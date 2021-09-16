@@ -17,7 +17,7 @@ class BaseFunction(Value):
         """
         new_context = Context(
             self.name, 
-            self.context
+            self.definition_context
         )
 
         new_context.symbol_table = SymbolTable(
@@ -45,8 +45,8 @@ class BaseFunction(Value):
         for i in range(len(args)):
             arg_name = arg_names[i] 
             arg_value = args[i]
-            arg_value.set_context(exec_context)
-            exec_context.symbol_table.set(arg_name, arg_value)
+            arg_value.set_definition_context(exec_context)
+            exec_context.set(arg_name, arg_value)
 
     def check_and_populate_args(self, arg_names, args, exec_context):
         """ Check and populate arguments.

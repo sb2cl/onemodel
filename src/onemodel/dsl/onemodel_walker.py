@@ -130,7 +130,7 @@ class OneModelWalker(NodeWalker):
 
         s.initialConcentration = value
 
-        self.context.symbol_table.set(name, s)
+        self.context.set(name, s)
 
         return s
 
@@ -149,7 +149,7 @@ class OneModelWalker(NodeWalker):
 
         p.value = value
 
-        self.context.symbol_table.set(name, p)
+        self.context.set(name, p)
 
         return p
 
@@ -176,7 +176,7 @@ class OneModelWalker(NodeWalker):
         r.products = products
         r.kinetic_law = kinetic_law_str
 
-        self.context.symbol_table.set(name, r)
+        self.context.set(name, r)
 
         return r
 
@@ -195,7 +195,7 @@ class OneModelWalker(NodeWalker):
         r.variable = variable
         r.math = math
 
-        self.context.symbol_table.set(name, r)
+        self.context.set(name, r)
 
         return r
 
@@ -213,7 +213,7 @@ class OneModelWalker(NodeWalker):
         r.variable = variable
         r.math = math
 
-        self.context.symbol_table.set(name, r)
+        self.context.set(name, r)
 
         return r
 
@@ -231,7 +231,7 @@ class OneModelWalker(NodeWalker):
         r.variable = variable
         r.math = math
 
-        self.context.symbol_table.set(name, r)
+        self.context.set(name, r)
 
         return r
 
@@ -239,7 +239,7 @@ class OneModelWalker(NodeWalker):
         name = node.name
         value = self.walk(node.value)
 
-        self.context.symbol_table.set(name, value)
+        self.context.set(name, value)
 
         return value
 
@@ -257,9 +257,7 @@ class OneModelWalker(NodeWalker):
         if type(arguments) != list:
             arguments = [arguments]
 
-        # TODO: Check that using context this way makes sense.
-        value.set_context(self.context)
-
+        value.set_definition_context(self.context)
         result = value(arguments)
 
         if type(result) == list:
@@ -270,15 +268,21 @@ class OneModelWalker(NodeWalker):
     def walk_Integer(self, node):
         value = int(node.value)
 
-        return PythonValue(value)
+        value = PythonValue(value)
+
+        return value
 
     def walk_Float(self, node):
         value = float(node.value)
+
+        value = PythonValue(value)
 
         return PythonValue(value)
 
     def walk_String(self, node):
         value = str(node.value)
+
+        value = PythonValue(value)
 
         return PythonValue(value)
 
@@ -295,7 +299,7 @@ class OneModelWalker(NodeWalker):
 
         f = Function(name, args, body)
 
-        self.context.symbol_table.set(name, f)
+        self.context.set(name, f)
 
         return f
 
@@ -305,7 +309,7 @@ class OneModelWalker(NodeWalker):
 
         m = Model(name, body)
 
-        self.context.symbol_table.set(name, m)
+        self.context.set(name, m)
 
         return m
 
@@ -314,7 +318,7 @@ class OneModelWalker(NodeWalker):
         name = node.name
         
         base = self.context.symbol_table.get(base)
-        value = base.value.get(name)
+        value = base.context.get(name)
 
         return value
 

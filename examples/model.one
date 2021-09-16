@@ -1,9 +1,10 @@
 model TestModel
   species x = 0
-  rule r: x' = 1
+  rule x' = 1
 end
 
-let testModel = TestModel()
+let a = TestModel()
+let b = TestModel()
 
-print(testModel.x)
-print(testModel.r)
+print(a.x)
+print(b.x)

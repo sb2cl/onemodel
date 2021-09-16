@@ -90,6 +90,33 @@ class BuiltInFunction(BaseFunction):
         return
     call_showContext.arg_names = []
 
+    def call_showValueContext(self, exec_context):
+        """ Show the context and symbol table of a value.
+        """
+        object_ = exec_context.symbol_table.get('object')
+
+        context = object_.context
+
+        if context.parent == None:
+            parent_name = 'None'
+        else:
+            parent_name = context.parent.display_name
+
+        symbol_table = context.symbol_table
+
+        print('### Context ###')
+        print(f'%-25s %s' % ('name', context.display_name))
+        print(f'%-25s %s' % ('parent_name', parent_name))
+        print()
+        print('### Symbol table ###')
+        for symbol in symbol_table.symbols:
+            name = symbol
+            value = symbol_table.get(name)
+            print(f'%-25s %s' % (name, value))
+
+        return
+    call_showValueContext.arg_names = ['object']
+
     def call_run(self, exec_context):
         """ Run a file.
         """

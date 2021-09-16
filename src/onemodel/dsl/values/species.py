@@ -21,6 +21,8 @@ class Species(Value):
             model: LibSBML model
                 Model to include this value.
         """
+        name = self.namespace + name
+
         s = model.createSpecies()
 
         check(

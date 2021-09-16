@@ -11,6 +11,8 @@ class RateRule(Value):
         self.math = ''
 
     def add_value_to_model(self, name, model):
+        variable = self.namespace + self.variable
+        name = self.namespace + name
 
         math_ast = parseL3Formula(self.math)
 
@@ -27,7 +29,7 @@ class RateRule(Value):
         )
 
         check(
-            r.setVariable(self.variable),
+            r.setVariable(variable),
             f'set variable on rate rule {name}'
         )
 

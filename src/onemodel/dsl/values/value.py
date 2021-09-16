@@ -4,12 +4,13 @@ class Value:
     def __init__(self):
         """ Initialize Value.
         """
-        self.set_context()
+        self.set_definition_context()
+        self.namespace = ''
 
-    def set_context(self, context=None):
-        """ Set the context of the value.
+    def set_definition_context(self, context=None):
+        """ Set the context where the value is defined.
         """
-        self.context = context
+        self.definition_context = context
 
     def add_value_to_model(self, name, model):
         """ Add this value to a SBML model.
