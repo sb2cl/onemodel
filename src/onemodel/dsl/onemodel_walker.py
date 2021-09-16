@@ -10,6 +10,8 @@ from libsbml import *
 from onemodel.dsl.context import Context
 from onemodel.dsl.context_root import ContextRoot
 
+from onemodel.dsl.symbols.variable_symbol import VariableSymbol
+
 class OneModelWalker(NodeWalker):
     def __init__(self, model_name, context = None):
         # Name for generating files.
@@ -105,6 +107,20 @@ class OneModelWalker(NodeWalker):
         return writeSBMLToString(self.document)
 
     ### Walk methods ###
+
+    def walk_AssignVariable(self, node):
+        name = node.name
+        value = self.walk(node.value)
+
+        variable = VariableSymbol(
+            name,
+            self.current_context,
+            value
+        )
+
+        self.current_context.set(variable)
+
+        return value
 
     def walk_Integer(self, node):
         value = int(node.value)

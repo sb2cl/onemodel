@@ -23,14 +23,11 @@ class Context:
 
         return context
 
-    def set(self, name, value):
-        """ Set the value in self.symbols as name.
+    def set(self, symbol):
+        """ Set a symbol in self.symbols.
         """
-        # Add the definition context to the value.
-        value.set_definition_context(self)
-
         # Save value in symbols.
-        self.symbols[name] = value
+        self.symbols[symbol.name] = symbol
 
     def get(self, name):
         """ Get a variable by its name.

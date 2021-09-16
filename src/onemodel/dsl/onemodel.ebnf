@@ -35,8 +35,16 @@ statement
 
 expr
   =
-   comp_expr
+  | assign_variable
+  | comp_expr
   ;
+
+
+assign_variable::AssignVariable
+  =
+  'let' name:identifier '=' value:expr
+  ;
+
 
 comp_expr
   =
