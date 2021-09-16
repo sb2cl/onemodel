@@ -9,16 +9,6 @@ from libsbml import *
 
 from onemodel.dsl.context import Context
 from onemodel.dsl.context_root import ContextRoot
-from onemodel.dsl.values.python_value import PythonValue
-from onemodel.dsl.values.species import Species
-from onemodel.dsl.values.parameter import Parameter
-from onemodel.dsl.values.reaction import Reaction
-from onemodel.dsl.values.rate_rule import RateRule
-from onemodel.dsl.values.assignment_rule import AssignmentRule
-from onemodel.dsl.values.algebraic_rule import AlgebraicRule
-from onemodel.dsl.values.function import Function
-from onemodel.dsl.values.model import Model
-from onemodel.dsl.utils import check, getAstNames
 
 class OneModelWalker(NodeWalker):
     def __init__(self, model_name, context = None):
@@ -28,13 +18,13 @@ class OneModelWalker(NodeWalker):
         # If context is passed.
         if context:
             # Save it.
-            self.context = context
+            self.current_context = context
         else:
             # If not, generate a root context.
-            self.context = ContextRoot()
+            self.current_context = ContextRoot()
 
         # Add this walker to the context.
-        self.context.walker = self
+        self.current_context.walker = self
 
         # SBMLDocument and SBMLModel
         self.document = None
@@ -87,7 +77,7 @@ class OneModelWalker(NodeWalker):
         # Create a default_compartment.
         c = self.model.createCompartment()
 
-        self.context.set(
+        self.current_context.set(
             'default_compartment', 
             PythonValue(c)
         )
@@ -100,9 +90,9 @@ class OneModelWalker(NodeWalker):
         check(c.setUnits('litre'), 'set compartment size units')
 
     def populateSBMLDocument(self):
-        for local in self.context.locals:
-            value = self.context.get(local)
-            value.add_value_to_model(local, self.model)
+        for symbol in self.current_context.symbols:
+            value = self.current_context.get(symbol)
+            value.add_value_to_model(symbol, self.model)
 
     def checkConsistency(self):
         if self.document.checkConsistency():
@@ -116,212 +106,24 @@ class OneModelWalker(NodeWalker):
 
     ### Walk methods ###
 
-    def walk_Species(self, node):
-        name = node.name
-        value = self.walk(node.value).value
-
-        if value == None:
-            value = 0
-
-        s = Species()
-
-        s.initialConcentration = value
-
-        self.context.set(name, s)
-
-        return s
-
-    def walk_Parameter(self, node):
-        name = node.name
-        value = self.walk(node.value).value
-
-        if value == None:
-            value = 0
-
-        if not type(value) in (int, float):
-            print('Error: value must be int or float')
-            return
-            
-        p = Parameter()
-
-        p.value = value
-
-        self.context.set(name, p)
-
-        return p
-
-    def walk_Reaction(self, node):
-        name = node.name
-        reactants = node.reactants
-        products = node.products
-        kinetic_law_str = node.kinetic_law
-
-        if type(reactants) != list:
-            reactants = [reactants] 
-
-        if type(products) != list:
-            products = [products] 
-
-        if name == None:
-            name = f'_J{self.numReactions}'
-            self.numReactions += 1
-
-        # Create reaction.
-        r = Reaction()
-
-        r.reactants = reactants
-        r.products = products
-        r.kinetic_law = kinetic_law_str
-
-        self.context.set(name, r)
-
-        return r
-
-    def walk_RateRule(self, node):
-        name = node.name
-        variable = node.variable
-        math = node.math
-
-        if name == None:
-            name = f'_R{self.numRules}'
-            self.numRules += 1
-
-        # Create rate rule.
-        r = RateRule()
-
-        r.variable = variable
-        r.math = math
-
-        self.context.set(name, r)
-
-        return r
-
-    def walk_AssignmentRule(self, node):
-        name = node.name
-        variable = node.variable
-        math = node.math
-
-        if name == None:
-            name = f'_R{self.numRules}'
-            self.numRules += 1
-
-        r = AssignmentRule()
-
-        r.variable = variable
-        r.math = math
-
-        self.context.set(name, r)
-
-        return r
-
-    def walk_AlgebraicRule(self, node):
-        name = node.name
-        variable = node.variable
-        math = node.math
-
-        if name == None:
-            name = f'_R{self.numRules}'
-            self.numRules += 1
-
-        r = AlgebraicRule()
-
-        r.variable = variable
-        r.math = math
-
-        self.context.set(name, r)
-
-        return r
-
-    def walk_AssignValue(self, node):
-        name = node.name
-        value = self.walk(node.value)
-
-        value.context.namespace = name
-        self.context.set(name, value)
-
-        return value
-
-    def walk_Call(self, node):
-        if node.next:
-            return self.walk(node.next)
-
-        value = self.walk(node.value)
-        arguments = self.walk(node.arguments)
-
-        if arguments == None:
-            arguments = []
-
-        if type(arguments) != list:
-            arguments = [arguments]
-
-        value.set_definition_context(self.context)
-        result = value(arguments)
-
-        if type(result) == list:
-            result = result[-1]
-
-        return result
-
     def walk_Integer(self, node):
         value = int(node.value)
-
-        value = PythonValue(value)
 
         return value
 
     def walk_Float(self, node):
         value = float(node.value)
 
-        value = PythonValue(value)
-
-        return PythonValue(value)
+        return value
 
     def walk_String(self, node):
         value = str(node.value)
-
-        value = PythonValue(value)
-
-        return PythonValue(value)
-
-    def walk_FunctionDefinition(self, node):
-        name = node.name
-        args = node.args
-        body = node.body
-
-        if args == None:
-            args = []
-
-        if type(args) != list:
-            args = [args]
-
-        f = Function(name, args, body)
-
-        self.context.set(name, f)
-
-        return f
-
-    def walk_ModelDefinition(self, node):
-        name = node.name
-        body = node.body
-
-        m = Model(name, body)
-
-        self.context.set(name, m)
-
-        return m
-
-    def walk_AccessProperty(self, node):
-        base = node.base
-        name = node.name
-        
-        base = self.context.get(base)
-        value = base.context.get(name)
 
         return value
 
     def walk_AccessIdentifier(self, node):
         name = node.name
-        value = self.context.get(name)
+        value = self.current_context.get(name)
 
         return value
 

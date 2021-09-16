@@ -29,80 +29,14 @@ statements
 
 statement
   = 
-  | 'species'   newline {newline | @:species newline}   'end'
-  | 'parameter' newline {newline | @:parameter newline} 'end'
-  | 'reaction'  newline {newline | @:reaction newline}  'end'
-  | 'rule'      newline {newline | @:rule newline}      'end'
-  | expr
+  expr
   ;
 
 
 expr
   =
-  | 'species'   @:species   {',' | @:species}
-  | 'parameter' @:parameter {',' | @:parameter}
-  | 'reaction'  @:reaction 
-  | 'rule'      @:rule 
-  | 'let'       @:assign_value
-  | comp_expr
+   comp_expr
   ;
-
-
-species::Species
-  = 
-  name:identifier ['=' value:atom]
-  ;
-
-
-parameter::Parameter
-  = 
-  name:identifier ['=' value:atom]
-  ;
-
-
-reaction::Reaction
-  =
-  [ name:identifier ':']
-  {'+' | reactants:identifier} 
-  '->' 
-  {'+' | products:identifier} 
-  newline 
-  kinetic_law:formula
-  ;
-
-
-rule
-  =
-  | rate_rule
-  | assignment_rule 
-  | algebraic_rule
-  ;
-
-
-rate_rule::RateRule
-  =
-  [name:identifier ':'] variable:identifier "'" '=' math:formula
-  ;
-
-
-assignment_rule::AssignmentRule
-  =
-  | name:identifier ':' variable:identifier ':=' math:formula
-  | variable:identifier ':=' math:formula
-  ;
-
-
-algebraic_rule::AlgebraicRule
-  =
-  [name:identifier ':'] variable:identifier '==' math:formula
-  ;
-
-
-assign_value::AssignValue
-  =
-  name:identifier '=' value:expr
-  ;
-
 
 comp_expr
   =
@@ -134,21 +68,17 @@ power
   ;
 
 
-call::Call
+call
   =
-  | value:atom '(' [arguments:expr {',' arguments:expr}] ')'
-  | next:atom
+  atom
   ;
 
 
 atom
   = 
-  | integer
   | float
+  | integer
   | string
-  | function_definition
-  | model_definition
-  | access_property
   | access_identifier
   ;
 
@@ -175,28 +105,6 @@ string::String
   ;
 
 
-function_definition::FunctionDefinition
-  =
-  'function' name:identifier '(' [args:identifier {',' args:identifier}] ')' newline 
-  {newline | body:statement}
-  'end'
-  ;
-
-
-model_definition::ModelDefinition
-  =
-  'model' name:identifier newline 
-  {newline | body:statement}
-  'end'
-  ;
-
-
-access_property::AccessProperty
-  = 
-  base:identifier '.' name:identifier
-  ;
-
-
 # Access the value of an identifier.
 access_identifier::AccessIdentifier
   = 
@@ -210,12 +118,6 @@ access_identifier::AccessIdentifier
 identifier::str
   =
   /(?!\d)\w+/ 
-  ;
-
-
-formula::str
-  =
-  /[^\\\r\n\f'\;]*/
   ;
 
 

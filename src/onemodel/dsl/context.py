@@ -1,20 +1,17 @@
 class Context:
     """ The evaluation context.
     """
-    def __init__(self, parent=None):
+    def __init__(self, name=None, parent=None):
         """ Initialize context.
         """
+        # Context name.
+        self.name = name
+
         # Parent context.
         self.parent = parent
 
-        # Dictionary with local variables.
-        self.locals = {}
-
-        # Reference to the walker.
-        self.walker = None
-
-        # Namespace.
-        self.namespace = ''
+        # Dictionary with local symbols.
+        self.symbols = {}
 
     def getRootContext(self):
         """ Return root context.
@@ -27,22 +24,22 @@ class Context:
         return context
 
     def set(self, name, value):
-        """ Set the value in self.locals as name.
+        """ Set the value in self.symbols as name.
         """
         # Add the definition context to the value.
         value.set_definition_context(self)
 
-        # Save value in locals.
-        self.locals[name] = value
+        # Save value in symbols.
+        self.symbols[name] = value
 
     def get(self, name):
         """ Get a variable by its name.
 
-        If the variable is not in self.locals, we will look for in the parent
+        If the variable is not in self.symbols, we will look for in the parent
         context.
         """
-        # Find value in self.locals.
-        value = self.locals.get(name, None)
+        # Find value in self.symbols.
+        value = self.symbols.get(name, None)
     
         # If didn't find the value, and there is a parent context.
         if value == None and self.parent:
@@ -55,15 +52,3 @@ class Context:
             raise NameError(f"NameError: name '{name}' is not defined")
       
         return value
-
-    def getLocal(self, name):
-        """ Get a variable by its name, but only look for it in self.locals.
-        """
-        # Find value in self.locals.
-        value = self.locals.get(name, None)
-
-        return value
-
-    def getFullName(self, name):
-        # TODO: Hacer esto.
-        pass

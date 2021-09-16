@@ -79,9 +79,9 @@ class BuiltInFunction(BaseFunction):
         print(f'%-25s %s' % ('namespace', f'"{context.namespace}"'))
         print(f'%-25s %s' % ('parent_namespace',f'"{parent_namespace}"'))
         # print()
-        print('### Context.locals  ###')
-        for local in context.locals:
-            name = local
+        print('### Context.symbols  ###')
+        for symbol in context.symbols:
+            name = symbol
             value = context.get(name)
             print(f'%-25s %s' % (name, value))
 
@@ -94,8 +94,8 @@ class BuiltInFunction(BaseFunction):
         object_ = exec_context.get('object')
 
         context = object_.context
-        print(context.locals)
-        print(context.parent.parent.locals)
+        print(context.symbols)
+        print(context.parent.parent.symbols)
 
         if context.parent.parent != None:
             parent_namespace = context.parent.parent.namespace
@@ -106,9 +106,9 @@ class BuiltInFunction(BaseFunction):
         print(f'%-25s %s' % ('namespace', f'"{context.namespace}"'))
         print(f'%-25s %s' % ('parent_namespace',f'"{parent_namespace}"'))
         # print()
-        print('### Context.locals ###')
-        for local in context.locals:
-            name = local
+        print('### Context.symbols ###')
+        for symbol in context.symbols:
+            name = symbol
             value = context.get(name)
             print(f'%-25s %s' % (name, value))
 

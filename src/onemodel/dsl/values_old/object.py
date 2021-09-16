@@ -33,10 +33,10 @@ class Object(Value):
             model: LibSBML model
                 Model to include this value.
         """
-        for local in self.context.locals:
-            value = self.context.get(local)
+        for symbol in self.context.symbols:
+            value = self.context.get(symbol)
             value.namespace = f'{name}__'
-            value.add_value_to_model(local, model)
+            value.add_value_to_model(symbol, model)
 
     def __str__(self):
         return f"<object>"
