@@ -7,6 +7,7 @@ class AssignmentRule(Value):
     """ SBML Assignment Rule.
     """
     def __init__(self):
+        super().__init__()
         self.variable = ''
         self.math = ''
 

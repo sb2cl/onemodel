@@ -1,15 +1,21 @@
 class Context:
-    """ Context for executing functions and keep track of symbol tables.
+    """ The evaluation context.
     """
-    def __init__(self, display_name, parent=None):
+    def __init__(self, parent=None):
         """ Initialize context.
         """
-        self.display_name = display_name
+        # Parent context.
         self.parent = parent
-        self.symbol_table = None
+
+        # Dictionary with local variables.
+        self.locals = {}
+
+        # Reference to the walker.
         self.walker = None
 
-    def getMainParent(self):
+    def getRootContext(self):
+        """ Return root context.
+        """
         context = self
 
         while context.parent != None:
@@ -18,13 +24,33 @@ class Context:
         return context
 
     def set(self, name, value):
+        """ Set the value in self.locals as name.
+        """
+        # Add the definition context to the value.
         value.set_definition_context(self)
 
-        self.symbol_table.set(name, value)
+        # Save value in locals.
+        self.locals[name] = value
 
     def get(self, name):
-        value = self.symbol_table.get(name)
+        """ Get a varible by its name.
 
+        If the variable is not in self.locals, we will look for in the parent
+        context.
+        """
+        # Find value in self.locals.
+        value = self.locals.get(name, None)
+    
+        # If didn't find the value, and there is a parent context.
+        if value == None and self.parent:
+            # Look recursively in parent context for the value.
+            return self.parent.get(name)
+      
+        # If value is not found.
+        if value == None:
+            # Raise an error.
+            raise NameError(f"NameError: name '{name}' is not defined")
+      
         return value
 
     def getValueFullName(self, name):

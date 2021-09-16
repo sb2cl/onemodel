@@ -8,7 +8,7 @@ from tatsu.walkers import NodeWalker
 from libsbml import *
 
 from onemodel.dsl.context import Context
-from onemodel.dsl.global_symbol_table import GlobalSymbolTable
+from onemodel.dsl.context_root import ContextRoot
 from onemodel.dsl.values.python_value import PythonValue
 from onemodel.dsl.values.species import Species
 from onemodel.dsl.values.parameter import Parameter
@@ -30,9 +30,8 @@ class OneModelWalker(NodeWalker):
             # Save it.
             self.context = context
         else:
-            # If not, generate a main context.
-            self.context = Context('<program>')
-            self.context.symbol_table = GlobalSymbolTable()
+            # If not, generate a root context.
+            self.context = ContextRoot()
 
         # Add this walker to the context.
         self.context.walker = self
@@ -88,7 +87,7 @@ class OneModelWalker(NodeWalker):
         # Create a default_compartment.
         c = self.model.createCompartment()
 
-        self.context.symbol_table.set(
+        self.context.set(
             'default_compartment', 
             PythonValue(c)
         )
@@ -101,11 +100,10 @@ class OneModelWalker(NodeWalker):
         check(c.setUnits('litre'), 'set compartment size units')
 
     def populateSBMLDocument(self):
-        symbol_table = self.context.symbol_table
 
-        for symbol in symbol_table.symbols:
-            value = symbol_table.get(symbol)
-            value.add_value_to_model(symbol, self.model)
+        for local in self.context.locals:
+            value = self.context.get(local)
+            value.add_value_to_model(local, self.model)
 
     def checkConsistency(self):
         if self.document.checkConsistency():
@@ -317,14 +315,14 @@ class OneModelWalker(NodeWalker):
         base = node.base
         name = node.name
         
-        base = self.context.symbol_table.get(base)
+        base = self.context.get(base)
         value = base.context.get(name)
 
         return value
 
     def walk_AccessIdentifier(self, node):
         name = node.name
-        value = self.context.symbol_table.get(name)
+        value = self.context.get(name)
 
         return value
 

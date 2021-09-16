@@ -7,6 +7,7 @@ class Reaction(Value):
     """ SBML Reaction.
     """
     def __init__(self):
+        super().__init__()
         self.reactants = []
         self.products = []
         self.kinetic_law = ''

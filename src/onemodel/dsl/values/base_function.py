@@ -1,6 +1,5 @@
 from onemodel.dsl.values.value import Value
 from onemodel.dsl.context import Context
-from onemodel.dsl.symbol_table import SymbolTable
 
 class BaseFunction(Value):
     """ Base function class for defining builting functions and user defined
@@ -16,12 +15,7 @@ class BaseFunction(Value):
         """ Generate a new context for executing the function.
         """
         new_context = Context(
-            self.name, 
             self.definition_context
-        )
-
-        new_context.symbol_table = SymbolTable(
-            new_context.parent.symbol_table
         )
 
         return new_context
@@ -40,7 +34,7 @@ class BaseFunction(Value):
                 )
 
     def populate_args(self, arg_names, args, exec_context):
-        """ Populate the arguments into the context symbol table.
+        """ Populate the arguments into the execution context.
         """
         for i in range(len(args)):
             arg_name = arg_names[i] 

@@ -1,7 +1,9 @@
-from onemodel.dsl.symbol_table import SymbolTable
+from onemodel.dsl.context import Context
 from onemodel.dsl.values.builtin_function import BuiltInFunction
 
-class GlobalSymbolTable(SymbolTable):
+class ContextRoot(Context):
+    """ The root evaluation context.
+    """
     def __init__(self):
         super().__init__()
 

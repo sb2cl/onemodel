@@ -9,7 +9,6 @@ import onemodel
 from onemodel.dsl.repl import Repl
 from onemodel.dsl.onemodel_walker import OneModelWalker
 from onemodel.dsl.context import Context
-from onemodel.dsl.global_symbol_table import GlobalSymbolTable
 
 from onemodel.sbml2dae.dae_model import DaeModel
 from onemodel.sbml2dae.matlab import Matlab

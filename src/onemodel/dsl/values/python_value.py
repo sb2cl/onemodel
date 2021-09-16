@@ -6,6 +6,7 @@ class PythonValue(Value):
     def __init__(self, value):
         """ Initialize PythonValue
         """
+        super().__init__()
         self.value = value
     
     def add_value_to_model(self, name, model):

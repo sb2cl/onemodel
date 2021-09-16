@@ -7,6 +7,7 @@ class RateRule(Value):
     """ SBML Rate Rule.
     """
     def __init__(self):
+        super().__init__()
         self.variable = ''
         self.math = ''
 

@@ -1,7 +1,7 @@
 from onemodel.dsl.values.base_function import BaseFunction
 
 class BuiltInFunction(BaseFunction):
-    """ BuiltInFunctions are functions loaded into the symbol_table.
+    """ BuiltInFunctions are functions loaded into the root context.
     """
     def __init__(self, name):
         """ Initialize BuiltInFunction.
@@ -37,7 +37,7 @@ class BuiltInFunction(BaseFunction):
     def call_print(self, exec_context):
         """ Print the argument into stdout.
         """
-        value = exec_context.symbol_table.get('value')
+        value = exec_context.get('value')
         print(value)
 
     call_print.arg_names = ['value']
@@ -47,7 +47,7 @@ class BuiltInFunction(BaseFunction):
         """
         from libsbml import writeSBMLToString
 
-        main_context = exec_context.getMainParent() 
+        main_context = exec_context.getRootContext() 
 
         walker = main_context.walker
         sbml = walker.getSBML()
@@ -66,52 +66,38 @@ class BuiltInFunction(BaseFunction):
     call_exit.arg_names = []
 
     def call_showContext(self, exec_context):
-        """ Show the context and symbol table.
+        """ Show the context.
         """
         context = exec_context.parent
 
-        if context.parent == None:
-            parent_name = 'None'
-        else:
-            parent_name = context.parent.display_name
-
-        symbol_table = context.symbol_table
-
-        print('### Context ###')
-        print(f'%-25s %s' % ('name', context.display_name))
-        print(f'%-25s %s' % ('parent_name', parent_name))
-        print()
-        print('### Symbol table ###')
-        for symbol in symbol_table.symbols:
-            name = symbol
-            value = symbol_table.get(name)
+        # print('### Context ###')
+        # print(f'%-25s %s' % ('name', context.display_name))
+        # print(f'%-25s %s' % ('parent_name', parent_name))
+        # print()
+        print('### Context.locals  ###')
+        for local in context.locals:
+            name = local
+            value = context.get(name)
             print(f'%-25s %s' % (name, value))
 
         return
     call_showContext.arg_names = []
 
     def call_showValueContext(self, exec_context):
-        """ Show the context and symbol table of a value.
+        """ Show the context a value.
         """
-        object_ = exec_context.symbol_table.get('object')
+        object_ = exec_context.get('object')
 
         context = object_.context
 
-        if context.parent == None:
-            parent_name = 'None'
-        else:
-            parent_name = context.parent.display_name
-
-        symbol_table = context.symbol_table
-
-        print('### Context ###')
-        print(f'%-25s %s' % ('name', context.display_name))
-        print(f'%-25s %s' % ('parent_name', parent_name))
-        print()
-        print('### Symbol table ###')
-        for symbol in symbol_table.symbols:
-            name = symbol
-            value = symbol_table.get(name)
+        # print('### Context ###')
+        # print(f'%-25s %s' % ('name', context.display_name))
+        # print(f'%-25s %s' % ('parent_name', parent_name))
+        # print()
+        print('### Context.locals ###')
+        for local in context.locals:
+            name = local
+            value = context.get(name)
             print(f'%-25s %s' % (name, value))
 
         return
@@ -124,7 +110,7 @@ class BuiltInFunction(BaseFunction):
         # This way, all values will be loaded into the parent.
         context = exec_context.parent
 
-        filename = exec_context.symbol_table.get('filename').value
+        filename = exec_context.get('filename').value
         text = open(filename).read()
 
         walker = context.walker

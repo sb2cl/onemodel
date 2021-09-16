@@ -5,6 +5,7 @@ class Species(Value):
     """ SBML species.
     """
     def __init__(self):
+        super().__init__()
         self.compartment = 'default_compartment'
         self.initialConcentration = 0
         self.substanceUnits = 'mole'

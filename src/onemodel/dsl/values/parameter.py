@@ -5,6 +5,7 @@ class Parameter(Value):
     """ SBML Parameter.
     """
     def __init__(self):
+        super().__init__()
         self.constant = True
         self.value = 0
         self.units = 'per_second'
