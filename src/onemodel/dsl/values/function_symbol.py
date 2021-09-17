@@ -1,19 +1,22 @@
-from onemodel.dsl.symbols.symbol import Symbol
-from onemodel.dsl.context import Context
+from onemodel.dsl.symbols.base_function_symbol import BaseFunctionSymbol
 
-class FunctionSymbol(Symbol):
-    def __init__(self, name, context, body_node):
+class FunctionSymbol(BaseFunctionSymbol):
+    def __init__(self, name, context, arg_names, body_node):
         super().__init__(name, context)
+        self.arg_names = arg_names
         self.body_node = body_node
 
     def __call__(self, calling_context, args):
         from onemodel.dsl.onemodel_walker import OneModelWalker
-        
-        execution_context = Context(
-            f'{self.name}',
-            calling_context
-        )
 
+        execution_context = self.generate_execution_context(calling_context)
+
+        self.check_and_populate_args(
+            self.arg_names,
+            args,
+            execution_context
+        )
+        
         walker = OneModelWalker(
             'repl', 
             execution_context

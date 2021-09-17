@@ -1,13 +1,17 @@
-model Test
-end
+#model Test
+#end
 
-model TestModel
-    species x = 0
-    rule x' = 1
-    let test = Test()
-end
+#model TestModel
+#    species x = 0
+#    rule x' = 1
+#    let test = Test()
+#end
 
-let a = TestModel()
+#let a = TestModel()
 
-showValueContext(a)
+#showValueContext(a)
 #showContext()
+
+function hello()
+    let x = 1
+end

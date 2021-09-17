@@ -1,14 +1,10 @@
-class Symbol:
-    """ Define the base Symbol object for dsl values.
+class Value:
+    """ Define the base Value object.
     """
-    def __init__(self, name, context):
+    def __init__(self):
         """ Initialize Value.
         """
-        # All symbols at least have a name.
-        self.name = name 
-
-        # All symbols know what context contains them.
-        self.context = context
+        pass
 
     def add_value_to_model(self, name, model):
         """ Add this value to a SBML model.

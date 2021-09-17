@@ -78,7 +78,7 @@ power
 
 call::Call
   =
-  | value:atom '(' ')'
+  | value:atom '(' [args:expr {',' args:expr}] ')'
   | next:atom
   ;
 
@@ -124,7 +124,7 @@ access_identifier::AccessIdentifier
 
 function_definition::FunctionDefinition
   =
-  'function' name:identifier '(' ')' newline
+  'function' name:identifier '(' [args:identifier {',' args:identifier}] ')' newline
   {newline | body:statement}
   'end'
   ;

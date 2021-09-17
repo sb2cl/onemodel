@@ -10,8 +10,7 @@ from libsbml import *
 from onemodel.dsl.context import Context
 from onemodel.dsl.context_root import ContextRoot
 
-from onemodel.dsl.symbols.variable_symbol import VariableSymbol
-from onemodel.dsl.symbols.function_symbol import FunctionSymbol
+from onemodel.dsl.values.number import Number
 
 class OneModelWalker(NodeWalker):
     def __init__(self, model_name, context = None):
@@ -113,13 +112,7 @@ class OneModelWalker(NodeWalker):
         name = node.name
         value = self.walk(node.value)
 
-        variable = VariableSymbol(
-            name,
-            self.current_context,
-            value
-        )
-
-        self.current_context.set(variable)
+        self.current_context.set(name, value)
 
         return value
 
@@ -128,11 +121,21 @@ class OneModelWalker(NodeWalker):
             return self.walk(node.next)
 
         value = self.walk(node.value)
+        args = self.walk(node.args)
+
+        if args == None:
+            args = []
+
+        if type(args) != list:
+            args = [args]
 
         result = value.__call__(
             self.current_context,
-            None # TODO: Here will be the arguments
+            args
         )
+
+        if type(result) == list:
+            result = result[-1]
 
         return result
 
@@ -159,11 +162,19 @@ class OneModelWalker(NodeWalker):
 
     def walk_FunctionDefinition(self, node):
         name = node.name
+        args = node.args
         body = node.body
+
+        if args == None:
+            args = []
+
+        if type(args) != list:
+            args = [args]
 
         function = FunctionSymbol(
                 name,
                 self.current_context,
+                args,
                 body)
 
         self.current_context.set(function)
