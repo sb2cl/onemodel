@@ -1,15 +1,15 @@
-from onemodel.dsl.symbols.symbol import Symbol
-from onemodel.dsl.symbols.variable_symbol import VariableSymbol
+from onemodel.dsl.values.value import Value
 from onemodel.dsl.context import Context
 
-class BaseFunctionSymbol(Symbol):
-    """ Base function class for defining builting functions and user defined
+class FunctionBase(Value):
+    """ FunctionBase class for defining builting functions and user defined
     functions.
     """
-    def __init__(self, name, context):
-        """ Initialize BaseFunctionSymbol.
+    def __init__(self, name):
+        """ Initialize FunctionBase.
         """
-        super().__init__(name, context)
+        super().__init__()
+        self.name = name
 
     def generate_execution_context(self, calling_context):
         """ Generate the execution context where the function will be
@@ -41,17 +41,7 @@ class BaseFunctionSymbol(Symbol):
         for i in range(len(args)):
             arg_name = arg_names[i] 
             arg_value = args[i]
-
-            print(isinstance(arg_value, Symbol))
-            if isinstance(arg_value, Symbol) == False:
-                arg_value = VariableSymbol(
-                    arg_name,
-                    execution_context,
-                    arg_value
-                )
-
-            print(isinstance(arg_value, Symbol))
-            execution_context.set(arg_value)
+            execution_context.set(arg_name, arg_value)
 
     def check_and_populate_args(self, arg_names, args, execution_context):
         """ Check and populate arguments.

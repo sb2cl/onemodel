@@ -12,6 +12,11 @@
 #showValueContext(a)
 #showContext()
 
-function hello()
-    let x = 1
+let a = 666
+function hello(x)
+    let a = 1
+    print(a)
+    print(x)
 end
+
+hello(a)

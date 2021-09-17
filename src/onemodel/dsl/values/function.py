@@ -1,8 +1,8 @@
-from onemodel.dsl.symbols.base_function_symbol import BaseFunctionSymbol
+from onemodel.dsl.values.function_base import FunctionBase
 
-class FunctionSymbol(BaseFunctionSymbol):
-    def __init__(self, name, context, arg_names, body_node):
-        super().__init__(name, context)
+class Function(FunctionBase):
+    def __init__(self, name, arg_names, body_node):
+        super().__init__(name)
         self.arg_names = arg_names
         self.body_node = body_node
 
