@@ -12,11 +12,13 @@
 #showValueContext(a)
 #showContext()
 
-let a = 666
+a = {}
+a.hello = 'Hola'
+
 function hello(x)
-    let a = 1
-    print(a)
-    print(x)
+    print(x)    
+    x = 1
 end
 
+hello(a)
 hello(a)

@@ -42,7 +42,7 @@ expr
 
 assign_variable::AssignVariable
   =
-  'let' name:identifier '=' value:expr
+  name:identifier {'.' name:identifier} '=' value:expr
   ;
 
 
@@ -88,6 +88,7 @@ atom
   | float
   | integer
   | string
+  | struct
   | access_identifier
   | function_definition
   ;
@@ -115,10 +116,16 @@ string::String
   ;
 
 
+struct::Struct
+  =
+  '{' '}'
+  ;
+
+
 # Access the value of an identifier.
 access_identifier::AccessIdentifier
   = 
-  name:identifier
+  name:identifier {'.' name:identifier}
   ;
 
 

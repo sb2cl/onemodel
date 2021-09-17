@@ -5,7 +5,7 @@ class ContextRoot(Context):
     """ The root evaluation context.
     """
     def __init__(self):
-        super().__init__()
+        super().__init__('root')
 
         self.addFunctionBuiltin('print')
 

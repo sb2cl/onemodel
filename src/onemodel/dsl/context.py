@@ -49,3 +49,18 @@ class Context:
             raise NameError(f"NameError: name '{name}' is not defined")
       
         return value
+
+    def print(self):
+        print(f'### Context ###')
+        print(f'name: {self.name}')
+        if self.parent:
+            print(f'parent: {self.parent.name}')
+        else:
+            print(f'parent: None')
+        print('symbols:')
+        for symbol in self.symbols:
+            print('\t' + symbol)
+
+        print(f'### End Context ###')
+        print()
+        

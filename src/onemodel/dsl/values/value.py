@@ -13,6 +13,16 @@ class Value:
             f'Class "{type(self).__name__}" has not defined add_value_to_model method.'
         )
 
+    def set(self, name, value):
+        raise Exception(
+            f'Class "{type(self).__name__}" has no attributes.'
+        )
+
+    def get(self, name):
+        raise Exception(
+            f'Class "{type(self).__name__}" has no attributes.'
+        )
+
     def __str__(self):
         raise Exception(
             f'Class "{type(self).__name__}" has not defined __str__ method.'
@@ -67,5 +77,3 @@ class Value:
         raise Exception(
             f'Class "{type(self).__name__}" has not defined __rtruediv__ method.'
         )
-
-

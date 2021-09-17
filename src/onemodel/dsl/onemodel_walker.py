@@ -11,6 +11,7 @@ from onemodel.dsl.context import Context
 from onemodel.dsl.context_root import ContextRoot
 
 from onemodel.dsl.values.number import Number
+from onemodel.dsl.values.struct import Struct
 from onemodel.dsl.values.function import Function
 
 class OneModelWalker(NodeWalker):
@@ -113,7 +114,15 @@ class OneModelWalker(NodeWalker):
         name = node.name
         value = self.walk(node.value)
 
-        self.current_context.set(name, value)
+        context = self.current_context
+
+        if type(name) == list:
+            for i in range(len(name)-1):
+                context = context.get(name[i])
+
+            context.set(name[-1], value)
+        else:
+            context.set(name, value)
 
         return value
 
@@ -159,9 +168,23 @@ class OneModelWalker(NodeWalker):
 
         return value
 
+    def walk_Struct(self, node):
+        struct = Struct()
+
+        return struct
+
     def walk_AccessIdentifier(self, node):
         name = node.name
-        value = self.current_context.get(name)
+
+        context = self.current_context
+
+        if type(name) == list:
+            for i in range(len(name)-1):
+                context = context.get(name[i])
+
+            value = context.get(name[-1])
+        else:
+            value = context.get(name)
 
         return value
 
