@@ -19,11 +19,13 @@ class Object(Context, Value):
         return Context.get(self, name)
 
     def __str__(self): 
-        #self.print()
-        string = f'<object {self.name}>\n'
-        string += f'{self.parent}\n'
-        string += f'attributes: {self.symbols}\n'
+        string = f'{repr(self)} with attributes:\n'
+
+        for symbol in self.symbols:
+            value = self.get(symbol)
+            string += '  %+10s: %s\n' % (symbol, repr(value))
+
         return string
 
     def __repr__(self):
-        return self.__str__()
+        return f'<object {self.name}>'

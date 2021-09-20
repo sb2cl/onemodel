@@ -1,32 +1,13 @@
 model TestModel
     a = 1
+    name = 'Test Name'
+    
+    function hello()
+        print('hello')
+    end
+
 end
 
-a = 1
-showContext()
-print('--------------------------')
+t_1 = TestModel()
 
-t = TestModel()
-showContext()
-print('--------------------------')
-
-b = 1
-showContext()
-print('--------------------------')
-
-t.a = 10
-
-print(t)
-
-#a = 1
-#showContext()
-
-#t_1 = TestModel() # <----
-
-#showContext()
-
-
-#showContext()
-#print('******************')
-#print(t_1)
-#print('******************')
+print(t_1)
