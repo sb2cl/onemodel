@@ -1,13 +1,13 @@
 from onemodel.dsl.values.value import Value
 from onemodel.dsl.context import Context
 
-class Struct(Context, Value):
-    """ Definition of Struct.
+class Object(Context, Value):
+    """ Definition of Object.
     """
-    def __init__(self):
-        """ Initialize Struct
+    def __init__(self, name, parent_context):
+        """ Initialize Object
         """
-        Context.__init__(self)
+        Context.__init__(self, name, parent_context)
         Value.__init__(self)
                 
     def set(self, name, value):
@@ -19,11 +19,10 @@ class Struct(Context, Value):
         return Context.get(self, name)
 
     def __str__(self): 
-        string = f'<struct>\n'
-        string += f'fields:\n'
-        for symbol in self.symbols:
-            value = self.get(symbol)
-            string += f'\t{symbol}: {value}\n'
+        #self.print()
+        string = f'<object {self.name}>\n'
+        string += f'{self.parent}\n'
+        string += f'attributes: {self.symbols}\n'
         return string
 
     def __repr__(self):

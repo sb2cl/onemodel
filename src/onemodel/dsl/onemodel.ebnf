@@ -89,8 +89,9 @@ atom
   | integer
   | string
   | struct
-  | access_identifier
   | function_definition
+  | model_definition
+  | access_identifier
   ;
 
 
@@ -135,6 +136,15 @@ function_definition::FunctionDefinition
   {newline | body:statement}
   'end'
   ;
+
+
+model_definition::ModelDefinition
+  =
+  'model' name:identifier newline 
+  {newline | body:statement}
+  'end'
+  ;
+
 
 # Definition of identifiers
 # Identifiers cannot have a keyword name.

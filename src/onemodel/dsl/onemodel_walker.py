@@ -13,6 +13,7 @@ from onemodel.dsl.context_root import ContextRoot
 from onemodel.dsl.values.number import Number
 from onemodel.dsl.values.struct import Struct
 from onemodel.dsl.values.function import Function
+from onemodel.dsl.values.model import Model
 
 class OneModelWalker(NodeWalker):
     def __init__(self, model_name, context = None):
@@ -28,7 +29,7 @@ class OneModelWalker(NodeWalker):
             self.current_context = ContextRoot()
 
         # Add this walker to the context.
-        self.current_context.walker = self
+        #self.current_context.walker = self
 
         # SBMLDocument and SBMLModel
         self.document = None
@@ -46,6 +47,7 @@ class OneModelWalker(NodeWalker):
 
     def run(self, text):
         model = self.parser.parse(text)
+        print(model)
         result = self.walk(model)
 
         return result
@@ -114,6 +116,11 @@ class OneModelWalker(NodeWalker):
         name = node.name
         value = self.walk(node.value)
 
+        print('START ASSIGNVARIABLE')
+        print('name: ' + name)
+        #print('walker_name:' + self.current_context.walker.model_name)
+        print(self.current_context)
+
         context = self.current_context
 
         if type(name) == list:
@@ -124,12 +131,28 @@ class OneModelWalker(NodeWalker):
         else:
             context.set(name, value)
 
+        context.set(name, value)
+
+        print(context)
+
+        print(self.current_context)
+        print('END ASSIGNVARIABLE')
+
+        #import pdb
+        #if name == 't_1':
+            #pdb.set_trace()
+
+        #if name == 'b':
+            #pdb.set_trace()
+
         return value
 
     def walk_Call(self, node):
         if node.next:
             return self.walk(node.next)
 
+        print('START CALL')
+        print(self.current_context)
         value = self.walk(node.value)
         args = self.walk(node.args)
 
@@ -147,6 +170,8 @@ class OneModelWalker(NodeWalker):
         if type(result) == list:
             result = result[-1]
 
+        print(self.current_context)
+        print('END CALL')
         return result
 
     def walk_Float(self, node):
@@ -207,6 +232,16 @@ class OneModelWalker(NodeWalker):
         self.current_context.set(name, function)
 
         return function
+
+    def walk_ModelDefinition(self, node):
+        name = node.name
+        body = node.body
+
+        m = Model(name, body)
+
+        self.current_context.set(name, m)
+
+        return m
 
     def walk_list(self, nodes):
         results = []

@@ -1,24 +1,24 @@
-#model Test
-#end
-
-#model TestModel
-#    species x = 0
-#    rule x' = 1
-#    let test = Test()
-#end
-
-#let a = TestModel()
-
-#showValueContext(a)
-#showContext()
-
-a = {}
-a.hello = 'Hola'
-
-function hello(x)
-    print(x)    
-    x = 1
+model TestModel
+    my_a = 1
 end
 
-hello(a)
-hello(a)
+function hello()
+    a = 1
+end
+
+showContext()
+hello()
+showContext()
+
+#a = 1
+#showContext()
+
+#t_1 = TestModel() # <----
+
+#showContext()
+
+
+#showContext()
+#print('******************')
+#print(t_1)
+#print('******************')

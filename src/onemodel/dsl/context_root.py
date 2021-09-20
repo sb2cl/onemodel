@@ -8,6 +8,7 @@ class ContextRoot(Context):
         super().__init__('root')
 
         self.addFunctionBuiltin('print')
+        self.addFunctionBuiltin('showContext')
 
     def addFunctionBuiltin(self, name):
         self.set(name, FunctionBuiltin(name))

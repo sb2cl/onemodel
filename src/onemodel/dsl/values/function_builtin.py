@@ -40,4 +40,12 @@ class FunctionBuiltin(FunctionBase):
 
     call_print.arg_names = ['value']
 
+    def call_showContext(self, exec_context):
+        """ Show current context.
+        """
+        context = exec_context.parent
+        context.print()
+
+    call_showContext.arg_names = []
+
 
