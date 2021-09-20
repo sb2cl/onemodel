@@ -47,7 +47,6 @@ class OneModelWalker(NodeWalker):
 
     def run(self, text):
         model = self.parser.parse(text)
-        print(model)
         result = self.walk(model)
 
         return result
@@ -116,11 +115,6 @@ class OneModelWalker(NodeWalker):
         name = node.name
         value = self.walk(node.value)
 
-        print('START ASSIGNVARIABLE')
-        print('name: ' + name)
-        #print('walker_name:' + self.current_context.walker.model_name)
-        print(self.current_context)
-
         context = self.current_context
 
         if type(name) == list:
@@ -131,28 +125,12 @@ class OneModelWalker(NodeWalker):
         else:
             context.set(name, value)
 
-        context.set(name, value)
-
-        print(context)
-
-        print(self.current_context)
-        print('END ASSIGNVARIABLE')
-
-        #import pdb
-        #if name == 't_1':
-            #pdb.set_trace()
-
-        #if name == 'b':
-            #pdb.set_trace()
-
         return value
 
     def walk_Call(self, node):
         if node.next:
             return self.walk(node.next)
 
-        print('START CALL')
-        print(self.current_context)
         value = self.walk(node.value)
         args = self.walk(node.args)
 
@@ -163,15 +141,13 @@ class OneModelWalker(NodeWalker):
             args = [args]
 
         result = value.__call__(
-            self.current_context,
+            self,
             args
         )
 
         if type(result) == list:
             result = result[-1]
 
-        print(self.current_context)
-        print('END CALL')
         return result
 
     def walk_Float(self, node):

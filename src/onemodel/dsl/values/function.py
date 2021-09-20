@@ -6,8 +6,8 @@ class Function(FunctionBase):
         self.arg_names = arg_names
         self.body_node = body_node
 
-    def __call__(self, calling_context, args):
-        from onemodel.dsl.onemodel_walker import OneModelWalker
+    def __call__(self, walker, args):
+        calling_context = walker.current_context
 
         execution_context = self.generate_execution_context(calling_context)
 
@@ -16,13 +16,12 @@ class Function(FunctionBase):
             args,
             execution_context
         )
-        
-        walker = OneModelWalker(
-            'repl', 
-            execution_context
-        )
 
+        walker.current_context = execution_context
+        
         result = walker.walk(self.body_node)
+
+        walker.current_context = calling_context
 
         return result
 

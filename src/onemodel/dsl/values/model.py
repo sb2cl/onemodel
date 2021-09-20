@@ -16,16 +16,14 @@ class Model(FunctionBase):
     def __repr__(self):
         return self.__str__()
 
-    def __call__(self, calling_context, args):
-        from onemodel.dsl.onemodel_walker import OneModelWalker
+    def __call__(self, walker, args):
+        calling_context = walker.current_context
 
         obj = Object(self.name, calling_context)
 
-        walker = OneModelWalker('repl_2', obj)
 
-        #import pdb
-        #pdb.set_trace()
-
-        #walker.walk(self.body_node)
+        walker.current_context = obj 
+        walker.walk(self.body_node)
+        walker.current_context = calling_context
 
         return obj 

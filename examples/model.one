@@ -1,14 +1,22 @@
 model TestModel
-    my_a = 1
-end
-
-function hello()
     a = 1
 end
 
+a = 1
 showContext()
-hello()
+print('--------------------------')
+
+t = TestModel()
 showContext()
+print('--------------------------')
+
+b = 1
+showContext()
+print('--------------------------')
+
+t.a = 10
+
+print(t)
 
 #a = 1
 #showContext()

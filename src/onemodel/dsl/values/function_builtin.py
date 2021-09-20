@@ -8,7 +8,9 @@ class FunctionBuiltin(FunctionBase):
         """
         super().__init__(name)
 
-    def __call__(self, calling_context, args):
+    def __call__(self, walker, args):
+        calling_context = walker.current_context
+
         execution_context = self.generate_execution_context(calling_context)
 
         method_name = f'call_{self.name}'
