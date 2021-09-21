@@ -64,3 +64,10 @@ class Context:
         print(f'### End Context ###')
         print()
         
+    def add_value_to_model(self, name, model):
+        for symbol in self.symbols:
+            value = self.get(symbol)
+            value.add_value_to_model(
+                name + '__' + symbol, 
+                model
+            )

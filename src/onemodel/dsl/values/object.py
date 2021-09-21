@@ -12,7 +12,6 @@ class Object(Context, Value):
 
     def add_value_to_model(self, name, model):
         # Call only set from Context, and not from Value.
-        name = name + '_' + self.name 
         Context.add_value_to_model(self, name, model)
                 
     def set(self, name, value):

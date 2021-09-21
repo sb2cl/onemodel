@@ -1,8 +1,13 @@
-#model Test
-parameter d = 123
-parameter d1 = 1230
-#end
+model Other
+    parameter a = 0
+end
 
-#t = Test()
+model Test
+    parameter d123 = 123
+    other = Other()
+end
 
-#print(d1)
+
+t = Test()
+
+print(t)

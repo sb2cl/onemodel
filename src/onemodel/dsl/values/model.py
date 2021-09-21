@@ -21,7 +21,6 @@ class Model(FunctionBase):
 
         obj = Object(self.name, calling_context)
 
-
         walker.current_context = obj 
         walker.walk(self.body_node)
         walker.current_context = calling_context
