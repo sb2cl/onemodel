@@ -19,8 +19,6 @@ class Parameter(Value):
             model: LibSBML model
                 Model to include this value.
         """
-        name = name
-
         p = model.createParameter()
 
         check(

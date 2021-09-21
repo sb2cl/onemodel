@@ -29,6 +29,7 @@ statements
 
 statement
   = 
+  | 'species'   newline {newline | @:species newline}   'end'
   | 'parameter' newline {newline | @:parameter newline} 'end'
   | expr
   ;
@@ -36,9 +37,16 @@ statement
 
 expr
   =
+  | 'species'   @:species   {',' | @:species}
   | 'parameter' @:parameter {',' | @:parameter}
   | assign_variable
   | comp_expr
+  ;
+
+
+species::Species
+  = 
+  name:identifier ['=' value:expr]
   ;
 
 

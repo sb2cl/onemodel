@@ -10,6 +10,7 @@ from libsbml import *
 from onemodel.dsl.context import Context
 from onemodel.dsl.context_root import ContextRoot
 
+from onemodel.dsl.values.species import Species
 from onemodel.dsl.values.parameter import Parameter
 from onemodel.dsl.values.number import Number
 from onemodel.dsl.values.struct import Struct
@@ -116,6 +117,25 @@ class OneModelWalker(NodeWalker):
         return sbml
 
     ### Walk methods ###
+
+    def walk_Species(self, node):
+        name = node.name
+        value = self.walk(node.value).value
+
+        if value == None:
+            value = 0
+
+        if not type(value) in (int, float):
+            print('Error: value must be int or float')
+            return
+ 
+        s = Species()
+
+        s.initialConcentration = value
+
+        self.current_context.set(name, s)
+
+        return s
 
     def walk_Parameter(self, node):
         name = node.name
@@ -254,6 +274,9 @@ class OneModelWalker(NodeWalker):
             results = results[0]
 
         return results
+
+    def walk_tuple(self, nodes):
+        return self.walk_list(nodes)
 
     def walk_object(self, node):
         return node

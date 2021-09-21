@@ -7,8 +7,8 @@ model Test
         d123 = 123
         b = 0
     end
+    species a = 0, c = 0
     other = Other()
 end
-
 
 t = Test()
