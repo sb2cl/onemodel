@@ -10,10 +10,13 @@ from libsbml import *
 from onemodel.dsl.context import Context
 from onemodel.dsl.context_root import ContextRoot
 
+from onemodel.dsl.values.parameter import Parameter
 from onemodel.dsl.values.number import Number
 from onemodel.dsl.values.struct import Struct
 from onemodel.dsl.values.function import Function
 from onemodel.dsl.values.model import Model
+
+from onemodel.dsl.utils import check, getAstNames
 
 class OneModelWalker(NodeWalker):
     def __init__(self, model_name, context = None):
@@ -81,11 +84,13 @@ class OneModelWalker(NodeWalker):
 
         # Create a default_compartment.
         c = self.model.createCompartment()
+    
 
-        self.current_context.set(
-            'default_compartment', 
-            PythonValue(c)
-        )
+        # TODO: This should be added to root context.
+        #self.current_context.set(
+        #    'default_compartment', 
+        #    c
+        #)
 
         check(c, 'create default compartment')
         check(c.setId('default_compartment'), 'set compartment id')
@@ -110,6 +115,25 @@ class OneModelWalker(NodeWalker):
         return writeSBMLToString(self.document)
 
     ### Walk methods ###
+
+    def walk_Parameter(self, node):
+        name = node.name
+        value = self.walk(node.value).value
+
+        if value == None:
+            value = 0
+
+        if not type(value) in (int, float):
+            print('Error: value must be int or float')
+            return
+            
+        p = Parameter()
+
+        p.value = value
+
+        self.current_context.set(name, p)
+
+        return p
 
     def walk_AssignVariable(self, node):
         name = node.name

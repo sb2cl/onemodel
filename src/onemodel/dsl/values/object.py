@@ -9,6 +9,11 @@ class Object(Context, Value):
         """
         Context.__init__(self, name, parent_context)
         Value.__init__(self)
+
+    def add_value_to_model(self, name, model):
+        # Call only set from Context, and not from Value.
+        name = name + '_' + self.name 
+        Context.add_value_to_model(self, name, model)
                 
     def set(self, name, value):
         # Call only set from Context, and not from Value.

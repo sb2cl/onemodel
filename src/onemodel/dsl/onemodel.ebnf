@@ -35,8 +35,15 @@ statement
 
 expr
   =
+  | 'parameter' @:parameter {',' | @:parameter}
   | assign_variable
   | comp_expr
+  ;
+
+
+parameter::Parameter
+  = 
+  name:identifier ['=' value:expr]
   ;
 
 

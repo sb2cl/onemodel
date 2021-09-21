@@ -48,3 +48,7 @@ class FunctionBase(Value):
         """
         self.check_arguments(arg_names, args)
         self.populate_args(arg_names, args, execution_context)
+
+    def add_value_to_model(self, name, model):
+        # Functions are not added to SBML models.
+        pass

@@ -1,13 +1,7 @@
-model TestModel
-    a = 1
-    name = 'Test Name'
-    
-    function hello()
-        print('hello')
-    end
+#model Test
+    parameter d = 123
+#end
 
-end
+#t = Test()
 
-t_1 = TestModel()
-
-print(t_1)
+#print(d1)

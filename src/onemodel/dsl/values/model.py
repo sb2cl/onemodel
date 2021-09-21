@@ -27,3 +27,7 @@ class Model(FunctionBase):
         walker.current_context = calling_context
 
         return obj 
+
+    def add_value_to_model(self, name, model):
+        # Models are not added to SBML models.
+        pass
