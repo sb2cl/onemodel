@@ -17,6 +17,7 @@ class Model(QObject):
         # Current working path of the app.
         self._current_path = QtCore.QDir.homePath()
         self._current_path += '/Sync/python/workspace/onemodel/examples'
+        os.chdir(self._current_path)
 
         # Current open file in the text editor.
         # If None, we don't have a file (or creating new).
