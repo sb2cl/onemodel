@@ -4,7 +4,15 @@ class Value:
     def __init__(self):
         """ Initialize Value.
         """
-        pass
+        # The name used to store this value in a context.
+        self.symbol_name = None
+        # The context where the value was defined (and also where it is saved
+        # as a symbol).
+        self.definition_context = None
+
+    def set_context(self, name, context):
+        self.symbol_name = name
+        self.definition_context = context
 
     def add_value_to_model(self, name, model):
         """ Add this value to a SBML model.

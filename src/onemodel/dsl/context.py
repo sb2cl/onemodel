@@ -26,6 +26,7 @@ class Context:
     def set(self, name, symbol):
         """ Set a symbol in self.symbols.
         """
+        symbol.set_context(name, self)
         # Save value in symbols.
         self.symbols[name] = symbol
 
@@ -50,6 +51,29 @@ class Context:
       
         return value
 
+    def getFullname(self, name):
+        """ Get the fullname of symbol by its local name.
+        """
+        # Try to find the symbols in self.symbols
+        value = self.symbols.get(name, None)
+
+        # If we found the symbol here.
+        if value != None:
+            fullname = name
+            context = self
+            while context.parent != None:
+                fullname = context.symbol_name + '_' + fullname
+                context = context.parent
+
+        elif self.parent:
+            return self.parent.getFullname(name)
+
+        else:
+            # Raise an error.
+            raise NameError(f"NameError: name '{name}' is not defined")
+
+        return fullname
+
     def print(self):
         print(f'### Context ###')
         print(f'name: {self.name}')
@@ -67,7 +91,8 @@ class Context:
     def add_value_to_model(self, name, model):
         for symbol in self.symbols:
             value = self.get(symbol)
+            fullname = self.getFullname(symbol)
             value.add_value_to_model(
-                name + '__' + symbol, 
+                fullname, 
                 model
             )

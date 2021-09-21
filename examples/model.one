@@ -9,5 +9,3 @@ end
 
 
 t = Test()
-
-print(t)
