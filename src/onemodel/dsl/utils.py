@@ -1,3 +1,6 @@
+from tokenize import tokenize, NAME, OP, ENCODING
+from io import BytesIO
+
 from libsbml import *
 
 def check(value, message):
@@ -39,3 +42,30 @@ def getAstNames(ast):
             names.append(item)
 
     return names
+
+def math_2_fullname(math_expr, context):
+    """ Changes local user defined names into fullnames.
+
+    Arguments:
+        math_expr: str
+            Math formula obtained with libSBML.formulaToL3String()
+    """
+    result = ''
+
+    g = tokenize(BytesIO(math_expr.encode('utf-8')).readline)
+
+    for toknum, tokval, _, _, _ in g:
+        if toknum == ENCODING:
+            continue
+
+        elif toknum == NAME:
+            try:
+                fullname = context.getFullname(str(tokval))
+                result += fullname
+            except:
+                result += str(tokval)
+
+        else:
+            result += str(tokval)
+
+    return str(result)

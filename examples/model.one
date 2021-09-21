@@ -2,12 +2,19 @@ model Other
     parameter a = 0
 end
 
+parameter myParam = 666
+
 model Test
-    parameter 
-        d123 = 123
-        b = 0
+    species
+        x1 = 0
+        x2 = 0
+        x3 = 0
     end
-    species a = 0, c = 0
+
+    parameter d12 = 0
+
+    reaction x1 + x2 -> x3; d12*myParam
+
     other = Other()
 end
 

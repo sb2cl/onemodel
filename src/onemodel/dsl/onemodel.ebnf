@@ -31,6 +31,7 @@ statement
   = 
   | 'species'   newline {newline | @:species newline}   'end'
   | 'parameter' newline {newline | @:parameter newline} 'end'
+  | 'reaction'  newline {newline | @:reaction newline}  'end'
   | expr
   ;
 
@@ -39,6 +40,7 @@ expr
   =
   | 'species'   @:species   {',' | @:species}
   | 'parameter' @:parameter {',' | @:parameter}
+  | 'reaction'  @:reaction 
   | assign_variable
   | comp_expr
   ;
@@ -53,6 +55,17 @@ species::Species
 parameter::Parameter
   = 
   name:identifier ['=' value:expr]
+  ;
+
+
+reaction::Reaction
+  =
+  [ name:identifier ':']
+  {'+' | reactants:identifier} 
+  '->' 
+  {'+' | products:identifier} 
+  newline 
+  kinetic_law:formula
   ;
 
 
@@ -168,6 +181,12 @@ model_definition::ModelDefinition
 identifier::str
   =
   /(?!\d)\w+/ 
+  ;
+
+
+formula::str
+  =
+  /[^\\\r\n\f'\;]*/
   ;
 
 

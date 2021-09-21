@@ -12,6 +12,7 @@ from onemodel.dsl.context_root import ContextRoot
 
 from onemodel.dsl.values.species import Species
 from onemodel.dsl.values.parameter import Parameter
+from onemodel.dsl.values.reaction import Reaction
 from onemodel.dsl.values.number import Number
 from onemodel.dsl.values.struct import Struct
 from onemodel.dsl.values.function import Function
@@ -155,6 +156,33 @@ class OneModelWalker(NodeWalker):
         self.current_context.set(name, p)
 
         return p
+
+    def walk_Reaction(self, node):
+        name = node.name
+        reactants = node.reactants
+        products = node.products
+        kinetic_law_str = node.kinetic_law
+
+        if type(reactants) != list:
+            reactants = [reactants] 
+
+        if type(products) != list:
+            products = [products] 
+
+        if name == None:
+            name = f'_J{self.numReactions}'
+            self.numReactions += 1
+
+        # Create reaction.
+        r = Reaction()
+
+        r.reactants = reactants
+        r.products = products
+        r.kinetic_law = kinetic_law_str
+
+        self.current_context.set(name, r)
+
+        return r
 
     def walk_AssignVariable(self, node):
         name = node.name
