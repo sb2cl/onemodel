@@ -49,5 +49,3 @@ class FunctionBuiltin(FunctionBase):
         context.print()
 
     call_showContext.arg_names = []
-
-

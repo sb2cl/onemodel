@@ -1,5 +1,5 @@
 #model Test
-    parameter d = 123
+parameter d = 123
 #end
 
 #t = Test()

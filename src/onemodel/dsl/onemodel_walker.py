@@ -112,7 +112,8 @@ class OneModelWalker(NodeWalker):
         self.initSBMLDocument()
         self.populateSBMLDocument()
         self.checkConsistency()
-        return writeSBMLToString(self.document)
+        sbml = writeSBMLToString(self.document)
+        return sbml
 
     ### Walk methods ###
 
