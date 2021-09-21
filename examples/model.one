@@ -3,7 +3,10 @@ model Other
 end
 
 model Test
-    parameter d123 = 123
+    parameter 
+        d123 = 123
+        b = 0
+    end
     other = Other()
 end
 
