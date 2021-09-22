@@ -14,6 +14,7 @@ from onemodel.dsl.values.species import Species
 from onemodel.dsl.values.parameter import Parameter
 from onemodel.dsl.values.reaction import Reaction
 from onemodel.dsl.values.rule_rate import RuleRate
+from onemodel.dsl.values.rule_assignment import RuleAssignment
 from onemodel.dsl.values.number import Number
 from onemodel.dsl.values.struct import Struct
 from onemodel.dsl.values.function import Function
@@ -185,7 +186,7 @@ class OneModelWalker(NodeWalker):
 
         return r
 
-    def walk_RateRule(self, node):
+    def walk_RuleRate(self, node):
         name = node.name
         variable = node.variable
         math = node.math
@@ -203,6 +204,25 @@ class OneModelWalker(NodeWalker):
         self.current_context.set(name, r)
 
         return r
+
+    def walk_RuleAssignment(self, node):
+        name = node.name
+        variable = node.variable
+        math = node.math
+
+        if name == None:
+            name = f'_R{self.numRules}'
+            self.numRules += 1
+
+        r = RuleAssignment()
+
+        r.variable = variable
+        r.math = math
+
+        self.current_context.set(name, r)
+
+        return r
+
 
     def walk_AssignVariable(self, node):
         name = node.name

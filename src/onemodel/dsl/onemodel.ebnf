@@ -73,30 +73,29 @@ reaction::Reaction
 
 rule
   =
-  | rate_rule
-  | assignment_rule 
-  | algebraic_rule
+  | rule_rate
+  | rule_assignment
+  | rule_algebraic
   ;
 
 
-rate_rule::RateRule
+rule_rate::RuleRate
   =
   [name:identifier ':'] variable:identifier "'" '=' math:formula
   ;
 
 
-assignment_rule::AssignmentRule
+rule_assignment::RuleAssignment
   =
   | name:identifier ':' variable:identifier ':=' math:formula
   | variable:identifier ':=' math:formula
   ;
 
 
-algebraic_rule::AlgebraicRule
+rule_algebraic::RuleAlgebraic
   =
   [name:identifier ':'] variable:identifier '==' math:formula
   ;
-
 
 
 assign_variable::AssignVariable
