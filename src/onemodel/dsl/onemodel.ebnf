@@ -32,6 +32,7 @@ statement
   | 'species'   newline {newline | @:species newline}   'end'
   | 'parameter' newline {newline | @:parameter newline} 'end'
   | 'reaction'  newline {newline | @:reaction newline}  'end'
+  | 'rule'      newline {newline | @:rule newline}      'end'
   | expr
   ;
 
@@ -41,6 +42,7 @@ expr
   | 'species'   @:species   {',' | @:species}
   | 'parameter' @:parameter {',' | @:parameter}
   | 'reaction'  @:reaction 
+  | 'rule'      @:rule 
   | assign_variable
   | comp_expr
   ;
@@ -67,6 +69,34 @@ reaction::Reaction
   newline 
   kinetic_law:formula
   ;
+
+
+rule
+  =
+  | rate_rule
+  | assignment_rule 
+  | algebraic_rule
+  ;
+
+
+rate_rule::RateRule
+  =
+  [name:identifier ':'] variable:identifier "'" '=' math:formula
+  ;
+
+
+assignment_rule::AssignmentRule
+  =
+  | name:identifier ':' variable:identifier ':=' math:formula
+  | variable:identifier ':=' math:formula
+  ;
+
+
+algebraic_rule::AlgebraicRule
+  =
+  [name:identifier ':'] variable:identifier '==' math:formula
+  ;
+
 
 
 assign_variable::AssignVariable
