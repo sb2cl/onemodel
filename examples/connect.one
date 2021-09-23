@@ -10,7 +10,7 @@ model AntitheticReaction
   
   species
     sigma = 0
-    anti__sigma = 0
+    anti_sigma = 0
   end
   
   reaction
@@ -18,12 +18,15 @@ model AntitheticReaction
     sigma + anti_sigma -> 0 ; gamma*sigma*anti_sigma
     
     # Degradation of species.
-    sigma      -> 0 ; sigma*mu
+    sigma -> 0 ; sigma*mu
     anti_sigma -> 0 ; anti_sigma*mu
   end
 end
 
 model Protein
+    # Protein translation rate.
+    input omega = nM/s
+
     parameter
         # Dilution rate.
         mu = 0
@@ -36,6 +39,7 @@ model Protein
     end
 
     reaction 
+        0 -> x; omega
         x -> 0; (mu+d)*x
     end 
 end
@@ -43,8 +47,15 @@ end
 a = AntitheticReaction()
 p = Protein()
 
+# Podemos conectar los modelos mediante reacciones químicas.
 reaction
-    0 -> a.sigma      ; 1
-    0 -> p.x          ; 1*a.sigma
+    # Constitutive production of sigma.
+    0 -> a.sigma ; 1
+    # Anti-sigma expression is induced by protein.
     0 -> a.anti_sigma ; 1*p.x
 end
+
+# O mediante connects.
+connect(a.sigma, p.omega)
+# Que por debajo será algo de este estilo:
+# rule p.omega := a.sigma

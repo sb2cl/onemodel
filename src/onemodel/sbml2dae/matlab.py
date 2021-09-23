@@ -125,6 +125,7 @@ class Matlab:
 
         # Default parameters.
         f.write(f'% Default parameters value.\n')
+        f.write(f'p = [];\n')
         for item in self.dae.getParameters():
             f.write(f'p.{item["id"]} = {item["value"]};\n')
 
