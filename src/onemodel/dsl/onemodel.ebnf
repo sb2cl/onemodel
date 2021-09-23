@@ -63,9 +63,9 @@ parameter::Parameter
 reaction::Reaction
   =
   [ name:identifier ':']
-  {'+' | reactants:identifier} 
+  ('0' | reactants:identifier {'+' | reactants:identifier})
   '->' 
-  {'+' | products:identifier} 
+  ('0' | products:identifier {'+' | products:identifier})
   newline 
   kinetic_law:formula
   ;

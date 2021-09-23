@@ -1,31 +1,47 @@
 parameter __t_end = 5
 
 model AntitheticReaction
+  # Definition of an antithetic reaction.
   
-  # Definition of parameters.
   parameter
     gamma = 1
     mu = 0
   end
   
-  # Definition of species.
   species
     sigma = 1
     antiSigma = 2
     sigma_antiSigma = 0
   end
   
-  # Definition of reactions.
   reaction
     # Antithetic sequestration.
-    sigma + antiSigma -> sigma_antiSigma; gamma*sigma*antiSigma
+    sigma + antiSigma -> sigma_antiSigma ; gamma*sigma*antiSigma
     
     # Degradation of species.
-    sigma -> ; mu
-    antiSigma -> ; mu
-    sigma_antiSigma -> ; mu
+    sigma           -> 0 ; sigma*mu
+    antiSigma       -> 0 ; antiSigma*mu
+    sigma_antiSigma -> 0 ; sigma_antiSigma*mu
   end
   
 end
 
+model Protein
+    parameter
+        # Dilution rate.
+        mu = 0
+        # Protein degradation rate.
+        d  = 0.1
+    end
+
+    species 
+        x = 5
+    end
+
+    reaction 
+        x -> 0; (mu+d)*x
+    end 
+end
+
 ar = AntitheticReaction()
+p  = Protein()
