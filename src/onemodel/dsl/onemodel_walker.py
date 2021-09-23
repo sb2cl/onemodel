@@ -162,8 +162,8 @@ class OneModelWalker(NodeWalker):
 
     def walk_Reaction(self, node):
         name = node.name
-        reactants = node.reactants
-        products = node.products
+        reactants = self.walk(node.reactants)
+        products = self.walk(node.products)
         kinetic_law_str = node.kinetic_law
 
         if type(reactants) != list:

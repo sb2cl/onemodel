@@ -54,11 +54,17 @@ def math_2_fullname(math_expr, context):
 
     g = tokenize(BytesIO(math_expr.encode('utf-8')).readline)
 
+    last_tokval = None
+
     for toknum, tokval, _, _, _ in g:
         if toknum == ENCODING:
             continue
 
-        elif toknum == NAME:
+        if str(last_tokval) == '.' and toknum == NAME:
+            result = result[0:-1]
+            result += '__'
+
+        if toknum == NAME:
             try:
                 fullname = context.getFullname(str(tokval))
                 result += fullname
@@ -67,5 +73,7 @@ def math_2_fullname(math_expr, context):
 
         else:
             result += str(tokval)
+
+        last_tokval = tokval
 
     return str(result)

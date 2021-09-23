@@ -38,7 +38,7 @@ class Context:
         """
         # Find value in self.symbols.
         value = self.symbols.get(name, None)
-    
+
         # If didn't find the value, and there is a parent context.
         if value == None and self.parent:
             # Look recursively in parent context for the value.
@@ -54,6 +54,16 @@ class Context:
     def getFullname(self, name):
         """ Get the fullname of symbol by its local name.
         """
+        ## Check if name contains '__'.
+        #idx = name.find('__')
+        #if idx > 0:
+        #    # Then the name has the following form: parentname__namelocal
+        #    nameparent = name[:idx]
+        #    namelocal = name[idx+2:]
+
+        #    parent = self.symbols.get(nameparent, None)
+        #    return parent.getFullname(namelocal)
+
         # Try to find the symbols in self.symbols
         value = self.symbols.get(name, None)
 
@@ -62,7 +72,8 @@ class Context:
             fullname = name
             context = self
             while context.parent != None:
-                fullname = context.symbol_name + '_' + fullname
+                if context.symbol_name != '':
+                    fullname = context.symbol_name + '__' + fullname
                 context = context.parent
 
         elif self.parent:

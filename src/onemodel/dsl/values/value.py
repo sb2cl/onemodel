@@ -5,7 +5,8 @@ class Value:
         """ Initialize Value.
         """
         # The name used to store this value in a context.
-        self.symbol_name = None
+        self.symbol_name = ''
+
         # The context where the value was defined (and also where it is saved
         # as a symbol).
         self.definition_context = None
@@ -13,6 +14,10 @@ class Value:
     def set_context(self, name, context):
         self.symbol_name = name
         self.definition_context = context
+
+    def getFullname(self):
+        fullname = self.definition_context.getFullname(self.symbol_name)
+        return fullname
 
     def add_value_to_model(self, name, model):
         """ Add this value to a SBML model.

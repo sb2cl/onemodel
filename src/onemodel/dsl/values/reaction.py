@@ -47,7 +47,7 @@ class Reaction(Value):
         for item in self.reactants:
             if item == None: continue
 
-            item_name = self.definition_context.getFullname(item)
+            item_name = item.getFullname()
 
             species_ref = r.createReactant()
 
@@ -72,7 +72,7 @@ class Reaction(Value):
         for item in self.products:
             if item == None: continue
 
-            item_name = self.definition_context.getFullname(item)
+            item_name = item.getFullname()
 
             species_ref = r.createProduct()
 
