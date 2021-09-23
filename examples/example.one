@@ -4,3 +4,5 @@ model Test
 end
 
 test = Test()
+
+print('Hola')

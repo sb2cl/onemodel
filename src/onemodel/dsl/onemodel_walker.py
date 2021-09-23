@@ -17,6 +17,7 @@ from onemodel.dsl.values.rule_rate import RuleRate
 from onemodel.dsl.values.rule_assignment import RuleAssignment
 from onemodel.dsl.values.rule_algebraic import RuleAlgebraic
 from onemodel.dsl.values.number import Number
+from onemodel.dsl.values.string import String
 from onemodel.dsl.values.struct import Struct
 from onemodel.dsl.values.function import Function
 from onemodel.dsl.values.model import Model
@@ -297,6 +298,8 @@ class OneModelWalker(NodeWalker):
 
     def walk_String(self, node):
         value = str(node.value)
+        
+        value = String(value)
 
         return value
 

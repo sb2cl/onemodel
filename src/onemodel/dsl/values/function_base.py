@@ -41,7 +41,7 @@ class FunctionBase(Value):
         for i in range(len(args)):
             arg_name = arg_names[i] 
             arg_value = args[i]
-            execution_context.set(arg_name, arg_value)
+            execution_context.set(arg_name, arg_value, False)
 
     def check_and_populate_args(self, arg_names, args, execution_context):
         """ Check and populate arguments.

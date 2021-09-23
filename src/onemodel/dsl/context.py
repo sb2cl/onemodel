@@ -23,10 +23,14 @@ class Context:
 
         return context
 
-    def set(self, name, symbol):
+    def set(self, name, symbol, isFirstDefinition=True):
         """ Set a symbol in self.symbols.
         """
-        symbol.set_context(name, self)
+        # If is is the first definiton of this symbol.
+        if isFirstDefinition:
+            # Set self as it context, and pass it its name.
+            symbol.set_context(name, self)
+
         # Save value in symbols.
         self.symbols[name] = symbol
 
