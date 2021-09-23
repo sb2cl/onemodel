@@ -120,7 +120,7 @@ class Matlab:
         f = open(filepath, "w")
 
         # Function header.
-        f.write(f'function [p,x0,M] = {self.dae.getModelName()}_param()\n')
+        f.write(f'function [p,x0,opts,M] = {self.dae.getModelName()}_param()\n')
         self.writeWarning(f)
 
         # Default parameters.
@@ -128,7 +128,7 @@ class Matlab:
         for item in self.dae.getParameters():
             f.write(f'p.{item["id"]} = {item["value"]};\n')
 
-        ## Default initial conditions.
+        # Default initial conditions.
         f.write(f'\n% Default initial conditions.\n')
         f.write(f'x0 = [\n')
         for item in self.dae.getStates():
@@ -141,6 +141,13 @@ class Matlab:
                     f'\t{item["initialCondition"]} % {item["id"]} (algebraic)\n'
                 )
         f.write(f'];\n')
+
+        # Default simulation options parameters.
+        f.write(f'\n% Default simulation options.\n')
+        options = self.dae.getOptions()
+        for item in options:
+            value = options.get(item, None)
+            f.write(f'opts.{item} = {value};\n')
 
         # Mass matrix.
         f.write(f'\n% Mass matrix for algebraic simulations.\n')
@@ -288,7 +295,7 @@ class Matlab:
 
         # Default parameters.
         f.write(f'\n% Default parameters.\n')
-        f.write(f'[p,x0,M] = {name}_param();\n')
+        f.write(f'[p,x0,opts,M] = {name}_param();\n')
 
         # Solver options.
         f.write(f'\n% Solver options.\n')
@@ -297,7 +304,7 @@ class Matlab:
 
         # Simulation time span.
         f.write(f'\n% Simulation time span.\n')
-        f.write(f'tspan = [0 50];\n')
+        f.write(f'tspan = [opts.t_init opts.t_end];\n')
 
         # Simulate.
         f.write(f'\n[t,x] = ode15s(@(t,x) {name}_ode(t,x,p),tspan,x0,opt);\n')

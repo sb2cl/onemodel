@@ -64,6 +64,9 @@ class DaeModel:
             # Skip not constant parameters.
             if item.getConstant() == False: continue
 
+            # Skip dunder parameters.
+            if item.id.startswith('__') == True: continue
+
             parameter = {}
             parameter['id'] = item.id
             parameter['value'] = item.value
@@ -214,6 +217,24 @@ class DaeModel:
                 item['equation'] = '0'
 
         return states
+
+    def getOptions(self):
+        """ Return a list with the simulatior options.
+        """
+        options = {}
+
+        # Default options value.
+        options['t_end']  = 10.0
+        options['t_init'] = 0.0
+
+        # Assign properties.
+        for item in self.model.getListOfParameters():
+            # Skip non-dunder parameters.
+            if item.id.startswith('__') == False: continue
+
+            options[item.id[2:]] = item.value
+
+        return options
 
 if __name__ == '__main__':
     dae = DaeModel(

@@ -1,0 +1,31 @@
+parameter __t_end = 5
+
+model AntitheticReaction
+  
+  # Definition of parameters.
+  parameter
+    gamma = 1
+    mu = 0
+  end
+  
+  # Definition of species.
+  species
+    sigma = 1
+    antiSigma = 2
+    sigma_antiSigma = 0
+  end
+  
+  # Definition of reactions.
+  reaction
+    # Antithetic sequestration.
+    sigma + antiSigma -> sigma_antiSigma; gamma*sigma*antiSigma
+    
+    # Degradation of species.
+    sigma -> ; mu
+    antiSigma -> ; mu
+    sigma_antiSigma -> ; mu
+  end
+  
+end
+
+ar = AntitheticReaction()
