@@ -25,7 +25,7 @@ end
 
 model Protein
     # Protein translation rate.
-    input omega = nM/s
+    species omega = 0
 
     parameter
         # Dilution rate.
@@ -56,6 +56,6 @@ reaction
 end
 
 # O mediante connects.
-connect(a.sigma, p.omega)
+#connect(a.sigma, p.omega)
 # Que por debajo será algo de este estilo:
-# rule p.omega := a.sigma
+rule p.omega := 10*a.sigma

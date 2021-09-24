@@ -209,8 +209,11 @@ class OneModelWalker(NodeWalker):
 
     def walk_RuleAssignment(self, node):
         name = node.name
-        variable = node.variable
+        variable = self.walk(node.variable)
         math = node.math
+
+        if not isinstance(variable, Species):
+            raise TypeError('variable must be "Species"')
 
         if name == None:
             name = f'_R{self.numRules}'
@@ -218,7 +221,7 @@ class OneModelWalker(NodeWalker):
 
         r = RuleAssignment()
 
-        r.variable = variable
+        r.variable = variable.getFullname()
         r.math = math
 
         self.current_context.set(name, r)

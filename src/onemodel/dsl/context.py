@@ -59,14 +59,14 @@ class Context:
         """ Get the fullname of symbol by its local name.
         """
         ## Check if name contains '__'.
-        #idx = name.find('__')
-        #if idx > 0:
-        #    # Then the name has the following form: parentname__namelocal
-        #    nameparent = name[:idx]
-        #    namelocal = name[idx+2:]
+        idx = name.find('__')
+        if idx > 0:
+            # Then the name has the following form: parentname__namelocal
+            nameparent = name[:idx]
+            namelocal = name[idx+2:]
 
-        #    parent = self.symbols.get(nameparent, None)
-        #    return parent.getFullname(namelocal)
+            parent = self.symbols.get(nameparent, None)
+            return parent.getFullname(namelocal)
 
         # Try to find the symbols in self.symbols
         value = self.symbols.get(name, None)
