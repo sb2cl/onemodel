@@ -3,12 +3,16 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to onemodel's documentation!
+Welcome to OneModel's documentation!
 ====================================
 
-**OneModel** is a Python package to define and export synthetic biology DAE models. OneModel enables you to define synthetic biology mathematical models in a simple coding syntax (OneModel syntax) and allows you to export your model into an implementation for other programming/simulation laguages (i.e. Matlab, Julia, OpenModelica, etc).
+**OneModel** is a Python package for defining dynamic synthetic biology models easily and efficiently.
 
-Check out the :doc:`usage` section for further information, including how to :ref:`install <installation>` the project.
+OneModel's syntax allows the definition of models with chemical reactions, ODEs and/or algebraic loops --which makes OneModel especially suitable for control theory applications where you need to combine biological processes with controllers implemented by DAEs.
+OneModel focuses on code readability and modularity; and provides the user with tools to check the coherence of the generated models.
+OneModel generates an `SBML <http://sbml.org/>`_ model file as output, which can be easily converted to other language implementations (such as Matlab, Julia, OpenModelica) with **sbml2dae**, or you could use many of the great SBML software developed by the community.
+
+Check out the :doc:`usage` section for further information, including how to :ref:`install <installation>` OneModel.
 
 .. note::
 
