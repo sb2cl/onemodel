@@ -1,10 +1,15 @@
 OneModel
 ========
 
-**OneModel** is a Python package for defining dynamic synthetic biology models in an easy and effective way.
-OneModel syntax allows the definition of models with chemical reactions, ODEs and/or algebraic loops --this makes OneModel suitable for control therory approach.
+**OneModel** is a Python package for defining dynamic synthetic biology models easily and efficiently.
 
-to define and export synthetic biology DAE models. OneModel enables you to define synthetic biology mathematical models in a simple coding syntax (OneModel syntax) and allows you to export your model into an implementation for other programming/simulation laguages (i.e. Matlab, Julia, OpenModelica, etc).
+OneModel's syntax allows the definition of models with chemical reactions, ODEs and/or algebraic loops --which makes OneModel especially suitable for control theory applications where you need to combine biological processes with controllers implemented by DAEs.
+OneModel focuses on code readability and modularity; and provides the user with tools to check the coherence of the generated models.
+OneModel generates an `SBML <http://sbml.org/>`_ model file as output, which can be easily converted to other language implementations (such as Matlab, Julia, OpenModelica) with **sbml2dae**, or you could use many of the great SBML software developed by the community.
+
+.. note::
+
+  This project is under active development.
 
 Documentation
 -------------
