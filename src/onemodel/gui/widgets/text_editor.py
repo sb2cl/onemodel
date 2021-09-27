@@ -29,7 +29,7 @@ class TextEditor(QPlainTextEdit):
     def keyPressEvent(self, event):
         if event.key() == QtCore.Qt.Key_Tab:
             tc = self.textCursor()
-            tc.insertText("    ")
+            tc.insertText("  ")
             return
         else:
             super().keyPressEvent(event)

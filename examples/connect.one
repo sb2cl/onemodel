@@ -1,61 +1,70 @@
+# Simulation ending time.
 parameter __t_end = 50
 
 model AntitheticReaction
-  # Definition of an antithetic reaction.
+  ### Definition of an antithetic reaction. ###
 
   parameter
+    # Antithetic sequestration affinity.
     gamma = 1
-    mu = 0
+    # Growth rate.
+    mu = 0    
   end
   
   species
-    sigma = 0
-    anti_sigma = 0
+    # Sigma concentration.
+    sigma = 0  
+    # Anti-sigma concentration.        
+    anti_sigma = 0 
   end
   
   reaction
     # Antithetic sequestration.
     sigma + anti_sigma -> 0 ; gamma*sigma*anti_sigma
-    
-    # Degradation of species.
+    # Dilution of species.
     sigma -> 0 ; sigma*mu
     anti_sigma -> 0 ; anti_sigma*mu
   end
 end
 
 model Protein
-    # Protein translation rate.
-    species omega = 0
+  ### Defintion of a protein. ###
 
-    parameter
-        # Dilution rate.
-        mu = 0
-        # Protein degradation rate.
-        d  = 1
-    end
+  # Protein translation rate.
+  species omega = 0
 
-    species 
-        x = 0
-    end
+  parameter 
+    # Growth rate.  
+    mu = 0 
+    # Protein degradation rate.
+    d  = 1 
+  end
 
-    reaction 
-        0 -> x; omega
-        x -> 0; (mu+d)*x
-    end 
+  species 
+    # Protein concentration.
+    x = 0  
+  end
+
+  reaction 
+    # Protein translation.
+    0 -> x; omega
+    # Protein degradation and dilution.
+    x -> 0; (mu+d)*x
+  end 
 end
+
+### Antithetic controller. ###
 
 a = AntitheticReaction()
 p = Protein()
 
 # Podemos conectar los modelos mediante reacciones químicas.
 reaction
-    # Constitutive production of sigma.
-    0 -> a.sigma ; 1
-    # Anti-sigma expression is induced by protein.
-    0 -> a.anti_sigma ; 1*p.x
+  # Constitutive production of sigma.
+  0 -> a.sigma ; 1
+  # Anti-sigma expression is induced by protein.
+  0 -> a.anti_sigma ; 1*p.x
 end
 
 # O mediante connects.
-#connect(a.sigma, p.omega)
-# Que por debajo será algo de este estilo:
 rule p.omega := 10*a.sigma
