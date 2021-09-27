@@ -12,7 +12,7 @@
 
 
 # Keywords reserved.
-@@keyword:: species parameter reaction end rule function
+@@keyword:: species parameter reaction end rule function input
 
 
 start
@@ -33,6 +33,7 @@ statement
   | 'parameter' newline {newline | @:parameter newline} 'end'
   | 'reaction'  newline {newline | @:reaction newline}  'end'
   | 'rule'      newline {newline | @:rule newline}      'end'
+  | 'input'     newline {newline | @:input newline}     'end'
   | expr
   ;
 
@@ -43,6 +44,7 @@ expr
   | 'parameter' @:parameter {',' | @:parameter}
   | 'reaction'  @:reaction 
   | 'rule'      @:rule 
+  | 'input'     @:input 
   | assign_variable
   | comp_expr
   ;
@@ -95,6 +97,12 @@ rule_assignment::RuleAssignment
 rule_algebraic::RuleAlgebraic
   =
   [name:identifier ':'] variable:identifier '==' math:formula
+  ;
+
+
+input::Input
+  = 
+  name:identifier
   ;
 
 

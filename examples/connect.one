@@ -31,7 +31,7 @@ model Protein
   ### Defintion of a protein. ###
 
   # Protein translation rate.
-  species omega = 0
+  input omega
 
   parameter 
     # Growth rate.  
@@ -67,4 +67,4 @@ reaction
 end
 
 # O mediante connects.
-rule p.omega := 10*a.sigma
+rule p.omega := 2*a.sigma

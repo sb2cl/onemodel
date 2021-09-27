@@ -246,6 +246,19 @@ class OneModelWalker(NodeWalker):
 
         return r
 
+    def walk_Input(self, node):
+        name = node.name
+
+        # Set default value to cero.
+        value = 0
+
+        s = Species()
+
+        s.initialConcentration = value
+        self.current_context.set(name, s)
+
+        return s
+
     def walk_AssignVariable(self, node):
         name = node.name
         value = self.walk(node.value)

@@ -78,7 +78,14 @@ class OneModelHighlighter(QSyntaxHighlighter):
     # OneModel keywords
 
     keywords = [
-        'species', 'parameter', 'reaction', 'rule', 'end', 'function', 'model'
+        'species', 
+        'parameter',
+        'reaction',
+        'rule',
+        'end',
+        'function',
+        'model',
+        'input'
     ]
 
     # Python operators
