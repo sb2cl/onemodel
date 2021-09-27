@@ -58,10 +58,11 @@ end
 a = AntitheticReaction()
 p = Protein()
 
+parameter k = 10
 # Podemos conectar los modelos mediante reacciones químicas.
 reaction
   # Constitutive production of sigma.
-  0 -> a.sigma ; 1
+  0 -> a.sigma ; k
   # Anti-sigma expression is induced by protein.
   0 -> a.anti_sigma ; 1*p.x
 end
