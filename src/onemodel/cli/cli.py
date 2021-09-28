@@ -169,16 +169,7 @@ def sbml2matlab(sbml_filename, output):
     # Export into matlab files.
     matlab = Matlab(dae, output)
 
-    filepath = matlab.exportDefaultParameters()
-    print(f'\tGenerated {filepath}')
-
-    filepath = matlab.exportOde()
-    print(f'\tGenerated {filepath}')
-
-    filepath = matlab.exportStates()
-    print(f'\tGenerated {filepath}')
-
-    filepath = matlab.exportDriver()
+    filepath = matlab.exportExample()
     print(f'\tGenerated {filepath}')
 
     filepath = matlab.exportClass()
