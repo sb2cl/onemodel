@@ -12,7 +12,7 @@
 
 
 # Keywords reserved.
-@@keyword:: species parameter reaction end rule function input
+@@keyword:: species parameter reaction end rule function input import has
 
 
 start
@@ -34,7 +34,14 @@ statement
   | 'reaction'  newline {newline | @:reaction newline}  'end'
   | 'rule'      newline {newline | @:rule newline}      'end'
   | 'input'     newline {newline | @:input newline}     'end'
+  | import
   | expr
+  ;
+
+
+import::Import
+  =
+  'import' filepath:string
   ;
 
 

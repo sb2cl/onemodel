@@ -37,9 +37,6 @@ class OneModelWalker(NodeWalker):
             # If not, generate a root context.
             self.current_context = ContextRoot()
 
-        # Add this walker to the context.
-        #self.current_context.walker = self
-
         # SBMLDocument and SBMLModel
         self.document = None
         self.model = None
@@ -48,15 +45,30 @@ class OneModelWalker(NodeWalker):
         self.numReactions = 0
         self.numRules = 0
 
+        # Text filepath which is being executed with self.run.
+        self.filepath_running = None
+
         # Load the grammar.
         self.grammar = files('onemodel.dsl').joinpath('onemodel.ebnf').read_text()
 
         # Load the parser with the grammar.
         self.parser = tatsu.compile(self.grammar, asmodel=True)
 
-    def run(self, text):
+    def run(self, text, filepath=None):
+        # If filepath is none, the text does not proceed from
+        # a file.
+
+        # Save previous filepath.
+        filepath_previous = self.filepath_running
+
+        # Set current filepath.
+        self.filepath_running = filepath
+
         model = self.parser.parse(text)
         result = self.walk(model)
+
+        # Restore previous filepath.
+        self.filepath_running = filepath_previous
 
         return result
 
@@ -122,6 +134,22 @@ class OneModelWalker(NodeWalker):
         return sbml
 
     ### Walk methods ###
+
+    def walk_Import(self, node):
+        import os
+
+        filepath = self.walk(node.filepath).value
+
+        f = os.path.abspath(self.filepath_running)
+        f = os.path.dirname(f)
+        f = os.path.join(f, filepath)
+        f = os.path.abspath(f)
+
+        text = open(f).read()
+
+        self.run(text, f)
+
+        return
 
     def walk_Species(self, node):
         name = node.name

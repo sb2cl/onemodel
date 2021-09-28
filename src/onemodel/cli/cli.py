@@ -49,7 +49,7 @@ def run(input_file):
     walker = OneModelWalker(filename)
 
     # Run.
-    walker.run(text)
+    walker.run(text, input_file)
 
 @cli.command(short_help='Export model')
 @click.argument('input_file', 
@@ -141,7 +141,7 @@ def onemodel2sbml(input_file, filename, output):
     print('\tOneModel interpreter initialized.')
 
     # Walk the AST model.
-    result = walker.run(text)
+    result = walker.run(text, input_file)
     print('\tRun input_file.')
 
     # Get SBML representation.
