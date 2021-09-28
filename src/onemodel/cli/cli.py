@@ -181,6 +181,8 @@ def sbml2matlab(sbml_filename, output):
     filepath = matlab.exportDriver()
     print(f'\tGenerated {filepath}')
 
+    filepath = matlab.exportClass()
+    print(f'\tGenerated {filepath}')
 
 if __name__ == '__main__':
     cli(obj={})
