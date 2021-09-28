@@ -53,6 +53,8 @@ end
 
 ### Stand-alone model ###
 
+parameter __t_end = 1000
+
 parameter
   # Average cell mass.
   m_p = 433         # fg

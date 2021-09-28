@@ -1,5 +1,6 @@
 from tokenize import tokenize, NAME, OP, ENCODING
 from io import BytesIO
+import math
 
 from onemodel.sbml2dae.dae_model import DaeModel, StateType
 
@@ -50,10 +51,7 @@ class Matlab:
         
         # Plot.
         f.write(f'\n% Plot result.\n')
-        f.write(f'plot(t,x);\n')
-        f.write(f'grid on;\n')
-        # TODO: Add a legend.
-
+        f.write(f'm.plot(out);\n')
 
         f.close()
 
@@ -78,6 +76,7 @@ class Matlab:
         self.writeSimulationOptions(f)
         self.writeOde(f)
         self.writeSimout2Struct(f)
+        self.writePlot(f)
 
         f.write(f'\tend\n')
         f.write(f'end\n')
@@ -289,6 +288,10 @@ class Matlab:
         f.write(f'\t\t\t%% Convert the simulation output into an easy-to-use struct.\n')
         f.write(f'\n')
 
+        f.write(f'\t\t\t% We need to transpose state matrix.\n')
+        f.write(f"\t\t\tx = x';")
+        f.write(f'\n')
+
         self.writeLocalStates(f)
 
         # Save the time.
@@ -299,7 +302,7 @@ class Matlab:
         # Crate ones vector.
         f.write(f'\n')
         f.write('\t\t\t% Vector for extending single-value states and parameters.\n')
-        f.write('\t\t\tones_t = ones(size(t));\n')
+        f.write('\t\t\tones_t = ones(size(t\'));\n')
         f.write(f'\n')
 
         # Save states.
@@ -313,6 +316,32 @@ class Matlab:
         for item in self.dae.getParameters():
             f.write(f'\t\t\tout.{item["id"]} = p.{item["id"]}.*ones_t;\n')
         f.write(f'\n')
+
+        f.write(f'\t\tend\n')
+
+    def writePlot(self, f):
+        """ Write method which plot simulation result.
+        """
+        f.write(f'\t\tfunction plot(~,out)\n')
+        f.write(f'\t\t\t%% Plot simulation result.\n')
+
+        states = self.dae.getStates()
+
+        # Calculate the size of the subplot.
+        N = math.sqrt(len(states))
+        x = math.ceil(N)
+        y = x
+        while x*(y-1) >= len(states):
+            y -= 1
+
+        # Write subplots.
+        for i in range(len(states)):
+            f.write(f'\t\t\tsubplot({x},{y},{i+1});\n')
+            f.write(f'\t\t\tplot(out.t, out.{states[i]["id"]});\n')
+            f.write(f'\t\t\ttitle("{states[i]["id"]}");\n')
+            f.write(f'\t\t\tylim([0, +inf]);\n')
+            f.write(f'\t\t\tgrid on;\n')
+            f.write(f'\n')
 
         f.write(f'\t\tend\n')
 
