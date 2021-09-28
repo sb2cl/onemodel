@@ -62,30 +62,29 @@ model Bioreactor
     s' = F_in/V*(s_f-s) - (1/y)*mu*x
     S' = F_out*s
   end
-
 end
 
-### Stand-alone model ###
-
-parameter __t_end = 1000
-
-parameter
-  # Average cell mass.
-  m_p = 433         # fg
+standalone
+  parameter __t_end = 1000
   
-  # Batch mode.
-  F_in = 0          # L/min
-  F_out = 0         # L/min
-
-  # Half activation threshold of growth rate.
-  K_s = 0.1802      # g/L
-end
-
-bio = Bioreactor()
-
-rule 
-  bio.m_p := m_p
-  bio.mu := log(2)/24*bio.s/(bio.s+K_s)
-  bio.F_in := F_in
-  bio.F_out := F_out
+  parameter
+    # Average cell mass.
+    m_p = 433         # fg
+    
+    # Batch mode.
+    F_in = 0          # L/min
+    F_out = 0         # L/min
+  
+    # Half activation threshold of growth rate.
+    K_s = 0.1802      # g/L
+  end
+  
+  bio = Bioreactor()
+  
+  rule 
+    bio.m_p := m_p
+    bio.mu := log(2)/24*bio.s/(bio.s+K_s)
+    bio.F_in := F_in
+    bio.F_out := F_out
+  end
 end
