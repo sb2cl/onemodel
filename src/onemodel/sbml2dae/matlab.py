@@ -229,7 +229,7 @@ class Matlab:
                     continue
 
                 # Skipe states that are already defined.
-                if state in known_states:
+                if state['id'] in known_states:
                     continue
 
                 dependencies = self.getStates(state['equation'])

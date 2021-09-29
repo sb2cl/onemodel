@@ -238,7 +238,7 @@ class DaeModel:
 
 if __name__ == '__main__':
     dae = DaeModel(
-        '/home/nobel/Sync/python/workspace/onemodel/examples/build/example.xml'
+        '/home/nobel/Sync/python/workspace/onemodel/libraries/multiscale/build/continous.xml'
     )
 
     print(dae.getModelName())
