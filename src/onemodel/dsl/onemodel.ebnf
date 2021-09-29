@@ -220,7 +220,7 @@ function_definition::FunctionDefinition
 
 model_definition::ModelDefinition
   =
-  'model' name:identifier newline 
+  'model' name:identifier ['(' parent_class:identifier ')'] newline 
   {newline | body:statement}
   'end'
   ;

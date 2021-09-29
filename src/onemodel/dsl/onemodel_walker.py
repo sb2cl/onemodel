@@ -407,8 +407,9 @@ class OneModelWalker(NodeWalker):
     def walk_ModelDefinition(self, node):
         name = node.name
         body = node.body
+        parent_class = node.parent_class
 
-        m = Model(name, body)
+        m = Model(name, body, parent_class)
 
         self.current_context.set(name, m)
 

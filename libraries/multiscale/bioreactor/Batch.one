@@ -4,9 +4,14 @@ model Batch(Bioreactor)
   # Model of a bioreactor in batch mode.
 
   rule
-    F_in := 0  # Set input media flow to zero.
-    F_out := 0 # Set output waster flow to zero.
+    F_in := 666
+    F_out := 0 
   end
+
+  showContext()
+
+  print(_R9)
+
 end
 
 standalone
@@ -15,6 +20,7 @@ standalone
   parameter
     # Average cell mass.
     m_p = 433         # fg
+    
     # Half activation threshold of growth rate.
     K_s = 0.1802      # g/L
   end

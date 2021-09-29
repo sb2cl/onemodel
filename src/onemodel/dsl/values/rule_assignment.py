@@ -41,7 +41,7 @@ class RuleAssignment(Value):
 
 
     def __str__(self):
-        return '<assignment rule>'
+        return f'<assignment rule "{self.variable} = {self.math}">'
 
     def __repr__(self):
         return self.__str__()
