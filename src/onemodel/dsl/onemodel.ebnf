@@ -237,7 +237,7 @@ identifier::str
 
 formula::str
   =
-  /[^\\\r\n\f'\;]*/
+  /[^\\\r\n\f'\;#]*/
   ;
 
 

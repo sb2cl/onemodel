@@ -4,8 +4,8 @@ model Batch(Bioreactor)
   # Model of a bioreactor in batch mode.
 
   rule
-    F_in := 666
-    F_out := 0 
+    F_in := 666 # Set input media flux to zero.
+    F_out := 0 # Set output waste flux to zero.
   end
 
   showContext()
