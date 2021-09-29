@@ -4,12 +4,25 @@ from onemodel.dsl.values.object import Object
 class Model(FunctionBase):
     """ Definiton of Model.
     """
-    def __init__(self, name, body_node, parent_class):
+    def __init__(self, name, body_node, parent_model):
         """ Initialize Model.
         """
         super().__init__(name)
         self.body_node = body_node
-        self.parent_class = parent_class
+        self.parent_model = parent_model
+
+    def execute(self, walker):
+        """ Initialize the new object by executing self.body_node in the new
+        object context. Also it executes previously the code from parent_model.
+        """
+        # If model has a parent_model.
+        if self.parent_model != None:
+            # Excecute first the parent.
+            parent = walker.current_context.get(self.parent_model)
+            parent.execute(walker)
+
+        # Then execute this model.
+        walker.walk(self.body_node)
                 
     def __str__(self):
         return f"<model {self.name}>"
@@ -24,14 +37,7 @@ class Model(FunctionBase):
 
         walker.current_context = obj 
 
-        parent_class = self.parent_class
-
-        while parent_class != None:
-            parent = calling_context.get(self.parent_class)
-            walker.walk(parent.body_node)
-            parent_class = parent.parent_class
-
-        walker.walk(self.body_node)
+        self.execute(walker)
 
         walker.current_context = calling_context
 
