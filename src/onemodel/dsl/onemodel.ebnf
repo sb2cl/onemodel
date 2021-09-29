@@ -12,7 +12,7 @@
 
 
 # Keywords reserved.
-@@keyword:: species parameter reaction end rule function input import has
+@@keyword:: species parameter reaction end rule function input import has standalone
 
 
 start
@@ -29,12 +29,13 @@ statements
 
 statement
   = 
-  | 'species'   newline {newline | @:species newline}   'end'
-  | 'parameter' newline {newline | @:parameter newline} 'end'
-  | 'reaction'  newline {newline | @:reaction newline}  'end'
-  | 'rule'      newline {newline | @:rule newline}      'end'
-  | 'input'     newline {newline | @:input newline}     'end'
+  | 'species'    newline {newline | @:species newline}   'end'
+  | 'parameter'  newline {newline | @:parameter newline} 'end'
+  | 'reaction'   newline {newline | @:reaction newline}  'end'
+  | 'rule'       newline {newline | @:rule newline}      'end'
+  | 'input'      newline {newline | @:input newline}     'end'
   | import
+  | standalone
   | expr
   ;
 
@@ -42,6 +43,12 @@ statement
 import::Import
   =
   'import' filepath:string
+  ;
+
+
+standalone::Standalone
+  =
+  'standalone' newline {newline | code:statement newline} 'end'
   ;
 
 

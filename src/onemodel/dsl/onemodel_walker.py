@@ -45,8 +45,11 @@ class OneModelWalker(NodeWalker):
         self.numReactions = 0
         self.numRules = 0
 
-        # Text filepath which is being executed with self.run.
+        # Filepath of the text which is being executed with self.run().
         self.filepath_running = None
+
+        # Are we importing code from other file?
+        self.isImporting = False
 
         # Load the grammar.
         self.grammar = files('onemodel.dsl').joinpath('onemodel.ebnf').read_text()
@@ -147,7 +150,21 @@ class OneModelWalker(NodeWalker):
 
         text = open(f).read()
 
+        # Save current self.isImporting.
+        aux = self.isImporting
+        # Set it to true.
+        self.isImporting = True
+
         self.run(text, f)
+
+        # Restores old self.isImporting.
+        self.isImporting = aux
+
+        return
+
+    def walk_Standalone(self, node):
+        if self.isImporting == False:
+            return self.walk(node.code)
 
         return
 
