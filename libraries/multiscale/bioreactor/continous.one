@@ -5,13 +5,15 @@ model Continous(Bioreactor)
 
   species
     # Desired biomass concentration.
-    x_ref = 1 # gram/litre
+    x_ref = 1  # gram/litre
     # Dilution rate.
-    D = 0 # dimensionless
+    D = 0      # dimensionless
   end
 
   rule
-    D := mu*x/x_ref
+    # Calculate the dilution rate.
+    D     := mu*x/x_ref
+    # Apply dilution rate to the media and waste fluxes.
     F_in  := D*V 
     F_out := D*V 
   end

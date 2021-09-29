@@ -1,0 +1,30 @@
+import './protein.one'
+
+model ProteinNonRibosomal(Protein)
+  # Model of average expression of non-ribosomal proteins in E.coli.
+
+  parameter
+    N = 1735 
+    omega = 0.0361
+    d_m = 0.2
+    k_b = 12.4404
+    k_u = 10.0454
+    l_p = 333
+  end
+
+  rule
+    E_m_eq: E_m := 6.3492
+  end
+end
+
+standalone
+  p_nr = ProteinNonRibosomal() 
+
+  rule
+    p_nr.nu := 1
+    p_nr.mu := 1
+    p_nr.r := 1
+    p_nr.m_h := 1
+    p_nr.J_host_sum := 1
+  end
+end

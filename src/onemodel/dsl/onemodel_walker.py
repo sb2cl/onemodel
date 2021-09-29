@@ -189,9 +189,11 @@ class OneModelWalker(NodeWalker):
 
     def walk_Parameter(self, node):
         name = node.name
-        value = self.walk(node.value).value
+        value = self.walk(node.value)
 
-        if value == None:
+        if value != None: 
+            value = value.value
+        else:
             value = 0
 
         if not type(value) in (int, float):

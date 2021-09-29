@@ -1,0 +1,51 @@
+model Protein
+  # Model of expression of a single protein.
+
+  input
+    # Effective translation rate per ribosome (aa/minute).
+    nu
+    # Growth rate (1/minute).
+    mu
+    # Free ribosomes (molec/cell).
+    r 
+    # Total protein mass of host genes (fg/cell).
+    m_h
+    # Total sum of RRS in host genes (dimensionless).
+    J_host_sum 
+  end
+
+  parameter
+    # Number of copies of the gene (molec/cell).
+    N 
+    # Promoter transcription rate (molec/minute/cell).
+    omega 
+    # Mean degradation rate of mRNA (1/minute).
+    d_m
+    # Association rate RBS-ribosome (cell/minute/molec).
+    k_b
+    # Dissotiation rate RBS-ribosome (1/minute).
+    k_u
+    # Protein length (aa).
+    l_p
+    # Ribosome occupancy length (aa).
+    l_e = 25
+  end
+
+  species
+    # Effective RBS affinity (cell/molec).
+    K_C0 = 0
+    # Ribosomes density related term (dimensionless).
+    E_m = 0
+    # Resources recruitment strength (dimensionless).
+    J = 0
+    # Total mass of this protein in the cell (fg/cell).
+    m = 100
+  end
+
+  rule
+    K_C0 := k_b/(k_u + nu/l_e)
+    E_m_eq: E_m := 0.62*l_p/l_e
+    J := E_m*omega/(d_m/K_C0 + mu*r)
+    m' = (m_h*N*J/J_host_sum - m)*mu
+  end
+end
