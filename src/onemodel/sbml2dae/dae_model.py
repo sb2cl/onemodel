@@ -85,6 +85,11 @@ class DaeModel:
         for species in self.model.getListOfSpecies():
             state = {}
             state['id'] = species.id
+            ind = species.id.rfind('__')
+            if ind > 0:
+                state['context'] = species.id[0:ind]
+            else:
+                state['context'] = ''
             state['initialCondition'] = species.getInitialConcentration()
             state['type'] = StateType.UNKOWN
 
@@ -117,6 +122,11 @@ class DaeModel:
 
             state = {}
             state['id'] = parameter.id
+            ind = paremeter.id.rfind('__')
+            if ind > 0:
+                state['context'] = paremeter.id[0:ind]
+            else:
+                state['context'] = ''
             state['initialCondition'] = parameter.getValue()
             state['type'] = StateType.UNKOWN
             state['definitionType'] = DefinitionType.RULE

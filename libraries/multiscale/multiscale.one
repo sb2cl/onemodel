@@ -1,6 +1,7 @@
 import './metabolic/wild_type.one'
 import './mass_equation/mass_interpolated.one'
 
+parameter __t_end = 10000
 
 cell = WildType()
 mass = MassInterpolated()

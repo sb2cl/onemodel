@@ -325,23 +325,39 @@ class Matlab:
         f.write(f'\t\tfunction plot(~,out)\n')
         f.write(f'\t\t\t%% Plot simulation result.\n')
 
+        # Get all the states we want to plot.
         states = self.dae.getStates()
 
-        # Calculate the size of the subplot.
-        N = math.sqrt(len(states))
-        x = math.ceil(N)
-        y = x
-        while x*(y-1) >= len(states):
-            y -= 1
+        # Separate states in the different contexts.
+        contexts = {}
+        for state in states:
+            c = state['context']
+            if contexts.get(c, None) == None:
+                contexts[c] = [state]
+            else:
+                contexts[c].append(state)
 
-        # Write subplots.
-        for i in range(len(states)):
-            f.write(f'\t\t\tsubplot({x},{y},{i+1});\n')
-            f.write(f'\t\t\tplot(out.t, out.{states[i]["id"]});\n')
-            f.write(f'\t\t\ttitle("{states[i]["id"]}");\n')
-            f.write(f'\t\t\tylim([0, +inf]);\n')
-            f.write(f'\t\t\tgrid on;\n')
-            f.write(f'\n')
+        for context in contexts:
+
+            states = contexts[context]
+
+            # Calculate the size of the subplot.
+            N = math.sqrt(len(states))
+            x = math.ceil(N)
+            y = x
+            while x*(y-1) >= len(states):
+                y -= 1
+
+            f.write(f"\t\t\tfigure('Name','{context}');\n")
+
+            # Write subplots.
+            for i in range(len(states)):
+                f.write(f'\t\t\tsubplot({x},{y},{i+1});\n')
+                f.write(f'\t\t\tplot(out.t, out.{states[i]["id"]});\n')
+                f.write(f'\t\t\ttitle("{states[i]["id"]}");\n')
+                f.write(f'\t\t\tylim([0, +inf]);\n')
+                f.write(f'\t\t\tgrid on;\n')
+                f.write(f'\n')
 
         f.write(f'\t\tend\n')
 
