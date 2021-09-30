@@ -1,5 +1,4 @@
-a = 0 
 
-if a
+if strcmp('hi','hi')
   print('Hello world')
 end

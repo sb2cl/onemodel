@@ -49,3 +49,13 @@ class FunctionBuiltin(FunctionBase):
         context.print()
 
     call_showContext.arg_names = []
+
+    def call_strcmp(self, exec_context):
+        """ Show current context.
+        """
+        str_1 = exec_context.get('str_1')
+        str_2 = exec_context.get('str_2')
+
+        return str_1.value == str_2.value
+
+    call_strcmp.arg_names = ['str_1', 'str_2']

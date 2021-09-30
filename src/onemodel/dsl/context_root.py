@@ -9,6 +9,7 @@ class ContextRoot(Context):
 
         self.addFunctionBuiltin('print')
         self.addFunctionBuiltin('showContext')
+        self.addFunctionBuiltin('strcmp')
 
     def addFunctionBuiltin(self, name):
         self.set(name, FunctionBuiltin(name))
