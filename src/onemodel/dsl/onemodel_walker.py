@@ -266,6 +266,12 @@ class OneModelWalker(NodeWalker):
             name = f'_R{self.numRules}'
             self.numRules += 1
 
+        if type(name) == list:
+            full_name = ''
+            for item in name:
+                full_name += item + '__'
+            name = full_name[0:-2]
+
         r = RuleAssignment()
 
         r.variable = variable.getFullname()

@@ -62,7 +62,7 @@ model WildType
   end
 
   rule
-    nu := nu_max*s/(s + K_s) 
+    nu_eq: nu := nu_max*s/(s + K_s) 
     mu == m_aa/m_h*nu*phi_b_t*phi_t*p_r.r_t
     m_p := p_r.m + p_nr.m
     J_sum := p_r.N*p_r.J + p_nr.N*p_nr.J

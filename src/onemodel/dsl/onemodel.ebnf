@@ -103,7 +103,7 @@ rule_rate::RuleRate
 
 rule_assignment::RuleAssignment
   =
-  | name:identifier ':' variable:expr ':=' math:formula
+  | name:identifier {'.' name:identifier} ':' variable:expr ':=' math:formula
   | variable:expr ':=' math:formula
   ;
 

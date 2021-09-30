@@ -1,0 +1,13 @@
+import './metabolic/wild_type.one'
+import './mass_equation/mass_interpolated.one'
+
+
+cell = WildType()
+mass = MassInterpolated()
+
+rule
+  cell.nu_eq: cell.nu := cell.nu_max
+  cell.m_h := mass.m_h
+
+  mass.mu := cell.mu
+end

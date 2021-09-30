@@ -70,7 +70,7 @@ connect(cellModel__m_h, mass__m_p);
 if strcmp(opts.bioreactor, 'nuFix');
   parameter bio__nu(value = 1260);
 
-  % We need to overried the equation of cellModel__nu.
+  % We need to override the equation of cellModel__nu.
   cellModel__nu_eq.eqn = 'cellModel__nu ==  bio__nu';
  
   connect(cellModel__s, 0);

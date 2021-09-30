@@ -16,11 +16,11 @@ model MassInterpolated
   end
 
   species
-    # Total protein mass of the cell (fg/cell).
-    m_p = 0
+    # Total host protein mass of the cell (fg/cell).
+    m_h = 0
   end
 
   rule
-    m_p := c_1*mu*mu + c_2*mu + c_3
+    m_h := c_1*mu*mu + c_2*mu + c_3
   end
 end
