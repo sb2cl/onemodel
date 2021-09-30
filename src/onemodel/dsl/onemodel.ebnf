@@ -169,6 +169,7 @@ atom
   | integer
   | string
   | struct
+  | if
   | function_definition
   | model_definition
   | access_identifier
@@ -203,10 +204,11 @@ struct::Struct
   ;
 
 
-# Access the value of an identifier.
-access_identifier::AccessIdentifier
-  = 
-  name:identifier {'.' name:identifier}
+if::If
+  =
+  'if' condition:expr newline
+  {newline | body:statement}
+  'end'
   ;
 
 
@@ -223,6 +225,13 @@ model_definition::ModelDefinition
   'model' name:identifier ['(' parent_model:identifier ')'] newline 
   {newline | body:statement}
   'end'
+  ;
+
+
+# Access the value of an identifier.
+access_identifier::AccessIdentifier
+  = 
+  name:identifier {'.' name:identifier}
   ;
 
 

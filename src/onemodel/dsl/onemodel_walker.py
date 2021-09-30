@@ -392,6 +392,15 @@ class OneModelWalker(NodeWalker):
 
         return value
 
+    def walk_If(self, node):
+        condition = self.walk(node.condition)
+        body = node.body
+
+        if bool(condition):
+            self.walk(body)
+
+        return
+
     def walk_FunctionDefinition(self, node):
         name = node.name
         args = node.args

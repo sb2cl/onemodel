@@ -20,3 +20,6 @@ class Number(Value):
 
     def __repr__(self):
         return self.__str__()
+
+    def __bool__(self):
+        return self.value != 0

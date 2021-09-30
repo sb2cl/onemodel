@@ -1,8 +1,5 @@
-model Test
-    species x = 0
-    rule x '= 1
+a = 0 
+
+if a
+  print('Hello world')
 end
-
-test = Test()
-
-print('Hola')
