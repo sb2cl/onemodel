@@ -33,7 +33,8 @@ setuptools.setup(
         include_package_data=True,
         entry_points ={
             'console_scripts': [
-                'onemodel-cli = onemodel.cli.cli:main'
+                'onemodel-cli = onemodel.cli.cli:main',
+                'onemodel-gui = onemodel.gui.app:main',
                 ]
             },
         )

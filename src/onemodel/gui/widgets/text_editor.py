@@ -14,7 +14,7 @@ class TextEditor(QPlainTextEdit):
 
         # Set font.
         fixedfont = QFontDatabase.systemFont(QFontDatabase.FixedFont)
-        fixedfont.setPointSize(13)
+        fixedfont.setPointSize(12)
         self.setFont(fixedfont)
 
         css  = 'QPlainTextEdit{\n'

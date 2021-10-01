@@ -85,7 +85,9 @@ class OneModelHighlighter(QSyntaxHighlighter):
         'end',
         'function',
         'model',
-        'input'
+        'input',
+        'import',
+        'if',
     ]
 
     # Python operators

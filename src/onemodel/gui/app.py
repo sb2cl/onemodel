@@ -13,6 +13,9 @@ class App(QApplication):
         self.main_view = MainView(self.model, self.main_controller)
         self.main_view.show()
 
-if __name__ == '__main__':
+def main():
     app = App(sys.argv)
     sys.exit(app.exec_())
+
+if __name__ == '__main__':
+    main()
