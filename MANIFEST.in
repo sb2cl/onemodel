@@ -1,2 +1,2 @@
-include examples/*
+include src/onemodel/examples/*
 include src/onemodel/dsl/*.ebnf
