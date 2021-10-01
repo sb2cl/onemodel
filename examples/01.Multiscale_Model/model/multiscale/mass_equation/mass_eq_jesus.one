@@ -1,0 +1,16 @@
+import './mass_equation.one'
+
+model MassEqJesus(MassEquation)
+  # This model was developed by jesus in the ACS paper.
+
+  parameter
+    # (fg/cell).
+    mp_mp0 = 77.3748
+    # (minute).
+    mp_beta = 61.7813
+  end
+
+  rule
+    m_h := mp_mp0*exp(mp_beta*mu)
+  end
+end

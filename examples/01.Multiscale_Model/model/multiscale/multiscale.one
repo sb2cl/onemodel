@@ -1,0 +1,110 @@
+### IMPORTS ###
+
+# Cell model.
+import './metabolic/wild_type.one'
+import './synthetic_circuit/one_protein.one'
+
+# Mass equations.
+import './mass_equation/mass_interpolated.one'
+import './mass_equation/mass_eq_jesus.one'
+
+# Bioreactors.
+import './bioreactor/batch.one'
+import './bioreactor/continous.one'
+import './bioreactor/fedbatch.one'
+
+### META-MODEL OPTIONS ###
+
+# Cell model: 'wild_type' or 'one_protein'
+cell_model = 'one_protein'
+
+# Mass equation: 'interpolated', 'jesus' or 'fix'.
+mass_equation = 'interpolated'
+
+# Bioreactor type: 'nu_fix', 'substrate_fix', 'batch' or 'continous'.
+bioreactor = 'continous'
+
+# Simulation time.
+parameter __t_end = 10000
+
+
+### CELL BURDEN MODEL ###
+
+if strcmp(cell_model, 'wild_type')
+  cell = WildType()
+end
+
+if strcmp(cell_model, 'one_protein')
+  cell = OneProtein()
+end
+
+### MASS EQUATION ###
+
+if strcmp(mass_equation, 'interpolated')
+  mass = MassInterpolated()
+
+  rule 
+    mass.mu := cell.mu
+    cell.m_h := mass.m_h
+  end
+end
+
+if strcmp(mass_equation, 'jesus')
+  mass = MassEqJesus()
+
+  rule 
+    mass.mu := cell.mu
+    cell.m_h := mass.m_h
+  end
+end
+
+if strcmp(mass_equation, 'fix')
+  rule cell.m_h := 450 #fg
+end
+
+
+### BIOREACTOR MODEL ###
+
+if strcmp(bioreactor, 'nu_fix')
+  rule
+    # Override nu equation in cell (aa/minute).
+    cell.nu_eq: cell.nu := 1260 
+  end
+end
+
+if strcmp(bioreactor, 'substrate_fix')
+  rule
+    # Fix the substrate to a fix value (gram/litre).
+    cell.s := 3.6
+  end
+end
+
+if strcmp(bioreactor, 'batch')
+  bio = Batch()
+
+  rule
+    bio.mu := cell.mu
+    bio.m_p := cell.m_p
+    cell.s := bio.s
+  end
+end
+
+if strcmp(bioreactor, 'continous')
+  bio = Continous()
+
+  rule
+    bio.mu := cell.mu
+    bio.m_p := cell.m_p
+    cell.s := bio.s
+  end
+end
+
+if strcmp(bioreactor, 'fedbatch')
+  bio = Fedbatch()
+
+  rule
+    bio.mu := cell.mu
+    bio.m_p := cell.m_p
+    cell.s := bio.s
+  end
+end

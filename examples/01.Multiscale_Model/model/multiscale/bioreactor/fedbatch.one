@@ -1,0 +1,38 @@
+import './bioreactor.one'
+
+model Fedbatch(Bioreactor)
+  # Model of a bioreactor in fedbatch mode.
+
+  parameter
+    # The fedbatch use high concentrated substrate.
+    # Override the substrate (gram/litre).
+    s_f = 180.156
+  end
+
+  rule
+    # The input flux makes constant the substrate concentration.
+    F_in := (1/y)*mu*x*V/(s_f-s)
+    # Set output waste flux to zero.
+    F_out := 0
+  end
+end
+
+standalone
+  parameter __t_end = 1000
+  
+  parameter
+    # Average cell mass (fg).
+    m_p = 433
+    
+    # Half activation threshold of growth rate (gram/litre).
+    K_s = 0.1802
+  end
+  
+  bio = Fedbatch()
+  
+  rule 
+    bio.m_p := m_p
+    bio.mu := log(2)/24*bio.s/(bio.s+K_s)
+  end
+end
+

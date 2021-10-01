@@ -1,4 +1,0 @@
-
-if strcmp('hi','hi')
-  print('Hello world')
-end

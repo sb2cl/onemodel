@@ -62,19 +62,21 @@ model WildType
   end
 
   rule
-    nu_eq: nu := nu_max*s/(s + K_s) 
+    nu_eq:  nu := nu_max*s/(s + K_s) 
     mu == m_aa/m_h*nu*phi_b_t*phi_t*p_r.r_t
-    m_p := p_r.m + p_nr.m
-    J_sum := p_r.N*p_r.J + p_nr.N*p_nr.J
+    m_p_eq:  m_p := p_r.m + p_nr.m
+    J_sum_eq: J_sum := p_r.N*p_r.J + p_nr.N*p_nr.J
     J_host_sum := p_r.N*p_r.J + p_nr.N*p_nr.J
-    J_sum_E := p_r.N*(1+1/p_r.E_m)*p_r.J + p_nr.N*(1+1/p_nr.E_m)*p_nr.J
+    J_sum_E_eq: J_sum_E := p_r.N*(1+1/p_r.E_m)*p_r.J + p_nr.N*(1+1/p_nr.E_m)*p_nr.J
     phi_b_t := J_host_sum/(1+J_sum_E)
     r == phi_t*p_r.r_t/(1+J_sum_E)
   end
 end
 
 standalone
-  wt = WildType()
+  parameter __t_end = 1000
+
+  cell = WildType()
 
   parameter
     s = 3.6
@@ -82,7 +84,7 @@ standalone
   end
 
   rule
-    wt.s := s
-    wt.m_h := m_h
+    cell.s := s
+    cell.m_h := m_h
   end
 end

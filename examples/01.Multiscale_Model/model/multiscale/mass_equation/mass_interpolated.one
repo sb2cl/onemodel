@@ -1,10 +1,7 @@
-model MassInterpolated
-  # Model of cell mass dependent of cell growth rate.
+import './mass_equation.one'
 
-  input
-    # Growth rate (1/min).
-    mu
-  end
+model MassInterpolated(MassEquation)
+  # This model was obtained by interpolaing the experimental data.
 
   parameter
     # First coefficient of mass equation (fg/cell/minute^2).
@@ -13,11 +10,6 @@ model MassInterpolated
     c_2 = 7432
     # Third coefficient of mass equation (fg/cell).
     c_3 = 37.06
-  end
-
-  species
-    # Total host protein mass of the cell (fg/cell).
-    m_h = 0
   end
 
   rule

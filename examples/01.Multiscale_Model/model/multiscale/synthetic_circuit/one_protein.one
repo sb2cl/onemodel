@@ -1,0 +1,54 @@
+import '../metabolic/protein.one'
+import '../metabolic/wild_type.one'
+
+model HeterologousProtein(Protein)
+  # Model of expression of a heterologous protein in E.coli.
+
+  parameter
+    N = 1 
+    omega = 10
+    d_m = 0.16
+    k_b = 4.7627
+    k_u = 119.7956
+    l_p = 195
+  end
+
+end
+
+model OneProtein(WildType)
+
+  # Create protein A.
+  p_A = HeterologousProtein()
+
+  # Add protein A to the model.
+  rule
+    p_A.nu := nu
+    p_A.mu := mu
+    p_A.r := r
+    p_A.m_h := m_h
+    p_A.J_host_sum := J_host_sum
+  end
+
+  # Override equations.
+  rule
+    m_p_eq:  m_p := p_r.m + p_nr.m + p_A.m
+    J_sum_eq: J_sum := p_r.N*p_r.J + p_nr.N*p_nr.J + p_A.N*p_A.J
+    J_sum_E_eq: J_sum_E := p_r.N*(1+1/p_r.E_m)*p_r.J + p_nr.N*(1+1/p_nr.E_m)*p_nr.J + p_A.N*(1+1/p_A.E_m)*p_A.J
+  end
+end
+
+standalone
+  parameter __t_end = 1000
+
+  cell = OneProtein()
+
+  parameter
+    s = 3.6
+    m_h = 450
+  end
+
+  rule
+    cell.s := s
+    cell.m_h := m_h
+  end
+end

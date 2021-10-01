@@ -4,31 +4,30 @@ model Continous(Bioreactor)
   # Model of a bioreactor in continous mode.
 
   species
-    # Desired biomass concentration.
-    x_ref = 1  # gram/litre
-    # Dilution rate.
-    D = 0      # dimensionless
+    # Desired biomass concentration (gram/litre).
+    x_ref = 1  
+    # Dilution rate (dimensionless).
+    D = 0
   end
 
   rule
     # Calculate the dilution rate.
-    D     := mu*x/x_ref
+    D := mu*x/x_ref
     # Apply dilution rate to the media and waste fluxes.
-    F_in  := D*V 
+    F_in := D*V 
     F_out := D*V 
   end
-
 end
 
 standalone
   parameter __t_end = 1000
   
   parameter
-    # Average cell mass.
-    m_p = 433         # fg
+    # Average cell mass (fg).
+    m_p = 433
     
-    # Half activation threshold of growth rate.
-    K_s = 0.1802      # g/L
+    # Half activation threshold of growth rate (gram/litre).
+    K_s = 0.1802
   end
   
   bio = Continous()

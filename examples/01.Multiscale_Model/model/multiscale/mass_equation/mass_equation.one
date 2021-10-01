@@ -1,0 +1,14 @@
+model MassEquation
+  # An abstract model of cell mass dependent of cell growth rate.
+
+  input
+    # Growth rate (1/min).
+    mu
+  end
+
+  species
+    # Total host protein mass of the cell (fg/cell).
+    m_h = 0
+  end
+end
+

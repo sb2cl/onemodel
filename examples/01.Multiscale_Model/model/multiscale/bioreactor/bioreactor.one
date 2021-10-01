@@ -1,0 +1,77 @@
+model Bioreactor
+
+  input
+    # Cell mass (fg/cell).
+    m_p             
+    # Growth rate (1/minute).
+    mu              
+    # Input media flux (litre/minute).
+    F_in            
+    # Output waste flux (litre/minute).
+    F_out           
+  end
+
+  parameter
+    # Biomass yield on glucose (dimensionless).
+    y = 0.45        
+    # Fresh media substrate concentration (gram/litre).
+    s_f = 3.6       
+    # Concentration of E.Coli. cells in 1 OD (teracell/litre/OD).
+    nOD = 1
+  end
+
+  species
+    # Volume of culture in the bioreactor (litre).
+    V = 1
+    # Total volume fed to the bioreactor (litre).
+    V_feed = 0
+    # Total volume removed from the bioreactor (litre).
+    V_out = 0
+    # Concentration of cells in the bioreactor (litre).
+    N = 0.005
+    # Concentration of biomass in the biorreactor (gram/litre).
+    x = 0
+    # Optical densisity in the biorreactor (OD).
+    OD = 0
+    # Concentration of substrate in the biorreactor (gram/litre).
+    s = 3.6
+    # Total mass of substrate removed from the bioreactor (gram).
+    S = 0 
+  end
+
+  rule
+    x := N*m_p*1e-3
+    OD := N/nOD 
+    V' = F_in - F_out
+    V_feed' = F_in
+    V_out' = F_out
+    N' = mu*N - F_in/V*N
+    s' = F_in/V*(s_f-s) - (1/y)*mu*x
+    S' = F_out*s
+  end
+end
+
+standalone
+  parameter __t_end = 1000
+  
+  parameter
+    # Average cell mass (fg).
+    m_p = 433
+    
+    # Batch mode (litre/minute).
+    F_in = 0
+    F_out = 0
+  
+    # Half activation threshold of growth rate (gram/litre).
+    K_s = 0.1802
+  end
+  
+  bio = Bioreactor()
+  
+  rule 
+    bio.m_p := m_p
+    bio.mu := log(2)/24*bio.s/(bio.s+K_s)
+    bio.F_in := F_in
+    bio.F_out := F_out
+  end
+end
