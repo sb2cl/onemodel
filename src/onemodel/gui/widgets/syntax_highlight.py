@@ -88,6 +88,7 @@ class OneModelHighlighter(QSyntaxHighlighter):
         'input',
         'import',
         'if',
+        'standalone'
     ]
 
     # Python operators
