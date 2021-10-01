@@ -146,6 +146,11 @@ class Ui_MainWindow(object):
         self.save_action.setStatusTip("Save current file.")
         self.file_menu.addAction(self.save_action)
 
+        # Create examples action.
+        self.examples_action = QtWidgets.QAction('Examples', MainWindow)
+        self.examples_action.setStatusTip("Change current path to examples folder.")
+        self.file_menu.addAction(self.examples_action)
+
         self.set_title()
 
     def set_title(self):

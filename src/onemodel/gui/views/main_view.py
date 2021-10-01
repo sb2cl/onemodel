@@ -4,6 +4,7 @@ from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import QMainWindow, QDesktopWidget
 from PyQt5.QtCore import pyqtSlot
 
+import onemodel
 from onemodel.gui.views.main_view_ui import Ui_MainWindow
 
 class MainView(QMainWindow):
@@ -57,6 +58,11 @@ class MainView(QMainWindow):
         # Triggered save_action.
         self._ui.save_action.triggered.connect(
                 self.on_triggered_save_action
+                )
+
+        # Triggered examples_action.
+        self._ui.examples_action.triggered.connect(
+                self.on_triggered_examples_action
                 )
 
         ####################################################################
@@ -187,6 +193,15 @@ class MainView(QMainWindow):
             )
 
             self._ui.status.showMessage('Done saving.')
+
+    def on_triggered_examples_action(self):
+
+        example_path = path.abspath(onemodel.__file__)
+        example_path = path.dirname(example_path)
+        example_path = path.join(example_path,'examples')
+
+        self._main_controller.change_current_path(example_path)
+        self._ui.status.showMessage('Examples folder open.')
 
     def on_cli_ready_read(self, text):
         self._ui.console.print(text)

@@ -1,6 +1,5 @@
 import os
 import sys
-from importlib_resources import files
 
 import click
 import tatsu
