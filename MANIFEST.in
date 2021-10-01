@@ -1,2 +1,2 @@
-include src/onemodel/examples/*
+recursive-include src/onemodel/examples *
 include src/onemodel/dsl/*.ebnf
