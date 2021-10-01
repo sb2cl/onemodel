@@ -9,12 +9,8 @@ import onemodel
 from onemodel.dsl.repl import Repl
 from onemodel.dsl.onemodel_walker import OneModelWalker
 from onemodel.dsl.context import Context
-
 from onemodel.sbml2dae.dae_model import DaeModel
 from onemodel.sbml2dae.matlab import Matlab
-
-import tellurium as te
-import roadrunner
 
 @click.group()
 def cli():
@@ -175,5 +171,8 @@ def sbml2matlab(sbml_filename, output):
     filepath = matlab.exportClass()
     print(f'\tGenerated {filepath}')
 
-if __name__ == '__main__':
+def main():
     cli(obj={})
+
+if __name__ == '__main__':
+    main()
