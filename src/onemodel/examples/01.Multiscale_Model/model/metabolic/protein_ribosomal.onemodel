@@ -1,4 +1,4 @@
-import './protein.one'
+import './protein.onemodel'
 
 model ProteinRibosomal(Protein)
   # Model of average expression of ribosomal proteins in E.coli.

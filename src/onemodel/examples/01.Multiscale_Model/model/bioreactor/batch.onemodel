@@ -1,4 +1,4 @@
-import './bioreactor.one'
+import './bioreactor.onemodel'
 
 model Batch(Bioreactor)
   # Model of a bioreactor in batch mode.

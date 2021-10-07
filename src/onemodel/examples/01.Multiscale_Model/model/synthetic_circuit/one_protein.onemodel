@@ -1,5 +1,5 @@
-import '../metabolic/protein.one'
-import '../metabolic/wild_type.one'
+import '../metabolic/protein.onemodel'
+import '../metabolic/wild_type.onemodel'
 
 model HeterologousProtein(Protein)
   # Model of expression of a heterologous protein in E.coli.

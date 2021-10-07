@@ -154,7 +154,7 @@ class MainView(QMainWindow):
         file_path = self._model._file_path
 
         if file_path != None:
-            cmd = 'python -m onemodel.cli.cli'
+            cmd = 'onemodel-cli'
             cmd += f' run {self._model._file_path}'
 
             self._ui.console.printCommand(cmd)
@@ -164,7 +164,7 @@ class MainView(QMainWindow):
         file_path = self._model._file_path
 
         if file_path != None:
-            cmd = 'python -m onemodel.cli.cli'
+            cmd = 'onemodel-cli'
             cmd += f' export {self._model._file_path}'
 
             self._ui.console.printCommand(cmd)

@@ -1,17 +1,17 @@
 ### IMPORTS ###
 
 # Cell model.
-import './metabolic/wild_type.one'
-import './synthetic_circuit/one_protein.one'
+import './metabolic/wild_type.onemodel'
+import './synthetic_circuit/one_protein.onemodel'
 
 # Mass equations.
-import './mass_equation/mass_interpolated.one'
-import './mass_equation/mass_eq_jesus.one'
+import './mass_equation/mass_interpolated.onemodel'
+import './mass_equation/mass_eq_jesus.onemodel'
 
 # Bioreactors.
-import './bioreactor/batch.one'
-import './bioreactor/continous.one'
-import './bioreactor/fedbatch.one'
+import './bioreactor/batch.onemodel'
+import './bioreactor/continous.onemodel'
+import './bioreactor/fedbatch.onemodel'
 
 ### META-MODEL OPTIONS ###
 

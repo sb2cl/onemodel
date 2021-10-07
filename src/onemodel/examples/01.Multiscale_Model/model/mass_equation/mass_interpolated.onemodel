@@ -1,4 +1,4 @@
-import './mass_equation.one'
+import './mass_equation.onemodel'
 
 model MassInterpolated(MassEquation)
   # This model was obtained by interpolaing the experimental data.

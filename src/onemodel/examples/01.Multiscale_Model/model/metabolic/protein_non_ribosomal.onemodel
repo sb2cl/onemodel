@@ -1,4 +1,4 @@
-import './protein.one'
+import './protein.onemodel'
 
 model ProteinNonRibosomal(Protein)
   # Model of average expression of non-ribosomal proteins in E.coli.

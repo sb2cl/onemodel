@@ -1,0 +1,18 @@
+# In this example we will show how to define reaction-based models.
+# We will implement an 
+
+# Model parameters are defined with the 'parameter' keyword.
+# For example, the following line will define a new parameter 'k' with a value
+# of '1'.
+
+parameter
+  k1 = 1
+  k2 = 1
+  k3 = 1
+  gamma12 = 1
+  d3 = 1
+end
+
+species
+
+

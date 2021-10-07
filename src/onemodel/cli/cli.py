@@ -82,13 +82,13 @@ def export(input_file, output, from_syntax, to_syntax):
     # If from_syntax is not set.
     if from_syntax == None:
         # Automatically set from_syntax based on file extension.
-        if extension == '.one':
+        if extension == '.onemodel':
             from_syntax = 'onemodel'
         elif extension == '.xml':
             from_syntax = 'sbml'
         else:
             print(f'Error: File extension "{extension}" is not reconized.')
-            print('Please use ".one" or ".xml".')
+            print('Please use ".onemodel" or ".xml".')
             sys.exit()
 
     # Default value of output is './build/'

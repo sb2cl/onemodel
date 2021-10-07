@@ -24,7 +24,7 @@ Check out the :doc:`usage` section for further information, including how to :re
 
   usage
   quick_start
-
+  onemodel_syntax
 
 
 Indices and tables
