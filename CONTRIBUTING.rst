@@ -1,7 +1,7 @@
 Contributing
 ============
 
-Thank you for taking the time to contribute to OneModel :)
+Thank you for taking the time to contribute to OneModel! :-)
 
 The following is a set of guidelines and tutorials for contributing to OneModel.
 These are mostly guidelines and not rules.

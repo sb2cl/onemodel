@@ -66,13 +66,13 @@ expr
 
 species::Species
   = 
-  name:identifier ['=' value:expr]
+  name:identifier  {'.' name:identifier} ['=' value:expr]
   ;
 
 
 parameter::Parameter
   = 
-  name:identifier ['=' value:expr]
+  name:identifier {'.' name:identifier} ['=' value:expr]
   ;
 
 
@@ -97,9 +97,9 @@ rule
 
 rule_rate::RuleRate
   =
-  [name:identifier ':'] variable:identifier "'" '=' math:formula
+  | name:identifier {'.' name:identifier} ':' variable:expr "'" '=' math:formula
+  | variable:expr "'" '=' math:formula
   ;
-
 
 rule_assignment::RuleAssignment
   =

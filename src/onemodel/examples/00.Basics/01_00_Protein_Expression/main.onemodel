@@ -1,0 +1,55 @@
+model ProteinExpression
+  # Model the transcription and translation of a protein.
+
+  parameter
+    # mRNA transcription rate (copies/min/cell).
+    k_m = 10
+    # mRNA degradation rate ().
+    d_m = 10
+    # Protein translation rate ().
+    k_p = 1
+    # Protein degradation rate ().
+    d_p = 0.1
+  end
+
+  species
+    # mRNA concentration (molec/cell).
+    mRNA = 0
+    # protein concentration (model/cell).
+    protein = 0
+  end
+
+  reaction
+    # mRNA transcription.
+    0 -> mRNA; k_m
+    # mRNA degradation.
+    mRNA -> 0; d_m*mRNA
+    # Protein transcription.
+    mRNA -> mRNA + protein; k_p*mRNA
+    # Protein degradation.
+    protein -> 0; d_p*protein
+  end
+end
+
+model ProteinExpressionRegulated(ProteinExpression)
+  input
+    k_m
+  end
+end
+
+standalone
+  A = ProteinExpression()
+  B = ProteinExpressionRegulated()
+  C = ProteinExpressionRegulated()
+
+  parameter __t_end = 100
+
+  rule
+    B.k_m := 1*A.protein
+    C.k_m := 1*B.protein
+  end
+
+  reaction
+    A.protein + C.protein -> 0; 100*A.protein*C.protein
+  end
+end

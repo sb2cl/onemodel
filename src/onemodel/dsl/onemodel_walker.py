@@ -172,6 +172,13 @@ class OneModelWalker(NodeWalker):
         name = node.name
         value = self.walk(node.value).value
 
+        context = self.current_context
+
+        if type(name) == list:
+            for i in range(len(name)-1):
+                context = context.get(name[i])
+            name = name[-1]
+
         if value == None:
             value = 0
 
@@ -183,13 +190,20 @@ class OneModelWalker(NodeWalker):
 
         s.initialConcentration = value
 
-        self.current_context.set(name, s)
+        context.set(name, s)
 
         return s
 
     def walk_Parameter(self, node):
         name = node.name
         value = self.walk(node.value)
+
+        context = self.current_context
+
+        if type(name) == list:
+            for i in range(len(name)-1):
+                context = context.get(name[i])
+            name = name[-1]
 
         if value != None: 
             value = value.value
@@ -204,7 +218,7 @@ class OneModelWalker(NodeWalker):
 
         p.value = value
 
-        self.current_context.set(name, p)
+        context.set(name, p)
 
         return p
 
@@ -237,8 +251,17 @@ class OneModelWalker(NodeWalker):
 
     def walk_RuleRate(self, node):
         name = node.name
-        variable = node.variable
+        variable = self.walk(node.variable)
         math = node.math
+
+        if not isinstance(variable, Species):
+            raise TypeError('variable must be "Species"')
+
+        if type(name) == list:
+            full_name = ''
+            for item in name:
+                full_name += item + '__'
+            name = full_name[0:-2]
 
         if name == None:
             name = f'_R{self.numRules}'
@@ -247,7 +270,7 @@ class OneModelWalker(NodeWalker):
         # Create rate rule.
         r = RuleRate()
 
-        r.variable = variable
+        r.variable = variable.getFullname()
         r.math = math
 
         self.current_context.set(name, r)
