@@ -308,13 +308,13 @@ class Matlab:
         # Save states.
         f.write(f'\n\t\t\t% Save states.\n')
         for item in self.dae.getStates():
-                f.write(f'\t\t\tout.{item["id"]} = {item["id"]}.*ones_t;\n')
+                f.write(f'\t\t\tout.{item["id"]} = ({item["id"]}.*ones_t)\';\n')
         f.write(f'\n')
 
         # Save parameters.
         f.write(f'\t\t\t% Save parameters.\n')
         for item in self.dae.getParameters():
-            f.write(f'\t\t\tout.{item["id"]} = p.{item["id"]}.*ones_t;\n')
+            f.write(f'\t\t\tout.{item["id"]} = (p.{item["id"]}.*ones_t)\';\n')
         f.write(f'\n')
 
         f.write(f'\t\tend\n')
