@@ -82,7 +82,7 @@ def export(input_file, output, from_syntax, to_syntax):
     # If from_syntax is not set.
     if from_syntax == None:
         # Automatically set from_syntax based on file extension.
-        if extension == '.onemodel':
+        if extension == '.onemodel' or extension == '.one':
             from_syntax = 'onemodel'
         elif extension == '.xml':
             from_syntax = 'sbml'
