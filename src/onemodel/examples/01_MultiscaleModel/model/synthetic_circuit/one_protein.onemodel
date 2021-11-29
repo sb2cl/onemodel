@@ -1,7 +1,7 @@
 import '../wild_type/protein_constitutive.onemodel'
 import '../wild_type/wild_type.onemodel'
-
-model OneProtein (WildType)
+ 
+ model OneProtein (WildType)
 
   # Create protein A.
   p_A = ProteinConstitutive()
@@ -23,17 +23,19 @@ model OneProtein (WildType)
 end
 
 standalone
-  parameter __t_end = 1000
+  import '../mass_equation/mass_interpolated.onemodel'
 
+  mass = MassInterpolated()
   cell = OneProtein()
 
   parameter
+    __t_end = 1000
     s = 3.6
-    m_h = 450
   end
 
   rule
     cell.s := s
-    cell.m_h := m_h
+    mass.mu := cell.mu
+    cell.m_h := mass.m_h
   end
 end

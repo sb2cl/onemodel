@@ -28,7 +28,7 @@ model AntitheticController (WildType)
 
   parameter
     # Antithetic sequestration affininty (1/molec/min).
-    gamma = 100000
+    gamma = 100
     z1.omega = 70
     z2.omega_max = 100
     # z12 is just produced by the antithetic reaction.
@@ -94,17 +94,19 @@ model AntitheticController (WildType)
 end
 
 standalone
-  parameter __t_end = 2000
+  import '../mass_equation/mass_interpolated.onemodel'
 
+  mass = MassInterpolated()
   cell = AntitheticController()
 
   parameter
+    __t_end = 1000
     s = 3.6
-    m_h = 450
   end
 
   rule
     cell.s := s
-    cell.m_h := m_h
+    mass.mu := cell.mu
+    cell.m_h := mass.m_h
   end
 end
