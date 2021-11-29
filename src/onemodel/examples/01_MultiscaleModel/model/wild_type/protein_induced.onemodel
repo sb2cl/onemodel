@@ -1,6 +1,6 @@
-import './base_protein.onemodel'
+import './protein_constitutive.onemodel'
 
-model InducedProtein(BaseProtein)
+model ProteinInduced (ProteinConstitutive)
   # This model defines induced protein expression.
 
   input

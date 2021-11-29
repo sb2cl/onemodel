@@ -1,5 +1,5 @@
-model BaseProtein
-  # This model defines the base for protein expression.
+model ProteinConstitutive
+  # This model defines constitutive expression expression.
   #
   # This model just defines the parameter and the species which are needed to
   # fullfill to ensure that the protein can be added to the metabolic-burden
@@ -59,7 +59,7 @@ model BaseProtein
     # No-aproximation of E_m.
     E_m_eq: E_m  := (l_p/l_e)*(1-(l_p/(l_p+l_e)^(l_p/l_e)))
     
-    # Alternarive: aproximation of E_m. 
+    # Alternative: aproximation of E_m. 
     # E_m_eq: E_m  := 0.62*l_p/l_e
 
     # Resource recruitment strength equation.
@@ -72,5 +72,3 @@ model BaseProtein
     0 -> m ; (m_h*N*J/J_host_sum - m)*mu
   end
 end
-
-

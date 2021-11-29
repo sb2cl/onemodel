@@ -1,8 +1,8 @@
-import '../wild_type/base_protein.onemodel'
-import '../wild_type/induced_protein.onemodel'
+import '../wild_type/protein_constitutive.onemodel'
+import '../wild_type/protein_induced.onemodel'
 import '../wild_type/wild_type.onemodel'
 
-model AntitheticController(WildType)
+model AntitheticController (WildType)
   #                           
   # 0─►z1─────────┐
   #     │         ▼
@@ -14,13 +14,13 @@ model AntitheticController(WildType)
   #                           
 
   # Sigma protein.
-  z1  = BaseProtein()
+  z1  = ProteinConstitutive()
   # Anti-sigma protein.
-  z2  = InducedProtein()
+  z2  = ProteinInduced()
   # Sigma and anti-sigma complex.
-  z12 = BaseProtein()
+  z12 = ProteinConstitutive()
   # Protein of interest.
-  x   = InducedProtein()
+  x   = ProteinInduced()
 
   species
     ref = 0

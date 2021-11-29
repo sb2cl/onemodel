@@ -1,6 +1,6 @@
-import './base_protein.onemodel'
+import './protein_constitutive.onemodel'
 
-model RibosomalProtein(BaseProtein)
+model ProteinRibosomal (ProteinConstitutive)
   # Model of average expression of ribosomal proteins in E.coli.
 
   parameter

@@ -1,6 +1,6 @@
-import './base_protein.onemodel'
+import './protein_constitutive.onemodel'
 
-model NonRibosomalProtein(BaseProtein)
+model ProteinNonRibosomal (ProteinConstitutive)
   # Model of average expression of non-ribosomal proteins in E.coli.
 
   parameter

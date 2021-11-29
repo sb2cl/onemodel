@@ -1,5 +1,5 @@
-import './ribosomal_protein.onemodel'
-import './non_ribosomal_protein.onemodel'
+import './protein_ribosomal.onemodel'
+import './protein_non_ribosomal.onemodel'
 
 model WildType
   # Model of a wild-type E.coli. cell.
@@ -11,8 +11,8 @@ model WildType
     m_h
   end
 
-  p_r = RibosomalProtein()
-  p_nr = NonRibosomalProtein()
+  p_r  = ProteinRibosomal()
+  p_nr = ProteinNonRibosomal()
 
   parameter
     # Half-activation threshold of growth rate (grams/litre).

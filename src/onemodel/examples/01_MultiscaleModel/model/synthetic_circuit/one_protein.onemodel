@@ -1,10 +1,10 @@
-import '../wild_type/base_protein.onemodel'
+import '../wild_type/protein_constitutive.onemodel'
 import '../wild_type/wild_type.onemodel'
 
-model OneProtein(WildType)
+model OneProtein (WildType)
 
   # Create protein A.
-  p_A = BaseProtein()
+  p_A = ProteinConstitutive()
 
   # Add protein A to the model.
   rule
