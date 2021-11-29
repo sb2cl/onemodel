@@ -1,0 +1,40 @@
+import './base_protein.onemodel'
+
+model RibosomalProtein(BaseProtein)
+  # Model of average expression of ribosomal proteins in E.coli.
+
+  parameter
+    N = 55 
+    omega = 7.33
+    d_m = 0.16
+    k_b = 4.7627
+    k_u = 119.7956
+    l_p = 195
+
+    # Weigth of a ribosome (fg/molec).
+    weigth = 0.0045
+  end
+
+  species
+    # Number of mature and inmature ribosomes (molec/cell).
+    r_t = 0
+    m = 100
+  end
+
+  rule
+    E_m_eq: E_m := 3.459
+            r_t := m/weigth
+  end
+end
+
+standalone
+  ribo = RibosomalProtein() 
+
+  rule
+    ribo.nu_t := 1
+    ribo.mu := 1
+    ribo.r := 1
+    ribo.m_h := 1
+    ribo.J_host_sum := 1
+  end
+end

@@ -1,0 +1,40 @@
+import './bioreactor.onemodel'
+
+model Continous(Bioreactor)
+  # Model of a bioreactor in continous mode.
+
+  species
+    # Desired biomass concentration (gram/litre).
+    x_ref = 1  
+    # Dilution rate (dimensionless).
+    D = 0
+  end
+
+  rule
+    # Calculate the dilution rate.
+    D := mu*x/x_ref
+    # Apply dilution rate to the media and waste fluxes.
+    F_in := D*V 
+    F_out := D*V 
+  end
+end
+
+standalone
+  parameter __t_end = 1000
+  
+  parameter
+    # Average cell mass (fg).
+    m_p = 433
+    
+    # Half activation threshold of growth rate (gram/litre).
+    K_s = 0.1802
+  end
+  
+  bio = Continous()
+  
+  rule 
+    bio.m_p := m_p
+    bio.mu := log(2)/24*bio.s/(bio.s+K_s)
+  end
+end
+

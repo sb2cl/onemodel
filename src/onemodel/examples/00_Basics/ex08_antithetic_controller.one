@@ -1,0 +1,25 @@
+### Host-aware antithetic controller circuit. ###
+import 'ex07_wild_type.one'
+
+model WildType_AntitheticController
+  # We have to build the antithetic controller using:
+  # WildType_ProteinConstitutive and WildType_ProteinInduced.
+  z1 = WildType_ProteinConstitutive()
+  z2 = WildType_ProteinInduced()
+  x  = WildType_ProteinInduced()
+  ...
+end
+
+standalone
+  # We instantiate the cell model and the circuit model.
+  cell    = WildType()
+  circuit = WildType_AntitheticController()
+
+  # Lastly, we have to statisfy the inputs of cell and circuit models.
+  rule
+    cell.WSum := circuit.z1.W + circuit.z2.W + circuit.x.W
+    circuit.z1.nu_t := cell.nu_t
+    circuit.z1.mu := cell.mu
+    ...
+  end
+end

@@ -1,0 +1,32 @@
+import './bioreactor.onemodel'
+
+model Batch(Bioreactor)
+  # Model of a bioreactor in batch mode.
+
+  rule
+    # Set input media flux to zero (gram/litre).
+    F_in  := 0 
+    # Set output waste flux to zero (gram/litre).
+    F_out := 0 
+  end
+
+end
+
+standalone
+  parameter __t_end = 1000
+  
+  parameter
+    # Average cell mass (fg).
+    m_p = 433
+    
+    # Half activation threshold of growth rate (gram/litre).
+    K_s = 0.1802
+  end
+  
+  bio = Batch()
+  
+  rule 
+    bio.m_p := m_p
+    bio.mu := log(2)/24*bio.s/(bio.s+K_s)
+  end
+end

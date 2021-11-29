@@ -29,11 +29,11 @@ statements
 
 statement
   = 
-  | 'species'    newline {newline | @:species newline}   'end'
-  | 'parameter'  newline {newline | @:parameter newline} 'end'
-  | 'reaction'   newline {newline | @:reaction newline}  'end'
-  | 'rule'       newline {newline | @:rule newline}      'end'
-  | 'input'      newline {newline | @:input newline}     'end'
+  | 'species'    newline {newline | @:species {',' | @:species} newline} 'end'
+  | 'parameter'  newline {newline | @:parameter {',' | @:parameter} newline} 'end'
+  | 'reaction'   newline {newline | @:reaction newline} 'end'
+  | 'rule'       newline {newline | @:rule newline} 'end'
+  | 'input'      newline {newline | @:input {',' | @:input} newline} 'end'
   | import
   | standalone
   | expr

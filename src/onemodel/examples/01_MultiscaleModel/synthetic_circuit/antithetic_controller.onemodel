@@ -1,0 +1,110 @@
+import '../protein/base_protein.onemodel'
+import '../protein/induced_protein.onemodel'
+import '../metabolic/wild_type.onemodel'
+
+model AntitheticController(WildType)
+  #                           
+  # 0─►z1─────────┐
+  #     │         ▼
+  #     ├──►z12  0─►x
+  #     │           │ 
+  # 0─►z2           │ 
+  #   ▲             │
+  #   └─────────────┘          
+  #                           
+
+  # Sigma protein.
+  z1  = BaseProtein()
+  # Anti-sigma protein.
+  z2  = InducedProtein()
+  # Sigma and anti-sigma complex.
+  z12 = BaseProtein()
+  # Protein of interest.
+  x   = InducedProtein()
+
+  species
+    ref = 0
+  end
+
+  parameter
+    # Antithetic sequestration affininty (1/molec/min).
+    gamma = 100000
+    z1.omega = 70
+    z2.omega_max = 100
+    # z12 is just produced by the antithetic reaction.
+    z12.omega = 0
+    x.omega_max = 100
+  end
+
+  rule
+    x.TF := z1.m
+    z2.TF := x.m
+    ref := z1.omega / z2.omega_max *z2.h
+  end
+
+  reaction
+    z1.m + z2.m -> z12.m ; gamma*z1.m*z2.m
+    #0 -> z1.m ; mu*z1.m
+    #0 -> z2.m ; mu*z2.m
+  end
+
+  # Add protein z1 to the model.
+  rule
+    z1.nu_t := nu_t
+    z1.mu := mu
+    z1.r := r
+    z1.m_h := m_h
+    z1.J_host_sum := J_host_sum
+  end
+
+  # Add protein z2 to the model.
+  rule
+    z2.nu_t := nu_t
+    z2.mu := mu
+    z2.r := r
+    z2.m_h := m_h
+    z2.J_host_sum := J_host_sum
+  end
+
+  # Add protein z12 to the model.
+  rule
+    z12.nu_t := nu_t
+    z12.mu := mu
+    z12.r := r
+    z12.m_h := m_h
+    z12.J_host_sum := J_host_sum
+  end
+
+  # Add protein x to the model.
+  rule
+    x.nu_t := nu_t
+    x.mu := mu
+    x.r := r
+    x.m_h := m_h
+    x.J_host_sum := J_host_sum
+    x.TF := z1.m
+  end
+
+  # Override equations.
+  rule
+    WSum_equation:  WSum := p_r.W + p_nr.W + z1.W + z2.W + z12.W + x.W
+    m_p_equation:    m_p := p_r.m + p_nr.m + z1.m + z2.m + z12.m + x.m
+  end
+
+end
+
+standalone
+  parameter __t_end = 2000
+
+  cell = AntitheticController()
+
+  parameter
+    s = 3.6
+    m_h = 450
+  end
+
+  rule
+    cell.s := s
+    cell.m_h := m_h
+  end
+end

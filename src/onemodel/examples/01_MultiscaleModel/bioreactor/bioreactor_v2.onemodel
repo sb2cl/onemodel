@@ -1,0 +1,90 @@
+model Bioreactor
+  'Simple bioreactor model.'
+
+  input
+    'Average cell mass.' 
+    m_p has fg 
+
+    'Growth rate.'
+    mu has 1/minute 
+
+    'Input media flux.'
+    F_in has litre/minute 
+
+    'Output waste flux.'
+    F_out has litre/minute 
+  end
+
+  parameter
+    'Biomass yield on glucose.'
+    y = 0.45 adim 
+
+    'Fresh media substrate concentration.'
+    s_f = 3.6 gram/litre 
+
+    'E.Coli. cells concentration in 1 OD.'
+    nOD = 1e+12 OD*cell/litre 
+  end
+
+  species
+    'Volume of culture in the bioreactor.'
+    V = 1 litre
+
+    'Total volume fed to the bioreactor.'
+    V_feed = 0 litre
+
+    'Total volume removed from the bioreactor.'
+    V_out = 0 litre
+
+    'Concentration of cells in the bioreactor.'
+    N = 5e+10 cell/litre
+
+    'Concentration of biomass in the biorreactor.'
+    x = 0 gram/litre
+
+    'Optical densisity in the biorreactor.'
+    OD = 0 dimensionless
+
+    'Concentration of substrate in the biorreactor.'
+    s = 3.6 gram/litre
+
+    'Total mass of substrate removed from the bioreactor.'
+    S = 0 gram
+  end
+
+  rule
+    x := N*m_p*1e-15
+    OD := N/nOD 
+    V' = F_in - F_out
+    V_feed' = F_in
+    V_out' = F_out
+    N' = mu*N - F_in/V*N
+    s' = F_in/V*(s_f-s) - (1/y)*mu*x
+    S' = F_out*s
+  end
+end
+
+standalone
+  parameter __t_end = 1000
+  
+  parameter
+    # Average cell mass.
+    m_p = 433         # fg
+    
+    # Batch mode.
+    F_in = 0          # L/min
+    F_out = 0         # L/min
+  
+    # Half activation threshold of growth rate.
+    K_s = 0.1802      # g/L
+  end
+  
+  bio = Bioreactor()
+  
+  rule 
+    bio.m_p := m_p
+    bio.mu := log(2)/24*bio.s/(bio.s+K_s)
+    bio.F_in := F_in
+    bio.F_out := F_out
+  end
+end

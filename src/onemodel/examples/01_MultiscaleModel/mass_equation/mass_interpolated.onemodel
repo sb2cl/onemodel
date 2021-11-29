@@ -1,0 +1,18 @@
+import './mass_equation.onemodel'
+
+model MassInterpolated(MassEquation)
+  # This model was obtained by interpolaing the experimental data.
+
+  parameter
+    # First coefficient of mass equation (fg/cell/minute^2).
+    c_1 = 239089
+    # Second coefficient of mass equation (fg/cell/minute).
+    c_2 = 7432
+    # Third coefficient of mass equation (fg/cell).
+    c_3 = 37.06
+  end
+
+  rule
+    m_h := c_1*mu*mu + c_2*mu + c_3
+  end
+end

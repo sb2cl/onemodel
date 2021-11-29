@@ -1,0 +1,76 @@
+model BaseProtein
+  # This model defines the base for protein expression.
+  #
+  # This model just defines the parameter and the species which are needed to
+  # fullfill to ensure that the protein can be added to the metabolic-burden
+  # model. All protein expression models must be child of this model.
+  #
+  # The parameter and initial condition values set are just a placeholder to
+  # allow to quickly simulate, you will have to override them with your own
+  # values.
+
+  input
+    # Effective translation rate per ribosome (aa/minute).
+    nu_t
+    # Growth rate (1/minute).
+    mu
+    # Free ribosomes (molec/cell).
+    r 
+    # Total protein mass of host genes (fg/cell).
+    m_h
+    # Total sum of RRS in host genes (dimensionless).
+    J_host_sum 
+  end
+
+  parameter
+    # Number of copies of the gene (molec/cell).
+    N = 1
+    # Promoter transcription rate (molec/minute/cell).
+    omega = 100
+    # Mean degradation rate of mRNA (1/minute).
+    d_m = 0.16
+    # Association rate RBS-ribosome (cell/minute/molec).
+    k_b = 4.7627
+    # Dissotiation rate RBS-ribosome (1/minute).
+    k_u = 119.7956
+    # Protein length (aa).
+    l_p = 195
+    # Ribosome occupancy length (aa).
+    l_e = 25
+  end
+
+  species
+    # Effective RBS affinity (cell/molec).
+    K_C0 = 0
+    # Ribosomes density related term (dimensionless).
+    E_m = 0
+    # Resources recruitment strength (dimensionless).
+    J = 0
+    # Resource recruitment strength taking into account N and E_m (dimensionless).
+    W = 0
+    # Total mass of this protein in the cell (fg/cell).
+    m = 0
+  end
+
+  rule
+    # K_C0 equation.
+    K_C0 := k_b/(k_u + nu_t/l_e)
+
+    # No-aproximation of E_m.
+    E_m_eq: E_m  := (l_p/l_e)*(1-(l_p/(l_p+l_e)^(l_p/l_e)))
+    
+    # Alternarive: aproximation of E_m. 
+    # E_m_eq: E_m  := 0.62*l_p/l_e
+
+    # Resource recruitment strength equation.
+    J_eq: J := E_m*omega/(d_m/K_C0 + mu*r)  
+
+    W := N*(1+1/E_m)*J
+  end
+
+  reaction
+    0 -> m ; (m_h*N*J/J_host_sum - m)*mu
+  end
+end
+
+

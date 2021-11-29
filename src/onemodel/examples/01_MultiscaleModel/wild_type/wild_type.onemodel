@@ -1,0 +1,93 @@
+import '../protein/ribosomal_protein.onemodel'
+import '../protein/non_ribosomal_protein.onemodel'
+
+model WildType
+  # Model of a wild-type E.coli. cell.
+
+  input
+    # Concentration of substrate in the bioreactor (grams/litre).
+    s
+    # Total host protein mass (fg/cell).
+    m_h
+  end
+
+  p_r = RibosomalProtein()
+  p_nr = NonRibosomalProtein()
+
+  parameter
+    # Half-activation threshold of growth rate (grams/litre).
+    K_sc = 0.1802
+    # Maximum effective translation rate per ribosome (aa/minute).
+    nu = 1260
+    # Average aminoacid mass (fg/aa).
+    m_aa = 182.6e-9
+    # Fraction of mature available ribosomes relative to the total ones (dimensionless).
+    phi_m = 0.9473
+  end
+
+  species
+    # Effective translation rate per ribosome (aa/minute).
+    nu_t = 0
+    # Specific cell growth rate (1/minute).
+    mu = 0.01
+    # Total protein mass calculate from the mass of individual proteins in the cell (fg/cell).
+    m_p = 0
+    # Total sum of host resource recruitment strengths in the cell (dimensionless).
+    J_host_sum = 0
+    # Total sum of RRS in the cell taking into account E_m terms (dimensionless).
+    WSum = 0
+    # Fraction of ribosomes elongating along endogenous transcripts relative to
+    # the total number of mature available ribosomes (dimensionless).
+    phi_ht = 0
+    # Free mature ribosomes in the cell.
+    r = 350
+  end
+
+  # Connect p_r to this model.
+  rule
+    p_r.nu_t := nu_t
+    p_r.mu := mu
+    p_r.r := r
+    p_r.m_h := m_h
+    p_r.J_host_sum := J_host_sum
+  end
+
+  # Connect p_nr to this model.
+  rule
+    p_nr.nu_t := nu_t
+    p_nr.mu := mu
+    p_nr.r := r
+    p_nr.m_h := m_h
+    p_nr.J_host_sum := J_host_sum
+  end
+
+  # Model equations.
+  rule
+    J_host_sum := p_r.N*p_r.J + p_nr.N*p_nr.J
+    nu_equation:  nu_t := nu*s/(s + K_sc) 
+    phi_ht := (p_r.N*p_r.J + p_nr.N*p_nr.J)/(1 + WSum)
+    r == phi_m*p_r.r_t/(1+WSum)
+    mu_equation:  mu == m_aa/m_h*nu_t*phi_ht*phi_m*p_r.r_t
+
+    # The following equation must be updated with the value of heterologous
+    # proteins:
+    WSum_equation:  WSum := p_r.W + p_nr.W
+    m_p_equation:   m_p := p_r.m + p_nr.m
+  end
+end
+
+standalone
+  parameter __t_end = 1000
+
+  cell = WildType()
+
+  parameter
+    s = 3.6
+    m_h = 450
+  end
+
+  rule
+    cell.s := s
+    cell.m_h := m_h
+  end
+end
