@@ -1,7 +1,7 @@
 ### IMPORTS ###
 
 # Cell model.
-import './metabolic/wild_type.onemodel'
+import './wild_type/wild_type.onemodel'
 import './synthetic_circuit/one_protein.onemodel'
 import './synthetic_circuit/antithetic_controller.onemodel'
 
@@ -17,7 +17,7 @@ import './bioreactor/fedbatch.onemodel'
 ### META-MODEL OPTIONS ###
 
 # Cell model: 'wild_type', 'one_protein', 'antithetic'.
-cell_model = 'antithetic'
+cell_model = 'wild_type'
 
 # Mass equation: 'interpolated', 'jesus', 'fix'.
 mass_equation = 'interpolated'

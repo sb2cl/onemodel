@@ -1,6 +1,6 @@
-import '../protein/base_protein.onemodel'
-import '../protein/induced_protein.onemodel'
-import '../metabolic/wild_type.onemodel'
+import '../wild_type/base_protein.onemodel'
+import '../wild_type/induced_protein.onemodel'
+import '../wild_type/wild_type.onemodel'
 
 model AntitheticController(WildType)
   #                           

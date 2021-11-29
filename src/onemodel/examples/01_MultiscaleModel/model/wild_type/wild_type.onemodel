@@ -1,5 +1,5 @@
-import '../protein/ribosomal_protein.onemodel'
-import '../protein/non_ribosomal_protein.onemodel'
+import './ribosomal_protein.onemodel'
+import './non_ribosomal_protein.onemodel'
 
 model WildType
   # Model of a wild-type E.coli. cell.
