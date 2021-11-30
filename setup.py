@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
         name="onemodel",
-        version="0.0.9",
+        version="0.0.10",
         author="Fernando Nobel Santos Navarro",
         author_email="fersann1@upv.es",
         description="OneModel package description.",
