@@ -1,61 +1,89 @@
 %% Example driver script for simulating "antithetic_controller" model.
 
 clear all;
-close all;
 
 % Init model.
 m = antithetic_controller();
+p = m.p;
+
+p.cell____burden = 0;
+p.cell____dilution = 0;
+outA = simulate(m,p);
+
+p.cell____burden = 0;
+p.cell____dilution = 1;
+outB = simulate(m,p);
+
+p.cell____burden = 1;
+p.cell____dilution = 0;
+outC = simulate(m,p);
+
+p.cell____burden = 1;
+p.cell____dilution = 1;
+outD = simulate(m,p);
+
+%% Plot result.
+
+close all;
+
+fig = figure('units','centimeters','position',[0,0,14,5]);
+colors;
+
+subplot(1,2,1);
+
+hold on;
+plot(outA.t, outA.cell__x__m, 'Color', myColors.blue);
+plot(outB.t, outB.cell__x__m, '--', 'Color', myColors.blue);
+plot(outC.t, outC.cell__x__m, 'Color', myColors.orange);
+plot(outD.t, outD.cell__x__m, '--', 'Color', myColors.orange);
+
+grid on;
+ylabel('Protein $x$ [fg]','interpreter','latex');
+xlabel('Time [h]','interpreter','latex');
+ylim([0 105]);
+yticks([0 35 70 105]);
+xticks([0 5 10 15 20]);
+
+subplot(1,2,2);
+
+hold on;
+plot(outA.t, outA.cell__mu, 'Color', myColors.blue);
+plot(outB.t, outB.cell__mu, '--', 'Color', myColors.blue);
+plot(outC.t, outC.cell__mu, 'Color', myColors.orange);
+plot(outD.t, outD.cell__mu, '--', 'Color', myColors.orange);
+
+grid on;
+ylabel('Growth rate [min$^{-1}$]','interpreter','latex');
+ylim([0 0.03]);
+yticks([0 0.01 0.02 0.03]);
+xticks([0 5 10 15 20]);
+xlabel('Time [h]','interpreter','latex');
+
+print(fig,'./figs/Example_03.eps','-depsc');
+
+%% Simulate auxiliar funtion
+
+function out = simulate(m,p)
 
 % Solver options.
 opt = odeset('AbsTol',1e-9,'RelTol',1e-9);
 opt = odeset(opt,'Mass',m.M);
 
-%% First simulation to get initial condition without the exogenous circuit.
+% First simulation to get initial condition without the exogenous circuit.
 
-p0 = m.p;
+p0 = p;
 p0.cell__z1__omega = 0;
-[~,x0] = ode15s(@(t,x) m.ode(t,x,p0),[0 1e6],m.x0,opt);
+[t0,x0] = ode15s(@(t,x) m.ode(t,x,p0),[0 1e6],m.x0,opt);
+out0 = m.simout2struct(t0,x0,p0);
+out0.t = out0.t/60;
 
 x0 = x0(end,:);
 
-%% Simulation time span.
+% Second simulation.
+tspan = [m.opts.t_init 20*60];
 
-tspan = [m.opts.t_init m.opts.t_end];
+[t,x] = ode15s(@(t,x) m.ode(t,x,p),tspan,x0,opt);
+out = m.simout2struct(t,x,p);
 
-[t,x] = ode15s(@(t,x) m.ode(t,x,m.p),tspan,x0,opt);
-out = m.simout2struct(t,x,m.p);
-
-%% Plot result.
-
-figure(1);
-
-subplot(3,1,1);
-
-hold on;
-
-plot(out.t, out.cell__p_r__m);
-plot(out.t, out.cell__p_nr__m);
-
-legend('ribo', 'non-ribo');
-ylabel('Mass [fg]');
-xlabel('Time [min]');
-
-subplot(3,1,2);
-
-hold on;
-
-plot(out.t, out.cell__z1__m);
-plot(out.t, out.cell__z2__m);
-plot(out.t, out.cell__z12__m);
-plot(out.t, out.cell__x__m);
-
-legend('z1', 'z2', 'z12', 'x');
-ylabel('Mass [fg]');
-xlabel('Time [min]');
-
-subplot(3,1,3);
-
-plot(out.t, out.cell__mu);
-ylabel('Growth rate [1/min]');
-ylim([0 0.03]);
-xlabel('Time [min]');
+out.t = out.t/60;
+end
