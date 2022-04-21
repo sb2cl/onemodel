@@ -27,6 +27,7 @@ Check out the :doc:`usage` section for further information, including how to :re
 
   introduction
   onemodel_workflow
+  onemodel_design_philosophy
   usage
   quick_start
   onemodel_syntax
