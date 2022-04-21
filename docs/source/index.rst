@@ -15,7 +15,7 @@ It is focused on accessibility, simplicity, and modularity.
 OneModel syntax allows the user to define models based on chemical (and pseudo-chemical) reactions, differential equations, and algebraic equations.
 OneModel is written in Python and it provides two interfaces: a command-line interface for expert-users, and a graphical user interface for non-expert users.
 
-Check out the :doc:`usage` section for further information, including how to :ref:`install <installation>` OneModel.
+Check out the :doc:`installation` and :doc:`quick_start` sections for further information.
 
 .. note::
 
@@ -26,13 +26,12 @@ Check out the :doc:`usage` section for further information, including how to :re
   :caption: Contents:
 
   introduction
+  installation
+  quick_start
   onemodel_workflow
   onemodel_design_philosophy
   onemodel_implementation
   subpackage_sbml2dae
-  installation
-  usage
-  quick_start
   onemodel_syntax
 
 
