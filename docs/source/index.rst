@@ -28,6 +28,8 @@ Check out the :doc:`usage` section for further information, including how to :re
   introduction
   onemodel_workflow
   onemodel_design_philosophy
+  onemodel_implementation
+  subpackage_sbml2dae
   usage
   quick_start
   onemodel_syntax
