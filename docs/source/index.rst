@@ -30,6 +30,7 @@ Check out the :doc:`usage` section for further information, including how to :re
   onemodel_design_philosophy
   onemodel_implementation
   subpackage_sbml2dae
+  installation
   usage
   quick_start
   onemodel_syntax
