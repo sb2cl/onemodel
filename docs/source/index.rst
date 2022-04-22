@@ -33,6 +33,7 @@ Check out the :doc:`installation` and :doc:`quick_start` sections for further in
   onemodel_implementation
   subpackage_sbml2dae
   onemodel_syntax
+  examples
 
 
 Indices and tables

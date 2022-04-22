@@ -1,4 +1,4 @@
-OneModel's syntax
+OneModel syntax
 =================
 
 The OneModel syntax simplifies the definition of SBML models and extends the functionality of SBML by introducing high-level elements.

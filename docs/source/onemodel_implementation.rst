@@ -10,8 +10,8 @@ One advantage of developing a domain-specific language (instead of having implem
 Examples of successful domain-specific languages are HTML (HyperText Markup Language) and CSS (Cascading Style Sheets), pseudo programming languages for non-expert users.
 In addition, the use of a domain-specific language allows the definition of high-level concepts (such as functions, classes, etc.) that are not currently available in SBML.
 
-  Domain-specific languages are an excellent tool for automating repetitive tasks and improving productivity---they are at the core of OneModel's development---.
-  I highly recommend to learn the why and how of creating domain-specific languages.
+   Domain-specific languages are an excellent tool for automating repetitive tasks and improving productivity---they are at the core of OneModel's development---.
+   I highly recommend to learn the why and how of creating domain-specific languages.
 
 OneModel uses libSBML, a library that simplifies reading and writing SBML files, and it is widely used in the SBML community to export models as SBML code.
 
