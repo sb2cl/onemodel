@@ -18,6 +18,7 @@ Moreover, it shows the benefits of using OneModel syntax for modeling synthetic 
 Protein expression---in this chapter, we use protein expression and gene expression interchangeably, as we will implement models of gene expression leading to the synthesis of proteins---is a complex process that involves many reactions and interactions.
 For this example, we simplify this process, and we take into account mRNA transcription, protein translation, and degradation of mRNA and protein:
 
+.. _reactions:
 .. figure:: ../images/examples/constitutive_expression_reactions.svg
   :align: center
   :width: 250
@@ -27,15 +28,16 @@ For this example, we simplify this process, and we take into account mRNA transc
 
 where ``mRNA`` and ``protein`` are the mRNA and protein concentration (we could alternatively work with the number of molecules of each species instead of working with concentrations); ``k_m`` and ``k_p`` are the rate constants related to transcription and translation, respectively; and ``d_m`` and ``d_p`` are the degradation rate constants of the mRNA and the protein.
 
-In the previous set of reactions, there are three different classes of model-elements: species (``mRNA`` and ``protein``), parameters (``k_m``, ``k_p``, ``d_m`` and ``d_p``) and the reactions.
+In the set of reactions of :numref:`reactions`, there are three different classes of model-elements: species (``mRNA`` and ``protein``), parameters (``k_m``, ``k_p``, ``d_m`` and ``d_p``) and the reactions.
 These are the elements that we have to implement using the OneModel syntax.
 
-The following code implements the model-elements in the previous set of reactions using OneModel syntax.
+:numref:`basic_mRNA_and_protein` implements the model-elements in :numref:`reactions` using OneModel syntax.
 Lines 3--6 define mRNA and protein as species and set their initial values to zero.
 Lines 8--13 define the parameters and set their values to one (for example purposes).
 Moreover, lines 15--20 define the reactions, with their explicit reaction rates placed after the ``;`` symbol.
 Note that texts after a ``#`` symbol are comments which are only used to explain the function of the code.
 
+.. _basic_mRNA_and_Protein:
 .. code-block:: 
   :caption: Example of modeling constitutive gene expression (transcription, translation and degradation) using OneModel.
 
@@ -60,10 +62,11 @@ Note that texts after a ``#`` symbol are comments which are only used to explain
     protein -> 0           ; d_p*protein  # Protein degradation.
   end                                     # Stop declaring reactions.
 
-The following figure shows a simulation of this code.
+:numref:`basic_mRNA_and_protein_sim` shows a simulation of this code.
 Once we have the OneModel implementation, we can use SBML2dae to generate a Matlab implementation of the OneModel code to simulate it.
 This way, if the simulation result is coherent, we can validate the OneModel code and continue with this example.
 
+.. _basic_mRNA_and_protein_sim:
 .. figure:: ../images/examples/ex01_simple_gene_expression.svg
   :align: center
   :width: 300
@@ -80,92 +83,179 @@ Copy-pasting is a bad programming practice, and it should be avoided.
 Models of this type are hard to maintain and to use.
 Indeed, this bad programming practice is due to using software that does not allow incremental and/or modular modeling.
 
-Code \ref{lst:two_genes_expression_bad} is an example of this bad programming practice.
-What we have done in this example is to copy-paste the Code \ref{lst:basic_mRNA_and_protein} twice.
+:numref:`two_genes_expression_bad` is an example of this bad programming practice.
+What we have done in this example is to copy-paste the :numref:`basic_mRNA_and_protein` twice.
 We have changed the name of species and parameters to create one set of species and parameters for the constitutive expression of protein A and another set for protein B.
-This code is hard to read, and this situation will worsen with each extra protein we want to add to the model: we developed \textit{OneModel} to avoid this type of situations.
+This code is hard to read, and this situation will worsen with each extra protein we want to add to the model: we developed OneModel to avoid this type of situations.
 
-\inputOneModel{
-  ./examples/03_onemodel/model/ex02_two_genes_expression.one
-}{
-  Example of bad programming practices to avoid.
-  Here is modeled the expression of two genes by copy and pasting the Code \ref{lst:basic_mRNA_and_protein}. \label{lst:two_genes_expression_bad}
-}
+.. _two_genes_expression_bad:
+.. code-block:: 
+  :caption: Example of bad programming practices to avoid. Here is modeled the expression of two genes by copy and pasting the :numref:`basic_mRNA_and_protein`. 
+
+  ### How NOT to model the expression of two genes. ###
+
+  species         
+    mRNA_A=0, protein_A=0   # Gene A mRNA and protein concentration.
+    mRNA_B=0, protein_B=0   # Gene A mRNA and protein concentration.
+  end
+  
+  parameter
+    k_m_A=1,  d_m_A=1   # Transcription and degradation rates of mRNA A.
+    k_p_A=1,  d_p_A=1   # Translation and degradation rates of protein A.
+    k_m_B=1,  d_m_B=1   # Transcription and degradation rates of mRNA B.
+    k_p_B=1,  d_p_B=1   # Translation and degradation rates of protein B.
+  end
+  
+  reaction
+    0 -> mRNA_A                  ; k_m_A           # Transcription mRNA A.
+    mRNA_A -> 0                  ; d_m_A*mRNA_A    # Degradation mRNA A.
+    mRNA_A -> mRNA_A + protein_A ; k_p_A*mRNA_A    # Translation protein A.
+    protein_A -> 0               ; d_p_A*protein_A # Degradation protein A.
+    0 -> mRNA_B                  ; k_m_B           # Transcription mRNA B.
+    mRNA_B -> 0                  ; d_m_B*mRNA_B    # Degradation mRNA B.
+    mRNA_B -> mRNA_B + protein_B ; k_p_B*mRNA_B    # Translation protein B.
+    protein_B -> 0               ; d_p_B*protein_B # Degradation protein B.
+  end
+
 
 The efficient solution to this problem is to use modularity.
-\textit{OneModel} syntax allows us to wrap Code \ref{lst:basic_mRNA_and_protein} as a \onemodelline{model}.
+OneModel syntax allows us to wrap :numref:`basic_mRNA_and_protein` as a ``model``.
 We group all the species, parameters, and reactions as a module which we can reuse by instantiating it as objects instead of copy-pasting the code for each protein.
 This way, we avoid copy-pasting the code for each protein.
 Instead, we can create multiple instances of this model.
 
-Code \ref{lst:protein_constitutive} shows how to implement Code \ref{lst:basic_mRNA_and_protein} as a \onemodelline{model}.
-This process is easy to do; we need to wrap the previous code inside the \onemodelline{model} and \onemodelline{end} keywords (lines 4--19).
-This way, \onemodelline{ProteinConstitutive} is a constructor which will generate instances of the model for us.
+:numref:`protein_constitutive` shows how to implement :numref:`basic_mRNA_and_protein` as a ``model``.
+This process is easy to do; we need to wrap the previous code inside the ``model`` and ``end`` keywords (lines 4--19).
+This way, ``ProteinConstitutive`` is a constructor which will generate instances of the model for us.
 
-In the \onemodelline{standalone} block, we show an example of using \onemodelline{ProteinConstitutive}.
-We have just created object A which is an instance of model \onemodelline{ProteinConstitutive}.
-Object A has a copy of all the model-elements of \onemodelline{ProteinConstitutive}, and they are accessible by the use of the \onemodelline{.} operator. For example, the mRNA concentration of object A can be accessed as \onemodelline{A.mRNA}.
+In the ``standalone`` block, we show an example of using ``ProteinConstitutive``.
+We have just created object A which is an instance of model ``ProteinConstitutive``.
+Object A has a copy of all the model-elements of ``ProteinConstitutive``, and they are accessible by the use of the ``.`` operator. For example, the mRNA concentration of object A can be accessed as ``A.mRNA``.
 
-\inputOneModel{
-  ./examples/03_onemodel/model/ex03_protein_constitutive.one
-}{
-  Example of how to build a reusable model for constitutive gene expression using \textit{OneModel} syntax. \label{lst:protein_constitutive}
-}
+.. _protein_constitutive:
+.. code-block::
+  :caption: Example of how to build a reusable model for constitutive gene expression using OneModel syntax.
 
-Code \ref{lst:two_genes_expression} shows how easy it is to model the expression of two proteins taking advantage of the previously defined model.
+  ### Definition of ProteinConstitutive. ###
+  
+  ## ProteinConstitutive models constitutive gene expression. ##
+  model ProteinConstitutive  # Start declaring model.
+  
+    species mRNA=0, protein=0  # mRNA and protein concentration.
+    
+    parameter
+      k_m=1, d_m=1  # mRNA transcription and degradation rate.
+      k_p=1, d_p=1  # Protein translation and degradation rate.
+    end
+    
+    reaction
+      0 -> mRNA              ; k_m          # mRNA transcription.
+      mRNA -> 0              ; d_m*mRNA     # mRNA degradation.
+      mRNA -> mRNA + protein ; k_p*mRNA     # Protein translation.
+      protein -> 0           ; d_p*protein  # Protein degradation.
+    end
+  end  # End declaring model.
+  
+  ## Example of how to use ProteinConstitutive. ##
+  standalone        
+    A = ProteinConstitutive()
+  end
+
+:numref:`two_genes_expression` shows how easy it is to model the expression of two proteins taking advantage of the previously defined model.
 First, we must import the previous code into the new model (line 5).
 And then, we just need to create as many proteins as we need by writing lines 8--9.
 Declaring models and instantiating objects is an efficient way to model the expression of two proteins.
 
-\inputOneModel{
-  ./examples/03_onemodel/model/ex04_two_genes_expression.one
-}{
-  Example of how to use the model defined in Code \ref{lst:protein_constitutive} to model the expression of two genes. \label{lst:two_genes_expression}
-}
+.. _two_genes_expression:
+.. code-block::
+  :caption: Example of how to use the model defined in :numref:`protein_constitutive` to model the expression of two genes.
+
+  ### How to model the expression of two proteins. ###
+
+  # Import ProteinConstitutive model.
+  # (note that the standalone code is not imported).
+  import './ex03_protein_constitutive.one'
+  
+  # Initialize A and B as instances of ProteinConstitutive.
+  A = ProteinConstitutive()
+  B = ProteinConstitutive()
+  
+  # We could easily add more proteins by writing:
+  # C = ProteinConstitutive()
+  # ...
+
+
+Induced protein expression
+--------------------------
+  
+``ProteinConstitutive`` models genes that are constitutive expressed.
+In many synthetic circuits, the presence of a transcription factor (which could also be a protein) can induce gene expression.
+This section, we show how to create another model for induced protein expression.
+
+As a first approach, we could create a new model by copy-pasting the code of ``ProteinConstitutive`` and modifying it to make the expression inducible: this would be another type of bad programming practice.
+Doing that is equivalent to what we did in :numref:`two_genes_expression_bad`, and it would lead to an inefficient workflow because each time we want to define a new ``model`` we will have to duplicate the transcription and translation reactions.
+
+  Whenever you are tempted to copy-pasting any part of your code: stop doing it; it is an indicator that there is a better way to do it.
+  Take the time to see if someone else has stumbled upon your problem---it's a golden opportunity to improve your programming skills---.
+
+In the previous case, the solution was to implement a ``model`` instead of copy-pasting the code.
+Here the solution is to create a new ``model`` by extending the functionality of ``ProteinConstitutive``.
+
+.. _protein_induced:
+.. code-block::
+  :caption: Example of modeling induced gene expression by extending the previously defined ``ProteinConstitutive`` model.
+
+  ### Definition of ProteinInduced. ###
+  
+  import 'ex03_protein_constitutive.one'
+  
+  ## ProteinInduced extends the ProteinConstitutive model to make ##
+  ## the expression inducible by a transcription factor.          ##
+  model ProteinInduced(ProteinConstitutive)
+  
+    input TF       # Define the transcription factor as an input.
+    species k_m=0  # Override the parameter k_m to be a species.
+    
+    parameter
+      h = 1        # Half-activation threshold.
+      k_m_max = 1  # Maximum transcription rate.
+    end
+    
+    # Set the value of k_m as an substitution equation.
+    rule k_m := k_m_max * TF/(TF+h)
+  end
+  
+  ## Example of how to use ProteinInduced. ##
+  standalone
+    A = ProteinConstitutive()
+    B = ProteinInduced()
+  
+    rule B.TF := A.protein  # Set protein A as the transcription factor of B.
+  end
+
+
+:numref:`protein_induced` shows the definition of a new model ``ProteinInduced`` by extending ``ProteinConstitutive``.
+First, we have to import the code of ``ProteinConstitutive`` (line 3).
+We declare ``ProteinInduced`` model and we set ``ProteinConstitutive`` as its parent (note that the name of ``ProteinConstitutive`` is in the parentheses in line 7).
+This way, ``ProteinInduced`` will have all the model-elements defined in its parent.
+The rest of the work is to add the inducible part to the model.
+For this, we do not need to change the reactions; we just need the value of parameter ``k_m`` to change depending on the transcription factor concentration.
+To this end, we declare the transcription factor ``TF`` as an input (line 9).
+We override the parameter ``k_m`` to be a species in line 10 (note that the declaration of species refers both to chemical species or to state variables).
+The last step is to declare the parameters for a Hill-like function (lines 13--14) and assign the value of ``k_m`` as the Hill function using the substitution rule.
+
+The ``standalone`` example (lines 22--26) models a constitutively expressed protein A and a protein B which is induced by A.
+:numref:`protein_induced_sim` shows a simulation of ``ProteinInduced``.
+
+.. _protein_induced_sim:
+.. figure:: ../images/examples/ex05_protein_induced.svg
+  :align: center
+  :width: 250
+  :alt: simulation of protein induced
+
+  Simulation of ``ex05_protein_induced.one``. Protein A is expressed constitutively, and protein B expression is induced by protein A. The mRNA and protein concentration of gene A are shown in blue and red, and the ones of gene B are shown in yellow and purple. All units are arbitrary.
 
 ..
-  \subsection{Induced protein expression}
-  
-  \onemodelline{ProteinConstitutive} models genes that are constitutive expressed.
-  In many synthetic circuits, the presence of a transcription factor (which could also be a protein) can induce gene expression.
-  This section, we show how to create another model for induced protein expression.
-  
-  As a first approach, we could create a new model by copy-pasting the code of \onemodelline{ProteinConstitutive} and modifying it to make the expression inducible: this would be another type of bad programming practice.
-  Doing that is equivalent to what we did in Code \ref{lst:two_genes_expression_bad}, and it would lead to an inefficient workflow because each time we want to define a new \onemodelline{model} we will have to duplicate the transcription and translation reactions.
-  
-  \begin{parrafoDestacado}
-    Whenever you are tempted to copy-pasting any part of your code: stop doing it; it is an indicator that there is a better way to do it.
-    Take the time to see if someone else has stumbled upon your problem---it's a golden opportunity to improve your programming skills---.
-  \end{parrafoDestacado}
-  
-  In the previous case, the solution was to implement a \onemodelline{model} instead of copy-pasting the code.
-  Here the solution is to create a new \onemodelline{model} by extending the functionality of \onemodelline{ProteinConstitutive}.
-  
-  \inputOneModel{
-    ./examples/03_onemodel/model/ex05_protein_induced.one
-  }{
-    Example of modeling induced gene expression by extending the previously defined \onemodelline{ProteinConstitutive} model. \label{lst:protein_induced}
-  }
-  
-  Code \ref{lst:protein_induced} shows the definition of a new model \onemodelline{ProteinInduced} by extending \onemodelline{ProteinConstitutive}.
-  First, we have to import the code of \onemodelline{ProteinConstitutive} (line 3).
-  We declare \onemodelline{ProteinInduced} model and we set \onemodelline{ProteinConstitutive} as its parent (note that the name of \onemodelline{ProteinConstitutive} is in the parentheses in line 7).
-  This way, \onemodelline{ProteinInduced} will have all the model-elements defined in its parent.
-  The rest of the work is to add the inducible part to the model.
-  For this, we do not need to change the reactions; we just need the value of parameter \onemodelline{k_m} to change depending on the transcription factor concentration.
-  To this end, we declare the transcription factor \onemodelline{TF} as an input (line 9).
-  We override the parameter \onemodelline{k_m} to be a species in line 10 (note that the declaration of species refers both to chemical species or to state variables).
-  The last step is to declare the parameters for a Hill-like function (lines 13--14) and assign the value of \onemodelline{k_m} as the Hill function using the substitution rule.
-  
-  The \onemodelline{standalone} example (lines 22--26) models a constitutively expressed protein A and a protein B which is induced by A.
-  Figure \ref{fig:protein_induced_sim} shows a simulation of \onemodelline{ProteinInduced}.
-  
-  \begin{figure}[H]
-    \centering
-    \includegraphics{./examples/03_onemodel/figs/ex05_protein_induced.eps}
-    \caption{Simulation of \texttt{ex05\_protein\_induced.one}. Protein A is expressed constitutively, and protein B expression is induced by protein A. The mRNA and protein concentration of gene A are shown in blue and red, and the ones of gene B are shown in yellow and purple. All units are arbitrary.\label{fig:protein_induced_sim}}
-  \end{figure}
-  
   \subsection{Antithetic controller}
   
   To exemplify more complex gene circuits, in this section, we model an antithetic controller making use of the models for constitutive and induced protein expression defined in the previous sections.
