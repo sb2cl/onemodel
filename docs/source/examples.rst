@@ -255,77 +255,94 @@ The ``standalone`` example (lines 22--26) models a constitutively expressed prot
 
   Simulation of ``ex05_protein_induced.one``. Protein A is expressed constitutively, and protein B expression is induced by protein A. The mRNA and protein concentration of gene A are shown in blue and red, and the ones of gene B are shown in yellow and purple. All units are arbitrary.
 
+Antithetic controller
+~~~~~~~~~~~~~~~~~~~~~
+
+To exemplify more complex gene circuits, in this section, we model an antithetic controller making use of the models for constitutive and induced protein expression defined in the previous sections.
+
+The antithetic controller is a synthetic gene system to robustly control the expression of a protein of interest.
+This circuit is implemented using three genes coding three proteins: sigma ``z_1``, anti-sigma ``z_2``, and the protein of interest ``x``.
+Normally, ``z_1`` is constitutively expressed and induces the production of ``x``. In turn, ``x`` activates the expression of ``z_2``.
+Finally, ``z_1`` and ``z_2`` annihilate each other in a sequestration reaction, thus closing the loop.
+
+The following set of reactions shows all the biochemical reactions in this gene circuit.
+The reactions related to protein expression and degradation:
+
+.. _eq_antithetic_a:
+.. figure:: ../images/examples/ex06_antithetic_reactions_1.svg
+  :align: center
+  :width: 400
+  :alt: antithetic reactions
+
+  Transcription, translation and degradation reactions
+
+and the sequestration reaction:
+
+.. _eq_antithetic_b:
+.. figure:: ../images/examples/ex06_antithetic_reactions_2.svg
+  :align: center
+  :width: 100
+  :alt: antithetic reactions
+
+  Sequestration reaction
+
+where ``m_{i}`` are the mRNA concentration of ``z_1``, ``z_2`` and ``x``; ``k_m^i`` and ``k_p^i`` are the rate constant parameters related to transcription and translation, respectively; ``d_m^i`` and ``d_p^i``  are the degradation rate constants of mRNA and protein; ``f(x)`` and ``g(z_1)`` are activation Hill-like functions; and ``\gamma`` is the antithetical sequestration rate constant.
+
+Note that in :numref:`eq_antithetic_a` there are a lot of repetitive reactions to model the expression of ``z_1``, ``z_2``, and ``x``.
+We can take advantage of this repetitive structure and use the model for protein expression that we defined before.
+
+:numref:`antithetic_controller` is an implementation of the ``AntitheticController`` model using the models ``ProteinConstitutive`` and ``ProteinInduced``.
+
+First, we have to import the previous models into this new one (line 3).
+Note that ``'ex05_protein_induced.one'`` already imports ``ProteinConstitutive``.
+We define the three proteins which make the circuit. We use ``ProteinConstitutive`` for protein ``z1`` and ``ProteinInduced`` for proteins ``z2`` and ``x`` (lines 6--8).
+We define the annihilation rate constant ``gamma`` (line 9), and we add the annihilation reaction to the model (line 14).
+
+Note that if we define models using reactions (instead of rules), we can add more reactions to previously defined models, and OneModel will update all the rates of changes of the species automatically---this makes it very easy to expand the functionality of models as we have done with adding the antithetic reaction in Code :numref:`antithetic_controller`.
+
+.. _antithetic_controller:
+.. code-block::
+  :caption: Example of modeling an antithetic controller using \textit{OneModel} syntax.
+
+  ### Definition of AntitheticController. ###
+  
+  import 'ex05_protein_induced.one'  # ProteinConstitutive and ProteinInduced.
+  
+  model AntitheticController
+    z1 = ProteinConstitutive()  # Sigma factor.
+    z2 = ProteinInduced()       # Anti-sigma factor.
+    x  = ProteinInduced()       # Protein of interest to control.
+    parameter gamma = 1         # Antithetic sequestration rate.
+  
+    reaction
+      # We have to add the antithetic reaction.
+      # Note that we can access species inside objects using '.' operator.
+      z1.protein + z2.protein -> 0 ; gamma*z1.protein*z2.protein
+    end
+  
+    rule
+      x.TF  := z1.protein  # Set z1 as the transcription factor of x. 
+      z2.TF := x.protein   # Set x as the transcription factor of z2.
+    end
+  end
+  
+  standalone  # Example of how to use the AntitheticController.
+    circuit = AntitheticController()
+  end
+
+Then, we set ``z1`` as the transcription factor of protein ``x``. In turn, ``x`` will be the transcription factor of protein ``z2`` (lines 18--19).
+Finally, we set the standalone example as just the AntitheticController.
+:numref:`antithetic_controller_sim` shows a simulation of the ``AntitheticController`` model.
+
+.. _antithetic_controller_sim:
+.. figure:: ../images/examples/ex06_antithetic_controller.svg
+  :align: center
+  :width: 250
+  :alt: antithetic controller simulation
+ 
+  Simulation of ``ex06_antithetic_controller.one``. The concentration of sigma protein ``z_1`` is shown in blue, in red the anti-sigma concentration ``z2`` and in yellow the protein of interest ``x``. All units are arbitrary.
+
 ..
-  \subsection{Antithetic controller}
-  
-  To exemplify more complex gene circuits, in this section, we model an antithetic controller making use of the models for constitutive and induced protein expression defined in the previous sections.
-  
-  The antithetic controller is a synthetic gene system to robustly control the expression of a protein of interest \parencite{Aoki2019}.
-  This circuit is implemented using three genes coding three proteins: sigma $z_1$, anti-sigma $z_2$, and the protein of interest $x$.
-  Normally, $z_1$ is constitutively expressed and induces the production of $x$. In turn, $x$ activates the expression of $z_2$.
-  Finally, $z_1$ and $z_2$ annihilate each other in a sequestration reaction, thus closing the loop.
-  
-  The following set of reactions shows all the biochemical reactions in this gene circuit.
-  The reactions related to protein expression and degradation:
-  
-  \begin{equation}\label{eq:antithetic_a}
-  \begin{aligned}
-    \ce{$\emptyset$ &->[k_m^{z1}] m_{z1}}\\
-    \ce{m_{z1} &->[d_m^{z1}] \emptyset}\\
-    \ce{m_{z1} &->[k_p^{z1}] m_{z1} + z1}\\
-    \ce{z1 &->[d_p^{z1}] \emptyset}\\
-  \end{aligned}
-  \quad\quad
-  \begin{aligned}
-    \ce{$\emptyset$ &->[k_m^{z2} f(x)] m_{z2}}\\
-    \ce{m_{z2} &->[d_m^{z2}] \emptyset}\\
-    \ce{m_{z2} &->[k_p^{z2}] m_{z2} + z2}\\
-    \ce{z2 &->[d_p^{z2}] \emptyset}\\
-  \end{aligned}
-  \quad\quad
-  \begin{aligned}
-    \ce{$\emptyset$ &->[k_m^{x} g(z_1)] m_{x}}\\
-    \ce{m_{x} &->[d_m^{x}] \emptyset}\\
-    \ce{m_{x} &->[k_p^{x}] m_{x} + x}\\
-    \ce{x &->[d_p^{x}] \emptyset}\\
-  \end{aligned}
-  \end{equation}
-  
-  and the sequestration reaction:
-  
-  \begin{equation}\label{eq:antithetic_b}
-    \ce{z1 + z2 ->[$\gamma$] \emptyset} \,,
-  \end{equation}
-  where $m_{i}$ are the mRNA concentration of $z_1$, $z_2$ and $x$; $k_m^i$ and $k_p^i$ are the rate constant parameters related to transcription and translation, respectively; $d_m^i$ and $d_p^i$  are the degradation rate constants of mRNA and protein; $f(x)$ and $g(z_1)$ are activation Hill-like functions; and $\gamma$ is the antithetical sequestration rate constant.
-  
-  Note that in \eqref{eq:antithetic_a} there are a lot of repetitive reactions to model the expression of $z_1$, $z_2$, and $x$.
-  We can take advantage of this repetitive structure and use the model for protein expression that we defined before.
-  
-  Code \ref{lst:antithetic_controller} is an implementation of the \onemodelline{AntitheticController} model using the models \onemodelline{ProteinConstitutive} and \onemodelline{ProteinInduced}.
-  
-  First, we have to import the previous models into this new one (line 3).
-  Note that \onemodelline{'ex05_protein_induced.one'} already imports \onemodelline{ProteinConstitutive}.
-  We define the three proteins which make the circuit. We use \onemodelline{ProteinConstitutive} for protein \onemodelline{z1} and \onemodelline{ProteinInduced} for proteins \onemodelline{z2} and \onemodelline{x} (lines 6--8).
-  We define the annihilation rate constant \onemodelline{gamma} (line 9), and we add the annihilation reaction to the model (line 14).
-  
-  Note that if we define models using reactions (instead of rules), we can add more reactions to previously defined models, and \textit{OneModel} will update all the rates of changes of the species automatically---this makes it very easy to expand the functionality of models as we have done with adding the antithetic reaction in Code \ref{lst:antithetic_controller}.
-  
-  \inputOneModel{
-    ./examples/03_onemodel/model/ex06_antithetic_controller.one
-  }{
-    Example of modeling an antithetic controller using \textit{OneModel} syntax. \label{lst:antithetic_controller}
-  }
-  
-  Then, we set \onemodelline{z1} as the transcription factor of protein \onemodelline{x}. In turn, \onemodelline{x} will be the transcription factor of protein \onemodelline{z2} (lines 18--19).
-  Finally, we set the standalone example as just the AntitheticController.
-  Figure \ref{fig:antithetic_controller_sim} shows a simulation of the \onemodelline{AntitheticController} model.
-  
-  \begin{figure}[H]
-    \centering
-    \includegraphics{./examples/03_onemodel/figs/ex06_antithetic_controller.eps}
-    \caption{Simulation of \texttt{ex06\_antithetic\_controller.one}. The concentration of sigma protein $z_1$ is shown in blue, in red the anti-sigma concentration z2 and in yellow the protein of interest x. All units are arbitrary.\label{fig:antithetic_controller_sim}}
-  \end{figure}
-  
   \subsection{Host-aware antithetic controller}
   
   This last example shows the use of \textit{OneModel} with complex and large models.
