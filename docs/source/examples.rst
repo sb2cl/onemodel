@@ -8,6 +8,8 @@ These case scenarios demonstrate how to use OneModel software.
 We used the following software tools to perform the examples: Matlab R2020b, Python v3.8.0, and OneModel v0.0.10. 
 We recommend using the same software versions to replicate the examples.
 
+.. _sec_constitutive_protein_expression:
+
 Constitutive protein expression
 -------------------------------
 
@@ -256,7 +258,7 @@ The ``standalone`` example (lines 22--26) models a constitutively expressed prot
   Simulation of ``ex05_protein_induced.one``. Protein A is expressed constitutively, and protein B expression is induced by protein A. The mRNA and protein concentration of gene A are shown in blue and red, and the ones of gene B are shown in yellow and purple. All units are arbitrary.
 
 Antithetic controller
-~~~~~~~~~~~~~~~~~~~~~
+---------------------
 
 To exemplify more complex gene circuits, in this section, we model an antithetic controller making use of the models for constitutive and induced protein expression defined in the previous sections.
 
@@ -342,63 +344,127 @@ Finally, we set the standalone example as just the AntitheticController.
  
   Simulation of ``ex06_antithetic_controller.one``. The concentration of sigma protein ``z_1`` is shown in blue, in red the anti-sigma concentration ``z2`` and in yellow the protein of interest ``x``. All units are arbitrary.
 
-..
-  \subsection{Host-aware antithetic controller}
+Host-aware antithetic controller
+--------------------------------
+
+This last example shows the use of OneModel with complex and large models.
+The first approach to model a synthetic gene circuit is usually done by neglecting the interactions between the host cell and the gene circuit.
+However, there is an increasing need to include host dynamics to improve model prediction capabilities.
+These host-aware dynamic models are complex and not easy to implement since they may contain several states and equations.
+
+Code :numref:`WildType` depicts the ``WildType`` model that represents the host-aware model freely distributed with OneModel.
+Lines 8--17 show an incomplete representation of it just for demonstration purposes.
+This model implements the equations of the host-aware model and takes into account the host dynamics, the competition for cell resources in protein expression, and its effect on cell growth.
+The model ``WildType`` is rather complex.
+However, from a user perspective, we only need to know how to modify its input ``WSum`` (line 10), which is a value that keeps track of the burden introduced by the expression of exogenous proteins like the ones introduced by the antithetic controller.
+``WildType_ProteinConstitutive`` is a model provided also by ``WildType``, which defines the base protein expression mechanism.
+The user may use this model as a building block for its own circuits (similarly to section :ref:`sec_constitutive_protein_expression`).
+There were no inputs in the original ``ProteinConstitutive`` model. However ``WildType_ProteinConstitutive`` is a more complex model which has inputs to calculate protein expression as function of the effective translation rate of ribosomes ``nu_t``, and the cell growth rate ``mu``.
+
+.. _WildType:
+.. code-block::
+  :caption: ``WildType`` is the host-aware model freely distributed with OneModel, ``WildType_ProteinConstitutive`` is the constitutive protein expression mechanism, and ``WildType_ProteinInduced`` is the inucible protein experssion mechanism. The figure shows an incomplete representation of these models only for the example purposes.
+
+  ### Definition of WildType. ###
   
-  This last example shows the use of \textit{OneModel} with complex and large models.
-  The first approach to model a synthetic gene circuit is usually done by neglecting the interactions between the host cell and the gene circuit.
-  However, there is an increasing need to include host dynamics to improve model prediction capabilities.
-  These host-aware dynamic models are complex and not easy to implement since they may contain several states and equations \parencite{Santos2021}.
+  # We show here an incomplete implementation of WildType and
+  # WildType_ProteinConstitutive and WildType_ProteinInduced
+  # (the 'dot-dot-dot' indicates that the original original code continues).
   
-  Code \ref{lst:WildType} depicts the \onemodelline{WildType} model that represents the host-aware model freely distributed with \textit{OneModel}.
-  Lines 8--17 show an incomplete representation of it just for demonstration purposes.
-  This model implements the equations from the host-aware model of Chapter 2 and takes into account the host dynamics, the competition for cell resources in protein expression, and its effect on cell growth.
-  The model \onemodelline{WildType} is rather complex.
-  However, from a user perspective, we only need to know how to modify its input \onemodelline{WSum} (line 10), which is a value that keeps track of the burden introduced by the expression of exogenous proteins like the ones introduced by the antithetic controller.
-  \onemodelline{WildType_ProteinConstitutive} is a model provided also by \onemodelline{WildType}, which defines the base protein expression mechanism.
-  The user may use this model as a building block for its own circuits (similarly to section \ref{sec:constitutive_protein_expression}).
-  There were no inputs in the original \onemodelline{ProteinConstitutive}. However \onemodelline{WildType_ProteinConstitutive} is a more complex model which has inputs to calculate protein expression as function of the effective translation rate of ribosomes \onemodelline{nu_t}, and the cell growth rate \onemodelline{mu}.
+  ## Host aware model of a E.coli. cell##
+  model WildType
+    input WSum_exo  # Burden generated by exogenous genes.
+    # The model takes into account many relevant variables as:
+    # the effective ribosome elongation rate, the growth rate, etc.
+    species nu_t, mu, ...
+    ...
+  end
   
+  ## Model for consitutive protein expression. ##
+  model WildType_ProteinConstitutive
+    input nu_t, mu, ...  # The inputs of this model are species of WildType.
+    species W # Burden generated by the expression of this protein.
+    ...
+  end
   
-  \inputOneModel{
-    ./examples/03_onemodel/model/ex07_wild_type.one
-  }{
-    \onemodelline{WildType} is the host-aware model freely distributed with \textit{OneModel}, \onemodelline{WildType_ProteinConstitutive} is the constitutive protein expression mechanism, and \onemodelline{WildType_ProteinInduced} is the inucible protein experssion mechanism. The figure shows an incomplete representation of these models only for the example purposes.\label{lst:WildType}
-  }
+  ## Model for induced protein expression. ##
+  model WildType_ProteinInduced (WildType_ProteinConstitutive)
+    input TF  # Transcription factor which induced expression.
+    ...
+  end
+
+
+:numref:`WildTypeAntitheticController` shows the ``WildType_AntitheticController`` model that is the implementation of the antithetic controller taking into account the host dynamics.
+
+First, in line 2 we import the ``WildType``, the ``WildType_ProteinConstitutive`` and the ``WildType_ProteinInduced`` models.
+Then in line 4, we declare a new model ``WildType_AntitheticController`` as an extension of ``WildType`` model; this way, we have all the dynamics of the host, and we only need to add the remaining dynamics of the antithetic controller.
+In lines 5--8, we define the proteins of the antithetic controller, sigma ``z1`` as a constitutive expressed protein and anti-sigma and the protein of interest (``z2`` and ``x``) as induced expressed proteins.
+The ``WildType`` model needs to know if any of the proteins are under active degradation to ensure that the cell mass is calculated correctly. Therefore we cannot implement the antithetic reaction as we did in :numref:`antithetic_controller`.
+However, there is a simple workaround; we can define the complex sigma and anti-sigma ``z12`` (line 7) that is not expressed directly by the cell (line 10) but is generated as a result of the sequestration reaction of the antithetic controller (line 17).
+The rest we have to do in the model is to set up the antithetic controller (lines 21--22) and calculate the total burden generated by the exogenous proteins (line 26).
+Finally, we have to satisfy the inputs for each protein (lines 30--32); this step is omitted in the example for brevity.
+
+.. _WildTypeAntitheticController:
+.. code-block::
+  :caption: Example of how to model a host-aware antithetic controller with OneModel syntax.
+
+  ### Host-aware antithetic controller circuit. ###
+  import 'ex07_wild_type.one'
   
-  Code \ref{lst:WildTypeAntitheticController} shows the \onemodelline{WildType_AntitheticController} model that is the implementation of the antithetic controller taking into account the host dynamics.
+  model WildType_AntitheticController (WildType)
+    z1  = WildType_ProteinConstitutive() # Sigma.
+    z2  = WildType_ProteinInduced()      # Anti-sigma.
+    z12 = WildType_ProteinConstitutive() # Sigma and anti-sigma complex.
+    x   = WildType_ProteinInduced()      # Protein of interest.
   
-  First, in line 2 we import the \onemodelline{WildType}, the \onemodelline{WildType_ProteinConstitutive} and the \onemodelline{WildType_ProteinInduced} models.
-  Then in line 4, we declare a new model \onemodelline{WildType_AntitheticController} as an extension of \onemodelline{WildType} model; this way, we have all the dynamics of the host, and we only need to add the remaining dynamics of the antithetic controller.
-  In lines 5--8, we define the proteins of the antithetic controller, sigma \onemodelline{z1} as a constitutive expressed protein and anti-sigma and the protein of interest (\onemodelline{z2} and \onemodelline{x}) as induced expressed proteins.
-  The \onemodelline{WildType} model needs to know if any of the proteins are under active degradation to ensure that the cell mass is calculated correctly. Therefore we cannot implement the antithetic reaction as we did in Code \ref{lst:antithetic_controller}.
-  However, there is a simple workaround; we can define the complex sigma and anti-sigma \onemodelline{z12} (line 7) that is not expressed directly by the cell (line 10) but is generated as a result of the sequestration reaction of the antithetic controller (line 17).
-  The rest we have to do in the model is to set up the antithetic controller (lines 21--22) and calculate the total burden generated by the exogenous proteins (line 26).
-  Finally, we have to satisfy the inputs for each protein (lines 30--32); this step is omitted in the example for brevity.
+    parameter z12.omega=0  # z12 is not expressed.
+    parameter gamma=10     # Antithetic sequestration rate.
   
-  \inputOneModel{
-    ./examples/03_onemodel/model/ex08_antithetic_controller.one
-  }{
-    Example of how to model a host-aware antithetic controller with \textit{OneModel} syntax.\label{lst:WildTypeAntitheticController}
-  }
+    # We have to add the antithetic reaction, but note that in the
+    # wild-type model we cannot degrade proteins directly, instead
+    # we have to redirect the mass of z1 and z2 into z12.
+    reaction
+      z1.protein + z2.protein -> z12.protein ; gamma*z1.protein*z2.protein
+    end
   
-  Figure \ref{fig:host_aware_sim} shows a set of simulations of the host-aware antithetic controller performed with \textit{SBML2dae}.
-  In these simulations, we have considered two simplifications of the model: (i) to neglect the burden produced by the antithetic controller to the host---this is done by removing the \onemodelline{z1.W + z2.W + z12.W} term from line 26 of Code \ref{lst:WildTypeAntitheticController}---, and (ii) to neglect the dilution of the sigma and anti-sigma factors of the antithetic controller.
+    rule
+      x.TF  := z1.protein  # Set z1 as the transcription factor of x.
+      z2.TF := x.protein   # Set x as the transcription factor of z2.
+    end
   
-  \begin{figure}[h]
-    \centering
-    \includegraphics[]{examples/03_onemodel/figs/Example_03.eps}
-    \caption{
-      Set of simulations of the host-aware antithetic controller, each line corresponds to a simulation with different conditions.
-      The solid lines correspond to simulations that neglect the dilution of the sigma and anti-sigma factors on the antithetic controller, while the dashed lines correspond to simulations that take dilution into account.
-      The blue lines correspond to simulations that neglect the burden produced by the antithetic controller to the host, and the red lines correspond to simulations in which this burden is taken into account.
-      The left plot shows the protein of interest $x$ to be controlled by the antithetic controller, the reference of the antithetic controller was set to \SI{70}{fg} (see Section \ref{ac_host:sec:ideal_antithetic} for more information about the antithetic controller's reference) .
-      The right plot shows the host growth rate.
-    }\label{fig:host_aware_sim}
-  \end{figure}
+    # We have to take into account the burden of the exogenous proteins.
+    rule cell.WSum_exo := z1.W + z2.W + z12.w + x.W
   
-  If we neglect the burden produced by the antithetic controller (blue lines), we can see how the growth rate does not change during simulation time (both solid and dashed blue lines overlap in the plot). However, if we consider that burden (red lines), we see how the growth rates vary accordingly---because now the host is using resources to express the antithetic controller instead of using them to grow.
+    # Lastly, we have to satisfy the inputs of z1, z2, z12, and x.
+    rule
+      z1.nu_t := cell.nu_t
+      z1.mu := cell.mu
+      ...
+    end
+  end
   
-  Suppose we neglect the dilution of the sigma and anti-sigma factors (solid lines). In that case, the antithetic controller will preserve the integral action, which makes $x$ to reach the reference of \SI{70}{fg} in the solid blue line, however in the solid red line (where the burden is taken into account) the $x$ still gets to the reference (this is not shown in the figure) but it takes much more time---due to effect of the integral action is diminished due to the cell is growing slower---. However, if we consider the dilution (dashed lines), the antithetic controller loses the integral action and never achieves the reference value.
-  
-  We have done this because it is an excellent example of showing the flexibility of the \textit{OneModel} workflow; it is straightforward to perform multiple simulations with different conditions taking advantage of the modularity.
+  standalone  # Example of how to use the WildType_AntitheticController.
+    ac = WildType_AntitheticController()
+  end
+
+
+:numref:`host_aware_sim` shows a set of simulations of the host-aware antithetic controller performed with SBML2dae.
+In these simulations, we have considered two simplifications of the model: (i) to neglect the burden produced by the antithetic controller to the host---this is done by removing the ``z1.W + z2.W + z12.W`` term from line 26 of Code :numref:`WildTypeAntitheticController`---, and (ii) to neglect the dilution of the sigma and anti-sigma factors of the antithetic controller.
+
+.. _host_aware_sim:
+.. figure:: ../images/examples/Example_03.svg
+  :align: center
+  :width: 500
+  :alt: simulation of host-aware antithetic
+
+  Set of simulations of the host-aware antithetic controller, each line corresponds to a simulation with different conditions.
+  The solid lines correspond to simulations that neglect the dilution of the sigma and anti-sigma factors on the antithetic controller, while the dashed lines correspond to simulations that take dilution into account.
+  The blue lines correspond to simulations that neglect the burden produced by the antithetic controller to the host, and the red lines correspond to simulations in which this burden is taken into account.
+  The left plot shows the protein of interest ``x`` to be controlled by the antithetic controller, the reference of the antithetic controller was set to 70 fg.
+  The right plot shows the host growth rate.
+
+If we neglect the burden produced by the antithetic controller (blue lines), we can see how the growth rate does not change during simulation time (both solid and dashed blue lines overlap in the plot). However, if we consider that burden (red lines), we see how the growth rates vary accordingly---because now the host is using resources to express the antithetic controller instead of using them to grow.
+
+Suppose we neglect the dilution of the sigma and anti-sigma factors (solid lines). In that case, the antithetic controller will preserve the integral action, which makes ``x`` to reach the reference of 70 fg in the solid blue line, however in the solid red line (where the burden is taken into account) the ``x`` still gets to the reference (this is not shown in the figure) but it takes much more time---due to effect of the integral action is diminished due to the cell is growing slower---. However, if we consider the dilution (dashed lines), the antithetic controller loses the integral action and never achieves the reference value.
+
+We have done this because it is an excellent example of showing the flexibility of the OneModel workflow; it is straightforward to perform multiple simulations with different conditions taking advantage of the modularity.
