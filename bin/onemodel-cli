@@ -1,5 +1,0 @@
-#!/bin/python
-
-from onemodel.cli.cli import cli
-
-cli(obj={})
