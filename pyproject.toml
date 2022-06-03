@@ -24,7 +24,7 @@ classifiers = [
 
 [tool.poetry.dependencies]
 python = "^3.8"
-tatsu = "*"
+tatsu = "5.6.1"
 PyQt5 = "*"
 click = "*"
 importlib-resources = "*"

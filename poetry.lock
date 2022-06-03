@@ -70,7 +70,7 @@ python-versions = "*"
 
 [[package]]
 name = "tatsu"
-version = "5.7.0"
+version = "5.6.1"
 description = "TatSu takes a grammar in a variation of EBNF as input, and outputs a memoizing PEG/Packrat parser in Python."
 category = "main"
 optional = false
@@ -94,7 +94,7 @@ testing = ["pytest (>=6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytest-
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "aa8092f3dedb9b511b843ce3aacbdbce0cb7155f51247b619cb64af586f5a000"
+content-hash = "7c42c5d5895e2631e5335fcd14fc4f556d2ecb0fe189905268157e448d3df81f"
 
 [metadata.files]
 click = [
@@ -175,8 +175,8 @@ python-libsbml = [
     {file = "python_libsbml-5.19.5-cp39-cp39-win_amd64.whl", hash = "sha256:18833aa8b6c98dfa7333bc269b218e7d97968d08ce694b7fdc7e1fef757770e3"},
 ]
 tatsu = [
-    {file = "TatSu-5.7.0-py2.py3-none-any.whl", hash = "sha256:9eebadfc2889d8e82e197df22913df56ff204bf4cfc62db49a5c7edd084e10b4"},
-    {file = "TatSu-5.7.0.zip", hash = "sha256:428136cd4aa9600fcd01428bd5667fc752062f54bd0148dc1e64fee7b8d05fa4"},
+    {file = "TatSu-5.6.1-py2.py3-none-any.whl", hash = "sha256:7cf03e15ab170fd91489b855cd8a4942b6cd1ac5e0eabcb852793a716600dbf0"},
+    {file = "TatSu-5.6.1.zip", hash = "sha256:6a4f07aa7bfe9dfbee8015824feaf13f0b1a89577e2ee5a4a62c18630c309d4e"},
 ]
 zipp = [
     {file = "zipp-3.8.0-py3-none-any.whl", hash = "sha256:c4f6e5bbf48e74f7a38e7cc5b0480ff42b0ae5178957d564d18932525d5cf099"},
