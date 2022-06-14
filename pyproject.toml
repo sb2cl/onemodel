@@ -3,13 +3,13 @@ name = "onemodel"
 version = "0.1.0"
 description = "OneModel: an open-source SBML modeling tool"
 authors = ["Fernando N. Santos-Navarro <fersann1@upv.es>"]
-license = "MIT"
+license = "Apache-2.0"
 readme = "README.md"
 repository = "https://github.com/sb2cl/onemodel"
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Science/Research",
-    "License :: OSI Approved :: MIT License",
+    "License :: OSI Approved :: Apache Software License",
     "Operating System :: OS Independent",
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
@@ -20,7 +20,6 @@ classifiers = [
     "Programming Language :: Python :: 3.10",
     "Topic :: Scientific/Engineering :: Bio-Informatics",
 ]
-
 
 [tool.poetry.dependencies]
 python = "^3.8"
