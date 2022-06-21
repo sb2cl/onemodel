@@ -15,7 +15,7 @@ build:
 	cd dist; unzip $(NAME)-$(VERSION)-py3-none-any.whl
 	mv dist/NOTICE dist/$(NAME)-$(VERSION).dist-info
 	rm dist/$(NAME)-$(VERSION)-py3-none-any.whl
-	cd dist; zip $(NAME)-$(VERSION)-py3-none-any.whl $(NAME)/* $(NAME)-$(VERSION).dist-info/*
+	cd dist; zip -r $(NAME)-$(VERSION)-py3-none-any.whl $(NAME) $(NAME)-$(VERSION).dist-info
 	rm -r dist/$(NAME)
 	rm -r dist/$(NAME)-$(VERSION).dist-info
 
