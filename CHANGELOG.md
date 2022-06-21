@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add a Makefile to streamline using `poetry`.
 - The NOTICE file is included in the build.
 - Add test for exporting from onemodel into matlab.
+- Add `noxfile.py`
 
 ## [0.1.0] - 2022-06-14
 
