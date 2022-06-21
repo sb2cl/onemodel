@@ -10,7 +10,7 @@ lint:
 # Poetry does not place the NOTICE file inside the dist-info folder
 # TODO: When poetry fixes this bug, we can remove the code for moving the NOTICE file.
 build:
-	rm -r dist
+	-rm -r dist
 	poetry build
 	cd dist; unzip $(NAME)-$(VERSION)-py3-none-any.whl
 	mv dist/NOTICE dist/$(NAME)-$(VERSION).dist-info
