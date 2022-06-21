@@ -2,8 +2,8 @@ import os
 
 import pytest
 from onemodel.cli import cli
-from onemodel.sbml2dae.dae_model import DaeModel
-from onemodel.sbml2dae.matlab import Matlab
+from sbml2dae.dae_model import DaeModel
+from sbml2dae.matlab import Matlab
 
 examples = [
     "ex01_simple_gene_expression",
@@ -43,10 +43,10 @@ def load_example(example_filepath, output_dir):
 
 
 def export_files(matlab):
-    filepath = matlab.exportExample()
+    filepath = matlab.export_example()
     example_file = read_file_contents(filepath)
 
-    filepath = matlab.exportClass()
+    filepath = matlab.export_class()
     class_file = read_file_contents(filepath)
 
     return [example_file, class_file]

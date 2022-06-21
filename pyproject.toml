@@ -26,9 +26,10 @@ include = ["NOTICE"]
 python = "^3.8"
 tatsu = "5.6.1"
 PyQt5 = "*"
-click = "*"
+click = "^8.0.0"
 importlib-resources = "*"
-python-libsbml = "*"
+python-libsbml = "5.19.5"
+sbml2dae = "^0.1.5"
 
 [tool.poetry.dev-dependencies]
 nox-poetry = "*"
