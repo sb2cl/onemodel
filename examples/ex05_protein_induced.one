@@ -1,0 +1,27 @@
+### Definition of ProteinInduced. ###
+
+import 'ex03_protein_constitutive.one'
+
+## ProteinInduced extends the ProteinConstitutive model to make ##
+## the expression inducible by a transcription factor.          ##
+model ProteinInduced(ProteinConstitutive)
+
+  input TF       # Define the transcriptio factor as an input.
+  species k_m=0  # Override the parameter k_m to be a species.
+  
+  parameter
+    h = 1        # Half-activation threshold.
+    k_m_max = 1  # Maximum transcription rate.
+  end
+  
+  # Set the value of k_m as an substitution equation.
+  rule k_m := k_m_max * TF/(TF+h)
+end
+
+## Example of how to use ProteinInduced. ##
+standalone
+  A = ProteinConstitutive()
+  B = ProteinInduced()
+
+  rule B.TF := A.protein  # Set protein A as the transcription factor of B.
+end

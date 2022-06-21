@@ -8,8 +8,8 @@ import onemodel
 from onemodel.dsl.repl import Repl
 from onemodel.dsl.onemodel_walker import OneModelWalker
 from onemodel.dsl.context import Context
-from onemodel.sbml2dae.dae_model import DaeModel
-from onemodel.sbml2dae.matlab import Matlab
+from sbml2dae.dae_model import DaeModel
+from sbml2dae.matlab import Matlab
 
 @click.group()
 def cli():
@@ -38,7 +38,9 @@ def run(input_file):
     (filename, extension) = os.path.splitext(base)
 
     # Read text from input_file.
-    text = open(input_file).read()
+    f = open(input_file)
+    text = input_file.read()
+    f.close()
 
     # Load the AST model walker.
     walker = OneModelWalker(filename)
@@ -128,7 +130,9 @@ def onemodel2sbml(input_file, filename, output):
 
 
     # Read input file.
-    text = open(input_file).read()
+    file = open(input_file)
+    text = file.read()
+    file.close()
     print('\tRead input file.')
 
     # Load the AST model walker.
@@ -164,10 +168,10 @@ def sbml2matlab(sbml_filename, output):
     # Export into matlab files.
     matlab = Matlab(dae, output)
 
-    filepath = matlab.exportExample()
+    filepath = matlab.export_example()
     print(f'\tGenerated {filepath}')
 
-    filepath = matlab.exportClass()
+    filepath = matlab.export_class()
     print(f'\tGenerated {filepath}')
 
 def main():

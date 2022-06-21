@@ -1,0 +1,20 @@
+### Simple gene expression model. ###
+
+species       # Start declaring species.
+  mRNA=0      # mRNA concentration.
+  protein=0   # Protein concentration.
+end           # End declaring species.
+
+parameter     # Start declaring parameters.
+  k_m=1       # mRNA transcription rate.
+  d_m=1       # mRNA degradation rate.
+  k_p=1       # Protein translation rate.
+  d_p=1       # Protein degradation rate.
+end           # End delaring parameters.
+
+reaction                                # Start declaring reactions.
+  0 -> mRNA              ; k_m          # mRNA transcription.
+  mRNA -> 0              ; d_m*mRNA     # mRNA degradation.
+  mRNA -> mRNA + protein ; k_p*mRNA     # Protein translation.
+  protein -> 0           ; d_p*protein  # Protein degradation.
+end                                     # Stop declaring reactions.
