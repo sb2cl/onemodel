@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sbml xmlns="http://www.sbml.org/sbml/level3/version2/core" level="3" version="2">
+  <model id="ex04_two_genes_expression" name="ex04_two_genes_expression" substanceUnits="mole" timeUnits="second" extentUnits="mole">
+    <listOfUnitDefinitions>
+      <unitDefinition id="per_second">
+        <listOfUnits>
+          <unit kind="second" exponent="-1" scale="0" multiplier="1"/>
+        </listOfUnits>
+      </unitDefinition>
+    </listOfUnitDefinitions>
+    <listOfCompartments>
+      <compartment id="default_compartment" spatialDimensions="3" size="1" units="litre" constant="true"/>
+    </listOfCompartments>
+    <listOfSpecies>
+      <species id="A__mRNA" compartment="default_compartment" initialConcentration="0" substanceUnits="mole" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="A__protein" compartment="default_compartment" initialConcentration="0" substanceUnits="mole" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="B__mRNA" compartment="default_compartment" initialConcentration="0" substanceUnits="mole" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="B__protein" compartment="default_compartment" initialConcentration="0" substanceUnits="mole" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+    </listOfSpecies>
+    <listOfParameters>
+      <parameter id="A__k_m" value="1" units="per_second" constant="true"/>
+      <parameter id="A__d_m" value="1" units="per_second" constant="true"/>
+      <parameter id="A__k_p" value="1" units="per_second" constant="true"/>
+      <parameter id="A__d_p" value="1" units="per_second" constant="true"/>
+      <parameter id="B__k_m" value="1" units="per_second" constant="true"/>
+      <parameter id="B__d_m" value="1" units="per_second" constant="true"/>
+      <parameter id="B__k_p" value="1" units="per_second" constant="true"/>
+      <parameter id="B__d_p" value="1" units="per_second" constant="true"/>
+    </listOfParameters>
+    <listOfReactions>
+      <reaction id="A___J0" reversible="false">
+        <listOfProducts>
+          <speciesReference species="A__mRNA" constant="true"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <ci> A__k_m </ci>
+          </math>
+        </kineticLaw>
+      </reaction>
+      <reaction id="A___J1" reversible="false">
+        <listOfReactants>
+          <speciesReference species="A__mRNA" constant="true"/>
+        </listOfReactants>
+        <listOfModifiers>
+          <modifierSpeciesReference species="A__mRNA"/>
+        </listOfModifiers>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <times/>
+              <ci> A__d_m </ci>
+              <ci> A__mRNA </ci>
+            </apply>
+          </math>
+        </kineticLaw>
+      </reaction>
+      <reaction id="A___J2" reversible="false">
+        <listOfReactants>
+          <speciesReference species="A__mRNA" constant="true"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="A__mRNA" constant="true"/>
+          <speciesReference species="A__protein" constant="true"/>
+        </listOfProducts>
+        <listOfModifiers>
+          <modifierSpeciesReference species="A__mRNA"/>
+        </listOfModifiers>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <times/>
+              <ci> A__k_p </ci>
+              <ci> A__mRNA </ci>
+            </apply>
+          </math>
+        </kineticLaw>
+      </reaction>
+      <reaction id="A___J3" reversible="false">
+        <listOfReactants>
+          <speciesReference species="A__protein" constant="true"/>
+        </listOfReactants>
+        <listOfModifiers>
+          <modifierSpeciesReference species="A__protein"/>
+        </listOfModifiers>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <times/>
+              <ci> A__d_p </ci>
+              <ci> A__protein </ci>
+            </apply>
+          </math>
+        </kineticLaw>
+      </reaction>
+      <reaction id="B___J4" reversible="false">
+        <listOfProducts>
+          <speciesReference species="B__mRNA" constant="true"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <ci> B__k_m </ci>
+          </math>
+        </kineticLaw>
+      </reaction>
+      <reaction id="B___J5" reversible="false">
+        <listOfReactants>
+          <speciesReference species="B__mRNA" constant="true"/>
+        </listOfReactants>
+        <listOfModifiers>
+          <modifierSpeciesReference species="B__mRNA"/>
+        </listOfModifiers>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <times/>
+              <ci> B__d_m </ci>
+              <ci> B__mRNA </ci>
+            </apply>
+          </math>
+        </kineticLaw>
+      </reaction>
+      <reaction id="B___J6" reversible="false">
+        <listOfReactants>
+          <speciesReference species="B__mRNA" constant="true"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="B__mRNA" constant="true"/>
+          <speciesReference species="B__protein" constant="true"/>
+        </listOfProducts>
+        <listOfModifiers>
+          <modifierSpeciesReference species="B__mRNA"/>
+        </listOfModifiers>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <times/>
+              <ci> B__k_p </ci>
+              <ci> B__mRNA </ci>
+            </apply>
+          </math>
+        </kineticLaw>
+      </reaction>
+      <reaction id="B___J7" reversible="false">
+        <listOfReactants>
+          <speciesReference species="B__protein" constant="true"/>
+        </listOfReactants>
+        <listOfModifiers>
+          <modifierSpeciesReference species="B__protein"/>
+        </listOfModifiers>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <times/>
+              <ci> B__d_p </ci>
+              <ci> B__protein </ci>
+            </apply>
+          </math>
+        </kineticLaw>
+      </reaction>
+    </listOfReactions>
+  </model>
+</sbml>

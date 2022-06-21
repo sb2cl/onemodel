@@ -81,6 +81,8 @@ class Matlab:
         f.write(f'\tend\n')
         f.write(f'end\n')
 
+        f.close()
+
         return filepath
 
     def writeClassHeader(self, f):
