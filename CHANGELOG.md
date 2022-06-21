@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Add the changelog.
+- Add `CHANGELOG.md`.
 - Add a `Makefile` to streamline using `poetry`.
 - The `NOTICE` file is included in the build.
 - Add test for exporting from onemodel into matlab.
@@ -31,6 +31,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Use `poetry` for managing the project.
 
-[unreleased]: https://github.com/sb2cl/onemodel/compare/v0.1.0...develop
+[unreleased]: https://github.com/sb2cl/onemodel/compare/v0.2.0...develop
 [0.2.0]: https://github.com/sb2cl/onemodel/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/sb2cl/onemodel/releases/tag/v0.1.0
