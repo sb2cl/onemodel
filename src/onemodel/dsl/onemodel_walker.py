@@ -147,8 +147,10 @@ class OneModelWalker(NodeWalker):
         f = os.path.dirname(f)
         f = os.path.join(f, filepath)
         f = os.path.abspath(f)
-
-        text = open(f).read()
+        
+        file = open(f) 
+        text = file.read()
+        file.close()
 
         # Save current self.isImporting.
         aux = self.isImporting

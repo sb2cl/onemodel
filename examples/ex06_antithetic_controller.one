@@ -1,0 +1,25 @@
+### Definition of AntitheticController. ###
+
+import 'ex05_protein_induced.one'  # ProteinConstitutive and ProteinInduced.
+
+model AntitheticController
+  z1 = ProteinConstitutive()  # Sigma factor.
+  z2 = ProteinInduced()       # Anti-sigma factor.
+  x  = ProteinInduced()       # Protein of interest to control.
+  parameter gamma = 1         # Anithetical sequestration rate.
+
+  reaction
+    # We have to add the antithetical reaction.
+    # Note that we can access species inside objects using '.' operator.
+    z1.protein + z2.protein -> 0 ; gamma*z1.protein*z2.protein
+  end
+
+  rule
+    x.TF  := z1.protein  # Set z1 as the transcription factor of x. 
+    z2.TF := x.protein   # Set x as the transcription factor of z2.
+  end
+end
+
+standalone  # Example of how to use the AntitheticController.
+  circuit = AntitheticController()
+end
