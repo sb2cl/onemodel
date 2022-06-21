@@ -10,14 +10,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Add the changelog.
-- Add a Makefile to streamline using `poetry`.
-- The NOTICE file is included in the build.
+- Add a `Makefile` to streamline using `poetry`.
+- The `NOTICE` file is included in the build.
 - Add test for exporting from onemodel into matlab.
-- Add `noxfile.py`
+- Add `noxfile.py`.
 
 ### Changed
 
-- The subpackage sbml2dae is removed from the source code of onemodel and it is now installed from its repository.
+- The subpackage `sbml2dae` is removed from the source code of `onemodel` and it is now installed from its repository.
+
+### Removed
+
+- Removed `MANIFEST.in` and `setup.py`, we use poetry instead.
 
 ## [0.1.0] - 2022-06-14
 
