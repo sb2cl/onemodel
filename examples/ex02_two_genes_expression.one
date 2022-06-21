@@ -1,0 +1,24 @@
+### How NOT to model the expression of two genes. ###
+
+species         
+  mRNA_A=0, protein_A=0   # Gene A mRNA and protein concentration.
+  mRNA_B=0, protein_B=0   # Gene A mRNA and protein concentration.
+end
+
+parameter
+  k_m_A=1,  d_m_A=1   # Transcription and degradation rates of mRNA A.
+  k_p_A=1,  d_p_A=1   # Translation and degradation rates of protein A.
+  k_m_B=1,  d_m_B=1   # Transcription and degradation rates of mRNA B.
+  k_p_B=1,  d_p_B=1   # Translation and degradation rates of protein B.
+end
+
+reaction
+  0 -> mRNA_A                  ; k_m_A           # Transcription mRNA A.
+  mRNA_A -> 0                  ; d_m_A*mRNA_A    # Degradation mRNA A.
+  mRNA_A -> mRNA_A + protein_A ; k_p_A*mRNA_A    # Translation protein A.
+  protein_A -> 0               ; d_p_A*protein_A # Degradation protein A.
+  0 -> mRNA_B                  ; k_m_B           # Transcription mRNA B.
+  mRNA_B -> 0                  ; d_m_B*mRNA_B    # Degradation mRNA B.
+  mRNA_B -> mRNA_B + protein_B ; k_p_B*mRNA_B    # Translation protein B.
+  protein_B -> 0               ; d_p_B*protein_B # Degradation protein B.
+end

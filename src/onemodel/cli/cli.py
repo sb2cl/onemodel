@@ -38,7 +38,9 @@ def run(input_file):
     (filename, extension) = os.path.splitext(base)
 
     # Read text from input_file.
-    text = open(input_file).read()
+    f = open(input_file)
+    text = input_file.read()
+    f.close()
 
     # Load the AST model walker.
     walker = OneModelWalker(filename)
@@ -128,7 +130,9 @@ def onemodel2sbml(input_file, filename, output):
 
 
     # Read input file.
-    text = open(input_file).read()
+    file = open(input_file)
+    text = file.read()
+    file.close()
     print('\tRead input file.')
 
     # Load the AST model walker.

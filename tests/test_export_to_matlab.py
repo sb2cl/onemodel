@@ -1,6 +1,7 @@
 import os
 
 import pytest
+from onemodel.cli import cli
 from onemodel.sbml2dae.dae_model import DaeModel
 from onemodel.sbml2dae.matlab import Matlab
 
@@ -19,7 +20,14 @@ def test_examples(tmpdir, example_name: str) -> None:
     """Test that the example SBML files are corretly exported into MATLAB."""
 
     examples_dir = os.path.dirname(os.path.abspath("README.md")) + "/examples/"
-    example_filepath = examples_dir + example_name + ".xml"
+
+    cli.onemodel2sbml(
+        examples_dir + example_name + ".one",
+        example_name,
+        str(tmpdir)
+    )
+
+    example_filepath = str(tmpdir) + "/" + example_name + ".xml"
 
     matlab = load_example(example_filepath, tmpdir)
     exported_files = export_files(matlab)

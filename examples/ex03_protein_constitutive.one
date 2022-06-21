@@ -1,0 +1,24 @@
+### Definition of ProteinConstitutive. ###
+
+## ProteinConstitutive models constitutive gene expression. ##
+model ProteinConstitutive  # Start declaring model.
+
+  species mRNA=0, protein=0  # mRNA and protein concentration.
+  
+  parameter
+    k_m=1, d_m=1  # mRNA transcription and degradation rate.
+    k_p=1, d_p=1  # Protein translation and degradation rate.
+  end
+  
+  reaction
+    0 -> mRNA              ; k_m          # mRNA transcription.
+    mRNA -> 0              ; d_m*mRNA     # mRNA degradation.
+    mRNA -> mRNA + protein ; k_p*mRNA     # Protein translation.
+    protein -> 0           ; d_p*protein  # Protein degradation.
+  end
+end  # End declaring model.
+
+## Example of how to use ProteinConstitutive. ##
+standalone        
+  A = ProteinConstitutive()
+end

@@ -1,0 +1,13 @@
+### How to model the expression of two proteins. ###
+
+# Import ProteinConstitutive model.
+# (note that the standalone code is not imported).
+import './ex03_protein_constitutive.one'
+
+# Initialize A and B as instances of ProteinConstitutive.
+A = ProteinConstitutive()  
+B = ProteinConstitutive()
+
+# We could easily add more proteins by writing:
+# C = ProteinConstitutive()
+# ...
