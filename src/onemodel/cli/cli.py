@@ -8,8 +8,8 @@ import onemodel
 from onemodel.dsl.repl import Repl
 from onemodel.dsl.onemodel_walker import OneModelWalker
 from onemodel.dsl.context import Context
-from onemodel.sbml2dae.dae_model import DaeModel
-from onemodel.sbml2dae.matlab import Matlab
+from sbml2dae.dae_model import DaeModel
+from sbml2dae.matlab import Matlab
 
 @click.group()
 def cli():
@@ -168,10 +168,10 @@ def sbml2matlab(sbml_filename, output):
     # Export into matlab files.
     matlab = Matlab(dae, output)
 
-    filepath = matlab.exportExample()
+    filepath = matlab.export_example()
     print(f'\tGenerated {filepath}')
 
-    filepath = matlab.exportClass()
+    filepath = matlab.export_class()
     print(f'\tGenerated {filepath}')
 
 def main():
