@@ -146,7 +146,7 @@ flake8 = ">=3.5,<5"
 
 [[package]]
 name = "flake8-bugbear"
-version = "22.4.25"
+version = "22.6.22"
 description = "A plugin for flake8 finding likely bugs and design problems in your program. Contains warnings that don't belong in pyflakes and pycodestyle."
 category = "dev"
 optional = false
@@ -446,18 +446,6 @@ optional = false
 python-versions = "*"
 
 [[package]]
-name = "sbml2dae"
-version = "0.1.5"
-description = "A customizable SBML to Matlab parser"
-category = "main"
-optional = false
-python-versions = ">=3.7,<4.0"
-
-[package.dependencies]
-click = ">=8.0.0,<9.0.0"
-python-libsbml = "5.19.5"
-
-[[package]]
 name = "six"
 version = "1.16.0"
 description = "Python 2 and 3 compatibility utilities"
@@ -533,7 +521,7 @@ testing = ["pytest (>=6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytest-
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "11ad8de570823b84b93672d64d33a2741403575c56ddfbb6427868319c06c266"
+content-hash = "42cc1192a36e1d9629dfac92a1310b69f9c8059d49decf45a33ae959d5343653"
 
 [metadata.files]
 argcomplete = [
@@ -645,8 +633,8 @@ flake8-broken-line = [
     {file = "flake8_broken_line-0.4.0-py3-none-any.whl", hash = "sha256:e9c522856862239a2c7ef2c1de0276fa598572aa864bd4e9c7efc2a827538515"},
 ]
 flake8-bugbear = [
-    {file = "flake8-bugbear-22.4.25.tar.gz", hash = "sha256:f7c080563fca75ee6b205d06b181ecba22b802babb96b0b084cc7743d6908a55"},
-    {file = "flake8_bugbear-22.4.25-py3-none-any.whl", hash = "sha256:ec374101cddf65bd7a96d393847d74e58d3b98669dbf9768344c39b6290e8bd6"},
+    {file = "flake8-bugbear-22.6.22.tar.gz", hash = "sha256:ac3317eba27d79dc19dcdeb7356ca1f656f0cde11d899c4551badf770f05cbef"},
+    {file = "flake8_bugbear-22.6.22-py3-none-any.whl", hash = "sha256:ad2b33dbe33a6d4ca1f0037e1d156d0a89107ee63c0600e3b4f7b60e37998ac2"},
 ]
 flake8-comprehensions = [
     {file = "flake8-comprehensions-3.10.0.tar.gz", hash = "sha256:181158f7e7aa26a63a0a38e6017cef28c6adee71278ce56ce11f6ec9c4905058"},
@@ -817,10 +805,6 @@ python-libsbml = [
     {file = "python_libsbml-5.19.5-cp39-cp39-musllinux_1_1_x86_64.whl", hash = "sha256:827295384f69f1e2b7cb9fd4f36223631889cd4d88ab1a22540eeb6e0faf07c8"},
     {file = "python_libsbml-5.19.5-cp39-cp39-win32.whl", hash = "sha256:000a8f41db22accc7d753dd1d57fd4d577186ae11e6af07dce452b411d12aaf9"},
     {file = "python_libsbml-5.19.5-cp39-cp39-win_amd64.whl", hash = "sha256:18833aa8b6c98dfa7333bc269b218e7d97968d08ce694b7fdc7e1fef757770e3"},
-]
-sbml2dae = [
-    {file = "sbml2dae-0.1.5-py3-none-any.whl", hash = "sha256:8101d5daa386f93e993d5d04895c4a939da27de1c7f88c797bd0c11e7d4d8060"},
-    {file = "sbml2dae-0.1.5.tar.gz", hash = "sha256:2803f67d2884817501332ed6c23cb68c39266bddc5842226bc9915d31db0ac47"},
 ]
 six = [
     {file = "six-1.16.0-py2.py3-none-any.whl", hash = "sha256:8abb2f1d86890a2dfb989f9a77cfcfd3e47c2a354b01111771326f8aa26e0254"},

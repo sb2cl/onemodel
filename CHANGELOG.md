@@ -9,7 +9,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Changed test to just test for sbml generation (not Matlab generation).
+- Changed tests to just test for sbml generation (not Matlab generation).
+
+### Removed
+
+- The generation of MATLAB code is removed (onemodel only generates sbml code as output).
+- The subpackage `onemodel.cli` is removed from the source code of `onemodel` (it has its own repository as `onemodel-cli`).
+- The subpackage `onemodel.gui` is removed from the source code of `onemodel` (it has its own repository as `onemodel-gui`).
+- The subpackage `sbml2dae` is not installed in `onemodel`.
 
 ## [0.2.0] - 2022-06-21
 
