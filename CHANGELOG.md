@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Changed test to just test for sbml generation (not Matlab generation).
+
 ## [0.2.0] - 2022-06-21
 
 ### Added
