@@ -1,5 +1,5 @@
-from onemodel.dsl.values.function_base import FunctionBase
-from onemodel.dsl.values.object import Object
+from onemodel.values.function_base import FunctionBase
+from onemodel.values.object import Object
 
 class Model(FunctionBase):
     """ Definiton of Model.

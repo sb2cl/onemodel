@@ -4,8 +4,8 @@ from importlib_resources import files
 import tatsu
 from tatsu.walkers import NodeWalker
 
-from onemodel.dsl.onemodel_walker import OneModelWalker
-from onemodel.dsl.context import Context
+from onemodel.onemodel_walker import OneModelWalker
+from onemodel.context import Context
 
 class Repl:
     """ REPL

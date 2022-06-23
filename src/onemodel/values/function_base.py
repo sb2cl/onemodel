@@ -1,5 +1,5 @@
-from onemodel.dsl.values.value import Value
-from onemodel.dsl.context import Context
+from onemodel.values.value import Value
+from onemodel.context import Context
 
 class FunctionBase(Value):
     """ FunctionBase class for defining builting functions and user defined

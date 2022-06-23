@@ -1,7 +1,7 @@
 from libsbml import parseL3Formula
 
-from onemodel.dsl.values.value import Value
-from onemodel.dsl.utils import check, math_2_fullname
+from onemodel.values.value import Value
+from onemodel.utils import check, math_2_fullname
 
 class RuleAlgebraic(Value):
     """ SBML Algebraic Rule.

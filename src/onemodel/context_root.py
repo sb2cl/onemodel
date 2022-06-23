@@ -1,5 +1,5 @@
-from onemodel.dsl.context import Context
-from onemodel.dsl.values.function_builtin import FunctionBuiltin
+from onemodel.context import Context
+from onemodel.values.function_builtin import FunctionBuiltin
 
 class ContextRoot(Context):
     """ The root evaluation context.

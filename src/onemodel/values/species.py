@@ -1,5 +1,5 @@
-from onemodel.dsl.values.value import Value
-from onemodel.dsl.utils import check
+from onemodel.values.value import Value
+from onemodel.utils import check
 
 class Species(Value):
     """ SBML species.

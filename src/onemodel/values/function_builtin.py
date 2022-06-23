@@ -1,4 +1,4 @@
-from onemodel.dsl.values.function_base import FunctionBase
+from onemodel.values.function_base import FunctionBase
 
 class FunctionBuiltin(FunctionBase):
     """ FunctionBuiltin are funtions loaded in the root context by default.
