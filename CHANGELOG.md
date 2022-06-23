@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - The subpackage `onemodel.cli` is removed from the source code of `onemodel` (it has its own repository as `onemodel-cli`).
 - The subpackage `onemodel.gui` is removed from the source code of `onemodel` (it has its own repository as `onemodel-gui`).
 - The subpackage `sbml2dae` is not installed in `onemodel`.
+- The `examples` for learning `onemodel` are removed from the source code of `onemodel` (they have their own repository as `onemodel-examples`).
 
 ## [0.2.0] - 2022-06-21
 
