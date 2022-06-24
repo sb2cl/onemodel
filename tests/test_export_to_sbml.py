@@ -1,7 +1,7 @@
 import os
 
 import pytest
-from onemodel.onemodel_walker import OneModelWalker
+from onemodel.dsl.onemodel_walker import OneModelWalker
 
 examples = [
     "ex01_simple_gene_expression",

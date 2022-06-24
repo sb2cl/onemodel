@@ -1,5 +1,5 @@
-from onemodel.values.value import Value
-from onemodel.context import Context
+from onemodel.core.values.value import Value
+from onemodel.core.context import Context
 
 class Object(Context, Value):
     """ Definition of Object.

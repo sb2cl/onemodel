@@ -1,10 +1,10 @@
 from libsbml import parseL3Formula
 
-from onemodel.values.value import Value
+from onemodel.core.values.value import Value
 from onemodel.utils import check, math_2_fullname
 
-class RuleAssignment(Value):
-    """ SBML Assignment Rule.
+class RuleRate(Value):
+    """ SBML Rate Rule.
     """
     def __init__(self):
         super().__init__()
@@ -17,31 +17,30 @@ class RuleAssignment(Value):
         aux = math_2_fullname(self.math, self.definition_context)
         math_ast = parseL3Formula(aux)
 
-        r = model.createAssignmentRule ()
+        r = model.createRateRule()
 
         check(
             r,
-            f'create assignment rule {name}'
+            f'create rate rule {name}'
         )
 
         check(
             r.setIdAttribute(name), 
-            f'set assignment rule id {name}'
+            f'set rate rule id {name}'
         )
 
         check(
             r.setVariable(variable),
-            f'set variable on assignment rule {name}'
+            f'set variable on rate rule {name}'
         )
 
         check(
             r.setMath(math_ast),
-            f'set math on assignment rule {name}'
+            f'set math on rate rule {name}'
         )
 
-
     def __str__(self):
-        return f'<assignment rule "{self.variable} = {self.math}">'
+        return '<rate rule>'
 
     def __repr__(self):
         return self.__str__()

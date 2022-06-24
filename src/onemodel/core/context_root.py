@@ -1,5 +1,5 @@
-from onemodel.context import Context
-from onemodel.values.function_builtin import FunctionBuiltin
+from onemodel.core.context import Context
+from onemodel.core.values.function_builtin import FunctionBuiltin
 
 class ContextRoot(Context):
     """ The root evaluation context.

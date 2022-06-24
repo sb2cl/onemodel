@@ -1,5 +1,5 @@
-from onemodel.values.function_base import FunctionBase
-from onemodel.values.object import Object
+from onemodel.core.values.function_base import FunctionBase
+from onemodel.core.values.object import Object
 
 class Model(FunctionBase):
     """ Definiton of Model.
