@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Changed tests to just test for sbml generation (not Matlab generation).
+- Separated the semantic model code (onemodel.core) from the domain-specific language code (onemodel.dsl).
 
 ### Removed
 
