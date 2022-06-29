@@ -1,6 +1,6 @@
 from xml.etree import ElementTree
 
-from onemodel.core.parameter import Parameter
+from onemodel.core.objects.parameter import Parameter
 from onemodel.core.onemodel import OneModel
 
 

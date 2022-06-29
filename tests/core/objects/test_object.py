@@ -1,4 +1,4 @@
-from onemodel.core.object import Object
+from onemodel.core.objects.object import Object
 
 
 def test_init():

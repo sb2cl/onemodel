@@ -1,5 +1,5 @@
 from onemodel.core.check import check
-from onemodel.core.object import Object
+from onemodel.core.objects.object import Object
 
 
 class Parameter (Object):
