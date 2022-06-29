@@ -1,4 +1,4 @@
-from onemodel.values.function_base import FunctionBase
+from onemodel.core.values.function_base import FunctionBase
 
 class Function(FunctionBase):
     def __init__(self, name, arg_names, body_node):

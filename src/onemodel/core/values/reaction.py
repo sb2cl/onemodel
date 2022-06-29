@@ -1,6 +1,6 @@
 from libsbml import parseL3Formula, Species
 
-from onemodel.values.value import Value
+from onemodel.core.values.value import Value
 from onemodel.utils import check, getAstNames, math_2_fullname
 
 class Reaction(Value):

@@ -1,4 +1,4 @@
-from onemodel.values.value import Value
+from onemodel.core.values.value import Value
 
 class String(Value):
     def __init__(self, value):

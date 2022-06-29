@@ -7,20 +7,20 @@ from tatsu.walkers import NodeWalker
 
 from libsbml import *
 
-from onemodel.context import Context
-from onemodel.context_root import ContextRoot
+from onemodel.core.context import Context
+from onemodel.core.context_root import ContextRoot
 
-from onemodel.values.species import Species
-from onemodel.values.parameter import Parameter
-from onemodel.values.reaction import Reaction
-from onemodel.values.rule_rate import RuleRate
-from onemodel.values.rule_assignment import RuleAssignment
-from onemodel.values.rule_algebraic import RuleAlgebraic
-from onemodel.values.number import Number
-from onemodel.values.string import String
-from onemodel.values.struct import Struct
-from onemodel.values.function import Function
-from onemodel.values.model import Model
+from onemodel.core.values.species import Species
+from onemodel.core.values.parameter import Parameter
+from onemodel.core.values.reaction import Reaction
+from onemodel.core.values.rule_rate import RuleRate
+from onemodel.core.values.rule_assignment import RuleAssignment
+from onemodel.core.values.rule_algebraic import RuleAlgebraic
+from onemodel.core.values.number import Number
+from onemodel.core.values.string import String
+from onemodel.core.values.struct import Struct
+from onemodel.core.values.function import Function
+from onemodel.core.values.model import Model
 
 from onemodel.utils import check, getAstNames
 
@@ -52,7 +52,7 @@ class OneModelWalker(NodeWalker):
         self.isImporting = False
 
         # Load the grammar.
-        self.grammar = files('onemodel').joinpath('onemodel.ebnf').read_text()
+        self.grammar = files('onemodel.dsl').joinpath('onemodel.ebnf').read_text()
 
         # Load the parser with the grammar.
         self.parser = tatsu.compile(self.grammar, asmodel=True)

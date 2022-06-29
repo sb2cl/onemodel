@@ -1,10 +1,10 @@
 from libsbml import parseL3Formula
 
-from onemodel.values.value import Value
+from onemodel.core.values.value import Value
 from onemodel.utils import check, math_2_fullname
 
-class RuleRate(Value):
-    """ SBML Rate Rule.
+class RuleAlgebraic(Value):
+    """ SBML Algebraic Rule.
     """
     def __init__(self):
         super().__init__()
@@ -12,35 +12,31 @@ class RuleRate(Value):
         self.math = ''
 
     def add_value_to_model(self, name, model):
-        variable = self.definition_context.getFullname(self.variable)
+        # We have to pass the variable to the other equation side.
+        math = f'{self.variable} - ({self.math})'
 
-        aux = math_2_fullname(self.math, self.definition_context)
+        aux = math_2_fullname(math, self.definition_context)
         math_ast = parseL3Formula(aux)
 
-        r = model.createRateRule()
+        r = model.createAlgebraicRule ()
 
         check(
             r,
-            f'create rate rule {name}'
+            f'create algebraic rule {name}'
         )
 
         check(
             r.setIdAttribute(name), 
-            f'set rate rule id {name}'
-        )
-
-        check(
-            r.setVariable(variable),
-            f'set variable on rate rule {name}'
+            f'set algebraic rule id {name}'
         )
 
         check(
             r.setMath(math_ast),
-            f'set math on rate rule {name}'
+            f'set math on algebraic rule {name}'
         )
 
     def __str__(self):
-        return '<rate rule>'
+        return '<algebraic rule>'
 
     def __repr__(self):
         return self.__str__()

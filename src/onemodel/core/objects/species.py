@@ -1,9 +1,9 @@
-from onemodel.values.value import Value
-from onemodel.utils import check
+from onemodel.core.check import check
+from onemodel.core.objects.object import Object
 
-class Species(Value):
-    """ SBML species.
-    """
+
+class Species(Object):
+
     def __init__(self):
         super().__init__()
         self.compartment = 'default_compartment'
@@ -13,15 +13,7 @@ class Species(Value):
         self.boundaryCondition = False
         self.hasOnlySubstanceUnits = False
 
-    def add_value_to_model(self, name, model):
-        """ Add this value to the SBML model.
-
-        Arguments:
-            name: str
-                Name of this value.
-            model: LibSBML model
-                Model to include this value.
-        """
+    def add_to_SBML_model(self, name, model):
         s = model.createSpecies()
 
         check(
@@ -63,9 +55,3 @@ class Species(Value):
             s.setHasOnlySubstanceUnits(self.hasOnlySubstanceUnits),
             f'set "hasOnlySubstanceUnits" on {name}'
         )
-
-    def __str__(self):
-        return f'<species>'
-    
-    def __repr__(self):
-        return self.__str__()
