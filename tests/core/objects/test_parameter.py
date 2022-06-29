@@ -8,10 +8,11 @@ def test_init():
     result = Parameter()
     assert isinstance(result, Parameter)
 
+
 def test_add_2_SBML_model():
-    
+
     m = OneModel()
-    m.root['a'] = Parameter()
+    m.root["a"] = Parameter()
     result_string = m.get_SBML_string()
     result = ElementTree.fromstring(result_string)
 

@@ -43,4 +43,3 @@ def lint(s: Session) -> None:
 @session(venv_backend="none")
 def type_check(s: Session) -> None:
     s.run("mypy", "src", "tests", "noxfile.py")
-

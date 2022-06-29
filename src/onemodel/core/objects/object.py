@@ -3,6 +3,4 @@ class Object:
         pass
 
     def add_to_SBML_model(self, name, model):
-        raise Exception(
-            f'Class "{type(self).__name__}" has not defined add_to_SBML method.'
-        )
+        raise Exception(f'Class "{type(self).__name__}" has not defined add_to_SBML method.')

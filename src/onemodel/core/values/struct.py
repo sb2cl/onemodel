@@ -1,15 +1,15 @@
-from onemodel.core.values.value import Value
 from onemodel.core.context import Context
+from onemodel.core.values.value import Value
+
 
 class Struct(Context, Value):
-    """ Definition of Struct.
-    """
+    """Definition of Struct."""
+
     def __init__(self):
-        """ Initialize Struct
-        """
+        """Initialize Struct"""
         Context.__init__(self)
         Value.__init__(self)
-                
+
     def set(self, name, value):
         # Call only set from Context, and not from Value.
         Context.set(self, name, value)
@@ -18,12 +18,12 @@ class Struct(Context, Value):
         # Call only get from Context, and not from Value.
         return Context.get(self, name)
 
-    def __str__(self): 
-        string = f'<struct>\n'
-        string += f'fields:\n'
+    def __str__(self):
+        string = f"<struct>\n"
+        string += f"fields:\n"
         for symbol in self.symbols:
             value = self.get(symbol)
-            string += f'\t{symbol}: {value}\n'
+            string += f"\t{symbol}: {value}\n"
         return string
 
     def __repr__(self):

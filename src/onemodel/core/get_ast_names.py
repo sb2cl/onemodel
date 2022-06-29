@@ -1,6 +1,5 @@
 def get_ast_names(ast):
-    """ Returns the user defined names in a MathML ast.
-    """
+    """Returns the user defined names in a MathML ast."""
     names = []
 
     if ast.isName():

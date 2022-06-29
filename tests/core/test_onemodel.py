@@ -2,16 +2,18 @@ from xml.etree import ElementTree
 
 from onemodel.core.onemodel import OneModel
 
+
 def test_init():
 
     m = OneModel()
 
     assert isinstance(m, OneModel)
 
+
 def test_get_SBML_string():
 
     m = OneModel()
-    
+
     result_string = m.get_SBML_string()
     result = ElementTree.fromstring(result_string)
 
@@ -35,39 +37,40 @@ def test_get_SBML_string():
 
     assert ElementTree.tostring(result) == ElementTree.tostring(expected)
 
-#def test_ex01_simple_gene_expression():
+
+# def test_ex01_simple_gene_expression():
 #
 #    m = OneModel()
 #
 #    m['mRNA'] = Species(start=0)
 #    m['protein'] = Species(start=0)
 #
-#    m['k_m'] = Parameter(value=1)    
-#    m['d_m'] = Parameter(value=1)    
-#    m['k_p'] = Parameter(value=1)    
-#    m['d_p'] = Parameter(value=1)    
+#    m['k_m'] = Parameter(value=1)
+#    m['d_m'] = Parameter(value=1)
+#    m['k_p'] = Parameter(value=1)
+#    m['d_p'] = Parameter(value=1)
 #
 #    m['J1'] = Reaction(
-#        None, 
-#        'mRNA', 
+#        None,
+#        'mRNA',
 #        'k_m'
 #    )
 #
 #    m['J2'] = Reaction(
-#        'mRNA', 
-#        None, 
+#        'mRNA',
+#        None,
 #        'd_m*mRNA'
 #    )
 #
 #    m['J3'] = Reaction(
-#        'mRNA', 
+#        'mRNA',
 #        ['mRNA', 'protein'],
 #        'k_p*mRNA'
 #    )
 #
 #    m['J4'] = Reaction(
-#        'protein', 
-#        None, 
+#        'protein',
+#        None,
 #        'd_p*protein']
 #    )
 #

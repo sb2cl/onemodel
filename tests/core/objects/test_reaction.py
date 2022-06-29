@@ -1,7 +1,7 @@
 from xml.etree import ElementTree
 
-from onemodel.core.objects.reaction import Reaction
 from onemodel.core.objects.parameter import Parameter
+from onemodel.core.objects.reaction import Reaction
 from onemodel.core.objects.species import Species
 from onemodel.core.onemodel import OneModel
 
@@ -10,19 +10,20 @@ def test_init():
     result = Reaction()
     assert isinstance(result, Reaction)
 
+
 def test_add_2_SBML_model():
-    
+
     m = OneModel()
 
-    m.root['A'] = Species()
-    m.root['B'] = Species()
-    m.root['k'] = Parameter()
+    m.root["A"] = Species()
+    m.root["B"] = Species()
+    m.root["k"] = Parameter()
 
-    m.root['J1'] = Reaction()
-    r = m.root['J1']
-    r.reactants = ['A']
-    r.products = ['B']
-    r.kinetic_law = 'k'
+    m.root["J1"] = Reaction()
+    r = m.root["J1"]
+    r.reactants = ["A"]
+    r.products = ["B"]
+    r.kinetic_law = "k"
 
     result_string = m.get_SBML_string()
     result = ElementTree.fromstring(result_string)

@@ -8,13 +8,14 @@ def test_init():
     result = Species()
     assert isinstance(result, Species)
 
+
 def test_add_2_SBML_model():
 
     m = OneModel()
-    m.root['a'] = Species()
+    m.root["a"] = Species()
     result_string = m.get_SBML_string()
     result = ElementTree.fromstring(result_string)
-    
+
     print(result_string)
 
     expected_string = """<?xml version="1.0" encoding="UTF-8"?>
