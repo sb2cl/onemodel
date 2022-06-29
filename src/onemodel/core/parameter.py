@@ -10,5 +10,5 @@ class Parameter (Object):
         self.value = 0
         self.units = None
 
-    def add_to_SBML(self):
+    def add_to_SBML_model(self):
         pass

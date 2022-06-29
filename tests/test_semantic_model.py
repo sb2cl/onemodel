@@ -34,6 +34,8 @@ def test_ex01_simple_gene_expression():
         'd_p*protein']
     )
 
+    sbml = m.getSBML()
+
 def test_ex02_two_gene_expression():
 
     m = OneModel()
