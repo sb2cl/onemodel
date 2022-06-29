@@ -22,16 +22,16 @@ class OneModel:
             raise SystemExit('Could not create SBMLDocument object')
 
         # Create the basic Model object inside the SBMLDocument object.
-        self.model = self.document.createModel()
-        check(self.model, 'create model')
-        check(self.model.setName(self.model_name), 'set model name')
-        check(self.model.setId(self.model_name), 'set model id')
-        check(self.model.setTimeUnits('second'), 'set model-wide time units')
-        check(self.model.setExtentUnits('mole'), 'set model units of extent')
-        check(self.model.setSubstanceUnits('mole'), 'set model substance units')
+        self.SBML_model = self.document.createModel()
+        check(self.SBML_model, 'create model')
+        check(self.SBML_model.setName(self.model_name), 'set model name')
+        check(self.SBML_model.setId(self.model_name), 'set model id')
+        check(self.SBML_model.setTimeUnits('second'), 'set model-wide time units')
+        check(self.SBML_model.setExtentUnits('mole'), 'set model units of extent')
+        check(self.SBML_model.setSubstanceUnits('mole'), 'set model substance units')
 
         # Create a unit definition we will need later.
-        per_second = self.model.createUnitDefinition()
+        per_second = self.SBML_model.createUnitDefinition()
         check(per_second, 'create unit definition')
         check(per_second.setId('per_second'),'set unit definition id')
 
@@ -43,7 +43,7 @@ class OneModel:
         check(unit.setMultiplier(1), 'set unit multiplier')
 
         # Create a default_compartment.
-        c = self.model.createCompartment()
+        c = self.SBML_model.createCompartment()
     
         # TODO: This should be added to root context.
         #self.current_context.set(
@@ -58,9 +58,13 @@ class OneModel:
         check(c.setSpatialDimensions(3), 'set compartment dimensions')
         check(c.setUnits('litre'), 'set compartment size units')
 
+    def populate_SBML_document(self):
+        for name in self.root.names():
+            self.root[name].add_to_SBML_model(name, self.SBML_model)
+
     def get_SBML_string(self): 
         self.init_SBML_document()
-        # self.populate_SBML_document()
+        self.populate_SBML_document()
         # self.check_SBML_consistency()
         result = libsbml.writeSBMLToString(self.document)
 

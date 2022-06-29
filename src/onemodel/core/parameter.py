@@ -1,3 +1,4 @@
+from onemodel.core.check import check
 from onemodel.core.object import Object
 
 
@@ -8,7 +9,33 @@ class Parameter (Object):
 
         self.isConstant = True
         self.value = 0
-        self.units = None
+        self.units = 'per_second'
 
-    def add_to_SBML_model(self):
-        pass
+    def add_to_SBML_model(self, name, model):
+        p = model.createParameter()
+
+        check(
+            p,
+            f'create parameter {name}'
+        )
+
+        check(
+            p.setId(name),
+            f'set parameter {name} id'
+        )
+
+        check(
+            p.setConstant(self.isConstant),
+            f'set parameter {name} "constant"'
+        )
+
+        check(
+            p.setValue(self.value),
+            f'set parameter {name} value'
+        )
+
+        check(
+            p.setUnits(self.units),
+            f'set parameter {name} units'
+        )
+ 
