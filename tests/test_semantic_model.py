@@ -1,41 +1,4 @@
-#def test_ex01_simple_gene_expression():
-#
-#    m = OneModel()
-#
-#    m['mRNA'] = Species(start=0)
-#    m['protein'] = Species(start=0)
-#
-#    m['k_m'] = Parameter(value=1)    
-#    m['d_m'] = Parameter(value=1)    
-#    m['k_p'] = Parameter(value=1)    
-#    m['d_p'] = Parameter(value=1)    
-#
-#    m['J1'] = Reaction(
-#        None, 
-#        'mRNA', 
-#        'k_m'
-#    )
-#
-#    m['J2'] = Reaction(
-#        'mRNA', 
-#        None, 
-#        'd_m*mRNA'
-#    )
-#
-#    m['J3'] = Reaction(
-#        'mRNA', 
-#        ['mRNA', 'protein'],
-#        'k_p*mRNA'
-#    )
-#
-#    m['J4'] = Reaction(
-#        'protein', 
-#        None, 
-#        'd_p*protein']
-#    )
-#
-#    sbml = m.getSBML()
-#
+
 #def test_ex02_two_gene_expression():
 #
 #    m = OneModel()
