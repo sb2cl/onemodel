@@ -2,7 +2,7 @@ from onemodel.core.check import check
 from onemodel.core.objects.object import Object
 
 
-class Parameter (Object):
+class Parameter(Object):
 
     def __init__(self):
         super().__init__()

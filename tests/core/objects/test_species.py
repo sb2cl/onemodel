@@ -1,19 +1,21 @@
 from xml.etree import ElementTree
 
-from onemodel.core.objects.parameter import Parameter
+from onemodel.core.objects.species import Species
 from onemodel.core.onemodel import OneModel
 
 
 def test_init():
-    result = Parameter()
-    assert isinstance(result, Parameter)
+    result = Species()
+    assert isinstance(result, Species)
 
 def test_add_2_SBML_model():
-    
+
     m = OneModel()
-    m.root['a'] = Parameter()
+    m.root['a'] = Species()
     result_string = m.get_SBML_string()
     result = ElementTree.fromstring(result_string)
+    
+    print(result_string)
 
     expected_string = """<?xml version="1.0" encoding="UTF-8"?>
 <sbml xmlns="http://www.sbml.org/sbml/level3/version2/core" level="3" version="2">
@@ -28,9 +30,9 @@ def test_add_2_SBML_model():
     <listOfCompartments>
       <compartment id="default_compartment" spatialDimensions="3" size="1" units="litre" constant="true"/>
     </listOfCompartments>
-    <listOfParameters>
-      <parameter id="a" value="0" units="per_second" constant="true"/>
-    </listOfParameters>
+    <listOfSpecies>
+      <species id="a" compartment="default_compartment" initialConcentration="0" substanceUnits="mole" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+    </listOfSpecies>
   </model>
 </sbml>
     """
