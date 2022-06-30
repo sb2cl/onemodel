@@ -1,6 +1,7 @@
 import libsbml
 from libsbml import UNIT_KIND_SECOND, SBMLDocument
-from onemodel.core.check import check
+
+from onemodel.core.utils.check import check
 from onemodel.core.namespace import Namespace
 
 

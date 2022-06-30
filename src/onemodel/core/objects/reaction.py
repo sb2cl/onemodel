@@ -1,6 +1,7 @@
 from libsbml import Species, parseL3Formula
-from onemodel.core.check import check
-from onemodel.core.get_ast_names import get_ast_names
+
+from onemodel.core.utils.check import check
+from onemodel.core.utils.get_ast_names import get_ast_names
 from onemodel.core.objects.object import Object
 
 

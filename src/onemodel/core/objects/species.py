@@ -1,4 +1,4 @@
-from onemodel.core.check import check
+from onemodel.core.utils.check import check
 from onemodel.core.objects.object import Object
 
 
