@@ -3,6 +3,7 @@ from onemodel.core.objects.object import Object
 
 
 class Parameter(Object):
+
     def __init__(self):
         super().__init__()
 
@@ -13,12 +14,27 @@ class Parameter(Object):
     def add_to_SBML_model(self, name, model):
         p = model.createParameter()
 
-        check(p, f"create parameter {name}")
+        check(
+            p,
+            f"create parameter {name}"
+        )
 
-        check(p.setId(name), f"set parameter {name} id")
+        check(
+            p.setId(name), 
+            f"set parameter {name} id"
+        )
 
-        check(p.setConstant(self.isConstant), f'set parameter {name} "constant"')
+        check(
+            p.setConstant(self.isConstant), 
+            f'set parameter {name} "constant"'
+        )
 
-        check(p.setValue(self.value), f"set parameter {name} value")
+        check(
+            p.setValue(self.value), 
+            f"set parameter {name} value"
+        )
 
-        check(p.setUnits(self.units), f"set parameter {name} units")
+        check(
+            p.setUnits(self.units), 
+            f"set parameter {name} units"
+        )
