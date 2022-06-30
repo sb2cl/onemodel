@@ -15,10 +15,15 @@ class Reaction(Object):
         self.reversible = False
 
     def add_to_SBML_model(self, name, model):
-        # Save here a list of ids of the species defined as reactans or products.
+        # List of species involved as reactans or products in the reaction.
         species_involved = []
 
-        # Create reaction.
+        r = self.create_SBML_reaction(name, model)
+        self.create_SBML_reaction_reactants(r, species_involved)
+        self.create_SBML_reaction_products(r, species_involved)
+        self.create_SBML_reaction_kinetic_law(r, model, species_involved)
+
+    def create_SBML_reaction(self, name, model):
         r = model.createReaction()
 
         check(
@@ -36,40 +41,40 @@ class Reaction(Object):
             "set reaction reversibility flag"
         )
 
-        # Create reactants.
-        for item in self.reactants:
-            if item == None:
+        return r
+
+    def create_SBML_reaction_reactants(self, reaction, species_involved):
+
+        for name in self.reactants:
+            if name == None:
                 continue
 
-            item_name = item
-
-            species_ref = r.createReactant()
+            reactant = reaction.createReactant()
 
             check(
-                species_ref, 
+                reactant, 
                 "create reactant"
             )
 
             check(
-                species_ref.setSpecies(item_name), 
-                f"assign reactant species {item_name}"
+                reactant.setSpecies(name), 
+                f"assign reactant species {name}"
             )
 
             check(
-                species_ref.setConstant(True), 
-                f'set "constant" on species {item_name}'
+                reactant.setConstant(True), 
+                f'set "constant" on species {name}'
             )
 
-            species_involved.append(item)
+            species_involved.append(name)
 
-        # Create products.
-        for item in self.products:
-            if item == None:
+    def create_SBML_reaction_products(self, reaction, species_involved):
+
+        for name in self.products:
+            if name == None:
                 continue
 
-            item_name = item
-
-            species_ref = r.createProduct()
+            species_ref = reaction.createProduct()
 
             check(
                 species_ref, 
@@ -77,18 +82,19 @@ class Reaction(Object):
             )
 
             check(
-                species_ref.setSpecies(item_name), 
+                species_ref.setSpecies(name), 
                 "assign product species"
             )
 
             check(
                 species_ref.setConstant(True), 
-                f'set "constant" on species {item_name}'
+                f'set "constant" on species {name}'
             )
 
-            species_involved.append(item)
+            species_involved.append(name)
 
-        # Create kinetic law.
+    def create_SBML_reaction_kinetic_law(self, reaction, model, species_involved):
+
         # aux = math_2_fullname(self.kinetic_law, self.definition_context)
         math_ast = parseL3Formula(self.kinetic_law)
 
@@ -97,7 +103,7 @@ class Reaction(Object):
             "create AST for rate expression"
         )
 
-        kinetic_law = r.createKineticLaw()
+        kinetic_law = reaction.createKineticLaw()
 
         check(
             kinetic_law, 
@@ -109,7 +115,8 @@ class Reaction(Object):
             "set math on kinetic law"
         )
 
-        # Create modifier species reference.
+        # Sometimes a species appears in the kinetic rate formula of a reaction 
+        # but is itself neither created nor destroyed in that reaction
         names = get_ast_names(math_ast)
         names_modifier = []
 
@@ -128,7 +135,7 @@ class Reaction(Object):
             if item == None:
                 continue
 
-            modifier_ref = r.createModifier()
+            modifier_ref = reaction.createModifier()
 
             check(
                 modifier_ref, 
@@ -139,3 +146,4 @@ class Reaction(Object):
                 modifier_ref.setSpecies(item), 
                 "assign modifier species"
             )
+
