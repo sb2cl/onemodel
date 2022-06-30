@@ -16,7 +16,7 @@ class Reaction(Object):
 
     def add_to_SBML_model(self, name, model):
         # Save here a list of ids of the species defined as reactans or products.
-        names_defined = []
+        species_involved = []
 
         # Create reaction.
         r = model.createReaction()
@@ -60,7 +60,7 @@ class Reaction(Object):
                 f'set "constant" on species {item_name}'
             )
 
-            names_defined.append(item)
+            species_involved.append(item)
 
         # Create products.
         for item in self.products:
@@ -86,7 +86,7 @@ class Reaction(Object):
                 f'set "constant" on species {item_name}'
             )
 
-            names_defined.append(item)
+            species_involved.append(item)
 
         # Create kinetic law.
         # aux = math_2_fullname(self.kinetic_law, self.definition_context)
@@ -119,7 +119,7 @@ class Reaction(Object):
             if type(elem) != Species:
                 continue
 
-            if name in names_defined:
+            if name in species_involved:
                 continue
 
             names_modifier.append(name)
