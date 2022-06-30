@@ -7,7 +7,7 @@ def get_ast_names(ast):
 
     for i in range(ast.getNumChildren()):
         child = ast.getChild(i)
-        child_names = get_ast_name(child)
+        child_names = get_ast_names(child)
 
         for item in child_names:
             names.append(item)

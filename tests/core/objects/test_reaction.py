@@ -23,7 +23,7 @@ def test_add_2_SBML_model():
     r = m.root["J1"]
     r.reactants = ["A"]
     r.products = ["B"]
-    r.kinetic_law = "k"
+    r.kinetic_law = "k*A"
 
     result_string = m.get_SBML_string()
     result = ElementTree.fromstring(result_string)
@@ -60,7 +60,11 @@ def test_add_2_SBML_model():
         </listOfProducts>
         <kineticLaw>
           <math xmlns="http://www.w3.org/1998/Math/MathML">
-            <ci> k </ci>
+            <apply>
+              <times/>
+              <ci> k </ci>
+              <ci> A </ci>
+            </apply>
           </math>
         </kineticLaw>
       </reaction>
