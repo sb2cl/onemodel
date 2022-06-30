@@ -1,7 +1,7 @@
 import os
 
-import pytest
 from onemodel.dsl.onemodel_walker import OneModelWalker
+import pytest
 
 examples = [
     "ex01_simple_gene_expression",
@@ -19,20 +19,16 @@ def test_examples(tmpdir, example_name: str) -> None:
 
     examples_dir = os.path.dirname(os.path.abspath("README.md")) + "/examples/"
 
-    result = onemodel2sbml(
-        examples_dir + example_name + ".one",
-        example_name
-    )
+    result = onemodel2sbml(examples_dir + example_name + ".one", example_name)
 
     expected = read_file_contents(f"./examples/{example_name}.xml")
 
     assert result == expected
 
-def onemodel2sbml(input_file, filename):
-    """ Convert a onemodel file into sbml.
-    """
-    print('### Convert onemodel into sbml ###')
 
+def onemodel2sbml(input_file, filename):
+    """Convert a onemodel file into sbml."""
+    print("### Convert onemodel into sbml ###")
 
     # Read input file.
     file = open(input_file)
@@ -49,6 +45,7 @@ def onemodel2sbml(input_file, filename):
     sbml = walker.getSBML()
 
     return sbml
+
 
 def read_file_contents(filepath):
     file = open(filepath, "r")

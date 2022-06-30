@@ -1,18 +1,18 @@
 from onemodel.core.values.function_base import FunctionBase
 from onemodel.core.values.object import Object
 
+
 class Model(FunctionBase):
-    """ Definiton of Model.
-    """
+    """Definiton of Model."""
+
     def __init__(self, name, body_node, parent_model):
-        """ Initialize Model.
-        """
+        """Initialize Model."""
         super().__init__(name)
         self.body_node = body_node
         self.parent_model = parent_model
 
     def execute(self, walker):
-        """ Initialize the new object by executing self.body_node in the new
+        """Initialize the new object by executing self.body_node in the new
         object context. Also it executes previously the code from parent_model.
         """
         # If model has a parent_model.
@@ -23,7 +23,7 @@ class Model(FunctionBase):
 
         # Then execute this model.
         walker.walk(self.body_node)
-                
+
     def __str__(self):
         return f"<model {self.name}>"
 
@@ -35,13 +35,13 @@ class Model(FunctionBase):
 
         obj = Object(self.name, calling_context)
 
-        walker.current_context = obj 
+        walker.current_context = obj
 
         self.execute(walker)
 
         walker.current_context = calling_context
 
-        return obj 
+        return obj
 
     def add_value_to_model(self, name, model):
         # Models are not added to SBML models.

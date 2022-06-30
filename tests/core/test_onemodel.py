@@ -1,6 +1,9 @@
 from xml.etree import ElementTree
 
 from onemodel.core.onemodel import OneModel
+from onemodel.core.objects.species import Species
+from onemodel.core.objects.parameter import Parameter
+from onemodel.core.objects.reaction import Reaction
 
 def test_init():
 
@@ -8,10 +11,11 @@ def test_init():
 
     assert isinstance(m, OneModel)
 
+
 def test_get_SBML_string():
 
     m = OneModel()
-    
+
     result_string = m.get_SBML_string()
     result = ElementTree.fromstring(result_string)
 
@@ -35,41 +39,130 @@ def test_get_SBML_string():
 
     assert ElementTree.tostring(result) == ElementTree.tostring(expected)
 
-#def test_ex01_simple_gene_expression():
-#
-#    m = OneModel()
-#
-#    m['mRNA'] = Species(start=0)
-#    m['protein'] = Species(start=0)
-#
-#    m['k_m'] = Parameter(value=1)    
-#    m['d_m'] = Parameter(value=1)    
-#    m['k_p'] = Parameter(value=1)    
-#    m['d_p'] = Parameter(value=1)    
-#
-#    m['J1'] = Reaction(
-#        None, 
-#        'mRNA', 
-#        'k_m'
-#    )
-#
-#    m['J2'] = Reaction(
-#        'mRNA', 
-#        None, 
-#        'd_m*mRNA'
-#    )
-#
-#    m['J3'] = Reaction(
-#        'mRNA', 
-#        ['mRNA', 'protein'],
-#        'k_p*mRNA'
-#    )
-#
-#    m['J4'] = Reaction(
-#        'protein', 
-#        None, 
-#        'd_p*protein']
-#    )
-#
-#    sbml = m.getSBML()
-#
+def test_ex01_simple_gene_expression():
+
+    m = OneModel()
+    
+    m.root['mRNA'] = Species()
+    m.root['protein'] = Species()
+    
+    m.root['k_m'] = Parameter()
+    m.root['d_m'] = Parameter()
+    m.root['k_p'] = Parameter()
+    m.root['d_p'] = Parameter()
+    
+    m.root['J1'] = Reaction()
+    m.root['J1'].reactants = []
+    m.root['J1'].products = ['mRNA']
+    m.root['J1'].kinetic_law = 'k_m'
+    
+    m.root['J2'] = Reaction()
+    m.root['J2'].reactants = ['mRNA']
+    m.root['J2'].products = []
+    m.root['J2'].kinetic_law = 'd_m*mRNA'
+    
+    m.root['J3'] = Reaction()
+    m.root['J3'].reactants = ['mRNA']
+    m.root['J3'].products = ['mRNA', 'protein']
+    m.root['J3'].kinetic_law = 'k_p*mRNA'
+    
+    m.root['J4'] = Reaction()
+    m.root['J1'].reactants = ['protein']
+    m.root['J4'].products = []
+    m.root['J4'].kinetic_law = 'd_p*protein'
+    
+    result_string = m.get_SBML_string()
+    result = ElementTree.fromstring(result_string)
+    
+    print(result_string)
+
+    expected = """<?xml version="1.0" encoding="UTF-8"?>
+<sbml xmlns="http://www.sbml.org/sbml/level3/version2/core" level="3" version="2">
+  <model id="main" name="main" substanceUnits="mole" timeUnits="second" extentUnits="mole">
+    <listOfUnitDefinitions>
+      <unitDefinition id="per_second">
+        <listOfUnits>
+          <unit kind="second" exponent="-1" scale="0" multiplier="1"/>
+        </listOfUnits>
+      </unitDefinition>
+    </listOfUnitDefinitions>
+    <listOfCompartments>
+      <compartment id="default_compartment" spatialDimensions="3" size="1" units="litre" constant="true"/>
+    </listOfCompartments>
+    <listOfSpecies>
+      <species id="mRNA" compartment="default_compartment" initialConcentration="0" substanceUnits="mole" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="protein" compartment="default_compartment" initialConcentration="0" substanceUnits="mole" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+    </listOfSpecies>
+    <listOfParameters>
+      <parameter id="k_m" value="0" units="per_second" constant="true"/>
+      <parameter id="d_m" value="0" units="per_second" constant="true"/>
+      <parameter id="k_p" value="0" units="per_second" constant="true"/>
+      <parameter id="d_p" value="0" units="per_second" constant="true"/>
+    </listOfParameters>
+    <listOfReactions>
+      <reaction id="J1" reversible="false">
+        <listOfReactants>
+          <speciesReference species="protein" constant="true"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="mRNA" constant="true"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <ci> k_m </ci>
+          </math>
+        </kineticLaw>
+      </reaction>
+      <reaction id="J2" reversible="false">
+        <listOfReactants>
+          <speciesReference species="mRNA" constant="true"/>
+        </listOfReactants>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <times/>
+              <ci> d_m </ci>
+              <ci> mRNA </ci>
+            </apply>
+          </math>
+        </kineticLaw>
+      </reaction>
+      <reaction id="J3" reversible="false">
+        <listOfReactants>
+          <speciesReference species="mRNA" constant="true"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="mRNA" constant="true"/>
+          <speciesReference species="protein" constant="true"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <times/>
+              <ci> k_p </ci>
+              <ci> mRNA </ci>
+            </apply>
+          </math>
+        </kineticLaw>
+      </reaction>
+      <reaction id="J4" reversible="false">
+        <listOfModifiers>
+          <modifierSpeciesReference species="protein"/>
+        </listOfModifiers>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <times/>
+              <ci> d_p </ci>
+              <ci> protein </ci>
+            </apply>
+          </math>
+        </kineticLaw>
+      </reaction>
+    </listOfReactions>
+  </model>
+</sbml>
+    """
+    expected = ElementTree.fromstring(expected_string)
+
+    assert ElementTree.tostring(result) == ElementTree.tostring(expected)

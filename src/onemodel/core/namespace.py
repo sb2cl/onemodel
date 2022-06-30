@@ -1,5 +1,4 @@
 class Namespace:
-
     def __init__(self, parent):
         self.parent = parent
         self.symbols = {}
@@ -10,7 +9,7 @@ class Namespace:
     def get(self, name):
         if name in self.names():
             return self.symbols.get(name, None)
-        
+
         if self.parent:
             return self.parent.get(name)
 

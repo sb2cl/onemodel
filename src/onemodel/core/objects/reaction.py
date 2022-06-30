@@ -1,8 +1,9 @@
-from libsbml import parseL3Formula, Species
+from libsbml import Species, parseL3Formula
 
-from onemodel.core.check import check
+from onemodel.core.utils.check import check
+from onemodel.core.utils.get_ast_names import get_ast_names
 from onemodel.core.objects.object import Object
-from onemodel.core.get_ast_names import get_ast_names
+
 
 class Reaction(Object):
 
@@ -10,129 +11,139 @@ class Reaction(Object):
         super().__init__()
         self.reactants = []
         self.products = []
-        self.kinetic_law = ''
+        self.kinetic_law = ""
         self.reversible = False
 
     def add_to_SBML_model(self, name, model):
-        # Save here a list of ids of the species defined as reactans or products.
-        names_defined = []
+        # List of species involved as reactans or products in the reaction.
+        species_involved = []
 
-        # Create reaction.
+        r = self.create_SBML_reaction(name, model)
+        self.create_SBML_reaction_reactants(r, species_involved)
+        self.create_SBML_reaction_products(r, species_involved)
+        self.create_SBML_reaction_kinetic_law(r, model, species_involved)
+
+    def create_SBML_reaction(self, name, model):
         r = model.createReaction()
 
         check(
-            r,
-            f'create reaction {name}'
+            r, 
+            f"create reaction {name}"
         )
 
         check(
             r.setId(name), 
-            f'set reaction id {name}'
+            f"set reaction id {name}"
         )
 
         check(
             r.setReversible(self.reversible), 
-            'set reaction reversibility flag'
+            "set reaction reversibility flag"
         )
 
-        # Create reactants.
-        for item in self.reactants:
-            if item == None: continue
+        return r
 
-            item_name = item
+    def create_SBML_reaction_reactants(self, reaction, species_involved):
 
-            species_ref = r.createReactant()
+        for name in self.reactants:
+            if name == None:
+                continue
+
+            reactant = reaction.createReactant()
 
             check(
-                species_ref,
-                'create reactant'
+                reactant, 
+                "create reactant"
             )
 
             check(
-                species_ref.setSpecies(item_name),
-                f'assign reactant species {item_name}'
+                reactant.setSpecies(name), 
+                f"assign reactant species {name}"
             )
 
             check(
-                species_ref.setConstant(True),
-                f'set "constant" on species {item_name}'
+                reactant.setConstant(True), 
+                f'set "constant" on species {name}'
             )
 
-            names_defined.append(item)
+            species_involved.append(name)
 
-        # Create products.
-        for item in self.products:
-            if item == None: continue
+    def create_SBML_reaction_products(self, reaction, species_involved):
 
-            item_name = item
+        for name in self.products:
+            if name == None:
+                continue
 
-            species_ref = r.createProduct()
-
-            check(
-                species_ref,
-                'create product'
-            )
+            species_ref = reaction.createProduct()
 
             check(
-                species_ref.setSpecies(item_name),
-                'assign product species'
+                species_ref, 
+                "create product"
             )
 
             check(
-                species_ref.setConstant(True),
-                f'set "constant" on species {item_name}'
+                species_ref.setSpecies(name), 
+                "assign product species"
             )
 
-            names_defined.append(item)
- 
-        # Create kinetic law.
+            check(
+                species_ref.setConstant(True), 
+                f'set "constant" on species {name}'
+            )
+
+            species_involved.append(name)
+
+    def create_SBML_reaction_kinetic_law(self, reaction, model, species_involved):
+
         # aux = math_2_fullname(self.kinetic_law, self.definition_context)
         math_ast = parseL3Formula(self.kinetic_law)
 
         check(
-            math_ast,
-            'create AST for rate expression'
+            math_ast, 
+            "create AST for rate expression"
         )
- 
-        kinetic_law = r.createKineticLaw()
+
+        kinetic_law = reaction.createKineticLaw()
 
         check(
-            kinetic_law,
-            'create kinetic law'
+            kinetic_law, 
+            "create kinetic law"
         )
 
         check(
-            kinetic_law.setMath(math_ast),
-            'set math on kinetic law'
+            kinetic_law.setMath(math_ast), 
+            "set math on kinetic law"
         )
 
-        # Create modifier species reference.
+        # Sometimes a species appears in the kinetic rate formula of a reaction 
+        # but is itself neither created nor destroyed in that reaction
         names = get_ast_names(math_ast)
         names_modifier = []
 
         for name in names:
             elem = model.getElementBySId(name)
 
-            if type(elem) != Species: 
+            if type(elem) != Species:
                 continue
 
-            if name in names_defined:
+            if name in species_involved:
                 continue
 
             names_modifier.append(name)
 
         for item in names_modifier:
-            if item == None: continue
+            if item == None:
+                continue
 
-            modifier_ref = r.createModifier()
+            modifier_ref = reaction.createModifier()
 
             check(
-                modifier_ref,
-                'create modifier'
+                modifier_ref, 
+                "create modifier"
             )
 
             check(
-                modifier_ref.setSpecies(item),
-                'assign modifier species'
+                modifier_ref.setSpecies(item), 
+                "assign modifier species"
             )
 
