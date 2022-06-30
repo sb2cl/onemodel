@@ -74,9 +74,7 @@ def test_ex01_simple_gene_expression():
     result_string = m.get_SBML_string()
     result = ElementTree.fromstring(result_string)
     
-    print(result_string)
-
-    expected = """<?xml version="1.0" encoding="UTF-8"?>
+    expected_string = """<?xml version="1.0" encoding="UTF-8"?>
 <sbml xmlns="http://www.sbml.org/sbml/level3/version2/core" level="3" version="2">
   <model id="main" name="main" substanceUnits="mole" timeUnits="second" extentUnits="mole">
     <listOfUnitDefinitions>
@@ -164,5 +162,23 @@ def test_ex01_simple_gene_expression():
 </sbml>
     """
     expected = ElementTree.fromstring(expected_string)
+
+    assert ElementTree.tostring(result) == ElementTree.tostring(expected)
+
+def test_ex03_protein_constitutive():
+    m = OneModel()
+    
+    m.root['foo'] = Parameter()
+    m.root['foo']['bar'] = Parameter()
+  
+    result_string = m.get_SBML_string()
+    result = ElementTree.fromstring(result_string)
+
+    print(result_string)
+
+    expected_string = """
+    """
+    expected = ElementTree.fromstring(expected_string)
+
 
     assert ElementTree.tostring(result) == ElementTree.tostring(expected)
