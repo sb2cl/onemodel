@@ -69,3 +69,9 @@ def test_nested_namespaces():
 
     del root["a"]
     assert root["ns"]["a"] == None
+
+def test_is_empty():
+    root = Namespace(None)
+
+    assert root.is_empty() == True
+
