@@ -58,13 +58,29 @@ class OneModel:
         check(c.setSpatialDimensions(3), "set compartment dimensions")
         check(c.setUnits("litre"), "set compartment size units")
 
-    def populate_SBML_document(self):
-        for name in self.root.names():
-            self.root[name].add_to_SBML_model(name, self.SBML_model)
+    def populate_SBML_document(self, namespace, scope_names):
+
+        if namespace.is_empty():
+            return
+
+        for name in namespace.names():
+
+            basename = '__'.join(scope_names)
+
+            if basename:
+                basename = basename + '__'
+
+            fullname = basename + name
+
+            namespace[name].add_to_SBML_model(fullname, self.SBML_model)
+
+            scope_names.append(name)
+            self.populate_SBML_document(namespace[name], scope_names)
+            scope_names.pop()
 
     def get_SBML_string(self):
         self.init_SBML_document()
-        self.populate_SBML_document()
+        self.populate_SBML_document(self.root, [])
         # self.check_SBML_consistency()
         result = libsbml.writeSBMLToString(self.document)
 
