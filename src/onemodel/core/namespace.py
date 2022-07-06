@@ -1,19 +1,12 @@
 class Namespace:
-    def __init__(self, parent):
-        self.parent = parent
+    def __init__(self):
         self.symbols = {}
 
     def set(self, name, value):
         self.symbols[name] = value
 
     def get(self, name):
-        if name in self.names():
-            return self.symbols.get(name, None)
-
-        if self.parent:
-            return self.parent.get(name)
-
-        return None
+        return self.symbols.get(name, None)
 
     def delete(self, name):
         return self.symbols.pop(name, None)

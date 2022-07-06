@@ -9,7 +9,7 @@ class OneModel:
     def __init__(self):
 
         self.model_name = "main"
-        self.root = Namespace(None)
+        self.root = Namespace()
         self.SBML_document = None
         self.SBML_model = None
 
