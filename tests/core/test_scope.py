@@ -77,11 +77,17 @@ def test_nested_get():
 
 def test_get_fullname():
     scope = Scope()
+    n0 = Namespace()
     n1 = Namespace()
     n2 = Namespace()
  
-    scope.push(n1, "n1")
-    scope.push(n2, "n2")
+    scope.push(n0, "")
     scope["foo"] = 1
+    scope.push(n1, "n1")
+    scope["bar"] = 1
+    scope.push(n2, "n2")
+    scope["baz"] = 1
 
-    assert scope.get_fullname("foo") == "n1__n2__foo"
+    assert scope.get_fullname("foo") == "foo"
+    assert scope.get_fullname("bar") == "n1__bar"
+    assert scope.get_fullname("baz") == "n1__n2__baz"

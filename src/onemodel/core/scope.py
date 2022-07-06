@@ -36,24 +36,25 @@ class Scope:
 
     def get(self, name):
         for namespace in reversed(self.namespaces):
-            value = namespace[name]
-
-            if value != None:
-                return value
+            if namespace.has_name(name):
+                return namespace[name]
 
         return None
 
     def get_fullname(self, name):
-        namespace_with_the_name = None
 
+        i = len(self.namespaces)
         for namespace in reversed(self.namespaces):
-            if namespace[name] != None:
-                namespace_with_the_name = namespace
+            if namespace.has_name(name):
+                break
+            i -= 1
+        position_namespace_has_name = i
 
-        i = 0
         basename = ""
-        for namespace in self.namespaces:
-            basename += self.identifiers[i] + "__"
+        i = 0
+        while i < position_namespace_has_name:
+            if self.identifiers[i] != "":
+                basename += self.identifiers[i] + "__"
             i += 1
         
         fullname = basename + name
