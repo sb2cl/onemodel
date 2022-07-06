@@ -25,6 +25,12 @@ class Namespace:
     def is_empty(self):
         return not bool(self.symbols)
 
+    def has_name(self, name):
+        if name in self.names():
+            return True
+        else:
+            return False
+
     def __setitem__(self, name, value):
         self.set(name, value)
 

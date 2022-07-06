@@ -54,3 +54,11 @@ def test_is_empty():
     root = Namespace()
 
     assert root.is_empty() == True
+
+def test_has_name():
+    ns = Namespace()
+    ns["foo"] = 1
+
+    assert ns.has_name("foo") == True
+    assert ns.has_name("bar") == False
+
