@@ -1,7 +1,3 @@
-class ScopeError(Exception):
-    """Base error class for scope errors. """
-    pass
-
 class ScopeIsEmptyError(Exception):
     """Raised when pop() an empty Scope. """
     pass
