@@ -3,6 +3,7 @@ from libsbml import Species, parseL3Formula
 from onemodel.core.utils.check import check
 from onemodel.core.utils.get_ast_names import get_ast_names
 from onemodel.core.objects.object import Object
+from onemodel.core.utils.math_2_fullname import math_2_fullname
 
 
 class Reaction(Object):
@@ -14,26 +15,29 @@ class Reaction(Object):
         self.kinetic_law = ""
         self.reversible = False
 
-    def add_to_SBML_model(self, name, model):
+    def add_to_SBML_model(self, name, scope, model):
         # List of species involved as reactans or products in the reaction.
         species_involved = []
 
-        r = self.create_SBML_reaction(name, model)
-        self.create_SBML_reaction_reactants(r, species_involved)
-        self.create_SBML_reaction_products(r, species_involved)
-        self.create_SBML_reaction_kinetic_law(r, model, species_involved)
+        r = self.create_SBML_reaction(name, scope, model)
+        self.create_SBML_reaction_reactants(r, species_involved, scope)
+        self.create_SBML_reaction_products(r, species_involved, scope)
+        self.create_SBML_reaction_kinetic_law(r, model, species_involved, scope)
 
-    def create_SBML_reaction(self, name, model):
+    def create_SBML_reaction(self, name, scope, model):
+
+        fullname = scope.get_fullname(name)
+
         r = model.createReaction()
 
         check(
             r, 
-            f"create reaction {name}"
+            f"create reaction {fullname}"
         )
 
         check(
-            r.setId(name), 
-            f"set reaction id {name}"
+            r.setId(fullname), 
+            f"set reaction id {fullname}"
         )
 
         check(
@@ -43,11 +47,13 @@ class Reaction(Object):
 
         return r
 
-    def create_SBML_reaction_reactants(self, reaction, species_involved):
+    def create_SBML_reaction_reactants(self, reaction, species_involved, scope):
 
         for name in self.reactants:
             if name == None:
                 continue
+
+            fullname = scope.get_fullname(name)
 
             reactant = reaction.createReactant()
 
@@ -57,22 +63,24 @@ class Reaction(Object):
             )
 
             check(
-                reactant.setSpecies(name), 
-                f"assign reactant species {name}"
+                reactant.setSpecies(fullname), 
+                f"assign reactant species {fullname}"
             )
 
             check(
                 reactant.setConstant(True), 
-                f'set "constant" on species {name}'
+                f'set "constant" on species {fullname}'
             )
 
-            species_involved.append(name)
+            species_involved.append(fullname)
 
-    def create_SBML_reaction_products(self, reaction, species_involved):
+    def create_SBML_reaction_products(self, reaction, species_involved, scope):
 
         for name in self.products:
             if name == None:
                 continue
+
+            fullname = scope.get_fullname(name)
 
             species_ref = reaction.createProduct()
 
@@ -82,21 +90,21 @@ class Reaction(Object):
             )
 
             check(
-                species_ref.setSpecies(name), 
+                species_ref.setSpecies(fullname), 
                 "assign product species"
             )
 
             check(
                 species_ref.setConstant(True), 
-                f'set "constant" on species {name}'
+                f'set "constant" on species {fullname}'
             )
 
             species_involved.append(name)
 
-    def create_SBML_reaction_kinetic_law(self, reaction, model, species_involved):
+    def create_SBML_reaction_kinetic_law(self, reaction, model, species_involved, scope):
 
-        # aux = math_2_fullname(self.kinetic_law, self.definition_context)
-        math_ast = parseL3Formula(self.kinetic_law)
+        math_fullname = math_2_fullname(self.kinetic_law, scope)
+        math_ast = parseL3Formula(math_fullname)
 
         check(
             math_ast, 

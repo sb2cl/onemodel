@@ -3,13 +3,14 @@ from libsbml import UNIT_KIND_SECOND, SBMLDocument
 
 from onemodel.core.utils.check import check
 from onemodel.core.namespace import Namespace
+from onemodel.core.scope import Scope
 
 
 class OneModel:
     def __init__(self):
 
         self.model_name = "main"
-        self.root = Namespace(None)
+        self.root = Namespace()
         self.SBML_document = None
         self.SBML_model = None
 
@@ -58,29 +59,27 @@ class OneModel:
         check(c.setSpatialDimensions(3), "set compartment dimensions")
         check(c.setUnits("litre"), "set compartment size units")
 
-    def populate_SBML_document(self, namespace, scope_names):
+    def populate_SBML_document(self, scope=None):
 
-        if namespace.is_empty():
+        if scope == None:
+            scope = Scope()
+            scope.push(self.root, "")
+
+        if scope.peek().is_empty():
             return
 
-        for name in namespace.names():
-
-            basename = '__'.join(scope_names)
-
-            if basename:
-                basename = basename + '__'
-
-            fullname = basename + name
-
-            namespace[name].add_to_SBML_model(fullname, self.SBML_model)
-
-            scope_names.append(name)
-            self.populate_SBML_document(namespace[name], scope_names)
-            scope_names.pop()
+        for name in scope.peek().names():
+            
+            value = scope.peek()[name]
+            value.add_to_SBML_model(name, scope, self.SBML_model)
+            
+            scope.push(value, name)
+            self.populate_SBML_document(scope)
+            scope.pop()
 
     def get_SBML_string(self):
         self.init_SBML_document()
-        self.populate_SBML_document(self.root, [])
+        self.populate_SBML_document()
         # self.check_SBML_consistency()
         result = libsbml.writeSBMLToString(self.document)
 
