@@ -71,7 +71,7 @@ class OneModel:
         for name in scope.peek().names():
             
             value = scope.peek()[name]
-            value.add_to_SBML_model(name, self.SBML_model)
+            value.add_to_SBML_model(name, scope, self.SBML_model)
             
             scope.push(value, name)
             self.populate_SBML_document(scope)

@@ -13,47 +13,49 @@ class Species(Object):
         self.boundaryCondition = False
         self.hasOnlySubstanceUnits = False
 
-    def add_to_SBML_model(self, name, model):
+    def add_to_SBML_model(self, name, scope, model):
+
+        fullname = scope.get_fullname(name)
 
         s = model.createSpecies()
 
         check(
             s,
-            f"create species {name}"
+            f"create species {fullname}"
         )
 
         check(
-            s.setId(name), 
-            f"set species {name} id"
+            s.setId(fullname), 
+            f"set species {fullname} id"
         )
 
         check(
             s.setCompartment(self.compartment), 
-            f"set species {name} in default_compartment"
+            f"set species {fullname} in default_compartment"
         )
 
         check(
             s.setConstant(self.constant), 
-            f'set "constant" attribute on {name}'
+            f'set "constant" attribute on {fullname}'
         )
 
         check(
             s.setInitialConcentration(self.initialConcentration), 
-            f"set initial amount for {name}"
+            f"set initial amount for {fullname}"
         )
 
         check(
             s.setSubstanceUnits(self.substanceUnits), 
-            f"set substance units for {name}"
+            f"set substance units for {fullname}"
         )
 
         check(
             s.setBoundaryCondition(self.boundaryCondition), 
-            f'set "boundaryCondition" on {name}'
+            f'set "boundaryCondition" on {fullname}'
         )
 
         check(
             s.setHasOnlySubstanceUnits(self.hasOnlySubstanceUnits),
-            f'set "hasOnlySubstanceUnits" on {name}',
+            f'set "hasOnlySubstanceUnits" on {fullname}',
         )
 

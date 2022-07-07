@@ -11,30 +11,32 @@ class Parameter(Object):
         self.value = 0
         self.units = "per_second"
 
-    def add_to_SBML_model(self, name, model):
+    def add_to_SBML_model(self, name, scope, model):
+        fullname = scope.get_fullname(name)
+
         p = model.createParameter()
 
         check(
             p,
-            f"create parameter {name}"
+            f"create parameter {fullname}"
         )
 
         check(
-            p.setId(name), 
-            f"set parameter {name} id"
+            p.setId(fullname), 
+            f"set parameter {fullname} id"
         )
 
         check(
             p.setConstant(self.isConstant), 
-            f'set parameter {name} "constant"'
+            f'set parameter {fullname} "constant"'
         )
 
         check(
             p.setValue(self.value), 
-            f"set parameter {name} value"
+            f"set parameter {fullname} value"
         )
 
         check(
             p.setUnits(self.units), 
-            f"set parameter {name} units"
+            f"set parameter {fullname} units"
         )

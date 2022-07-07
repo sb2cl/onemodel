@@ -82,7 +82,7 @@ def test_reference_nested():
 
     m.root["foo"] = Object()
 
-    m.root["foo"]["A"] = Species()
+    m.root["A"] = Species()
     m.root["foo"]["B"] = Species()
     m.root["foo"]["k"] = Parameter()
 
@@ -110,8 +110,8 @@ def test_reference_nested():
       <compartment id="default_compartment" spatialDimensions="3" size="1" units="litre" constant="true"/>
     </listOfCompartments>
     <listOfSpecies>
-      <species id="foo__A" compartment="default_compartment" initialConcentration="0" substanceUnits="mole" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
       <species id="foo__B" compartment="default_compartment" initialConcentration="0" substanceUnits="mole" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="A" compartment="default_compartment" initialConcentration="0" substanceUnits="mole" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
     </listOfSpecies>
     <listOfParameters>
       <parameter id="foo__k" value="0" units="per_second" constant="true"/>
@@ -119,7 +119,7 @@ def test_reference_nested():
     <listOfReactions>
       <reaction id="foo__J1" reversible="false">
         <listOfReactants>
-          <speciesReference species="foo__A" constant="true"/>
+          <speciesReference species="A" constant="true"/>
         </listOfReactants>
         <listOfProducts>
           <speciesReference species="foo__B" constant="true"/>
@@ -129,7 +129,7 @@ def test_reference_nested():
             <apply>
               <times/>
               <ci> foo__k </ci>
-              <ci> foo__A </ci>
+              <ci> A </ci>
             </apply>
           </math>
         </kineticLaw>
