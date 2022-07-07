@@ -5,7 +5,7 @@ from onemodel.core.utils.math_2_fullname import math_2_fullname
 from onemodel.core.objects.object import Object
 
 
-class RateRule(Object):
+class AssignmentRule(Object):
 
     def __init__(self):
         super().__init__()
@@ -21,24 +21,24 @@ class RateRule(Object):
         math_fullname = math_2_fullname(self.math, scope)
         math_ast = parseL3Formula(math_fullname)
 
-        r = model.createRateRule()
+        r = model.createAssignmentRule()
 
         check(
             r, 
-            f"create rate rule {fullname}"
+            f"create assignment rule {fullname}"
         )
 
         check(
             r.setIdAttribute(fullname), 
-            f"set rate rule id {fullname}"
+            f"set assignment rule id {fullname}"
         )
 
         check(
-            r.setVariable(variable_fullname), 
-            f"set variable on rate rule {fullname}"
+            r.setVariable(variable_fullname),
+            f"set variable on assignment rule {fullname}"
         )
 
         check(
-            r.setMath(math_ast), 
-            f"set math on rate rule {fullname}"
+            r.setMath(math_ast),
+            f"set math on assignment rule {fullname}"
         )
