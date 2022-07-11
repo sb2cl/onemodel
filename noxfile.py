@@ -47,4 +47,5 @@ def type_check(s: Session) -> None:
 
 @session(venv_backend="none")
 def docs(s: Session) -> None:
+    s.run("sphinx-apidoc", "-f", "-o", "./docs/source", "src/")
     s.run("sphinx-build", "-b", "html", "docs/source", "docs/build/html")
