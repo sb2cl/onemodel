@@ -10,8 +10,8 @@ def test_init():
 
     assert isinstance(result, Function)
 
-def my_print_function(scope):
-    value = scope["value"].value
+def get_value(scope):
+    value = scope["parameter"].value
 
     return value
 
@@ -19,15 +19,16 @@ def test_call():
     
     m = OneModel()
     
-    m.root["param"] = Parameter()
+    m.root["foo"] = Parameter()
 
-    m.root["func"] = Function()
-    m.root["func"].argumentNames = ["value"]
-    m.root["func"].body = my_print_function
+    m.root["get"] = Function()
+    m.root["get"].argumentNames = ["parameter"]
+    m.root["get"].body = get_value
 
     scope = Scope()
     scope.push(m.root)
 
-    result = m.root["func"].call(scope, ["param"])
+    result = m.root["get"].call(scope, ["foo"])
+    expected = m.root["foo"].value
 
-    assert result == 0.0
+    assert result == expected
