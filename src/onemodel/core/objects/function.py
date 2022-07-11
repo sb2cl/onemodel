@@ -11,13 +11,18 @@ class Function(Object):
 
     def call(self, scope, parameter_names):
 
-        function_namespace = Namespace()
+        func_namespace = self.create_function_namespace(scope, parameter_names)
 
-        for arg_name, param_name in zip(self.argument_names, parameter_names):
-            function_namespace[arg_name] = scope[param_name]
-
-        scope.push(function_namespace)
+        scope.push(func_namespace)
         result = self.body(scope)
         scope.pop()
+
+        return result
+
+    def create_function_namespace(self, scope, parameter_names):
+        result = Namespace()
+
+        for arg_name, param_name in zip(self.argument_names, parameter_names):
+            result[arg_name] = scope[param_name]
 
         return result
