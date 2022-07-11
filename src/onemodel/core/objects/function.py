@@ -6,6 +6,8 @@ from onemodel.core.namespace import Namespace
 class Function(Object):
 
     def __init__(self):
+        super().__init__()
+
         self.argument_names = []
         self.body = None
 

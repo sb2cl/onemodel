@@ -5,6 +5,8 @@ from onemodel.core.objects.object import Object
 from onemodel.core.objects.species import Species
 from onemodel.core.objects.parameter import Parameter
 from onemodel.core.objects.reaction import Reaction
+from onemodel.core.objects.function import Function
+from onemodel.core.scope import Scope
 
 def test_init():
 
@@ -165,39 +167,52 @@ def test_ex01_simple_gene_expression():
 
     assert ElementTree.tostring(result) == ElementTree.tostring(expected)
 
+def ProteinConstitutive(scope):
+   
+    scope['self'] = Object()
+
+    scope['self']['mRNA'] = Species()
+    scope['self']['protein'] = Species()
+
+    scope['self']['k_m'] = Parameter()
+    scope['self']['d_m'] = Parameter()
+    scope['self']['k_p'] = Parameter()
+    scope['self']['d_p'] = Parameter()
+
+    scope['self']['J1'] = Reaction()
+    scope['self']['J1'].reactants = []
+    scope['self']['J1'].products = ['mRNA']
+    scope['self']['J1'].kinetic_law = 'k_m'
+
+    scope['self']['J2'] = Reaction()
+    scope['self']['J2'].reactants = ['mRNA']
+    scope['self']['J2'].products = []
+    scope['self']['J2'].kinetic_law = 'd_m*mRNA'
+
+    scope['self']['J3'] = Reaction()
+    scope['self']['J3'].reactants = ['mRNA']
+    scope['self']['J3'].products = ['mRNA', 'protein']
+    scope['self']['J3'].kinetic_law = 'k_p*mRNA'
+
+    scope['self']['J4'] = Reaction()
+    scope['self']['J4'].reactants = ['protein']
+    scope['self']['J4'].products = []
+    scope['self']['J4'].kinetic_law = 'd_p*protein'
+
+    return scope['self']
+ 
 def test_ex03_protein_constitutive():
     m = OneModel()
     
-    m.root['A'] = Object()
+    m.root['ProteinConstitutive'] = Function()
+    m.root['ProteinConstitutive'].argument_names = []
+    m.root['ProteinConstitutive'].body = ProteinConstitutive
 
-    m.root['A']['mRNA'] = Species()
-    m.root['A']['protein'] = Species()
+    scope = Scope()
+    scope.push(m.root)
 
-    m.root['A']['k_m'] = Parameter()
-    m.root['A']['d_m'] = Parameter()
-    m.root['A']['k_p'] = Parameter()
-    m.root['A']['d_p'] = Parameter()
-    
-    m.root['A']['J1'] = Reaction()
-    m.root['A']['J1'].reactants = []
-    m.root['A']['J1'].products = ['mRNA']
-    m.root['A']['J1'].kinetic_law = 'k_m'
-    
-    m.root['A']['J2'] = Reaction()
-    m.root['A']['J2'].reactants = ['mRNA']
-    m.root['A']['J2'].products = []
-    m.root['A']['J2'].kinetic_law = 'd_m*mRNA'
-    
-    m.root['A']['J3'] = Reaction()
-    m.root['A']['J3'].reactants = ['mRNA']
-    m.root['A']['J3'].products = ['mRNA', 'protein']
-    m.root['A']['J3'].kinetic_law = 'k_p*mRNA'
-    
-    m.root['A']['J4'] = Reaction()
-    m.root['A']['J4'].reactants = ['protein']
-    m.root['A']['J4'].products = []
-    m.root['A']['J4'].kinetic_law = 'd_p*protein'
- 
+    m.root['A'] = m.root['ProteinConstitutive'].call(scope, [])
+
     result_string = m.get_SBML_string()
     result = ElementTree.fromstring(result_string)
 
