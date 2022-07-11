@@ -6,15 +6,15 @@ from onemodel.core.namespace import Namespace
 class Function(Object):
 
     def __init__(self):
-        self.argumentNames = []
+        self.argument_names = []
         self.body = None
 
-    def call(self, scope, argumentValues):
+    def call(self, scope, parameter_names):
 
         function_namespace = Namespace()
 
-        for name, value in zip(self.argumentNames, argumentValues):
-            function_namespace[name] = scope[value]
+        for arg_name, param_name in zip(self.argument_names, parameter_names):
+            function_namespace[arg_name] = scope[param_name]
 
         scope.push(function_namespace)
         result = self.body(scope)

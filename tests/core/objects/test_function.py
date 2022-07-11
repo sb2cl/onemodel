@@ -22,13 +22,13 @@ def test_call():
     m.root["foo"] = Parameter()
 
     m.root["get"] = Function()
-    m.root["get"].argumentNames = ["parameter"]
+    m.root["get"].argument_names = ["parameter"]
     m.root["get"].body = get_value
 
     scope = Scope()
     scope.push(m.root)
-
     result = m.root["get"].call(scope, ["foo"])
+
     expected = m.root["foo"].value
 
     assert result == expected
