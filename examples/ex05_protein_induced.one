@@ -6,7 +6,7 @@ import 'ex03_protein_constitutive.one'
 ## the expression inducible by a transcription factor.          ##
 model ProteinInduced(ProteinConstitutive)
 
-  input TF       # Define the transcriptio factor as an input.
+  input TF       # Define the transcription factor as an input.
   species k_m=0  # Override the parameter k_m to be a species.
   
   parameter
