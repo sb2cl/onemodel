@@ -20,7 +20,7 @@ TODO
 
 ### Writing documentation
 
-TODO
+We use NumPy Docstring.
 
 ### Writing OneModel examples
 

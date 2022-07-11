@@ -1,13 +1,32 @@
 class Namespace:
-    """
-    Return a list of random ingredients as strings.
+    """Summary line.
 
-    :param kind: Optional "kind" of ingredients.
-    :type kind: list[str] or None
-    :raise lumache.InvalidKindError: If the kind is invalid.
-    :return: The ingredients list.
-    :rtype: list[str]
+    Extended description of function.
 
+    Parameters
+    ----------
+    arg1 : int
+        Description of arg1
+    arg2 : str
+        Description of arg2
+
+    Returns
+    -------
+    bool
+        Description of return value
+
+    See Also
+    --------
+    otherfunc : some related other function
+
+    Examples
+    --------
+    These are written in doctest format, and should illustrate how to
+    use the function.
+
+    >>> a=[1,2,3]
+    >>> print [x + 3 for x in a]
+    [4, 5, 6]
     """
     def __init__(self):
         self.symbols = {}
