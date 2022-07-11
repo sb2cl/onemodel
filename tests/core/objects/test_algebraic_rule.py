@@ -43,15 +43,19 @@ def test_add_2_SBML_model():
       <parameter id="bar" value="0" units="per_second" constant="true"/>
     </listOfParameters>
     <listOfRules>
-      <assignmentRule id="R1" variable="foo">
+      <algebraicRule id="R1">
         <math xmlns="http://www.w3.org/1998/Math/MathML">
           <apply>
-            <times/>
-            <cn type="integer"> 10 </cn>
-            <ci> bar </ci>
+            <minus/>
+            <ci> foo </ci>
+            <apply>
+              <times/>
+              <cn type="integer"> 10 </cn>
+              <ci> bar </ci>
+            </apply>
           </apply>
         </math>
-      </assignmentRule>
+      </algebraicRule>
     </listOfRules>
   </model>
 </sbml>
