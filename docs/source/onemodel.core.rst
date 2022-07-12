@@ -7,6 +7,7 @@ Subpackages
 .. toctree::
 
     onemodel.core.objects
+    onemodel.core.utils
 
 Submodules
 ----------
