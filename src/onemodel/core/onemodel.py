@@ -20,11 +20,6 @@ class OneModel(Scope):
 
     root : :obj:`Namespace`
         The root namespace of the model.
-
-    Notes
-    -----
-    The OneModel class extends Scope class for user convinience. This way is
-    easier to work with OneModel without using the dsl.
     """
     def __init__(self):
         super().__init__()
