@@ -37,6 +37,10 @@ class OneModel(Scope):
     def get_SBML_string(self):
         """Returns a SBML representation of the model. """
 
+        # Perform self.pop() until the root namespace.
+        while len(self.namespaces) > 1:
+            self.pop()
+
         SBML_document, SBML_model = self._init_SBML_document()
         self._populate_SBML_document(SBML_model)
         # self.check_SBML_consistency()
@@ -92,20 +96,11 @@ class OneModel(Scope):
 
         return SBML_document, SBML_model
 
-    def _populate_SBML_document(self, SBML_model, scope=None):
+    def _populate_SBML_document(self, SBML_model):
         """Populates the SBML with the objects in the root namespace."""
 
-        if scope == None:
-            scope = Scope()
-            scope.push(self.root, "")
-
-        if scope.peek().is_empty():
-            return
-
-        for name, value in scope.peek().items():
-            
-            value.add_to_SBML_model(name, scope, SBML_model)
-            
-            scope.push(value, name)
-            self._populate_SBML_document(SBML_model, scope)
-            scope.pop()
+        for name, value in self.peek().items():
+            value.add_to_SBML_model(name, self, SBML_model)
+            self.push(value, name)
+            self._populate_SBML_document(SBML_model)
+            self.pop()
