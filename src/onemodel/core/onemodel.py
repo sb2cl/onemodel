@@ -23,7 +23,7 @@ class OneModel(Scope):
 
     Notes
     -----
-    The OneModel class extends Scope class for convinience. This way is
+    The OneModel class extends Scope class for user convinience. This way is
     easier to work with OneModel without using the dsl.
     """
     def __init__(self):
@@ -32,7 +32,7 @@ class OneModel(Scope):
         self.model_name = "main"
         self.root = Namespace()
 
-        self.push(self.root)
+        self.push(self.root, "")
 
     def get_SBML_string(self):
         """Returns a SBML representation of the model. """
@@ -93,6 +93,7 @@ class OneModel(Scope):
         return SBML_document, SBML_model
 
     def _populate_SBML_document(self, SBML_model, scope=None):
+        """Populates the SBML with the objects in the root namespace."""
 
         if scope == None:
             scope = Scope()
