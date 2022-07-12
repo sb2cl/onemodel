@@ -12,11 +12,11 @@ def test_init():
 def test_add_2_SBML_model():
     m = OneModel()
 
-    m.root["foo"] = Species()
-    m.root["bar"] = Parameter()
-    m.root["R1"] = AlgebraicRule()
-    m.root["R1"].variable = "foo"
-    m.root["R1"].math = "10*bar"
+    m["foo"] = Species()
+    m["bar"] = Parameter()
+    m["R1"] = AlgebraicRule()
+    m["R1"].variable = "foo"
+    m["R1"].math = "10*bar"
 
     result_string = m.get_SBML_string()
     result = ElementTree.fromstring(result_string)

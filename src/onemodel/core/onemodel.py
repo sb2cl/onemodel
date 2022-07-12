@@ -6,11 +6,18 @@ from onemodel.core.namespace import Namespace
 from onemodel.core.scope import Scope
 
 
-class OneModel:
+class OneModel(Scope):
+    """OneModel contains the root namespace where we define the models.
+
+    """
     def __init__(self):
+        super().__init__()
 
         self.model_name = "main"
+
         self.root = Namespace()
+        self.push(self.root)
+
         self.SBML_document = None
         self.SBML_model = None
 

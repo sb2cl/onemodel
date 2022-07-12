@@ -16,14 +16,14 @@ def test_add_2_SBML_model():
 
     m = OneModel()
 
-    m.root["A"] = Species()
-    m.root["B"] = Species()
-    m.root["k"] = Parameter()
+    m["A"] = Species()
+    m["B"] = Species()
+    m["k"] = Parameter()
 
-    m.root["J1"] = Reaction()
-    m.root["J1"].reactants = ["A"]
-    m.root["J1"].products = ["B"]
-    m.root["J1"].kinetic_law = "k*A"
+    m["J1"] = Reaction()
+    m["J1"].reactants = ["A"]
+    m["J1"].products = ["B"]
+    m["J1"].kinetic_law = "k*A"
 
     result_string = m.get_SBML_string()
     result = ElementTree.fromstring(result_string)
@@ -80,16 +80,16 @@ def test_reference_nested():
 
     m = OneModel()
 
-    m.root["foo"] = Object()
+    m["foo"] = Object()
 
-    m.root["A"] = Species()
-    m.root["foo"]["B"] = Species()
-    m.root["foo"]["k"] = Parameter()
+    m["A"] = Species()
+    m["foo"]["B"] = Species()
+    m["foo"]["k"] = Parameter()
 
-    m.root["foo"]["J1"] = Reaction()
-    m.root["foo"]["J1"].reactants = ["A"]
-    m.root["foo"]["J1"].products = ["B"]
-    m.root["foo"]["J1"].kinetic_law = "k*A"
+    m["foo"]["J1"] = Reaction()
+    m["foo"]["J1"].reactants = ["A"]
+    m["foo"]["J1"].products = ["B"]
+    m["foo"]["J1"].kinetic_law = "k*A"
 
     result_string = m.get_SBML_string()
     result = ElementTree.fromstring(result_string)

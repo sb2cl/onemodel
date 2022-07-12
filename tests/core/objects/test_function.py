@@ -19,17 +19,17 @@ def test_call():
     
     m = OneModel()
     
-    m.root["foo"] = Parameter()
+    m["foo"] = Parameter()
 
-    m.root["get"] = Function()
-    m.root["get"].argument_names = ["parameter"]
-    m.root["get"].body = get_value
+    m["get"] = Function()
+    m["get"].argument_names = ["parameter"]
+    m["get"].body = get_value
 
     scope = Scope()
     scope.push(m.root)
-    result = m.root["get"].call(scope, ["foo"])
+    result = m["get"].call(scope, ["foo"])
 
-    expected = m.root["foo"].value
+    expected = m["foo"].value
 
     assert result == expected
 
@@ -41,19 +41,19 @@ def method_increase(scope):
 def test_method():
     m = OneModel()
     
-    m.root["foo"] = Object()
+    m["foo"] = Object()
 
-    m.root["foo"]["bar"] = Parameter()
-    m.root["foo"]["increase"] = Function()
-    m.root["foo"]["increase"].argument_names = ["self"]
-    m.root["foo"]["increase"].body = method_increase
+    m["foo"]["bar"] = Parameter()
+    m["foo"]["increase"] = Function()
+    m["foo"]["increase"].argument_names = ["self"]
+    m["foo"]["increase"].body = method_increase
 
     scope = Scope()
     scope.push(m.root)
-    m.root["foo"]["increase"].call(scope, ["foo"])
-    m.root["foo"]["increase"].call(scope, ["foo"])
-    m.root["foo"]["increase"].call(scope, ["foo"])
+    m["foo"]["increase"].call(scope, ["foo"])
+    m["foo"]["increase"].call(scope, ["foo"])
+    m["foo"]["increase"].call(scope, ["foo"])
 
-    result = m.root["foo"]["bar"].value
+    result = m["foo"]["bar"].value
 
     assert result == 3
