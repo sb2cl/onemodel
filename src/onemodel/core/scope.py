@@ -1,7 +1,3 @@
-class ScopeIsEmptyError(Exception):
-    """Raised when pop() an empty Scope. """
-    pass
-
 class Scope:
 
     def __init__(self):
@@ -19,7 +15,7 @@ class Scope:
             self.namespaces.pop()
             self.identifiers.pop()
         else:
-            raise ScopeIsEmptyError
+            raise Exception("Scope is empty")
 
     def peek(self):
         if self.namespaces:
