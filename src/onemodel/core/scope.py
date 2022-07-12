@@ -32,7 +32,7 @@ class Scope:
 
     def get(self, name):
         for namespace in reversed(self.namespaces):
-            if namespace.has_name(name):
+            if name in namespace:
                 return namespace[name]
 
         return None
@@ -41,7 +41,7 @@ class Scope:
 
         i = len(self.namespaces)
         for namespace in reversed(self.namespaces):
-            if namespace.has_name(name):
+            if name in namespace:
                 break
             i -= 1
         position_namespace_has_name = i

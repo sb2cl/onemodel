@@ -68,9 +68,8 @@ class OneModel:
         if scope.peek().is_empty():
             return
 
-        for name in scope.peek().names():
+        for name, value  in scope.peek().items():
             
-            value = scope.peek()[name]
             value.add_to_SBML_model(name, scope, self.SBML_model)
             
             scope.push(value, name)
