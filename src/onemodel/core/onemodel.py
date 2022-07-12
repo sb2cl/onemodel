@@ -35,14 +35,17 @@ class OneModel(Scope):
         self.push(self.root)
 
     def get_SBML_string(self):
-        SBML_document, SBML_model = self.init_SBML_document()
-        self.populate_SBML_document(SBML_model)
+        """Returns a SBML representation of the model. """
+
+        SBML_document, SBML_model = self._init_SBML_document()
+        self._populate_SBML_document(SBML_model)
         # self.check_SBML_consistency()
         result = libsbml.writeSBMLToString(SBML_document)
 
         return result
 
-    def init_SBML_document(self):
+    def _init_SBML_document(self):
+        """Initializes the SBML document. """
 
         # Create and empty SBMLDocument object.
         try:
@@ -89,7 +92,7 @@ class OneModel(Scope):
 
         return SBML_document, SBML_model
 
-    def populate_SBML_document(self, SBML_model, scope=None):
+    def _populate_SBML_document(self, SBML_model, scope=None):
 
         if scope == None:
             scope = Scope()
@@ -103,5 +106,5 @@ class OneModel(Scope):
             value.add_to_SBML_model(name, scope, SBML_model)
             
             scope.push(value, name)
-            self.populate_SBML_document(SBML_model, scope)
+            self._populate_SBML_document(SBML_model, scope)
             scope.pop()
