@@ -12,10 +12,6 @@ class Scope:
 
     identifiers : :obj:`list` of :obj:`str`
         List of the identifier name for each namespace.
-
-    Examples
-    --------
-    TODO
     """
 
     def __init__(self):
@@ -90,9 +86,9 @@ class Scope:
                 basename += self.identifiers[i] + "__"
             i += 1
         
-        fullname = basename + name
+        result = basename + name
 
-        return fullname
+        return result
 
     def __setitem__(self, name, value):
         self.set(name, value)
