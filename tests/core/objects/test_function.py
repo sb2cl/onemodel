@@ -25,9 +25,7 @@ def test_call():
     m["get"].argument_names = ["parameter"]
     m["get"].body = get_value
 
-    scope = Scope()
-    scope.push(m.root)
-    result = m["get"].call(scope, ["foo"])
+    result = m["get"].call(m, ["foo"])
 
     expected = m["foo"].value
 
@@ -48,11 +46,9 @@ def test_method():
     m["foo"]["increase"].argument_names = ["self"]
     m["foo"]["increase"].body = method_increase
 
-    scope = Scope()
-    scope.push(m.root)
-    m["foo"]["increase"].call(scope, ["foo"])
-    m["foo"]["increase"].call(scope, ["foo"])
-    m["foo"]["increase"].call(scope, ["foo"])
+    m["foo"]["increase"].call(m, ["foo"])
+    m["foo"]["increase"].call(m, ["foo"])
+    m["foo"]["increase"].call(m, ["foo"])
 
     result = m["foo"]["bar"].value
 

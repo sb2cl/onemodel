@@ -212,11 +212,7 @@ def test_ex03_protein_constitutive():
     m['ProteinConstitutive'] = Function()
     m['ProteinConstitutive'].argument_names = []
     m['ProteinConstitutive'].body = ProteinConstitutive
-
-    scope = Scope()
-    scope.push(m.root)
-
-    m['A'] = m.root['ProteinConstitutive'].call(scope, [])
+    m['A'] = m.root['ProteinConstitutive'].call(m, [])
 
     result_string = m.get_SBML_string()
     result = ElementTree.fromstring(result_string)
@@ -342,11 +338,8 @@ def test_ex05_protein_induced():
     m['ProteinInduced'].argument_names = []
     m['ProteinInduced'].body = ProteinInduced
 
-    scope = Scope()
-    scope.push(m.root)
-
-    m['A'] = m.root['ProteinConstitutive'].call(scope, [])
-    m['B'] = m.root['ProteinInduced'].call(scope, [])
+    m['A'] = m.root['ProteinConstitutive'].call(m, [])
+    m['B'] = m.root['ProteinInduced'].call(m, [])
 
     m['R1'] = AssignmentRule()
     m["R1"].variable = "B__TF"
