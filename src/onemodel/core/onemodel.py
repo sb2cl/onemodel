@@ -6,33 +6,68 @@ from onemodel.core.namespace import Namespace
 from onemodel.core.scope import Scope
 
 
-class OneModel:
+class OneModel(Scope):
+    """OneModel contains the root namespace where we define the models.
+
+    The class OneModel is the semantic model of the OneModel syntax. OneModel
+    defines the root namespace in which we define the objects that form our
+    models.
+
+    Parameters
+    ----------
+    model_name : :obj:`str`
+        The name of the model.
+
+    root : :obj:`Namespace`
+        The root namespace of the model.
+
+    Notes
+    -----
+    The OneModel class extends Scope class for user convinience. This way is
+    easier to work with OneModel without using the dsl.
+    """
     def __init__(self):
+        super().__init__()
 
         self.model_name = "main"
         self.root = Namespace()
-        self.SBML_document = None
-        self.SBML_model = None
 
-    def init_SBML_document(self):
+        self.push(self.root, "")
+
+    def get_SBML_string(self):
+        """Returns a SBML representation of the model. """
+
+        # Perform self.pop() until the root namespace.
+        while len(self.namespaces) > 1:
+            self.pop()
+
+        SBML_document, SBML_model = self._init_SBML_document()
+        self._populate_SBML_document(SBML_model)
+        # self.check_SBML_consistency()
+        result = libsbml.writeSBMLToString(SBML_document)
+
+        return result
+
+    def _init_SBML_document(self):
+        """Initializes the SBML document. """
 
         # Create and empty SBMLDocument object.
         try:
-            self.document = SBMLDocument(3, 2)
+            SBML_document = SBMLDocument(3, 2)
         except ValueError:
             raise SystemExit("Could not create SBMLDocument object")
 
         # Create the basic Model object inside the SBMLDocument object.
-        self.SBML_model = self.document.createModel()
-        check(self.SBML_model, "create model")
-        check(self.SBML_model.setName(self.model_name), "set model name")
-        check(self.SBML_model.setId(self.model_name), "set model id")
-        check(self.SBML_model.setTimeUnits("second"), "set model-wide time units")
-        check(self.SBML_model.setExtentUnits("mole"), "set model units of extent")
-        check(self.SBML_model.setSubstanceUnits("mole"), "set model substance units")
+        SBML_model = SBML_document.createModel()
+        check(SBML_model, "create model")
+        check(SBML_model.setName(self.model_name), "set model name")
+        check(SBML_model.setId(self.model_name), "set model id")
+        check(SBML_model.setTimeUnits("second"), "set model-wide time units")
+        check(SBML_model.setExtentUnits("mole"), "set model units of extent")
+        check(SBML_model.setSubstanceUnits("mole"), "set model substance units")
 
         # Create a unit definition we will need later.
-        per_second = self.SBML_model.createUnitDefinition()
+        per_second = SBML_model.createUnitDefinition()
         check(per_second, "create unit definition")
         check(per_second.setId("per_second"), "set unit definition id")
 
@@ -44,7 +79,7 @@ class OneModel:
         check(unit.setMultiplier(1), "set unit multiplier")
 
         # Create a default_compartment.
-        c = self.SBML_model.createCompartment()
+        c = SBML_model.createCompartment()
 
         # TODO: This should be added to root context.
         # self.current_context.set(
@@ -59,27 +94,13 @@ class OneModel:
         check(c.setSpatialDimensions(3), "set compartment dimensions")
         check(c.setUnits("litre"), "set compartment size units")
 
-    def populate_SBML_document(self, scope=None):
+        return SBML_document, SBML_model
 
-        if scope == None:
-            scope = Scope()
-            scope.push(self.root, "")
+    def _populate_SBML_document(self, SBML_model):
+        """Populates the SBML with the objects in the root namespace."""
 
-        if scope.peek().is_empty():
-            return
-
-        for name, value  in scope.peek().items():
-            
-            value.add_to_SBML_model(name, scope, self.SBML_model)
-            
-            scope.push(value, name)
-            self.populate_SBML_document(scope)
-            scope.pop()
-
-    def get_SBML_string(self):
-        self.init_SBML_document()
-        self.populate_SBML_document()
-        # self.check_SBML_consistency()
-        result = libsbml.writeSBMLToString(self.document)
-
-        return result
+        for name, value in self.peek().items():
+            value.add_to_SBML_model(name, self, SBML_model)
+            self.push(value, name)
+            self._populate_SBML_document(SBML_model)
+            self.pop()

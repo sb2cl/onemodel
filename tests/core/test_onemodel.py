@@ -47,33 +47,33 @@ def test_ex01_simple_gene_expression():
 
     m = OneModel()
     
-    m.root['mRNA'] = Species()
-    m.root['protein'] = Species()
+    m['mRNA'] = Species()
+    m['protein'] = Species()
     
-    m.root['k_m'] = Parameter()
-    m.root['d_m'] = Parameter()
-    m.root['k_p'] = Parameter()
-    m.root['d_p'] = Parameter()
+    m['k_m'] = Parameter()
+    m['d_m'] = Parameter()
+    m['k_p'] = Parameter()
+    m['d_p'] = Parameter()
     
-    m.root['J1'] = Reaction()
-    m.root['J1'].reactants = []
-    m.root['J1'].products = ['mRNA']
-    m.root['J1'].kinetic_law = 'k_m'
+    m['J1'] = Reaction()
+    m['J1'].reactants = []
+    m['J1'].products = ['mRNA']
+    m['J1'].kinetic_law = 'k_m'
     
-    m.root['J2'] = Reaction()
-    m.root['J2'].reactants = ['mRNA']
-    m.root['J2'].products = []
-    m.root['J2'].kinetic_law = 'd_m*mRNA'
+    m['J2'] = Reaction()
+    m['J2'].reactants = ['mRNA']
+    m['J2'].products = []
+    m['J2'].kinetic_law = 'd_m*mRNA'
     
-    m.root['J3'] = Reaction()
-    m.root['J3'].reactants = ['mRNA']
-    m.root['J3'].products = ['mRNA', 'protein']
-    m.root['J3'].kinetic_law = 'k_p*mRNA'
+    m['J3'] = Reaction()
+    m['J3'].reactants = ['mRNA']
+    m['J3'].products = ['mRNA', 'protein']
+    m['J3'].kinetic_law = 'k_p*mRNA'
     
-    m.root['J4'] = Reaction()
-    m.root['J4'].reactants = ['protein']
-    m.root['J4'].products = []
-    m.root['J4'].kinetic_law = 'd_p*protein'
+    m['J4'] = Reaction()
+    m['J4'].reactants = ['protein']
+    m['J4'].products = []
+    m['J4'].kinetic_law = 'd_p*protein'
     
     result_string = m.get_SBML_string()
     result = ElementTree.fromstring(result_string)
@@ -209,14 +209,10 @@ def ProteinConstitutive(scope):
 def test_ex03_protein_constitutive():
     m = OneModel()
     
-    m.root['ProteinConstitutive'] = Function()
-    m.root['ProteinConstitutive'].argument_names = []
-    m.root['ProteinConstitutive'].body = ProteinConstitutive
-
-    scope = Scope()
-    scope.push(m.root)
-
-    m.root['A'] = m.root['ProteinConstitutive'].call(scope, [])
+    m['ProteinConstitutive'] = Function()
+    m['ProteinConstitutive'].argument_names = []
+    m['ProteinConstitutive'].body = ProteinConstitutive
+    m['A'] = m.root['ProteinConstitutive'].call(m, [])
 
     result_string = m.get_SBML_string()
     result = ElementTree.fromstring(result_string)
@@ -334,23 +330,20 @@ def ProteinInduced(scope):
 def test_ex05_protein_induced():
     m = OneModel()
     
-    m.root['ProteinConstitutive'] = Function()
-    m.root['ProteinConstitutive'].argument_names = []
-    m.root['ProteinConstitutive'].body = ProteinConstitutive
+    m['ProteinConstitutive'] = Function()
+    m['ProteinConstitutive'].argument_names = []
+    m['ProteinConstitutive'].body = ProteinConstitutive
 
-    m.root['ProteinInduced'] = Function()
-    m.root['ProteinInduced'].argument_names = []
-    m.root['ProteinInduced'].body = ProteinInduced
+    m['ProteinInduced'] = Function()
+    m['ProteinInduced'].argument_names = []
+    m['ProteinInduced'].body = ProteinInduced
 
-    scope = Scope()
-    scope.push(m.root)
+    m['A'] = m.root['ProteinConstitutive'].call(m, [])
+    m['B'] = m.root['ProteinInduced'].call(m, [])
 
-    m.root['A'] = m.root['ProteinConstitutive'].call(scope, [])
-    m.root['B'] = m.root['ProteinInduced'].call(scope, [])
-
-    m.root['R1'] = AssignmentRule()
-    m.root["R1"].variable = "B__TF"
-    m.root["R1"].math = "A__protein"
+    m['R1'] = AssignmentRule()
+    m["R1"].variable = "B__TF"
+    m["R1"].math = "A__protein"
 
     result_string = m.get_SBML_string()
     result = ElementTree.fromstring(result_string)
@@ -536,5 +529,3 @@ def test_ex05_protein_induced():
 
 
     assert ElementTree.tostring(result) == ElementTree.tostring(expected)
-
-

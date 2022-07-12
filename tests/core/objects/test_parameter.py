@@ -12,7 +12,7 @@ def test_init():
 def test_add_2_SBML_model():
 
     m = OneModel()
-    m.root["a"] = Parameter()
+    m["a"] = Parameter()
     result_string = m.get_SBML_string()
     result = ElementTree.fromstring(result_string)
 
