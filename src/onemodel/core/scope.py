@@ -54,7 +54,6 @@ class Scope:
         * If the name is not defined there, we look for it recursibely in the
           previous namespaces.
         * If the name is nof found in any of the namespaces, return None.
-
         """
 
         for namespace in reversed(self.namespaces):

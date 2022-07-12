@@ -4,7 +4,6 @@ from onemodel.core.namespace import Namespace
 
 def test_init():
     result = Scope()
-
     assert isinstance(result, Scope)
 
 def test_push():
