@@ -1,0 +1,84 @@
+@@grammar::OneModel
+
+
+# TatSu by default defines newline as whitespace but onemodel syntax
+# uses newlines as separators. So we have removed the intro from the
+# whitespace characters in TatSu.
+@@whitespace::/[\t ]+/
+
+
+# This allows us to use comments like in python.
+@@eol_comments::/#.*?$/
+
+
+# Keywords reserved.
+@@keyword:: species parameter reaction end rule function input import has standalone if
+
+
+
+start
+  = 
+  {statements} $
+  ;
+
+
+statements
+  =
+  {newline} @:statement {{newline}+ @:statement} {newline}
+  ;
+
+
+statement
+  =
+  expr
+  ;
+
+
+expr
+  =
+  'parameter' @:parameter {',' | @:parameter}
+  ;
+
+
+parameter::Parameter
+  =
+  name:identifier ['=' value:number]
+  ;
+
+
+# Definition of identifiers
+# Identifiers cannot have a keyword name.
+@name
+identifier::str
+  =
+  /(?!\d)\w+/ 
+  ;
+
+
+number
+  =
+  | integer
+  | float
+  ;
+
+
+# Definition of integers.
+integer::Integer
+  = 
+  value:/\d+/
+  ;
+
+
+# Definition of floats.
+float::Float
+  =
+  | value:/\d*(?:\.\d+)?(?:e(?:\+|\-)\d+)/  # Scientific notation.
+  | value:/\d*\.\d+/                        # Regular floats.
+  ;
+
+
+newline 
+  = 
+  | ';'
+  | /\n/
+  ;
