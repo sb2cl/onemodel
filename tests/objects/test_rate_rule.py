@@ -1,0 +1,61 @@
+from xml.etree import ElementTree
+
+from onemodel.onemodel import OneModel
+from onemodel.objects.species import Species
+from onemodel.objects.parameter import Parameter
+from onemodel.objects.rate_rule import RateRule
+
+def test_init():
+    result = RateRule()
+    assert isinstance(result, RateRule)
+
+def test_add_2_SBML_model():
+    m = OneModel()
+
+    m["foo"] = Species()
+    m["bar"] = Parameter()
+    m["R1"] = RateRule()
+    m["R1"]["variable"] = "foo"
+    m["R1"]["math"] = "10*bar"
+
+    result_string = m.get_SBML_string()
+    result = ElementTree.fromstring(result_string)
+
+    print(result_string)
+
+    expected_string = """<?xml version="1.0" encoding="UTF-8"?>
+<sbml xmlns="http://www.sbml.org/sbml/level3/version2/core" level="3" version="2">
+  <model id="main" name="main" substanceUnits="mole" timeUnits="second" extentUnits="mole">
+    <listOfUnitDefinitions>
+      <unitDefinition id="per_second">
+        <listOfUnits>
+          <unit kind="second" exponent="-1" scale="0" multiplier="1"/>
+        </listOfUnits>
+      </unitDefinition>
+    </listOfUnitDefinitions>
+    <listOfCompartments>
+      <compartment id="default_compartment" spatialDimensions="3" size="1" units="litre" constant="true"/>
+    </listOfCompartments>
+    <listOfSpecies>
+      <species id="foo" compartment="default_compartment" initialConcentration="0" substanceUnits="mole" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+    </listOfSpecies>
+    <listOfParameters>
+      <parameter id="bar" value="0" units="per_second" constant="true"/>
+    </listOfParameters>
+    <listOfRules>
+      <rateRule id="R1" variable="foo">
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+          <apply>
+            <times/>
+            <cn type="integer"> 10 </cn>
+            <ci> bar </ci>
+          </apply>
+        </math>
+      </rateRule>
+    </listOfRules>
+  </model>
+</sbml>
+    """
+
+    expected = ElementTree.fromstring(expected_string)
+    assert ElementTree.tostring(result) == ElementTree.tostring(expected)

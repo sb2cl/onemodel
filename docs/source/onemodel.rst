@@ -6,16 +6,33 @@ Subpackages
 
 .. toctree::
 
-    onemodel.core
     onemodel.dsl
+    onemodel.objects
+    onemodel.utils
 
 Submodules
 ----------
 
-onemodel\.utils module
+onemodel\.namespace module
+--------------------------
+
+.. automodule:: onemodel.namespace
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+onemodel\.onemodel module
+-------------------------
+
+.. automodule:: onemodel.onemodel
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+onemodel\.scope module
 ----------------------
 
-.. automodule:: onemodel.utils
+.. automodule:: onemodel.scope
     :members:
     :undoc-members:
     :show-inheritance:
