@@ -4,6 +4,7 @@ from libsbml import UNIT_KIND_SECOND, SBMLDocument
 from onemodel.core.utils.check import check
 from onemodel.core.namespace import Namespace
 from onemodel.core.scope import Scope
+from onemodel.core.objects.object import Object
 
 
 class OneModel(Scope):
@@ -95,6 +96,10 @@ class OneModel(Scope):
         """Populates the SBML with the objects in the root namespace."""
 
         for name, value in self.peek().items():
+
+            if not isinstance(value, Object):
+                continue
+
             value.add_to_SBML_model(name, self, SBML_model)
             self.push(value, name)
             self._populate_SBML_document(SBML_model)

@@ -20,6 +20,8 @@ def test_get_SBML_string():
 
     m = OneModel()
 
+    m["foo"] = "this should not be included in the SBML model"
+
     result_string = m.get_SBML_string()
     result = ElementTree.fromstring(result_string)
 
