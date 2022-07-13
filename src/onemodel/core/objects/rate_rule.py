@@ -6,7 +6,7 @@ from onemodel.core.objects.object import Object
 
 
 class RateRule(Object):
-    """ An equation that sets the derivative of a Species.
+    """An equation that sets the derivative of a Species.
 
     Parameters
     ----------
