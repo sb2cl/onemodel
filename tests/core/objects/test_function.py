@@ -22,8 +22,8 @@ def test_call():
     m["foo"] = Parameter()
 
     m["get"] = Function()
-    m["get"].argument_names = ["parameter"]
-    m["get"].body = get_value
+    m["get"]["argument_names"] = ["parameter"]
+    m["get"]["body"] = get_value
 
     result = m["get"].call(m, ["foo"])
 
@@ -43,8 +43,8 @@ def test_method():
 
     m["foo"]["bar"] = Parameter()
     m["foo"]["increase"] = Function()
-    m["foo"]["increase"].argument_names = ["self"]
-    m["foo"]["increase"].body = method_increase
+    m["foo"]["increase"]["argument_names"] = ["self"]
+    m["foo"]["increase"]["body"] = method_increase
 
     m["foo"]["increase"].call(m, ["foo"])
     m["foo"]["increase"].call(m, ["foo"])

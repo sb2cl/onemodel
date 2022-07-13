@@ -212,8 +212,8 @@ def test_ex03_protein_constitutive():
     m = OneModel()
     
     m['ProteinConstitutive'] = Function()
-    m['ProteinConstitutive'].argument_names = []
-    m['ProteinConstitutive'].body = ProteinConstitutive
+    m['ProteinConstitutive']["argument_names"] = []
+    m['ProteinConstitutive']["body"] = ProteinConstitutive
     m['A'] = m.root['ProteinConstitutive'].call(m, [])
 
     result_string = m.get_SBML_string()
@@ -333,12 +333,12 @@ def test_ex05_protein_induced():
     m = OneModel()
     
     m['ProteinConstitutive'] = Function()
-    m['ProteinConstitutive'].argument_names = []
-    m['ProteinConstitutive'].body = ProteinConstitutive
+    m['ProteinConstitutive']["argument_names"] = []
+    m['ProteinConstitutive']["body"] = ProteinConstitutive
 
     m['ProteinInduced'] = Function()
-    m['ProteinInduced'].argument_names = []
-    m['ProteinInduced'].body = ProteinInduced
+    m['ProteinInduced']["argument_names"] = []
+    m['ProteinInduced']["body"] = ProteinInduced
 
     m['A'] = m.root['ProteinConstitutive'].call(m, [])
     m['B'] = m.root['ProteinInduced'].call(m, [])
