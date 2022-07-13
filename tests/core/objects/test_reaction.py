@@ -21,9 +21,9 @@ def test_add_2_SBML_model():
     m["k"] = Parameter()
 
     m["J1"] = Reaction()
-    m["J1"].reactants = ["A"]
-    m["J1"].products = ["B"]
-    m["J1"].kinetic_law = "k*A"
+    m["J1"]["reactants"] = ["A"]
+    m["J1"]["products"] = ["B"]
+    m["J1"]["kinetic_law"] = "k*A"
 
     result_string = m.get_SBML_string()
     result = ElementTree.fromstring(result_string)
@@ -87,9 +87,9 @@ def test_reference_nested():
     m["foo"]["k"] = Parameter()
 
     m["foo"]["J1"] = Reaction()
-    m["foo"]["J1"].reactants = ["A"]
-    m["foo"]["J1"].products = ["B"]
-    m["foo"]["J1"].kinetic_law = "k*A"
+    m["foo"]["J1"]["reactants"] = ["A"]
+    m["foo"]["J1"]["products"] = ["B"]
+    m["foo"]["J1"]["kinetic_law"] = "k*A"
 
     result_string = m.get_SBML_string()
     result = ElementTree.fromstring(result_string)

@@ -7,15 +7,25 @@ from onemodel.core.utils.math_2_fullname import math_2_fullname
 
 
 class Reaction(Object):
+    """A (bio-)chemical reaction. 
 
+    Parameters
+    ----------
+    reactants : :obj:`list` of :obj:`Species`
+    products : :obj:`list` of :obj:`Species`
+    kinetic_law : :obj:`str`
+    reversible : :obj:`bool`
+    """
     def __init__(self):
         super().__init__()
-        self.reactants = []
-        self.products = []
-        self.kinetic_law = ""
-        self.reversible = False
+        self["reactants"] = []
+        self["products"] = []
+        self["kinetic_law"] = ""
+        self["reversible"] = False
 
     def add_to_SBML_model(self, name, scope, model):
+        """Include this object into a SBML model. """
+
         # List of species involved as reactans or products in the reaction.
         species_involved = []
 
@@ -25,6 +35,7 @@ class Reaction(Object):
         self.create_SBML_reaction_kinetic_law(r, model, species_involved, scope)
 
     def create_SBML_reaction(self, name, scope, model):
+        """Create and add the SBML reaction object. """
 
         fullname = scope.get_fullname(name)
 
@@ -41,15 +52,16 @@ class Reaction(Object):
         )
 
         check(
-            r.setReversible(self.reversible), 
+            r.setReversible(self["reversible"]), 
             "set reaction reversibility flag"
         )
 
         return r
 
     def create_SBML_reaction_reactants(self, reaction, species_involved, scope):
+        """Create and add the SBML reactants. """
 
-        for name in self.reactants:
+        for name in self["reactants"]:
             if name == None:
                 continue
 
@@ -75,8 +87,9 @@ class Reaction(Object):
             species_involved.append(fullname)
 
     def create_SBML_reaction_products(self, reaction, species_involved, scope):
+        """Create and add the SBML products. """
 
-        for name in self.products:
+        for name in self["products"]:
             if name == None:
                 continue
 
@@ -102,8 +115,9 @@ class Reaction(Object):
             species_involved.append(name)
 
     def create_SBML_reaction_kinetic_law(self, reaction, model, species_involved, scope):
+        """Add the kinetic law to the reaction"""
 
-        math_fullname = math_2_fullname(self.kinetic_law, scope)
+        math_fullname = math_2_fullname(self["kinetic_law"], scope)
         math_ast = parseL3Formula(math_fullname)
 
         check(
@@ -154,4 +168,3 @@ class Reaction(Object):
                 modifier_ref.setSpecies(item), 
                 "assign modifier species"
             )
-

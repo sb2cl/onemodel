@@ -58,24 +58,24 @@ def test_ex01_simple_gene_expression():
     m['d_p'] = Parameter()
     
     m['J1'] = Reaction()
-    m['J1'].reactants = []
-    m['J1'].products = ['mRNA']
-    m['J1'].kinetic_law = 'k_m'
+    m['J1']["reactants"] = []
+    m['J1']["products"] = ['mRNA']
+    m['J1']["kinetic_law"] = 'k_m'
     
     m['J2'] = Reaction()
-    m['J2'].reactants = ['mRNA']
-    m['J2'].products = []
-    m['J2'].kinetic_law = 'd_m*mRNA'
+    m['J2']["reactants"] = ['mRNA']
+    m['J2']["products"] = []
+    m['J2']["kinetic_law"] = 'd_m*mRNA'
     
     m['J3'] = Reaction()
-    m['J3'].reactants = ['mRNA']
-    m['J3'].products = ['mRNA', 'protein']
-    m['J3'].kinetic_law = 'k_p*mRNA'
+    m['J3']["reactants"] = ['mRNA']
+    m['J3']["products"] = ['mRNA', 'protein']
+    m['J3']["kinetic_law"] = 'k_p*mRNA'
     
     m['J4'] = Reaction()
-    m['J4'].reactants = ['protein']
-    m['J4'].products = []
-    m['J4'].kinetic_law = 'd_p*protein'
+    m['J4']["reactants"] = ['protein']
+    m['J4']["products"] = []
+    m['J4']["kinetic_law"] = 'd_p*protein'
     
     result_string = m.get_SBML_string()
     result = ElementTree.fromstring(result_string)
@@ -187,24 +187,24 @@ def ProteinConstitutive(scope):
     scope['self']['d_p']["value"] = 1
 
     scope['self']['J1'] = Reaction()
-    scope['self']['J1'].reactants = []
-    scope['self']['J1'].products = ['mRNA']
-    scope['self']['J1'].kinetic_law = 'k_m'
+    scope['self']['J1']["reactants"] = []
+    scope['self']['J1']["products"] = ['mRNA']
+    scope['self']['J1']["kinetic_law"] = 'k_m'
 
     scope['self']['J2'] = Reaction()
-    scope['self']['J2'].reactants = ['mRNA']
-    scope['self']['J2'].products = []
-    scope['self']['J2'].kinetic_law = 'd_m*mRNA'
+    scope['self']['J2']["reactants"] = ['mRNA']
+    scope['self']['J2']["products"] = []
+    scope['self']['J2']["kinetic_law"] = 'd_m*mRNA'
 
     scope['self']['J3'] = Reaction()
-    scope['self']['J3'].reactants = ['mRNA']
-    scope['self']['J3'].products = ['mRNA', 'protein']
-    scope['self']['J3'].kinetic_law = 'k_p*mRNA'
+    scope['self']['J3']["reactants"] = ['mRNA']
+    scope['self']['J3']["products"] = ['mRNA', 'protein']
+    scope['self']['J3']["kinetic_law"] = 'k_p*mRNA'
 
     scope['self']['J4'] = Reaction()
-    scope['self']['J4'].reactants = ['protein']
-    scope['self']['J4'].products = []
-    scope['self']['J4'].kinetic_law = 'd_p*protein'
+    scope['self']['J4']["reactants"] = ['protein']
+    scope['self']['J4']["products"] = []
+    scope['self']['J4']["kinetic_law"] = 'd_p*protein'
 
     return scope['self']
  
