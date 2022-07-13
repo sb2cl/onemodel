@@ -15,6 +15,7 @@ class RateRule(Object):
     math : :obj:`str`
         The math expression to evaluate.
     """
+
     def __init__(self):
         super().__init__()
         self["variable"] = ""

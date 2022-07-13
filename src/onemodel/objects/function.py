@@ -13,6 +13,7 @@ class Function(Object):
     body : :obj:`function`
         A Python function object.
     """
+
     def __init__(self):
         super().__init__()
 

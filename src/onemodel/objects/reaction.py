@@ -16,6 +16,7 @@ class Reaction(Object):
     kinetic_law : :obj:`str`
     reversible : :obj:`bool`
     """
+
     def __init__(self):
         super().__init__()
         self["reactants"] = []

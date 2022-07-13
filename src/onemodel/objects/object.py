@@ -7,6 +7,7 @@ class Object(Namespace):
     objects. This clases is the base for implementing the rest of
     OneModel elements.
     """
+
     def __init__(self):
         super().__init__()
 

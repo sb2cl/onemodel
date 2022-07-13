@@ -14,6 +14,7 @@ class Species(Object):
     boundaryCondition : :obj:`bool`
     hasOnlySubstanceUnits : :obj:`bool`
     """
+
     def __init__(self):
         super().__init__()
         self["compartment"] = "default_compartment"

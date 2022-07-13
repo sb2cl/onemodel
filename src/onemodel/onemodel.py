@@ -22,6 +22,7 @@ class OneModel(Scope):
     root : :obj:`Namespace`
         The root namespace of the model.
     """
+
     def __init__(self):
         super().__init__()
 

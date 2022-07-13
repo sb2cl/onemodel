@@ -16,6 +16,7 @@ class Parameter(Object):
     units : :obj:`str`
         Units of the parameter.
     """
+
     def __init__(self):
         super().__init__()
 
