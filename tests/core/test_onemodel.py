@@ -324,8 +324,8 @@ def ProteinInduced(scope):
     scope["self"]["k_m_max"]["value"] = 1
 
     scope["self"]["R1"] = AssignmentRule()
-    scope["self"]["R1"].variable = "k_m"
-    scope["self"]["R1"].math = "k_m_max*TF(TF+h)"
+    scope["self"]["R1"]["variable"] = "k_m"
+    scope["self"]["R1"]["math"] = "k_m_max*TF(TF+h)"
 
     return scope['self']
 
@@ -344,8 +344,8 @@ def test_ex05_protein_induced():
     m['B'] = m.root['ProteinInduced'].call(m, [])
 
     m['R1'] = AssignmentRule()
-    m["R1"].variable = "B__TF"
-    m["R1"].math = "A__protein"
+    m["R1"]["variable"] = "B__TF"
+    m["R1"]["math"] = "A__protein"
 
     result_string = m.get_SBML_string()
     result = ElementTree.fromstring(result_string)

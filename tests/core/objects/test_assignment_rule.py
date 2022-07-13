@@ -15,8 +15,8 @@ def test_add_2_SBML_model():
     m["foo"] = Species()
     m["bar"] = Parameter()
     m["R1"] = AssignmentRule()
-    m["R1"].variable = "foo"
-    m["R1"].math = "10*bar"
+    m["R1"]["variable"] = "foo"
+    m["R1"]["math"] = "10*bar"
 
     result_string = m.get_SBML_string()
     result = ElementTree.fromstring(result_string)

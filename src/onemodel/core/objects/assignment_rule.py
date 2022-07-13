@@ -6,19 +6,29 @@ from onemodel.core.objects.object import Object
 
 
 class AssignmentRule(Object):
+    """ An equation that sets the value of a Species.
+
+    Parameters
+    ----------
+    variable : :obj:`str`
+        The name of the species to set the value.
+    math : :obj:`str`
+        The math expression to evaluate.
+    """
 
     def __init__(self):
         super().__init__()
-        self.variable = ""
-        self.math = ""
+        self["variable"] = ""
+        self["math"] = ""
 
     def add_to_SBML_model(self, name, scope, model):
+        """Include this object into a SBML model. """
 
         fullname = scope.get_fullname(name)
 
-        variable_fullname = scope.get_fullname(self.variable)
+        variable_fullname = scope.get_fullname(self["variable"])
 
-        math_fullname = math_2_fullname(self.math, scope)
+        math_fullname = math_2_fullname(self["math"], scope)
         math_ast = parseL3Formula(math_fullname)
 
         r = model.createAssignmentRule()
