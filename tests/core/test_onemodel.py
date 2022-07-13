@@ -178,13 +178,13 @@ def ProteinConstitutive(scope):
     scope['self']['protein'] = Species()
 
     scope['self']['k_m'] = Parameter()
-    scope['self']['k_m'].value = 1
+    scope['self']['k_m']["value"] = 1
     scope['self']['d_m'] = Parameter()
-    scope['self']['d_m'].value = 1
+    scope['self']['d_m']["value"] = 1
     scope['self']['k_p'] = Parameter()
-    scope['self']['k_p'].value = 1
+    scope['self']['k_p']["value"] = 1
     scope['self']['d_p'] = Parameter()
-    scope['self']['d_p'].value = 1
+    scope['self']['d_p']["value"] = 1
 
     scope['self']['J1'] = Reaction()
     scope['self']['J1'].reactants = []
@@ -318,10 +318,10 @@ def ProteinInduced(scope):
     scope["self"]["k_m"] = Species()
 
     scope["self"]["h"] = Parameter()
-    scope["self"]["h"].value = 1
+    scope["self"]["h"]["value"] = 1
 
     scope["self"]["k_m_max"] = Parameter()
-    scope["self"]["k_m_max"].value = 1
+    scope["self"]["k_m_max"]["value"] = 1
 
     scope["self"]["R1"] = AssignmentRule()
     scope["self"]["R1"].variable = "k_m"

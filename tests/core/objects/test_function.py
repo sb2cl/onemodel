@@ -11,7 +11,7 @@ def test_init():
     assert isinstance(result, Function)
 
 def get_value(scope):
-    value = scope["parameter"].value
+    value = scope["parameter"]["value"]
 
     return value
 
@@ -27,14 +27,14 @@ def test_call():
 
     result = m["get"].call(m, ["foo"])
 
-    expected = m["foo"].value
+    expected = m["foo"]["value"]
 
     assert result == expected
 
 def method_increase(scope):
 
     parameter = scope["self"]["bar"]
-    parameter.value = parameter.value + 1
+    parameter["value"] = parameter["value"] + 1
 
 def test_method():
     m = OneModel()
@@ -50,6 +50,6 @@ def test_method():
     m["foo"]["increase"].call(m, ["foo"])
     m["foo"]["increase"].call(m, ["foo"])
 
-    result = m["foo"]["bar"].value
+    result = m["foo"]["bar"]["value"]
 
     assert result == 3
