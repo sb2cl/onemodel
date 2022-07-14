@@ -44,6 +44,8 @@ def test_walk_Parameter():
     parameter
         a4 = 1, a5
     end
+    
+    parameter a0.a1 = 1
     """
 
     walker = OneModelWalker()  
@@ -60,3 +62,4 @@ def test_walk_Parameter():
     assert result["a3"]["value"] == 0
     assert result["a4"]["value"] == 1
     assert result["a5"]["value"] == 0
+    assert result["a0"]["a1"]["value"] == 0

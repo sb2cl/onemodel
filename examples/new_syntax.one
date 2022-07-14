@@ -1,0 +1,61 @@
+from ex05_protein_induced import ProteinInduced, ProteinConstitutive
+
+
+model AntitheticController
+  """Antithetic controller motif.
+  
+  This model implements the antithetical biomolecular controller.
+
+  Instances 
+  ---------
+  z1 : ProteinConstitutive 
+    The sigma factor.
+  z2 : ProteinInduced
+    The anti-sigma factor.
+  x : ProteinInduced
+    The protein of interest to be controlled.
+
+  Parameters
+  ----------
+  gamma : parameter (1/min)
+    The antithetical sequestration rate.
+
+  Reactions
+  ---------
+  J1 : reaction
+    The antithetical reaction between z1 and z2. 
+
+  Rules
+  -----
+  R1 : assignment rule
+    Set z1 as the transcription factor of x.
+  R2 : assignment rule
+    Set x as the transcription factor of z2.
+  """
+
+  extends HostAwareModel
+
+  instance 
+    z1 = ProteinConstitutive()
+    z2 = ProteinInduced() 
+    x = ProteinInduced() 
+  end
+  
+  parameter
+    gamma = 1 / min
+  end
+
+  reaction
+    J1: z1.protein + z2.protein -> 0 ; gamma*z1.protein*z2.protein
+  end
+
+  rule
+    R1: x.TF := z1.protein 
+    R2: z2.TF := x.protein 
+  end
+end
+
+
+standalone
+  circuit = AntitheticController()
+end
