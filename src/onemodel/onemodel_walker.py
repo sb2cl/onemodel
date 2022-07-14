@@ -21,6 +21,21 @@ class OneModelWalker(NodeWalker):
         result = self.walk(ast)
 
         return result, ast
+    
+    def walk_Integer(self, node):
+        return int(node.value)
+
+    def walk_Float(self, node):
+        return float(node.value)
+
+    def walk_Parameter(self, node):
+        name = node.name
+        value = self.walk(node.value)
+
+        self.onemodel[name] = Parameter()
+
+        if value is not None:
+            self.onemodel[name]["value"] = value
 
     def walk_list(self, nodes):
         """Walk every object in a list. 
@@ -39,20 +54,4 @@ class OneModelWalker(NodeWalker):
 
     def walk_tuple(self, nodes):
         return self.walk_list(nodes)
-
-    def walk_Parameter(self, node):
-        name = node.name
-        value = self.walk(node.value)
-
-        self.onemodel[name] = Parameter()
-
-        if value is not None:
-            self.onemodel[name]["value"] = value
-
-    def walk_Float(self, node):
-        return float(node.value)
-
-    def walk_Integer(self, node):
-        return int(node.value)
-
 

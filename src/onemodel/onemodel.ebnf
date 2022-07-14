@@ -15,7 +15,6 @@
 @@keyword:: species parameter reaction end rule function input import has standalone if
 
 
-
 start
   = 
   {@:statements} $
@@ -41,21 +40,6 @@ expr
   ;
 
 
-parameter::Parameter
-  =
-  name:identifier ['=' value:number]
-  ;
-
-
-# Definition of identifiers
-# Identifiers cannot have a keyword name.
-@name
-identifier::str
-  =
-  /(?!\d)\w+/ 
-  ;
-
-
 number
   =
   | float
@@ -63,23 +47,35 @@ number
   ;
 
 
-# Definition of integers.
-integer::Integer
-  = 
-  value:/\d+/
-  ;
-
-
-# Definition of floats.
-float::Float
-  =
-  | value:/\d*(?:\.\d+)?(?:e(?:\+|\-|)\d+)/  # Scientific notation: 1e2, 1e+2, 0.1e-3
-  | value:/\d*\.\d+/                         # Regular floats: 0.1, 1.05, etc.
-  ;
-
-
 newline 
   = 
   | ';'
   | /\n/
+  ;
+
+
+parameter::Parameter
+  =
+  name:identifier ['=' value:number]
+  ;
+
+
+# Definition of identifiers: cannot be a keyword name.
+@name
+identifier::str
+  =
+  /(?!\d)\w+/ 
+  ;
+
+
+float::Float
+  =
+  | value:/\d*(?:\.\d+)?(?:e(?:\+|\-|)\d+)/  # Scientific notation: 1e2, 1e+2, 10e-3
+  | value:/\d*\.\d+/                         # Regular floats: 0.1, 1.05, etc.
+  ;
+
+
+integer::Integer
+  = 
+  value:/\d+/
   ;

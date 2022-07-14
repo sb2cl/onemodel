@@ -15,6 +15,7 @@ def test_walk_Integer():
     """
     walker = OneModelWalker()  
     result, ast = walker.run(model)
+
     expected = [0, 10, 420]
     assert result == expected
 
@@ -31,13 +32,8 @@ def test_walk_Float():
     """
     walker = OneModelWalker()  
     result, ast = walker.run(model)
-
-    print(ast)
-    print(result)
-
     expected = [0.0, 1.0, 0.9, 1.5, 0.001, 1e2, 1e3, 1e-2]
     assert result == expected
-
 
 def test_walk_Parameter():
     model = """
