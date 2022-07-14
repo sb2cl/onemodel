@@ -40,6 +40,10 @@ def test_walk_Parameter():
     parameter a0 = 1
     parameter a1 = 3, a2 
     parameter a3
+
+    parameter
+        a4 = 1, a5
+    end
     """
 
     walker = OneModelWalker()  
@@ -53,4 +57,6 @@ def test_walk_Parameter():
     assert result["a0"]["value"] == 1
     assert result["a1"]["value"] == 3
     assert result["a2"]["value"] == 0
-    assert isinstance(result["a3"], Parameter)
+    assert result["a3"]["value"] == 0
+    assert result["a4"]["value"] == 1
+    assert result["a5"]["value"] == 0
