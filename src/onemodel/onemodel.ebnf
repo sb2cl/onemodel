@@ -18,7 +18,7 @@
 
 start
   = 
-  {statements} $
+  {@:statements} $
   ;
 
 
@@ -36,7 +36,8 @@ statement
 
 expr
   =
-  'parameter' @:parameter {',' | @:parameter}
+  | 'parameter' @:parameter {',' | @:parameter}
+  | number
   ;
 
 
@@ -57,8 +58,8 @@ identifier::str
 
 number
   =
-  | integer
   | float
+  | integer
   ;
 
 
@@ -72,8 +73,8 @@ integer::Integer
 # Definition of floats.
 float::Float
   =
-  | value:/\d*(?:\.\d+)?(?:e(?:\+|\-)\d+)/  # Scientific notation.
-  | value:/\d*\.\d+/                        # Regular floats.
+  | value:/\d*(?:\.\d+)?(?:e(?:\+|\-|)\d+)/  # Scientific notation: 1e2, 1e+2, 0.1e-3
+  | value:/\d*\.\d+/                         # Regular floats: 0.1, 1.05, etc.
   ;
 
 

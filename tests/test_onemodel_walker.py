@@ -7,6 +7,38 @@ def test_init():
     assert isinstance(result, OneModelWalker)
     assert result.parser
 
+def test_walk_Integer():
+    model = """
+    0
+    10
+    420
+    """
+    walker = OneModelWalker()  
+    result, ast = walker.run(model)
+    expected = [0, 10, 420]
+    assert result == expected
+
+def test_walk_Float():
+    model = """
+    0.0
+    1.0
+    .9
+    01.50
+    0.001
+    1e2
+    0.1e+4
+    1e-2
+    """
+    walker = OneModelWalker()  
+    result, ast = walker.run(model)
+
+    print(ast)
+    print(result)
+
+    expected = [0.0, 1.0, 0.9, 1.5, 0.001, 1e2, 1e3, 1e-2]
+    assert result == expected
+
+
 def test_walk_Parameter():
     model = """
     parameter a0 = 1
@@ -15,7 +47,7 @@ def test_walk_Parameter():
     """
 
     walker = OneModelWalker()  
-    walker.run(model)
+    ast = walker.run(model)
     result = walker.onemodel.root
 
     assert result["a0"]["value"] == 1

@@ -17,8 +17,10 @@ class OneModelWalker(NodeWalker):
 
     def run(self, onemodel_code):
 
-        model = self.parser.parse(onemodel_code)
-        self.walk(model)
+        ast = self.parser.parse(onemodel_code)
+        result = self.walk(ast)
+
+        return result, ast
 
     def walk_list(self, nodes):
         """Walk every object in a list. 
@@ -26,15 +28,12 @@ class OneModelWalker(NodeWalker):
         Notes
         -----
         If we don't implement this method, the walker will not
-        evaluate the code inside lists.
+        evaluate list nodes.
         """
         results = []
 
         for node in nodes:
             results.append(self.walk(node))
-
-        if len(results) == 1:
-            results = results[0]
 
         return results
 
