@@ -43,7 +43,11 @@ def test_walk_Parameter():
     """
 
     walker = OneModelWalker()  
-    ast = walker.run(model)
+    result, ast = walker.run(model)
+
+    print(ast)
+    print(result)
+
     result = walker.onemodel.root
 
     assert result["a0"]["value"] == 1
