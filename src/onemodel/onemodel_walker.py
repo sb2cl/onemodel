@@ -29,13 +29,22 @@ class OneModelWalker(NodeWalker):
         return float(node.value)
 
     def walk_Parameter(self, node):
+        base = node.base
         name = node.name
         value = self.walk(node.value)
 
-        self.onemodel[name] = Parameter()
+        onemodel = self.onemodel
 
-        if value is not None:
-            self.onemodel[name]["value"] = value
+        if base:
+            for basename in base:
+                print(base)
+                print(basename)
+                onemodel = onemodel[basename]
+
+        onemodel[name] = Parameter()
+
+        if value:
+            onemodel[name]["value"] = value
 
     def walk_list(self, nodes):
         """Walk every object in a list. 
