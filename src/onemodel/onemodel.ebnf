@@ -57,7 +57,7 @@ newline
 
 parameter::Parameter
   =
-  {base+:identifier '.'} name:identifier ['=' value:number]
+  {namespace_list+:identifier '.'} name:identifier ['=' value:number]
   ;
 
 
