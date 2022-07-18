@@ -29,7 +29,7 @@ statements
 
 statement
   =
-  | 'parameter' newline {newline | @:parameter {',' @:parameter} newline} 'end'
+  | 'parameter' newline ~ {newline | @:parameter {',' @:parameter} newline} 'end'
   | expr
   ;
 
