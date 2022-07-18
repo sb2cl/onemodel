@@ -37,7 +37,14 @@ statement
 expr
   =
   | 'parameter' ~ @:parameter {',' @:parameter}
+  | atom
+  ;
+
+
+atom
+  =
   | number
+  | access_identifier
   ;
 
 
@@ -61,8 +68,13 @@ parameter::Parameter
   ;
 
 
-# Definition of identifiers: cannot be a keyword name.
-@name
+access_identifier::AccessIdentifier
+  =
+  {namespace_list+:identifier '.'} name:identifier
+  ;
+
+
+@name  # Definition of identifiers: cannot be a keyword name.
 identifier::str
   =
   /(?!\d)\w+/ 

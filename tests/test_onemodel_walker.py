@@ -63,3 +63,18 @@ def test_walk_Parameter():
     assert result["a4"]["value"] == 1
     assert result["a5"]["value"] == 0
     assert result["a0"]["a1"]["value"] == 10
+
+#def test_walk_Parameter_access():
+#    model = """
+#    parameter foo = 1
+#    foo
+#    """
+#
+#    walker = OneModelWalker()  
+#    result, ast = walker.run(model)
+#
+#    print(ast)
+#    print(result)
+#
+#    expected = "<parameter value=1>"
+#    assert result[1] == expected

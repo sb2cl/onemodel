@@ -44,6 +44,18 @@ class OneModelWalker(NodeWalker):
         if value:
             namespace[name]["value"] = value
 
+    def walk_AccessIdentifier(self, node):
+        namespace_list = node.namespace_list
+        name = node.name
+
+        namespace = self.onemodel
+
+        if namespace_list:
+            for namespace_name in namespace_list:
+                namespace = namespace[namespace_name]
+
+        return namespace[name]
+
     def walk_list(self, nodes):
         """Walk every object in a list. 
         
