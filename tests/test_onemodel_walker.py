@@ -54,7 +54,7 @@ def test_walk_string():
 
 def test_walk_Parameter():
     model = """
-    parameter a0 = 1
+    parameter a0 = 1 "This is a parameter"
     parameter a1 = 3, a2 
     parameter a3
 
@@ -76,6 +76,7 @@ def test_walk_Parameter():
     result = walker.onemodel.root
 
     assert result["a0"]["value"] == 1
+    assert result["a0"]["__doc__"] == "This is a parameter"
     assert result["a1"]["value"] == 3
     assert result["a2"]["value"] == 0
     assert result["a3"]["value"] == 10

@@ -35,6 +35,7 @@ class OneModelWalker(NodeWalker):
         namespace_list = node.namespace_list
         name = node.name
         value = self.walk(node.value)
+        documentation = self.walk(node.documentation)
 
         namespace = self.onemodel
 
@@ -46,6 +47,9 @@ class OneModelWalker(NodeWalker):
 
         if value:
             namespace[name]["value"] = value
+
+        if documentation:
+            namespace[name]["__doc__"] = documentation
     
     def walk_AssignVariable(self, node):
         namespace_list = node.namespace_list
