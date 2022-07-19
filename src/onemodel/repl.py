@@ -52,7 +52,9 @@ class Repl:
 
         result = text
 
-        print(result)
+        if not result is None:
+            print(result)
+
         return result
 
     def print_welcome_message(self): 
