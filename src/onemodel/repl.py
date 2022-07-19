@@ -1,7 +1,9 @@
 import os
 import readline
 import atexit
+from importlib.metadata import version
 
+import onemodel
 from onemodel.onemodel_walker import OneModelWalker
 
 
@@ -16,8 +18,9 @@ class Repl:
     def run(self):
         """Execute the repl."""
 
-        exit_loop = False
+        self.print_welcome_message()
 
+        exit_loop = False
         while not exit_loop:
             text = self.read()
 
@@ -51,6 +54,12 @@ class Repl:
 
         print(result)
         return result
+
+    def print_welcome_message(self): 
+
+        print(f"OneModel v{version('onemodel')}")
+        print("Documentation: https://onemodel.readthedocs.io/")
+        print()
 
     def setup_input_history(self):
         """Setup the history for input() function."""
