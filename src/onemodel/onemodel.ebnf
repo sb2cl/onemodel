@@ -53,6 +53,7 @@ number
   =
   | float
   | integer
+  | string
   ;
 
 
@@ -65,7 +66,7 @@ newline
 
 parameter::Parameter
   =
-  {namespace_list+:identifier '.'} name:identifier ['=' value:number]
+  {namespace_list+:identifier '.'} name:identifier ['=' value:number] 
   ;
 
 
@@ -98,4 +99,11 @@ float::Float
 integer::Integer
   = 
   value:/\d+/
+  ;
+
+
+string::String
+  =
+  | '"' value:/.+?(?=\")/ '"'
+  | "'" value:/.+?(?=\')/ "'"
   ;

@@ -22,11 +22,14 @@ class OneModelWalker(NodeWalker):
 
         return result, ast
     
+    def walk_Float(self, node):
+        return float(node.value)
+
     def walk_Integer(self, node):
         return int(node.value)
 
-    def walk_Float(self, node):
-        return float(node.value)
+    def walk_String(self, node):
+        return str(node.value)
 
     def walk_Parameter(self, node):
         namespace_list = node.namespace_list

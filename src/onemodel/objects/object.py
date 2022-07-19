@@ -11,8 +11,13 @@ class Object(Namespace):
     def __init__(self):
         super().__init__()
 
+        self['__doc__'] = ""
+
     def add_to_SBML_model(self, name, scope, SBML_model):
         """Include this object into a SBML model. 
+
+        self['__doc__'] : :obj:`str`
+            Documentation of this object.
 
         Parameters
         ----------
