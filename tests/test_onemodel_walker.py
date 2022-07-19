@@ -41,6 +41,8 @@ def test_walk_Parameter():
     parameter a1 = 3, a2 
     parameter a3
 
+    a3.value = 10
+
     parameter
         a4 = 1, a5
     end
@@ -59,7 +61,7 @@ def test_walk_Parameter():
     assert result["a0"]["value"] == 1
     assert result["a1"]["value"] == 3
     assert result["a2"]["value"] == 0
-    assert result["a3"]["value"] == 0
+    assert result["a3"]["value"] == 10
     assert result["a4"]["value"] == 1
     assert result["a5"]["value"] == 0
     assert result["a0"]["a1"]["value"] == 10

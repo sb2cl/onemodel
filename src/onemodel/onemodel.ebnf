@@ -37,6 +37,7 @@ statement
 expr
   =
   | 'parameter' ~ @:parameter {',' @:parameter}
+  | assign_variable
   | atom
   ;
 
@@ -65,6 +66,12 @@ newline
 parameter::Parameter
   =
   {namespace_list+:identifier '.'} name:identifier ['=' value:number]
+  ;
+
+
+assign_variable::AssignVariable
+  =
+  {namespace_list+:identifier '.'} name:identifier '=' value:atom
   ;
 
 

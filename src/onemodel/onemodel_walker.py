@@ -43,6 +43,19 @@ class OneModelWalker(NodeWalker):
 
         if value:
             namespace[name]["value"] = value
+    
+    def walk_AssignVariable(self, node):
+        namespace_list = node.namespace_list
+        name = node.name
+        value = self.walk(node.value)
+
+        namespace = self.onemodel
+
+        if namespace_list:
+            for namespace_name in namespace_list:
+                namespace = namespace[namespace_name]
+       
+        namespace[name] = value
 
     def walk_AccessIdentifier(self, node):
         namespace_list = node.namespace_list
