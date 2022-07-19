@@ -66,8 +66,7 @@ requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.scripts]
-onemodel-cli = "onemodel.cli.cli:main"
-onemodel-gui = "onemodel.gui.app:main"
+onemodel-repl = "onemodel:repl"
 
 [tool.mypy]
 ignore_missing_imports = true
