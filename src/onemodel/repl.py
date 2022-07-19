@@ -15,6 +15,7 @@ class Repl:
 
     def run(self):
         """Execute the repl."""
+
         exit_loop = False
 
         while not exit_loop:
@@ -28,6 +29,8 @@ class Repl:
             exit_loop = False
 
     def read(self):
+        """Read the input from user."""
+
         result = input(">>> ")
 
         if result.strip() == "":
@@ -36,21 +39,21 @@ class Repl:
         return result
 
     def evaluate(self, text):
+        """Evaluate the user input."""
+
         result, ast = self.onemodel_walker.run(text)
         return result
 
     def print(self, text):
+        """Print the result."""
+
         result = text
 
         print(result)
         return result
 
     def setup_input_history(self):
-        """
-        @brief: Setup the history for input() command.
-
-        @return: None
-        """
+        """Setup the history for input() function."""
 
         histfile = os.path.join(os.path.expanduser("~"), ".onemodel_history")
         try:
