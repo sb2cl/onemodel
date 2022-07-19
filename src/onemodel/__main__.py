@@ -1,5 +1,9 @@
-if __name__ == "__main__":
-    from onemodel.dsl.repl import Repl
+from onemodel.repl import Repl
 
+
+def main():
     repl = Repl()
     repl.run()
+
+if __name__ == "__main__":
+    main()

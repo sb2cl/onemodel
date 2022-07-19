@@ -64,7 +64,3 @@ class Repl:
             pass
 
         atexit.register(readline.write_history_file, histfile)
-
-if __name__ == '__main__':
-    repl = Repl()
-    repl.run()
