@@ -28,6 +28,12 @@ class OneModelWalker(NodeWalker):
     def walk_Integer(self, node):
         return int(node.value)
 
+    def walk_Docstring(self, node):
+        text = str(node.value)
+        lines = text.split("\n")
+        result = "\n".join(line.strip() for line in lines)  
+        return result
+    
     def walk_String(self, node):
         return str(node.value)
 

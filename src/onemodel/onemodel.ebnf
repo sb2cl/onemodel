@@ -53,6 +53,7 @@ number
   =
   | float
   | integer
+  | docstring
   | string
   ;
 
@@ -101,11 +102,14 @@ integer::Integer
   value:/\d+/
   ;
 
-
-string::String
+docstring::Docstring
   =
   | '"""' ~ value:/[\w\W]*?(?=\")/ '"""'
   | "'''" ~ value:/[\w\W]*?(?=\')/ "'''"
+  ;
+
+string::String
+  =
   | '"' value:/.+?(?=\")/ '"'
   | "'" value:/.+?(?=\')/ "'"
   ;

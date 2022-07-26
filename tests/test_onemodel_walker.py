@@ -36,7 +36,7 @@ def test_walk_Integer():
     expected = [0, 10, 420]
     assert result == expected
 
-def test_walk_string():
+def test_walk_String():
     model = """
     \"This is a string\"
     \'This is other string\'
@@ -54,9 +54,9 @@ def test_walk_string():
 
 def test_walk_Docstring():
     model = '''
-"""Hello world!
-hola
-"""
+    """Hello world!
+    hola
+    """
     '''
 
     walker = OneModelWalker()  
