@@ -52,6 +52,20 @@ def test_walk_string():
 
     assert result == expected
 
+def test_walk_Docstring():
+    model = '''
+"""Hello world!
+hola
+"""
+    '''
+
+    walker = OneModelWalker()  
+    result, ast = walker.run(model)
+
+    expected = "Hello world!\nhola\n"
+
+    assert result == expected
+
 def test_walk_Parameter():
     model = """
     parameter a0 = 1 "This is a parameter"

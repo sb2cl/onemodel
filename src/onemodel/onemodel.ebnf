@@ -104,6 +104,7 @@ integer::Integer
 
 string::String
   =
+  | '"""' ~ value:/[\w\W]*?(?=\")/ '"""'
   | '"' value:/.+?(?=\")/ '"'
   | "'" value:/.+?(?=\')/ "'"
   ;
