@@ -81,10 +81,15 @@ hola
 
 
 def test_walk_Parameter():
-    model = """
+    model = '''
     parameter a0 = 1 "This is a parameter"
     parameter a1 = 3, a2 
-    parameter a3
+
+    parameter a3 
+    """foo
+
+    bar
+    """
 
     a3.value = 10
 
@@ -93,7 +98,7 @@ def test_walk_Parameter():
     end
     
     parameter a0.a1 = 10
-    """
+    '''
 
     walker = OneModelWalker()  
     result, ast = walker.run(model)
@@ -108,6 +113,7 @@ def test_walk_Parameter():
     assert result["a1"]["value"] == 3
     assert result["a2"]["value"] == 0
     assert result["a3"]["value"] == 10
+    assert result["a3"]["__doc__"] == "foo\n\nbar\n"
     assert result["a4"]["value"] == 1
     assert result["a5"]["value"] == 0
     assert result["a0"]["a1"]["value"] == 10

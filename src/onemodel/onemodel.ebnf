@@ -67,7 +67,7 @@ newline
 
 parameter::Parameter
   =
-  {namespace_list+:identifier '.'} name:identifier ['=' value:number] [documentation:string]
+  {namespace_list+:identifier '.'} name:identifier ['=' value:number] [[newline] documentation:(docstring|string)]
   ;
 
 
