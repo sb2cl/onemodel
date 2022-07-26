@@ -47,15 +47,33 @@ class Repl:
         result, ast = self.onemodel_walker.run(text)
         return result
 
-    def print(self, text):
+    def print(self, evaluation_result):
         """Print the result."""
 
-        result = text
+        if isinstance(evaluation_result, list):
+            result = None
+            for item in evaluation_result:
+                printed = self.printResult(item)
+                if result is None:
+                    result = str(printed)
+                else:
+                    result += '\n' + str(printed)
+            return result
 
-        if not result is None:
-            print(result)
+        result = self.printResult(evaluation_result)
 
         return result
+
+    def printResult(self, result):
+        if result is None:
+            return
+
+        if isinstance(result, str):
+            print('"' + result + '"')
+            return '"' + result + '"'
+
+        print(result)
+        return(result)
 
     def print_welcome_message(self): 
 

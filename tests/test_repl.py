@@ -35,5 +35,5 @@ def test_evaluate():
 
 def test_print():
     repl = Repl()
-    result = repl.print("<parameter foo>")
-    assert result == "<parameter foo>"
+    result = repl.print(["foo", 1, "bar"])
+    assert result == '"foo"\n1\n"bar"' 
