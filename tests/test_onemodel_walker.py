@@ -17,10 +17,11 @@ def test_walk_Float():
     1e2
     0.1e+4
     1e-2
+    1E+3
     """
     walker = OneModelWalker()  
     result, ast = walker.run(model)
-    expected = [0.0, 1.0, 0.9, 1.5, 0.001, 1e2, 1e3, 1e-2]
+    expected = [0.0, 1.0, 0.9, 1.5, 0.001, 1e2, 1e3, 1e-2, 1e3]
     assert result == expected
 
 

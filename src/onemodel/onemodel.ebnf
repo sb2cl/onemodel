@@ -92,7 +92,7 @@ identifier::str
 
 float::Float
   =
-  | value:/\d*(?:\.\d+)?(?:e(?:\+|\-|)\d+)/  # Scientific notation: 1e2, 1e+2, 10e-3
+  | value:/\d*(?:\.\d+)?(?:(e|E)(?:\+|\-|)\d+)/  # Scientific notation: 1e2, 1e+2, 10e-3
   | value:/\d*\.\d+/                         # Regular floats: 0.1, 1.05, etc.
   ;
 
