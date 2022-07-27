@@ -1,5 +1,3 @@
-import repository sb2cl/onemodel-examples tag="v1.0.0"
-
 from onemodel-examples.protein_constitutive import ProteinConstitutive
 from onemodel-examples.protein_induced import ProteinInduced
 
