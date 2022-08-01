@@ -45,7 +45,7 @@ def test_walk_Parameter():
     assert result["a5"]["value"] == 0
     assert result["a0"]["a1"]["value"] == 10
 
-def test_walk_AccessIdentifier():
+def test_walk_AccessName():
     model = """
     parameter foo = 1
     foo

@@ -37,7 +37,7 @@ statement
 expr
   =
   | 'parameter' ~ @:parameter {',' @:parameter}
-  | assign_variable
+  | assign_name
   | atom
   ;
 
@@ -45,7 +45,7 @@ expr
 atom
   =
   | number
-  | access_identifier
+  | access_name
   ;
 
 
@@ -67,30 +67,30 @@ newline
 
 parameter::Parameter
   =
-  {namespace_list+:identifier '.'} name:identifier ['=' value:number] [[newline] documentation:(docstring|string)]
+  {namespace_list+:name '.'} name:name ['=' value:number] [[newline] documentation:(docstring|string)]
   ;
 
 
-assign_variable::AssignVariable
+assign_name::AssignName
   =
-  {namespace_list+:identifier '.'} name:identifier '=' value:atom
+  {namespace_list+:name '.'} name:name '=' value:atom
   ;
 
 
-access_identifier::AccessIdentifier
+access_name::AccessName
   =
-  identifier:qualified_identifier
+  name:qualified_name
   ;
 
 
-qualified_identifier::QualifiedIdentifier
+qualified_name::QualifiedName
   =
-  {qualifiers+:identifier '.'} name:identifier
+  {qualifiers+:name '.'} name:name
   ;
 
 
 @name  # Definition of identifiers: cannot be a keyword name.
-identifier::str
+name::str
   =
   /(?!\d)\w+/ 
   ;

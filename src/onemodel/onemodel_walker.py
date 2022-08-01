@@ -42,7 +42,7 @@ class OneModelWalker(NodeWalker):
         if documentation:
             namespace[name]["__doc__"] = documentation
 
-    def walk_AssignVariable(self, node):
+    def walk_AssignName(self, node):
         namespace_list = node.namespace_list
         name = node.name
         value = self.walk(node.value)
@@ -55,8 +55,8 @@ class OneModelWalker(NodeWalker):
        
         namespace[name] = value
 
-    def walk_AccessIdentifier(self, node):
-        qualifiers, name = self.walk(node.identifier)
+    def walk_AccessName(self, node):
+        qualifiers, name = self.walk(node.name)
 
         namespace = self.onemodel
 
@@ -66,7 +66,7 @@ class OneModelWalker(NodeWalker):
 
         return namespace[name]
 
-    def walk_QualifiedIdentifier(self, node):
+    def walk_QualifiedName(self, node):
         return node.qualifiers, node.name
 
     def walk_Float(self, node):
