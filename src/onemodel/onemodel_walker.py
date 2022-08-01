@@ -56,16 +56,18 @@ class OneModelWalker(NodeWalker):
         namespace[name] = value
 
     def walk_AccessIdentifier(self, node):
-        namespace_list = node.namespace_list
-        name = node.name
+        qualifiers, name = self.walk(node.identifier)
 
         namespace = self.onemodel
 
-        if namespace_list:
-            for namespace_name in namespace_list:
-                namespace = namespace[namespace_name]
+        if qualifiers:
+            for qualifier in qualifiers:
+                namespace = namespace[qualifier]
 
         return namespace[name]
+
+    def walk_QualifiedIdentifier(self, node):
+        return node.qualifiers, node.name
 
     def walk_Float(self, node):
         return float(node.value)

@@ -79,7 +79,13 @@ assign_variable::AssignVariable
 
 access_identifier::AccessIdentifier
   =
-  {namespace_list+:identifier '.'} name:identifier
+  identifier:qualified_identifier
+  ;
+
+
+qualified_identifier::QualifiedIdentifier
+  =
+  {qualifiers+:identifier '.'} name:identifier
   ;
 
 
