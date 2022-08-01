@@ -49,6 +49,8 @@ def test_walk_AccessIdentifier():
     model = """
     parameter foo = 1
     foo
+    parameter foo.bar = 10
+    foo.bar 
     """
 
     walker = OneModelWalker()  
@@ -57,10 +59,12 @@ def test_walk_AccessIdentifier():
     print(ast)
     print(result)
 
-    result = str(result[1])
     expected = walker.onemodel["foo"].__repr__()
+    assert str(result[1]) == expected
 
-    assert result == expected
+    expected = walker.onemodel["foo"]["bar"].__repr__()
+    assert str(result[3]) == expected
+
 
 def test_walk_Float():
     model = """
