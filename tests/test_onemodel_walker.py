@@ -7,80 +7,6 @@ def test_init():
     assert isinstance(result, OneModelWalker)
     assert result.parser
 
-def test_walk_Float():
-    model = """
-    0.0
-    1.0
-    .9
-    01.50
-    0.001
-    1e2
-    0.1e+4
-    1e-2
-    1E+3
-    """
-    walker = OneModelWalker()  
-    result, ast = walker.run(model)
-    expected = [0.0, 1.0, 0.9, 1.5, 0.001, 1e2, 1e3, 1e-2, 1e3]
-    assert result == expected
-
-
-def test_walk_Integer():
-    model = """
-    0
-    10
-    420
-    """
-    walker = OneModelWalker()  
-    result, ast = walker.run(model)
-
-    expected = [0, 10, 420]
-    assert result == expected
-
-def test_walk_String():
-    model = """
-    \"This is a string\"
-    \'This is other string\'
-    """
-
-    walker = OneModelWalker()  
-    result, ast = walker.run(model)
-
-    expected = [
-        "This is a string",
-        "This is other string"
-    ]
-
-    assert result == expected
-
-def test_walk_Docstring():
-    model = '''
-    """Hello world!
-    hola
-    """
-    '''
-
-    walker = OneModelWalker()  
-    result, ast = walker.run(model)
-
-    expected = "Hello world!\nhola\n"
-
-    assert result == expected
-
-    model = """
-'''Hello world!
-hola
-'''
-    """
-
-    walker = OneModelWalker()  
-    result, ast = walker.run(model)
-
-    expected = "Hello world!\nhola\n"
-
-    assert result == expected
-
-
 def test_walk_Parameter():
     model = '''
     parameter a0 = 1 "This is a parameter"
@@ -133,5 +59,77 @@ def test_walk_AccessIdentifier():
 
     result = str(result[1])
     expected = walker.onemodel["foo"].__repr__()
+
+    assert result == expected
+
+def test_walk_Float():
+    model = """
+    0.0
+    1.0
+    .9
+    01.50
+    0.001
+    1e2
+    0.1e+4
+    1e-2
+    1E+3
+    """
+    walker = OneModelWalker()  
+    result, ast = walker.run(model)
+    expected = [0.0, 1.0, 0.9, 1.5, 0.001, 1e2, 1e3, 1e-2, 1e3]
+    assert result == expected
+
+def test_walk_Integer():
+    model = """
+    0
+    10
+    420
+    """
+    walker = OneModelWalker()  
+    result, ast = walker.run(model)
+
+    expected = [0, 10, 420]
+    assert result == expected
+
+def test_walk_Docstring():
+    model = '''
+    """Hello world!
+    hola
+    """
+    '''
+
+    walker = OneModelWalker()  
+    result, ast = walker.run(model)
+
+    expected = "Hello world!\nhola\n"
+
+    assert result == expected
+
+    model = """
+'''Hello world!
+hola
+'''
+    """
+
+    walker = OneModelWalker()  
+    result, ast = walker.run(model)
+
+    expected = "Hello world!\nhola\n"
+
+    assert result == expected
+
+def test_walk_String():
+    model = """
+    \"This is a string\"
+    \'This is other string\'
+    """
+
+    walker = OneModelWalker()  
+    result, ast = walker.run(model)
+
+    expected = [
+        "This is a string",
+        "This is other string"
+    ]
 
     assert result == expected

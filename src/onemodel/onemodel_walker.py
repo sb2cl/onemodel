@@ -21,23 +21,8 @@ class OneModelWalker(NodeWalker):
         result = self.walk(ast)
 
         return result, ast
-    
-    def walk_Float(self, node):
-        return float(node.value)
 
-    def walk_Integer(self, node):
-        return int(node.value)
-
-    def walk_Docstring(self, node):
-        text = str(node.value)
-        lines = text.split("\n")
-        result = "\n".join(line.strip() for line in lines)  
-        return result
-    
-    def walk_String(self, node):
-        return str(node.value)
-
-    def walk_Parameter(self, node):
+     def walk_Parameter(self, node):
         namespace_list = node.namespace_list
         name = node.name
         value = self.walk(node.value)
@@ -56,8 +41,8 @@ class OneModelWalker(NodeWalker):
 
         if documentation:
             namespace[name]["__doc__"] = documentation
-    
-    def walk_AssignVariable(self, node):
+
+     def walk_AssignVariable(self, node):
         namespace_list = node.namespace_list
         name = node.name
         value = self.walk(node.value)
@@ -82,6 +67,21 @@ class OneModelWalker(NodeWalker):
 
         return namespace[name]
 
+    def walk_Float(self, node):
+        return float(node.value)
+
+    def walk_Integer(self, node):
+        return int(node.value)
+
+    def walk_Docstring(self, node):
+        text = str(node.value)
+        lines = text.split("\n")
+        result = "\n".join(line.strip() for line in lines)  
+        return result
+    
+    def walk_String(self, node):
+        return str(node.value)
+
     def walk_list(self, nodes):
         """Walk every object in a list. 
         
@@ -99,4 +99,3 @@ class OneModelWalker(NodeWalker):
 
     def walk_tuple(self, nodes):
         return self.walk_list(nodes)
-
