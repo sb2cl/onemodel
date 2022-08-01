@@ -66,7 +66,7 @@ class OneModelWalker(NodeWalker):
 
         return namespace[name]
 
-    def walk_QualifiedName(self, node):
+    def walk_DottedName(self, node):
         return node.qualifiers, node.name
 
     def walk_Float(self, node):

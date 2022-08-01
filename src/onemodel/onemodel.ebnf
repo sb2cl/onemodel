@@ -79,11 +79,11 @@ assign_name::AssignName
 
 access_name::AccessName
   =
-  name:qualified_name
+  name:dotted_name
   ;
 
 
-qualified_name::QualifiedName
+dotted_name::DottedName
   =
   {qualifiers+:name '.'} name:name
   ;
