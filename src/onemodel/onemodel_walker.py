@@ -22,7 +22,7 @@ class OneModelWalker(NodeWalker):
 
         return result, ast
 
-     def walk_Parameter(self, node):
+    def walk_Parameter(self, node):
         namespace_list = node.namespace_list
         name = node.name
         value = self.walk(node.value)
@@ -42,7 +42,7 @@ class OneModelWalker(NodeWalker):
         if documentation:
             namespace[name]["__doc__"] = documentation
 
-     def walk_AssignVariable(self, node):
+    def walk_AssignVariable(self, node):
         namespace_list = node.namespace_list
         name = node.name
         value = self.walk(node.value)
