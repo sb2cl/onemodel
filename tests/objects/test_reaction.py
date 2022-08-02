@@ -81,14 +81,16 @@ def test_reference_nested():
     m = OneModel()
 
     m["foo"] = Object()
+    m["foo"]["bar"] = Object()
 
     m["A"] = Species()
     m["foo"]["B"] = Species()
     m["foo"]["k"] = Parameter()
+    m["foo"]["bar"]["C"] = Species()
 
     m["foo"]["J1"] = Reaction()
     m["foo"]["J1"]["reactants"] = ["A"]
-    m["foo"]["J1"]["products"] = ["B"]
+    m["foo"]["J1"]["products"] = ["B", "bar.C"]
     m["foo"]["J1"]["kinetic_law"] = "k*A"
 
     result_string = m.get_SBML_string()
@@ -111,6 +113,7 @@ def test_reference_nested():
     </listOfCompartments>
     <listOfSpecies>
       <species id="foo__B" compartment="default_compartment" initialConcentration="0" substanceUnits="mole" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="foo__bar__C" compartment="default_compartment" initialConcentration="0" substanceUnits="mole" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
       <species id="A" compartment="default_compartment" initialConcentration="0" substanceUnits="mole" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
     </listOfSpecies>
     <listOfParameters>
@@ -123,6 +126,7 @@ def test_reference_nested():
         </listOfReactants>
         <listOfProducts>
           <speciesReference species="foo__B" constant="true"/>
+          <speciesReference species="foo__bar__C" constant="true"/>
         </listOfProducts>
         <kineticLaw>
           <math xmlns="http://www.w3.org/1998/Math/MathML">

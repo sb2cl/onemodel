@@ -11,8 +11,8 @@ class Reaction(Object):
 
     Parameters
     ----------
-    reactants : :obj:`list` of :obj:`Species`
-    products : :obj:`list` of :obj:`Species`
+    reactants : :obj:`list` of :obj:`str`
+    products : :obj:`list` of :obj:`str`
     kinetic_law : :obj:`str`
     reversible : :obj:`bool`
     """
