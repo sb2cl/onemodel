@@ -1,5 +1,6 @@
 from onemodel.onemodel_walker import OneModelWalker
 from onemodel.objects.parameter import Parameter
+from onemodel.objects.species import Species
 
 def test_init():
     result = OneModelWalker()
@@ -44,6 +45,31 @@ def test_walk_Parameter():
     assert result["a4"]["value"] == 1
     assert result["a5"]["value"] == 0
     assert result["a0"]["a1"]["value"] == 10
+
+def test_walk_Species():
+    model = '''
+    species a0 = 1 
+    """This is a species"""
+
+    species
+        a1=2
+        a2=3
+    end
+    '''
+
+    walker = OneModelWalker()  
+    result, ast = walker.run(model)
+
+    print(ast)
+    print(result)
+
+    result = walker.onemodel.root
+
+    assert isinstance(result["a0"], Species)
+    assert result["a0"]["value"] == 1
+    assert result["a0"]["__doc__"] == "This is a species"
+    assert result["a1"]["value"] == 2
+    assert result["a2"]["value"] == 3
 
 def test_walk_AccessName():
     model = """

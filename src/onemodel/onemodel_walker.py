@@ -3,6 +3,7 @@ import tatsu
 from tatsu.walkers import NodeWalker
 from onemodel.onemodel import OneModel
 from onemodel.objects.parameter import Parameter
+from onemodel.objects.species import Species
 
 class OneModelWalker(NodeWalker):
 
@@ -28,6 +29,19 @@ class OneModelWalker(NodeWalker):
         documentation = self.walk(node.documentation)
 
         namespace[name] = Parameter()
+
+        if value:
+            namespace[name]["value"] = value
+
+        if documentation:
+            namespace[name]["__doc__"] = documentation
+
+    def walk_Species(self, node):
+        namespace, name = self.walk(node.name)
+        value = self.walk(node.value)
+        documentation = self.walk(node.documentation)
+
+        namespace[name] = Species()
 
         if value:
             namespace[name]["value"] = value
