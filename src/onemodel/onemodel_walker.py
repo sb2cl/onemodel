@@ -23,16 +23,9 @@ class OneModelWalker(NodeWalker):
         return result, ast
 
     def walk_Parameter(self, node):
-        namespace_list = node.namespace_list
-        name = node.name
+        namespace, name = self.walk(node.name)
         value = self.walk(node.value)
         documentation = self.walk(node.documentation)
-
-        namespace = self.onemodel
-
-        if namespace_list:
-            for namespace_name in namespace_list:
-                namespace = namespace[namespace_name]
 
         namespace[name] = Parameter()
 
@@ -43,30 +36,24 @@ class OneModelWalker(NodeWalker):
             namespace[name]["__doc__"] = documentation
 
     def walk_AssignName(self, node):
-        qualifiers, name = self.walk(node.name)
+        namespace, name = self.walk(node.name)
         value = self.walk(node.value)
 
-        namespace = self.onemodel
-
-        if qualifiers:
-            for qualifier in qualifiers:
-                namespace = namespace[qualifier]
-       
         namespace[name] = value
 
     def walk_AccessName(self, node):
-        qualifiers, name = self.walk(node.name)
-
-        namespace = self.onemodel
-
-        if qualifiers:
-            for qualifier in qualifiers:
-                namespace = namespace[qualifier]
+        namespace, name = self.walk(node.name)
 
         return namespace[name]
 
     def walk_DottedName(self, node):
-        return node.qualifiers, node.name
+        qualifiers = node.qualifiers
+        namespace = self.onemodel
+
+        for qualifier in qualifiers:
+            namespace = namespace[qualifier]
+
+        return namespace, node.name
 
     def walk_Float(self, node):
         return float(node.value)

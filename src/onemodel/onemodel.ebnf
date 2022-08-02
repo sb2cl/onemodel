@@ -67,7 +67,7 @@ newline
 
 parameter::Parameter
   =
-  {namespace_list+:name '.'} name:name ['=' value:number] [[newline] documentation:(docstring|string)]
+  name:dotted_name ['=' value:number] [[newline] documentation:(docstring|string)]
   ;
 
 
@@ -89,7 +89,7 @@ dotted_name::DottedName
   ;
 
 
-@name  # Definition of identifiers: cannot be a keyword name.
+@name  # Name cannot be a keyword name.
 name::str
   =
   /(?!\d)\w+/ 
