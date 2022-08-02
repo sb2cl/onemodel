@@ -4,6 +4,7 @@ from tatsu.walkers import NodeWalker
 from onemodel.onemodel import OneModel
 from onemodel.objects.parameter import Parameter
 from onemodel.objects.species import Species
+from onemodel.objects.reaction import Reaction
 
 class OneModelWalker(NodeWalker):
 
@@ -48,6 +49,11 @@ class OneModelWalker(NodeWalker):
 
         if documentation:
             namespace[name]["__doc__"] = documentation
+
+    def walk_Reaction(self, node):
+        namespace, name = self.walk(node.name)
+
+        namespace[name] = Reaction()
 
     def walk_AssignName(self, node):
         namespace, name = self.walk(node.name)

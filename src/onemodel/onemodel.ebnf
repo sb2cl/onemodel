@@ -39,6 +39,7 @@ expr
   =
   | 'parameter' ~ @:parameter {',' @:parameter}
   | 'species' ~ @:species {',' @:species}
+  | 'reaction'  @:reaction 
   | assign_name
   | atom
   ;
@@ -76,6 +77,23 @@ parameter::Parameter
 species::Species
   =
   name:dotted_name ['=' value:number] [[newline] documentation:(docstring|string)]
+  ;
+
+
+reaction::Reaction
+  =
+  [ name:dotted_name ':']
+  (
+    '0' |
+    reactants+:dotted_name {'+' | reactants+:dotted_name}
+  )
+  '->' 
+  (
+    '0' | 
+    products+:dotted_name {'+' | products+:dotted_name}
+  )
+  newline 
+  kinetic_law:formula
   ;
 
 
@@ -128,6 +146,12 @@ string::String
   =
   | '"' value:/.+?(?=\")/ '"'
   | "'" value:/.+?(?=\')/ "'"
+  ;
+
+
+formula::str
+  =
+  /[^\\\r\n\f'\;#]*/
   ;
 
 

@@ -1,6 +1,7 @@
 from onemodel.onemodel_walker import OneModelWalker
 from onemodel.objects.parameter import Parameter
 from onemodel.objects.species import Species
+from onemodel.objects.reaction import Reaction
 
 def test_init():
     result = OneModelWalker()
@@ -70,6 +71,22 @@ def test_walk_Species():
     assert result["a0"]["__doc__"] == "This is a species"
     assert result["a1"]["value"] == 2
     assert result["a2"]["value"] == 3
+
+def test_walk_Reaction():
+    model = '''
+    reaction J1: A -> A; k*A
+    '''
+
+    walker = OneModelWalker()  
+    result, ast = walker.run(model)
+
+    print(ast)
+    print(result)
+
+    result = walker.onemodel.root
+
+    assert isinstance(result["J1"], Reaction)
+
 
 def test_walk_AccessName():
     model = """
