@@ -43,15 +43,14 @@ class OneModelWalker(NodeWalker):
             namespace[name]["__doc__"] = documentation
 
     def walk_AssignName(self, node):
-        namespace_list = node.namespace_list
-        name = node.name
+        qualifiers, name = self.walk(node.name)
         value = self.walk(node.value)
 
         namespace = self.onemodel
 
-        if namespace_list:
-            for namespace_name in namespace_list:
-                namespace = namespace[namespace_name]
+        if qualifiers:
+            for qualifier in qualifiers:
+                namespace = namespace[qualifier]
        
         namespace[name] = value
 

@@ -73,7 +73,7 @@ parameter::Parameter
 
 assign_name::AssignName
   =
-  {namespace_list+:name '.'} name:name '=' value:atom
+  name:dotted_name '=' value:atom
   ;
 
 
