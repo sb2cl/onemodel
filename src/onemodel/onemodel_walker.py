@@ -25,7 +25,9 @@ class OneModelWalker(NodeWalker):
         return result, ast
 
     def walk_Parameter(self, node):
-        namespace, name = self.walk(node.name)
+        result = self.walk(node.name)
+        name = result["name"]
+        namespace = result["namespace"]
         value = self.walk(node.value)
         documentation = self.walk(node.documentation)
 
@@ -38,7 +40,9 @@ class OneModelWalker(NodeWalker):
             namespace[name]["__doc__"] = documentation
 
     def walk_Species(self, node):
-        namespace, name = self.walk(node.name)
+        result = self.walk(node.name)
+        name = result["name"]
+        namespace = result["namespace"]
         value = self.walk(node.value)
         documentation = self.walk(node.documentation)
 
@@ -51,29 +55,63 @@ class OneModelWalker(NodeWalker):
             namespace[name]["__doc__"] = documentation
 
     def walk_Reaction(self, node):
-        namespace, name = self.walk(node.name)
+        result = self.walk(node.name)
+        name = result["name"]
+        namespace = result["namespace"]
+
+        reactants = self.walk(node.reactants)
+        products = self.walk(node.products)
+        kinetic_law = node.kinetic_law
 
         namespace[name] = Reaction()
 
+        namespace[name]["reactants"] = []
+        for reactant in reactants:
+            namespace[name]["reactants"].append(reactant["dotted_name"])
+
+        namespace[name]["products"] = []
+        for product in products:
+            namespace[name]["products"].append(product["dotted_name"])
+
+        namespace[name]["kinetic_law"] = kinetic_law
+
     def walk_AssignName(self, node):
-        namespace, name = self.walk(node.name)
+        result = self.walk(node.name)
+        name = result["name"]
+        namespace = result["namespace"]
         value = self.walk(node.value)
 
         namespace[name] = value
 
     def walk_AccessName(self, node):
-        namespace, name = self.walk(node.name)
+        result = self.walk(node.name)
+        name = result["name"]
+        namespace = result["namespace"]
 
         return namespace[name]
 
     def walk_DottedName(self, node):
         qualifiers = node.qualifiers
+        name = node.name
         namespace = self.onemodel
+
+        dotted_name = ''
+
+        if qualifiers:
+            dotted_name = '.'.join(qualifiers)
+            dotted_name = dotted_name + '.' + name
+        else:
+            dotted_name = name
 
         for qualifier in qualifiers:
             namespace = namespace[qualifier]
 
-        return namespace, node.name
+        result = {}
+        result["name"] = name
+        result["namespace"] = namespace
+        result["dotted_name"] = dotted_name
+
+        return result
 
     def walk_Float(self, node):
         return float(node.value)

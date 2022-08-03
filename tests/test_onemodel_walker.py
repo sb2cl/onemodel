@@ -74,18 +74,18 @@ def test_walk_Species():
 
 def test_walk_Reaction():
     model = '''
-    reaction J1: A -> A; k*A
+    reaction J1: foo.A + B -> C + D; k*foo.A*B
     '''
 
     walker = OneModelWalker()  
     result, ast = walker.run(model)
 
-    print(ast)
-    print(result)
-
     result = walker.onemodel.root
 
     assert isinstance(result["J1"], Reaction)
+    assert result["J1"]["reactants"] == ["foo.A", "B"]
+    assert result["J1"]["products"] == ["C", "D"]
+    assert result["J1"]["kinetic_law"] == "k*foo.A*B"
 
 
 def test_walk_AccessName():
