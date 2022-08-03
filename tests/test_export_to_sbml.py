@@ -1,15 +1,15 @@
 import os
 
-from onemodel.dsl.onemodel_walker import OneModelWalker
+from onemodel.onemodel_walker import OneModelWalker
 import pytest
 
 examples = [
     "ex01_simple_gene_expression",
-    "ex02_two_genes_expression",
-    "ex03_protein_constitutive",
-    "ex04_two_genes_expression",
-    "ex05_protein_induced",
-    "ex06_antithetic_controller",
+    #"ex02_two_genes_expression",
+    #"ex03_protein_constitutive",
+    #"ex04_two_genes_expression",
+    #"ex05_protein_induced",
+    #"ex06_antithetic_controller",
 ]
 
 
@@ -35,14 +35,13 @@ def onemodel2sbml(input_file, filename):
     text = file.read()
     file.close()
 
-    # Load the AST model walker.
-    walker = OneModelWalker(filename)
-
-    # Walk the AST model.
-    result = walker.run(text, input_file)
+    walker = OneModelWalker()
+    result, ast = walker.run(text)
+    
+    onemodel = walker.onemodel
 
     # Get SBML representation.
-    sbml = walker.getSBML()
+    sbml = onemodel.get_SBML_string()
 
     return sbml
 
