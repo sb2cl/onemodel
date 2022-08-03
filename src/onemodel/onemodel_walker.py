@@ -56,8 +56,13 @@ class OneModelWalker(NodeWalker):
 
     def walk_Reaction(self, node):
         result = self.walk(node.name)
-        name = result["name"]
-        namespace = result["namespace"]
+        if result is None:
+            name = f"_J{self.numberOfUnnamedReactions}"
+            self.numberOfUnnamedReactions += 1
+            namespace = self.onemodel
+        else:
+            name = result["name"]
+            namespace = result["namespace"]
 
         reactants = self.walk(node.reactants)
         products = self.walk(node.products)
