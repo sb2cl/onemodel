@@ -90,3 +90,4 @@ def test_get_fullname():
     assert scope.get_fullname("foo") == "foo"
     assert scope.get_fullname("bar") == "n1__bar"
     assert scope.get_fullname("baz") == "n1__n2__baz"
+    assert scope.get_fullname("bar.other") == "n1__bar__other"
