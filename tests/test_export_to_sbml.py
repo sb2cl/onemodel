@@ -1,6 +1,7 @@
 import os
 
 from onemodel.onemodel_walker import OneModelWalker
+from onemodel.onemodel_walker import load_file
 import pytest
 
 examples = [
@@ -31,14 +32,7 @@ def onemodel2sbml(input_file, filename):
     print("### Convert onemodel into sbml ###")
 
     # Read input file.
-    file = open(input_file)
-    text = file.read()
-    file.close()
-
-    walker = OneModelWalker()
-    result, ast = walker.run(text)
-    
-    onemodel = walker.onemodel
+    onemodel = load_file(input_file)
 
     # Get SBML representation.
     sbml = onemodel.get_SBML_string()

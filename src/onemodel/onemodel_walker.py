@@ -6,6 +6,20 @@ from onemodel.objects.parameter import Parameter
 from onemodel.objects.species import Species
 from onemodel.objects.reaction import Reaction
 
+def load_file(filename):
+    """Load a file into OneModel. """
+
+    file = open(filename)
+    text = file.read()
+    file.close()
+
+    walker = OneModelWalker()
+    result, ast = walker.run(text)
+    
+    onemodel = walker.onemodel
+
+    return walker.onemodel
+
 class OneModelWalker(NodeWalker):
 
     numberOfUnnamedReactions = 0
