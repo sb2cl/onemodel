@@ -6,7 +6,7 @@ import pytest
 
 examples = [
     "ex01_simple_gene_expression",
-    #"ex02_two_genes_expression",
+    "ex02_two_genes_expression",
     #"ex03_protein_constitutive",
     #"ex04_two_genes_expression",
     #"ex05_protein_induced",
