@@ -191,6 +191,8 @@ def test_walk_String():
 def test_walk_Assignment_Rule():
     model = """
     rule bar := foo
+    rule bar := foo
+    rule R2: bar := 100 + foo^2
     """
 
     walker = OneModelWalker()
@@ -202,3 +204,11 @@ def test_walk_Assignment_Rule():
     assert isinstance(result["_R0"], AssignmentRule)
     assert result["_R0"]["variable"] == "bar"
     assert result["_R0"]["math"] == "foo"
+
+    assert isinstance(result["_R1"], AssignmentRule)
+    assert result["_R1"]["variable"] == "bar"
+    assert result["_R1"]["math"] == "foo"
+
+    assert isinstance(result["R2"], AssignmentRule)
+    assert result["R2"]["variable"] == "bar"
+    assert result["R2"]["math"] == "100 + foo^2"

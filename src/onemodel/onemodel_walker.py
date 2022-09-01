@@ -71,6 +71,7 @@ class OneModelWalker(NodeWalker):
 
     def walk_Reaction(self, node):
         result = self.walk(node.name)
+
         if result is None:
             name = f"_J{self.numberOfUnnamedReactions}"
             self.numberOfUnnamedReactions += 1
@@ -106,7 +107,12 @@ class OneModelWalker(NodeWalker):
             name = result["name"]
             namespace = result["namespace"]
 
+        variable = self.walk(node.variable)['dotted_name']
+        math = node.math
+
         namespace[name] = AssignmentRule()
+        namespace[name]['variable'] = variable
+        namespace[name]['math'] = math
 
     def walk_AssignName(self, node):
         result = self.walk(node.name)
