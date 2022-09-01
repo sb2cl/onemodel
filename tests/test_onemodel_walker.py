@@ -2,6 +2,7 @@ from onemodel.onemodel_walker import OneModelWalker
 from onemodel.objects.parameter import Parameter
 from onemodel.objects.species import Species
 from onemodel.objects.reaction import Reaction
+from onemodel.objects.assignment_rule import AssignmentRule
 
 def test_init():
     result = OneModelWalker()
@@ -186,3 +187,18 @@ def test_walk_String():
     ]
 
     assert result == expected
+
+def test_walk_Assignment_Rule():
+    model = """
+    rule bar := foo
+    """
+
+    walker = OneModelWalker()
+
+    result, ast = walker.run(model)
+
+    result = walker.onemodel.root
+
+    assert isinstance(result["_R0"], AssignmentRule)
+    # assert result["_R0"]["variable"] == "bar"
+    # assert result["_R0"]["math"] == "foo"
