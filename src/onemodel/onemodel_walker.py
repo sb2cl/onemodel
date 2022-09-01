@@ -5,6 +5,7 @@ from onemodel.onemodel import OneModel
 from onemodel.objects.parameter import Parameter
 from onemodel.objects.species import Species
 from onemodel.objects.reaction import Reaction
+from onemodel.objects.assignment_rule import AssignmentRule
 
 def load_file(filename):
     """Load a file into OneModel. """
@@ -93,6 +94,19 @@ class OneModelWalker(NodeWalker):
             namespace[name]["products"].append(product["dotted_name"])
 
         namespace[name]["kinetic_law"] = kinetic_law
+
+    def walk_AssignmentRule(self, node):
+        result = self.walk(node.name)
+
+        if result is None:
+            name = f"_R{self.numberOfUnnamedReactions}"
+            self.numberOfUnnamedReactions += 1
+            namespace = self.onemodel
+        else:
+            name = result["name"]
+            namespace = result["namespace"]
+
+        namespace[name] = AssignmentRule()
 
     def walk_AssignName(self, node):
         result = self.walk(node.name)

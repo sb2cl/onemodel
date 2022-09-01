@@ -40,7 +40,8 @@ expr
   =
   | 'parameter' ~ @:parameter {',' @:parameter}
   | 'species' ~ @:species {',' @:species}
-  | 'reaction'  @:reaction 
+  | 'reaction' ~ @:reaction 
+  | 'rule' ~ @:rule 
   | assign_name
   | atom
   ;
@@ -83,7 +84,7 @@ species::Species
 
 reaction::Reaction
   =
-  [ name:dotted_name ':']
+  [name:dotted_name ':']
   (
     '0' |
     reactants+:dotted_name {'+' | reactants+:dotted_name}
@@ -95,6 +96,21 @@ reaction::Reaction
   )
   newline 
   kinetic_law:formula
+  ;
+
+
+rule
+  =
+  assignment_rule
+  ;
+
+
+assignment_rule::AssignmentRule
+  =
+  [name:dotted_name ':' !'='] # We need !'=' to avoid matching ':='.
+  variable:dotted_name
+  ':='
+  math:formula
   ;
 
 
