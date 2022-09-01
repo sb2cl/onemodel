@@ -32,6 +32,7 @@ statement
   | 'parameter' newline ~ {newline | @:parameter {',' @:parameter} newline} 'end'
   | 'species' newline ~ {newline | @:species {',' @:species} newline} 'end'
   | 'reaction' newline ~ {newline | @:reaction} 'end'
+  | 'rule' newline ~ {newline | @:rule newline} 'end'
   | expr
   ;
 
