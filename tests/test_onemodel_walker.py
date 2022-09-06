@@ -238,3 +238,5 @@ def test_walk_Algebraic_Rule():
     result = walker.onemodel.root
 
     assert isinstance(result["_R0"], AlgebraicRule)
+    assert result["_R0"]["variable"] == "bar"
+    assert result["_R0"]["math"] == "foo"

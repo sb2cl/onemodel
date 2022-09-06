@@ -102,7 +102,8 @@ reaction::Reaction
 
 rule
   =
-  assignment_rule
+  | assignment_rule
+  | algebraic_rule
   ;
 
 
@@ -111,6 +112,15 @@ assignment_rule::AssignmentRule
   [name:dotted_name ':' !'='] # We need !'=' to avoid matching ':='.
   variable:dotted_name
   ':='
+  math:formula
+  ;
+
+
+algebraic_rule::AlgebraicRule
+  =
+  [name:dotted_name ':']
+  variable:dotted_name
+  '=='
   math:formula
   ;
 
