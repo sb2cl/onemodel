@@ -300,5 +300,3 @@ def test_walk_Rate_Rule():
     assert isinstance(result["R3"], RateRule)
     assert result["R3"]["variable"] == "c"
     assert result["R3"]["math"] == "a*a"
-
-
