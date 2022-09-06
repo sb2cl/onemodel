@@ -229,6 +229,12 @@ def test_walk_Assignment_Rule():
 def test_walk_Algebraic_Rule():
     model = """
     rule bar == foo
+    rule bar == foo
+    rule R2: bar == 100 + foo^2
+    rule
+        a == b
+        R3: c == a*a
+    end
     """
 
     walker = OneModelWalker()
@@ -240,3 +246,19 @@ def test_walk_Algebraic_Rule():
     assert isinstance(result["_R0"], AlgebraicRule)
     assert result["_R0"]["variable"] == "bar"
     assert result["_R0"]["math"] == "foo"
+
+    assert isinstance(result["_R1"], AlgebraicRule)
+    assert result["_R1"]["variable"] == "bar"
+    assert result["_R1"]["math"] == "foo"
+
+    assert isinstance(result["R2"], AlgebraicRule)
+    assert result["R2"]["variable"] == "bar"
+    assert result["R2"]["math"] == "100 + foo^2"
+
+    assert isinstance(result["_R2"], AlgebraicRule)
+    assert result["_R2"]["variable"] == "a"
+    assert result["_R2"]["math"] == "b"
+
+    assert isinstance(result["R3"], AlgebraicRule)
+    assert result["R3"]["variable"] == "c"
+    assert result["R3"]["math"] == "a*a"
