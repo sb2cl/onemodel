@@ -267,6 +267,12 @@ def test_walk_Algebraic_Rule():
 def test_walk_Rate_Rule():
     model = """
     rule der(bar) := foo
+    rule der(bar) := foo
+    rule R2: der(bar) := 100 + foo^2
+    rule
+        der(a) := b
+        R3: der(c) := a*a
+    end
     """
 
     walker = OneModelWalker()
@@ -276,3 +282,23 @@ def test_walk_Rate_Rule():
     result = walker.onemodel.root
 
     assert isinstance(result["_R0"], RateRule)
+    assert result["_R0"]["variable"] == "bar"
+    assert result["_R0"]["math"] == "foo"
+
+    assert isinstance(result["_R1"], RateRule)
+    assert result["_R1"]["variable"] == "bar"
+    assert result["_R1"]["math"] == "foo"
+
+    assert isinstance(result["R2"], RateRule)
+    assert result["R2"]["variable"] == "bar"
+    assert result["R2"]["math"] == "100 + foo^2"
+
+    assert isinstance(result["_R2"], RateRule)
+    assert result["_R2"]["variable"] == "a"
+    assert result["_R2"]["math"] == "b"
+
+    assert isinstance(result["R3"], RateRule)
+    assert result["R3"]["variable"] == "c"
+    assert result["R3"]["math"] == "a*a"
+
+

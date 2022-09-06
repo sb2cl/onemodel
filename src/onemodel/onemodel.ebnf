@@ -104,6 +104,7 @@ rule
   =
   | assignment_rule
   | algebraic_rule
+  | rate_rule
   ;
 
 
@@ -121,6 +122,18 @@ algebraic_rule::AlgebraicRule
   [name:dotted_name ':']
   variable:dotted_name
   '=='
+  math:formula
+  ;
+
+
+rate_rule::RateRule
+  =
+  [name:dotted_name ':' !'='] # We need !'=' to avoid matching ':='.
+  'der'
+  '('
+  variable:dotted_name
+  ')'
+  ':='
   math:formula
   ;
 

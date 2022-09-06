@@ -7,6 +7,7 @@ from onemodel.objects.species import Species
 from onemodel.objects.reaction import Reaction
 from onemodel.objects.assignment_rule import AssignmentRule
 from onemodel.objects.algebraic_rule import AlgebraicRule
+from onemodel.objects.rate_rule import RateRule
 
 def load_file(filename):
     """Load a file into OneModel. """
@@ -130,6 +131,24 @@ class OneModelWalker(NodeWalker):
         math = node.math
 
         namespace[name] = AlgebraicRule()
+        namespace[name]['variable'] = variable
+        namespace[name]['math'] = math
+
+    def walk_RateRule(self, node):
+        result = self.walk(node.name)
+
+        if result is None:
+            name = f"_R{self.numberOfUnnamedReactions}"
+            self.numberOfUnnamedReactions += 1
+            namespace = self.onemodel
+        else:
+            name = result["name"]
+            namespace = result["namespace"]
+
+        variable = self.walk(node.variable)['dotted_name']
+        math = node.math
+
+        namespace[name] = RateRule()
         namespace[name]['variable'] = variable
         namespace[name]['math'] = math
 
