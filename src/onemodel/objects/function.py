@@ -52,6 +52,9 @@ class Function(Object):
 
         result = Namespace()
 
+        if parameter_names is None:
+            return result
+
         for arg_name, param_name in zip(self["argument_names"], parameter_names):
             result[arg_name] = scope[param_name]
 

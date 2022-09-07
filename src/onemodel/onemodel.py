@@ -6,7 +6,6 @@ from onemodel.namespace import Namespace
 from onemodel.scope import Scope
 from onemodel.objects.object import Object
 
-
 class OneModel(Scope):
     """OneModel contains the root namespace where we define the models.
 

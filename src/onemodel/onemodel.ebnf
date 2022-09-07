@@ -44,13 +44,22 @@ expr
   | 'reaction' ~ @:reaction 
   | 'rule' ~ @:rule 
   | assign_name
-  | atom
+  | call
+  ;
+
+
+call::Call
+  = 
+  | value:atom '(' ')'
+  | next:atom
   ;
 
 
 atom
   =
   | number
+  | docstring
+  | string
   | access_name
   ;
 
@@ -59,8 +68,6 @@ number
   =
   | float
   | integer
-  | docstring
-  | string
   ;
 
 
