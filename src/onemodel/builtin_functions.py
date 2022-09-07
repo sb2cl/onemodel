@@ -27,3 +27,8 @@ add_builtin_function("hello", [], hello)
 def exit_(scope):
     exit()
 add_builtin_function("exit", [], exit_)
+
+def print_(scope):
+    print(scope["value"])
+    return None
+add_builtin_function("print", ["value"], print_)
