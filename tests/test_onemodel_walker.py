@@ -300,3 +300,16 @@ def test_walk_Rate_Rule():
     assert isinstance(result["R3"], RateRule)
     assert result["R3"]["variable"] == "c"
     assert result["R3"]["math"] == "a*a"
+
+def test_walk_Call():
+    model = """
+    print()
+    """
+
+    walker = OneModelWalker()
+
+    result, ast = walker.run(model)
+
+    result = walker.onemodel.root
+
+    assert False
