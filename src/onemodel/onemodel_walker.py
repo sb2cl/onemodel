@@ -9,6 +9,7 @@ from onemodel.objects.assignment_rule import AssignmentRule
 from onemodel.objects.algebraic_rule import AlgebraicRule
 from onemodel.objects.rate_rule import RateRule
 from onemodel.objects.function import Function
+from onemodel.builtin_functions import load_builtin_functions
 
 def load_file(filename):
     """Load a file into OneModel. """
@@ -24,10 +25,6 @@ def load_file(filename):
 
     return walker.onemodel
 
-def hello(scope):
-    print('Hello message')
-    return None
-
 class OneModelWalker(NodeWalker):
 
     numberOfUnnamedReactions = 0
@@ -35,11 +32,7 @@ class OneModelWalker(NodeWalker):
     
     def __init__(self):
         self.onemodel = OneModel()
-
-        self.onemodel["hello"] = Function()
-        self.onemodel["hello"]["argument_names"] = []
-        self.onemodel["hello"]["body"] = hello  
-
+        load_builtin_functions(self.onemodel)
 
         grammar = files("onemodel").joinpath("onemodel.ebnf").read_text()
         self.parser = tatsu.compile(grammar, asmodel=True)
