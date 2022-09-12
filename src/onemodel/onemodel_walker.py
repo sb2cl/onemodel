@@ -65,10 +65,11 @@ class OneModelWalker(NodeWalker):
         return left / right
 
     def walk_Power(self, node):
-        if node.next:
-            return self.walk(node.next)
-
         base = self.walk(node.base)
+
+        if node.exponent is None:
+            return base
+
         exponent = self.walk(node.exponent)
         return base ** exponent
 

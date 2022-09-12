@@ -90,8 +90,7 @@ factor
 
 power::Power
   =
-  | base:call '^' ~ exponent:factor
-  | next:call
+  base:call ['^' ~ exponent:factor]
   ;
 
 
