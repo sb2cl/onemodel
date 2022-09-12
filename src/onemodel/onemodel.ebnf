@@ -85,7 +85,14 @@ division::Division
 factor
   =
   | '+' ~ @:factor
+  | inverse_addition
   | power
+  ;
+
+
+inverse_addition::InverseAddition
+  =
+  '-' ~ base:factor
   ;
 
 

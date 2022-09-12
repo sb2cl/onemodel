@@ -64,6 +64,10 @@ class OneModelWalker(NodeWalker):
         right = self.walk(node.right)
         return left / right
 
+    def walk_InverseAddition(self, node):
+        base = self.walk(node.base)
+        return - base
+
     def walk_Power(self, node):
         base = self.walk(node.base)
 

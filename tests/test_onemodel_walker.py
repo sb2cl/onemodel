@@ -353,10 +353,11 @@ def test_walk_Division():
 def test_Factor():
     model = """
     +2
+    -2
     """
     walker = OneModelWalker()
     result, ast = walker.run(model)
-    assert result == 2
+    assert result == [2,-2]
 
 def test_walk_Power():
     model = """
