@@ -55,3 +55,9 @@ class Parameter(Object):
             p.setUnits(self["units"]), 
             f"set parameter {fullname} units"
         )
+
+    def __repr__(self):
+        result = "<parameter "
+        result += f"value={self['value']}>"
+
+        return result

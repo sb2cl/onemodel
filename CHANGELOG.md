@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Add a welcome message to the repl session.
+- Add docstrings.
+
 ### Changed
 
 - Changed tests to just test for sbml generation (not Matlab generation).

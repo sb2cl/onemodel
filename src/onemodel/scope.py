@@ -71,6 +71,12 @@ class Scope:
         namespace where the object resides.
         """
 
+        dotted_name = None
+
+        if '.' in name:
+            dotted_name = name.split('.')
+            name = dotted_name[0]
+
         i = len(self.namespaces)
         for namespace in reversed(self.namespaces):
             if name in namespace:
@@ -86,6 +92,10 @@ class Scope:
             i += 1
         
         result = basename + name
+
+        if dotted_name:
+            for name in dotted_name[1:]:
+                result = result + '__' + name
 
         return result
 

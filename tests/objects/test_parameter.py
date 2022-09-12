@@ -38,3 +38,12 @@ def test_add_2_SBML_model():
     expected = ElementTree.fromstring(expected_string)
 
     assert ElementTree.tostring(result) == ElementTree.tostring(expected)
+
+def test_repr():
+    foo = Parameter()
+    foo["value"] = 10
+
+    result = foo.__repr__()
+    expected = "<parameter value=10>"
+
+    assert result == expected
