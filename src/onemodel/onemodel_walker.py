@@ -47,8 +47,12 @@ class OneModelWalker(NodeWalker):
     def walk_Addition(self, node):
         left = self.walk(node.left)
         right = self.walk(node.right)
-
         return left + right
+
+    def walk_Subtraction(self, node):
+        left = self.walk(node.left)
+        right = self.walk(node.right)
+        return left - right
 
     def walk_Parameter(self, node):
         result = self.walk(node.name)

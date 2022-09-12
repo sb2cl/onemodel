@@ -44,6 +44,7 @@ expression
   | 'reaction' ~ @:reaction 
   | 'rule' ~ @:rule 
   | addition
+  | subtraction
   | assign_name
   | call
   ;
@@ -52,6 +53,12 @@ expression
 addition::Addition
   =
   left:expression op:'+' ~ right:call
+  ;
+
+
+subtraction::Subtraction
+  =
+  left:expression op:'-' ~ right:call
   ;
 
 

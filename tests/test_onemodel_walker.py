@@ -324,3 +324,14 @@ def test_walk_Addition():
     result, ast = walker.run(model)
 
     assert result == 3
+
+def test_walk_Subtraction():
+    model = """
+    1 - 2
+    """
+
+    walker = OneModelWalker()
+
+    result, ast = walker.run(model)
+
+    assert result == -1
