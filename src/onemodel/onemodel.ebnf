@@ -50,9 +50,9 @@ expr
 
 call::Call
   = 
-  | value:atom '(' ')'
+  | value:atom '(' [args:expr {',' args:expr}] ')'
   | next:atom
-  ;
+  ; 
 
 
 atom

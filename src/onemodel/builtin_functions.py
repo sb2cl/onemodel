@@ -32,3 +32,6 @@ def print_(scope):
     print(scope["value"])
     return None
 add_builtin_function("print", ["value"], print_)
+
+
+

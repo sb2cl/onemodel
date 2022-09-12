@@ -160,8 +160,12 @@ class OneModelWalker(NodeWalker):
             return self.walk(node.next)
 
         value = self.walk(node.value)
+        args = self.walk(node.args)
 
-        result = value.call(self.onemodel, None)
+        if args == None:
+            args = []
+
+        result = value.call(self.onemodel, args)
 
         if type(result) == list:
             result = result[-1]

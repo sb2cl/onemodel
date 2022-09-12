@@ -1,6 +1,6 @@
 ### Definition of ProteinConstitutive. ###
 
-## ProteinConstitutive models constitutive gene expression. ##
+ ## ProteinConstitutive models constitutive gene expression. ##
 model ProteinConstitutive  # Start declaring model.
 
   species mRNA=0, protein=0  # mRNA and protein concentration.
