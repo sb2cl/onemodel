@@ -20,7 +20,7 @@ class Function(Object):
         self["argument_names"] = []
         self["body"] = None
 
-    def call(self, scope, parameter_names):
+    def call(self, scope, argument_values):
         """Execute the function body. 
 
         Parameters
@@ -28,10 +28,13 @@ class Function(Object):
         scope : :obj:`Scope`
             The scope where the function is called.
         parameter_names : :obj:`list` of :obj:`str`
-            The names of the parameters passed to the function.
+            The values of the arguments passed to the function.
         """
 
-        func_namespace = self.create_function_namespace(scope, parameter_names)
+        func_namespace = self.create_function_namespace(
+            scope, 
+            argument_values
+        )
 
         scope.push(func_namespace)
         result = self["body"](scope)
@@ -39,7 +42,7 @@ class Function(Object):
 
         return result
 
-    def create_function_namespace(self, scope, parameter_names):
+    def create_function_namespace(self, scope, argument_values):
         """Create the local namespace for the execution of the function.
 
         Parameters
@@ -47,15 +50,15 @@ class Function(Object):
         scope : :obj:`Scope`
             The scope where the function is called.
         parameter_names : :obj:`list` of :obj:`str`
-            The names of the parameters passed to the function.
+            The values of the arguments passed to the function.
         """
 
         result = Namespace()
 
-        if parameter_names is None:
+        if argument_values is None:
             return result
 
-        for arg_name, param_name in zip(self["argument_names"], parameter_names):
-            result[arg_name] = scope[param_name]
+        for name, value in zip(self["argument_names"], argument_values):
+            result[name] = value
 
         return result

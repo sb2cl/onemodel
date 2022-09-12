@@ -104,7 +104,7 @@ power::Power
 
 call::Call
   = 
-  | value:atom '(' [args:expression {',' args:expression}] ')'
+  | value:atom '(' [args+:expression {',' args+:expression}] ')'
   | next:atom
   ; 
 

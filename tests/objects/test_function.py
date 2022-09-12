@@ -25,7 +25,7 @@ def test_call():
     m["get"]["argument_names"] = ["parameter"]
     m["get"]["body"] = get_value
 
-    result = m["get"].call(m, ["foo"])
+    result = m["get"].call(m, [m["foo"]])
 
     expected = m["foo"]["value"]
 
@@ -46,9 +46,9 @@ def test_method():
     m["foo"]["increase"]["argument_names"] = ["self"]
     m["foo"]["increase"]["body"] = method_increase
 
-    m["foo"]["increase"].call(m, ["foo"])
-    m["foo"]["increase"].call(m, ["foo"])
-    m["foo"]["increase"].call(m, ["foo"])
+    m["foo"]["increase"].call(m, [m["foo"]])
+    m["foo"]["increase"].call(m, [m["foo"]])
+    m["foo"]["increase"].call(m, [m["foo"]])
 
     result = m["foo"]["bar"]["value"]
 

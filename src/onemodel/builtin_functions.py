@@ -19,11 +19,6 @@ def load_builtin_functions(namespace):
 
 ### Definition of built-in functions. ###
 
-def hello(scope):
-    print('Hello message')
-    return None
-add_builtin_function("hello", [], hello)
-
 def exit_(scope):
     exit()
 add_builtin_function("exit", [], exit_)
@@ -32,6 +27,3 @@ def print_(scope):
     print(scope["value"])
     return None
 add_builtin_function("print", ["value"], print_)
-
-
-

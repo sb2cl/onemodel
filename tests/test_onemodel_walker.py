@@ -303,16 +303,14 @@ def test_walk_Rate_Rule():
 
 def test_walk_Call():
     model = """
-    hello()
+    print("Hello world!")
     """
 
     walker = OneModelWalker()
 
     result, ast = walker.run(model)
 
-    assert result is None
-
-    result = walker.onemodel.root
+    assert result == "Hello world!"
 
 def test_walk_Addition():
     model = """
