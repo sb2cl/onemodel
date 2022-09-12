@@ -46,19 +46,32 @@ expression
   | addition
   | subtraction
   | assign_name
-  | call
+  | term
   ;
 
 
 addition::Addition
   =
-  left:expression op:'+' ~ right:call
+  left:expression op:'+' ~ right:term
   ;
 
 
 subtraction::Subtraction
   =
-  left:expression op:'-' ~ right:call
+  left:expression op:'-' ~ right:term
+  ;
+
+
+term
+  =
+  | multiplication
+  | call
+  ;
+
+
+multiplication::Multiplication
+  =
+  left:term op:'*' ~ right:call
   ;
 
 

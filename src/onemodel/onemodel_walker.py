@@ -54,6 +54,11 @@ class OneModelWalker(NodeWalker):
         right = self.walk(node.right)
         return left - right
 
+    def walk_Multiplication(self, node):
+        left = self.walk(node.left)
+        right = self.walk(node.right)
+        return left * right
+
     def walk_Parameter(self, node):
         result = self.walk(node.name)
         name = result["name"]
