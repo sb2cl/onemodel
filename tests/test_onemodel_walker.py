@@ -350,3 +350,14 @@ def test_walk_Division():
     walker = OneModelWalker()
     result, ast = walker.run(model)
     assert result == 2
+
+def test_walk_Factor():
+    model = """
+    6 / (3 + 2)
+    """
+
+    walker = OneModelWalker()
+    result, ast = walker.run(model)
+    assert result == 1.2
+
+

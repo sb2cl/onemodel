@@ -72,13 +72,20 @@ term
 
 multiplication::Multiplication
   =
-  left:term op:'*' ~ right:call
+  left:term op:'*' ~ right:factor
   ;
 
 
 division::Division
   =
-  left:term op:'/' ~ right:call
+  left:term op:'/' ~ right:factor
+  ;
+
+
+factor
+  =
+  | '(' ~ @:expression ')'
+  | call
   ;
 
 
