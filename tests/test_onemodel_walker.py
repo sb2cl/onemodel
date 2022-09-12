@@ -313,3 +313,66 @@ def test_walk_Call():
     assert result is None
 
     result = walker.onemodel.root
+
+def test_walk_Addition():
+    model = """
+    1 + 2
+    """
+
+    walker = OneModelWalker()
+    result, ast = walker.run(model)
+    assert result == 3
+
+def test_walk_Subtraction():
+    model = """
+    1 - 2
+    """
+
+    walker = OneModelWalker()
+    result, ast = walker.run(model)
+    assert result == -1
+
+def test_walk_Multiplication():
+    model = """
+    2 * 3
+    """
+
+    walker = OneModelWalker()
+    result, ast = walker.run(model)
+    assert result == 6
+
+def test_walk_Division():
+    model = """
+    6 / 3
+    """
+
+    walker = OneModelWalker()
+    result, ast = walker.run(model)
+    assert result == 2
+
+def test_Factor():
+    model = """
+    +2
+    -2
+    """
+    walker = OneModelWalker()
+    result, ast = walker.run(model)
+    assert result == [2,-2]
+
+def test_walk_Power():
+    model = """
+    2^3
+    """
+    walker = OneModelWalker()
+    result, ast = walker.run(model)
+    assert result == 8
+
+def test_walk_Parentheis():
+    model = """
+    6/(3+2)
+    6+(3+9)
+    """
+
+    walker = OneModelWalker()
+    result, ast = walker.run(model)
+    assert result == [1.2,18]

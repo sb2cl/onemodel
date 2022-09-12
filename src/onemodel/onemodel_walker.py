@@ -44,6 +44,56 @@ class OneModelWalker(NodeWalker):
 
         return result, ast
 
+    def walk_Addition(self, node):
+        left = self.walk(node.left)
+        right = self.walk(node.right)
+        return left + right
+
+    def walk_Subtraction(self, node):
+        left = self.walk(node.left)
+        right = self.walk(node.right)
+        return left - right
+
+    def walk_Multiplication(self, node):
+        left = self.walk(node.left)
+        right = self.walk(node.right)
+        return left * right
+
+    def walk_Division(self, node):
+        left = self.walk(node.left)
+        right = self.walk(node.right)
+        return left / right
+
+    def walk_InverseAddition(self, node):
+        base = self.walk(node.base)
+        return - base
+
+    def walk_Power(self, node):
+        base = self.walk(node.base)
+
+        if node.exponent is None:
+            return base
+
+        exponent = self.walk(node.exponent)
+        return base ** exponent
+
+    def walk_Call(self, node):
+        if node.next:
+            return self.walk(node.next)
+
+        value = self.walk(node.value)
+        args = self.walk(node.args)
+
+        if args == None:
+            args = []
+
+        result = value.call(self.onemodel, args)
+
+        if type(result) == list:
+            result = result[-1]
+
+        return result
+
     def walk_Parameter(self, node):
         result = self.walk(node.name)
         name = result["name"]
@@ -154,23 +204,6 @@ class OneModelWalker(NodeWalker):
         namespace[name] = RateRule()
         namespace[name]['variable'] = variable
         namespace[name]['math'] = math
-
-    def walk_Call(self, node):
-        if node.next:
-            return self.walk(node.next)
-
-        value = self.walk(node.value)
-        args = self.walk(node.args)
-
-        if args == None:
-            args = []
-
-        result = value.call(self.onemodel, args)
-
-        if type(result) == list:
-            result = result[-1]
-
-        return result
 
     def walk_AssignName(self, node):
         result = self.walk(node.name)

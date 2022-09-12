@@ -33,30 +33,85 @@ statement
   | 'species' newline ~ {newline | @:species {',' @:species} newline} 'end'
   | 'reaction' newline ~ {newline | @:reaction} 'end'
   | 'rule' newline ~ {newline | @:rule newline} 'end'
-  | expr
+  | expression
   ;
 
 
-expr
+expression
   =
   | 'parameter' ~ @:parameter {',' @:parameter}
   | 'species' ~ @:species {',' @:species}
   | 'reaction' ~ @:reaction 
   | 'rule' ~ @:rule 
+  | addition
+  | subtraction
   | assign_name
-  | call
+  | term
+  ;
+
+
+addition::Addition
+  =
+  left:expression op:'+' ~ right:term
+  ;
+
+
+subtraction::Subtraction
+  =
+  left:expression op:'-' ~ right:term
+  ;
+
+
+term
+  =
+  | multiplication
+  | division
+  | factor
+  ;
+
+
+multiplication::Multiplication
+  =
+  left:term op:'*' ~ right:factor
+  ;
+
+
+division::Division
+  =
+  left:term op:'/' ~ right:factor
+  ;
+
+
+factor
+  =
+  | '+' ~ @:factor
+  | inverse_addition
+  | power
+  ;
+
+
+inverse_addition::InverseAddition
+  =
+  '-' ~ base:factor
+  ;
+
+
+power::Power
+  =
+  base:call ['^' ~ exponent:factor]
   ;
 
 
 call::Call
   = 
-  | value:atom '(' [args:expr {',' args:expr}] ')'
+  | value:atom '(' [args:expression {',' args:expression}] ')'
   | next:atom
   ; 
 
 
 atom
   =
+  | '(' ~ @:expression ')'
   | number
   | docstring
   | string
