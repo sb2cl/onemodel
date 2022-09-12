@@ -320,9 +320,7 @@ def test_walk_Addition():
     """
 
     walker = OneModelWalker()
-
     result, ast = walker.run(model)
-
     assert result == 3
 
 def test_walk_Subtraction():
@@ -331,9 +329,7 @@ def test_walk_Subtraction():
     """
 
     walker = OneModelWalker()
-
     result, ast = walker.run(model)
-
     assert result == -1
 
 def test_walk_Multiplication():
@@ -342,7 +338,15 @@ def test_walk_Multiplication():
     """
 
     walker = OneModelWalker()
-
     result, ast = walker.run(model)
-
     assert result == 6
+
+
+def test_walk_Division():
+    model = """
+    6 / 3
+    """
+
+    walker = OneModelWalker()
+    result, ast = walker.run(model)
+    assert result == 2

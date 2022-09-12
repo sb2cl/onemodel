@@ -65,6 +65,7 @@ subtraction::Subtraction
 term
   =
   | multiplication
+  | division
   | call
   ;
 
@@ -72,6 +73,12 @@ term
 multiplication::Multiplication
   =
   left:term op:'*' ~ right:call
+  ;
+
+
+division::Division
+  =
+  left:term op:'/' ~ right:call
   ;
 
 
