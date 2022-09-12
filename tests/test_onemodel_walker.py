@@ -313,3 +313,14 @@ def test_walk_Call():
     assert result is None
 
     result = walker.onemodel.root
+
+def test_walk_Addition():
+    model = """
+    1 + 2
+    """
+
+    walker = OneModelWalker()
+
+    result, ast = walker.run(model)
+
+    assert result == 3

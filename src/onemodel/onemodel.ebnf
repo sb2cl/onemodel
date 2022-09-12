@@ -33,24 +33,31 @@ statement
   | 'species' newline ~ {newline | @:species {',' @:species} newline} 'end'
   | 'reaction' newline ~ {newline | @:reaction} 'end'
   | 'rule' newline ~ {newline | @:rule newline} 'end'
-  | expr
+  | expression
   ;
 
 
-expr
+expression
   =
   | 'parameter' ~ @:parameter {',' @:parameter}
   | 'species' ~ @:species {',' @:species}
   | 'reaction' ~ @:reaction 
   | 'rule' ~ @:rule 
+  | addition
   | assign_name
   | call
   ;
 
 
+addition::Addition
+  =
+  left:expression op:'+' ~ right:call
+  ;
+
+
 call::Call
   = 
-  | value:atom '(' [args:expr {',' args:expr}] ')'
+  | value:atom '(' [args:expression {',' args:expression}] ')'
   | next:atom
   ; 
 
