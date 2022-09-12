@@ -202,7 +202,7 @@ rate_rule::RateRule
 
 assign_name::AssignName
   =
-  name:dotted_name '=' value:atom
+  name:dotted_name '=' value:expression
   ;
 
 

@@ -53,17 +53,6 @@ parameter foo = "bar*2"
 
 rule R1: B.TF := A.protein + {{ getMass(A) }}
 
-
-function hill(
-
-parameter k = sin(PI)
-
-
-
-
-
-
-
-
-
-
+function increase( aParameter )
+  aParamter.value = aParameter + 1
+end
