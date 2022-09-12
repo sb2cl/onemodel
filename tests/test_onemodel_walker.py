@@ -350,15 +350,13 @@ def test_walk_Division():
     result, ast = walker.run(model)
     assert result == 2
 
-def test_walk_Factor():
+def test_Factor():
     model = """
-    6/(3+2)
-    6+(3+9)
+    +2
     """
-
     walker = OneModelWalker()
     result, ast = walker.run(model)
-    assert result == [1.2,18]
+    assert result == 2
 
 def test_walk_Power():
     model = """
@@ -367,3 +365,13 @@ def test_walk_Power():
     walker = OneModelWalker()
     result, ast = walker.run(model)
     assert result == 8
+
+def test_walk_Parentheis():
+    model = """
+    6/(3+2)
+    6+(3+9)
+    """
+
+    walker = OneModelWalker()
+    result, ast = walker.run(model)
+    assert result == [1.2,18]

@@ -84,7 +84,8 @@ division::Division
 
 factor
   =
-  power
+  | '+' ~ @:factor
+  | power
   ;
 
 
