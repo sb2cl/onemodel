@@ -359,3 +359,11 @@ def test_walk_Factor():
     walker = OneModelWalker()
     result, ast = walker.run(model)
     assert result == [1.2,18]
+
+def test_walk_Power():
+    model = """
+    2^3
+    """
+    walker = OneModelWalker()
+    result, ast = walker.run(model)
+    assert result == 8

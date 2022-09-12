@@ -84,8 +84,14 @@ division::Division
 
 factor
   =
-  | '(' ~ @:expression ')'
-  | call
+  power
+  ;
+
+
+power::Power
+  =
+  | base:call '^' ~ exponent:factor
+  | next:call
   ;
 
 
@@ -98,6 +104,7 @@ call::Call
 
 atom
   =
+  | '(' ~ @:expression ')'
   | number
   | docstring
   | string
