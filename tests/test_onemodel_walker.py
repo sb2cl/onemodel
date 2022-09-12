@@ -341,7 +341,6 @@ def test_walk_Multiplication():
     result, ast = walker.run(model)
     assert result == 6
 
-
 def test_walk_Division():
     model = """
     6 / 3
@@ -353,11 +352,10 @@ def test_walk_Division():
 
 def test_walk_Factor():
     model = """
-    6 / (3 + 2)
+    6/(3+2)
+    6+(3+9)
     """
 
     walker = OneModelWalker()
     result, ast = walker.run(model)
-    assert result == 1.2
-
-
+    assert result == [1.2,18]
