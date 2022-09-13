@@ -1,10 +1,10 @@
-from onemodel.objects.function import Function
+from onemodel.objects.builtin_function import BuiltinFunction
 
 
 builtin_functions = {}
 
 def add_builtin_function(name, argument_names, body):
-    func = Function()
+    func = BuiltinFunction()
     func["argument_names"] = argument_names
     func["body"] = body
 

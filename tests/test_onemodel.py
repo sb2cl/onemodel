@@ -6,7 +6,7 @@ from onemodel.objects.species import Species
 from onemodel.objects.parameter import Parameter
 from onemodel.objects.reaction import Reaction
 from onemodel.objects.assignment_rule import AssignmentRule
-from onemodel.objects.function import Function
+from onemodel.objects.builtin_function import BuiltinFunction
 from onemodel.scope import Scope
 
 def test_init():
@@ -211,7 +211,7 @@ def ProteinConstitutive(scope):
 def test_ex03_protein_constitutive():
     m = OneModel()
     
-    m['ProteinConstitutive'] = Function()
+    m['ProteinConstitutive'] = BuiltinFunction()
     m['ProteinConstitutive']["argument_names"] = []
     m['ProteinConstitutive']["body"] = ProteinConstitutive
     m['A'] = m.root['ProteinConstitutive'].call(m, [])
@@ -332,11 +332,11 @@ def ProteinInduced(scope):
 def test_ex05_protein_induced():
     m = OneModel()
     
-    m['ProteinConstitutive'] = Function()
+    m['ProteinConstitutive'] = BuiltinFunction()
     m['ProteinConstitutive']["argument_names"] = []
     m['ProteinConstitutive']["body"] = ProteinConstitutive
 
-    m['ProteinInduced'] = Function()
+    m['ProteinInduced'] = BuiltinFunction()
     m['ProteinInduced']["argument_names"] = []
     m['ProteinInduced']["body"] = ProteinInduced
 
