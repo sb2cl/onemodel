@@ -215,7 +215,7 @@ access_name::AccessName
 
 function_definition::FunctionDefinition
   =
-  'function' name:name '(' [args+:expression {',' args+:expression}] ')' newline
+  'function' name:name '(' [args+:name {',' args+:name}] ')' newline
   {newline | body:statement}
   'end'
   ;

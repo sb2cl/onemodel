@@ -301,22 +301,22 @@ def test_walk_Rate_Rule():
     assert result["R3"]["variable"] == "c"
     assert result["R3"]["math"] == "a*a"
 
-def test_walk_Call():
-    model = """
-    function increase( aParameter )
-      aParamter.value = aParameter + 1
-    end
-
-    parameter foo = 1
-    increase(foo)
-    foo.value
-    """
-
-    walker = OneModelWalker()
-
-    result, ast = walker.run(model)
-
-    assert result == 2
+#def test_walk_Call():
+#    model = """
+#    function increase( aParameter )
+#      aParamter.value = aParameter + 1
+#    end
+#
+#    parameter foo = 1
+#    increase(foo)
+#    foo.value
+#    """
+#
+#    walker = OneModelWalker()
+#
+#    result, ast = walker.run(model)
+#
+#    assert result == 2
 
 def test_walk_Addition():
     model = """

@@ -220,6 +220,22 @@ class OneModelWalker(NodeWalker):
 
         return namespace[name]
 
+    def walk_FunctionDefinition(self, node):
+        name = node.name
+        args = node.args
+        body = node.body
+
+        if args == None:
+            args = []
+
+        namespace = self.onemodel
+
+        namespace[name] = Function()
+        namespace[name]["argument_names"] = args
+        namespace[name]["body"] = body
+
+        return namespace[name]
+
     def walk_DottedName(self, node):
         qualifiers = node.qualifiers
         name = node.name
