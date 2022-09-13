@@ -116,6 +116,7 @@ atom
   | docstring
   | string
   | access_name
+  | function_definition
   ;
 
 
@@ -209,6 +210,14 @@ assign_name::AssignName
 access_name::AccessName
   =
   name:dotted_name
+  ;
+
+
+function_definition::FunctionDefinition
+  =
+  'function' name:name '(' [args+:expression {',' args+:expression}] ')' newline
+  {newline | body:statement}
+  'end'
   ;
 
 
