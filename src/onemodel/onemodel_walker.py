@@ -233,6 +233,7 @@ class OneModelWalker(NodeWalker):
         namespace[name] = Function()
         namespace[name]["argument_names"] = args
         namespace[name]["body"] = body
+        namespace[name].walker = self
 
         return namespace[name]
 
