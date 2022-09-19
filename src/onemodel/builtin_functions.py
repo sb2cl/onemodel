@@ -27,3 +27,22 @@ def print_(scope):
     print(scope["value"])
     return None
 add_builtin_function("print", ["value"], print_)
+
+def globals_(scope):
+    global_namespace = scope.namespaces[0]
+    print('{')
+    for name in global_namespace:
+        print(f"    {name} : {global_namespace[name]}")
+    print('}')
+    return None
+add_builtin_function("globals", [""], globals_)
+
+def list_namespace(scope):
+    namespace = scope.namespaces[-2]
+    print('{')
+    for name in namespace:
+        print(f"    {name} : {namespace[name]}")
+    print('}')
+    return None
+add_builtin_function("list_namespace", [""], list_namespace)
+
