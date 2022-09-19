@@ -5,6 +5,7 @@ from onemodel.objects.reaction import Reaction
 from onemodel.objects.assignment_rule import AssignmentRule
 from onemodel.objects.algebraic_rule import AlgebraicRule
 from onemodel.objects.rate_rule import RateRule
+from onemodel.objects.model import Model
 
 def test_init():
     result = OneModelWalker()
@@ -70,10 +71,10 @@ def test_walk_Species():
     result = walker.onemodel.root
 
     assert isinstance(result["a0"], Species)
-    assert result["a0"]["value"] == 1
+    assert result["a0"]["initialConcentration"] == 1
     assert result["a0"]["__doc__"] == "This is a species"
-    assert result["a1"]["value"] == 2
-    assert result["a2"]["value"] == 3
+    assert result["a1"]["initialConcentration"] == 2
+    assert result["a2"]["initialConcentration"] == 3
 
 def test_walk_Reaction():
     model = '''
@@ -323,8 +324,10 @@ def test_walk_ModelDefinition():
     model MyModel
         parameter foo = 10
         species bar = 0
-        rule der(bar) := foo - bar
+        rule R1: der(bar) := foo - bar
     end
+
+    m = MyModel()
     """
 
     walker = OneModelWalker()
@@ -334,6 +337,9 @@ def test_walk_ModelDefinition():
     result = walker.onemodel.root
     
     assert isinstance(result["MyModel"], Model)
+    assert result["m"]["foo"]["value"] == 10
+    assert result["m"]["bar"]["initialConcentration"] == 0
+    assert result["m"]["R1"]["math"] == "foo - bar"
 
 def test_walk_Addition():
     model = """
