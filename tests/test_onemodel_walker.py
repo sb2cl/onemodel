@@ -318,6 +318,21 @@ def test_walk_Call():
 
     assert result[-1] == 2
 
+def test_walk_ModelDefinition():
+    model = """
+    model MyModel
+        parameter foo = 10
+        species bar = 0
+        rule der(bar) := foo - bar
+    end
+    """
+
+    walker = OneModelWalker()
+
+    result, ast = walker.run(model)
+
+    assert result[-1] == 2
+
 def test_walk_Addition():
     model = """
     1 + 2
