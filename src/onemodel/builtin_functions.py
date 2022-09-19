@@ -45,4 +45,3 @@ def list_namespace(scope):
     print('}')
     return None
 add_builtin_function("list_namespace", [""], list_namespace)
-
