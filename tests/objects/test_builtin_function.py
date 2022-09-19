@@ -1,4 +1,4 @@
-from onemodel.objects.function import Function
+from onemodel.objects.builtin_function import BuiltinFunction
 from onemodel.onemodel import OneModel
 from onemodel.objects.object import Object
 from onemodel.objects.parameter import Parameter
@@ -6,9 +6,9 @@ from onemodel.scope import Scope
 from onemodel.namespace import Namespace
 
 def test_init():
-    result = Function()
+    result = BuiltinFunction()
 
-    assert isinstance(result, Function)
+    assert isinstance(result, BuiltinFunction)
 
 def get_value(scope):
     value = scope["parameter"]["value"]
@@ -21,11 +21,11 @@ def test_call():
     
     m["foo"] = Parameter()
 
-    m["get"] = Function()
+    m["get"] = BuiltinFunction()
     m["get"]["argument_names"] = ["parameter"]
     m["get"]["body"] = get_value
 
-    result = m["get"].call(m, ["foo"])
+    result = m["get"].call(m, [m["foo"]])
 
     expected = m["foo"]["value"]
 
@@ -42,13 +42,13 @@ def test_method():
     m["foo"] = Object()
 
     m["foo"]["bar"] = Parameter()
-    m["foo"]["increase"] = Function()
+    m["foo"]["increase"] = BuiltinFunction()
     m["foo"]["increase"]["argument_names"] = ["self"]
     m["foo"]["increase"]["body"] = method_increase
 
-    m["foo"]["increase"].call(m, ["foo"])
-    m["foo"]["increase"].call(m, ["foo"])
-    m["foo"]["increase"].call(m, ["foo"])
+    m["foo"]["increase"].call(m, [m["foo"]])
+    m["foo"]["increase"].call(m, [m["foo"]])
+    m["foo"]["increase"].call(m, [m["foo"]])
 
     result = m["foo"]["bar"]["value"]
 

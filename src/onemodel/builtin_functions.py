@@ -1,10 +1,10 @@
-from onemodel.objects.function import Function
+from onemodel.objects.builtin_function import BuiltinFunction
 
 
 builtin_functions = {}
 
 def add_builtin_function(name, argument_names, body):
-    func = Function()
+    func = BuiltinFunction()
     func["argument_names"] = argument_names
     func["body"] = body
 
@@ -19,11 +19,6 @@ def load_builtin_functions(namespace):
 
 ### Definition of built-in functions. ###
 
-def hello(scope):
-    print('Hello message')
-    return None
-add_builtin_function("hello", [], hello)
-
 def exit_(scope):
     exit()
 add_builtin_function("exit", [], exit_)
@@ -33,5 +28,20 @@ def print_(scope):
     return None
 add_builtin_function("print", ["value"], print_)
 
+def globals_(scope):
+    global_namespace = scope.namespaces[0]
+    print('{')
+    for name in global_namespace:
+        print(f"    {name} : {global_namespace[name]}")
+    print('}')
+    return None
+add_builtin_function("globals", [""], globals_)
 
-
+def list_namespace(scope):
+    namespace = scope.namespaces[-2]
+    print('{')
+    for name in namespace:
+        print(f"    {name} : {namespace[name]}")
+    print('}')
+    return None
+add_builtin_function("list_namespace", [""], list_namespace)

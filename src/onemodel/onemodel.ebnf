@@ -104,7 +104,7 @@ power::Power
 
 call::Call
   = 
-  | value:atom '(' [args:expression {',' args:expression}] ')'
+  | value:atom '(' [args+:expression {',' args+:expression}] ')'
   | next:atom
   ; 
 
@@ -116,6 +116,7 @@ atom
   | docstring
   | string
   | access_name
+  | function_definition
   ;
 
 
@@ -202,13 +203,21 @@ rate_rule::RateRule
 
 assign_name::AssignName
   =
-  name:dotted_name '=' value:atom
+  name:dotted_name '=' value:expression
   ;
 
 
 access_name::AccessName
   =
   name:dotted_name
+  ;
+
+
+function_definition::FunctionDefinition
+  =
+  'function' name:name '(' [args+:name {',' args+:name}] ')' newline
+  {newline | body:statement}
+  'end'
   ;
 
 
