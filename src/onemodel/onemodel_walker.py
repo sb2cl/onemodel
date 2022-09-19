@@ -30,6 +30,7 @@ class OneModelWalker(NodeWalker):
 
     numberOfUnnamedReactions = 0
     numberOfUnnamedRules = 0
+    isImporting = False
     
     def __init__(self):
         self.onemodel = OneModel()
@@ -251,6 +252,12 @@ class OneModelWalker(NodeWalker):
         namespace[name].walker = self
 
         return namespace[name]
+
+    def walk_Standalone(self, node):
+        if self.isImporting == False:
+            return self.walk(node.body)
+
+        return None
 
     def walk_DottedName(self, node):
         qualifiers = node.qualifiers

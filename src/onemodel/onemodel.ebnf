@@ -218,7 +218,7 @@ access_name::AccessName
 function_definition::FunctionDefinition
   =
   'function' name:name '(' [args+:name {',' args+:name}] ')' newline
-  {newline | body:statement}
+  {newline | body:statement newline}
   'end'
   ;
 
@@ -226,7 +226,7 @@ function_definition::FunctionDefinition
 model_definition::ModelDefinition
   =
   'model' name:name newline
-  {newline | body:statement}
+  {newline | body:statement newline}
   'end'
   ;
 

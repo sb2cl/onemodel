@@ -19,6 +19,6 @@ model ProteinConstitutive  # Start declaring model.
 end  # End declaring model.
 
 ## Example of how to use ProteinConstitutive. ##
-#standalone        
+standalone        
   A = ProteinConstitutive()
-#end
+end

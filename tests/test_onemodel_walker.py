@@ -347,11 +347,18 @@ def test_walk_Standalone():
         1
     end
     """
-
     walker = OneModelWalker()
-
     result, ast = walker.run(model)
+    assert result == 1
 
+    model = """
+    standalone
+        1
+    end
+    """
+    walker = OneModelWalker()
+    walker.isImporting = True
+    result, ast = walker.run(model)
     assert result == None
     
 def test_walk_Addition():
