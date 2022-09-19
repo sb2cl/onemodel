@@ -331,7 +331,9 @@ def test_walk_ModelDefinition():
 
     result, ast = walker.run(model)
 
-    assert result[-1] == 2
+    result = walker.onemodel.root
+    
+    assert isinstance(result["MyModel"], Model)
 
 def test_walk_Addition():
     model = """

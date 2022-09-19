@@ -12,7 +12,7 @@
 
 
 # Keywords reserved.
-@@keyword:: species parameter reaction end rule function input import has standalone if
+@@keyword:: species parameter reaction end rule function input import has standalone if model
 
 
 start
@@ -117,6 +117,7 @@ atom
   | string
   | access_name
   | function_definition
+  | model_definition
   ;
 
 
@@ -216,6 +217,14 @@ access_name::AccessName
 function_definition::FunctionDefinition
   =
   'function' name:name '(' [args+:name {',' args+:name}] ')' newline
+  {newline | body:statement}
+  'end'
+  ;
+
+
+model_definition::ModelDefinition
+  =
+  'model' name:name newline
   {newline | body:statement}
   'end'
   ;
