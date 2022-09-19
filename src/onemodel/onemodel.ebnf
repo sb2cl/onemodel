@@ -118,6 +118,7 @@ atom
   | access_name
   | function_definition
   | model_definition
+  | standalone
   ;
 
 
@@ -226,6 +227,14 @@ model_definition::ModelDefinition
   =
   'model' name:name newline
   {newline | body:statement}
+  'end'
+  ;
+
+
+standalone::Standalone
+  =
+  'standalone' newline
+  {newline | body:statement newline}
   'end'
   ;
 

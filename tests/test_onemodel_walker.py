@@ -341,6 +341,19 @@ def test_walk_ModelDefinition():
     assert result["m"]["bar"]["initialConcentration"] == 0
     assert result["m"]["R1"]["math"] == "foo - bar"
 
+def test_walk_Standalone():
+    model = """
+    standalone
+        1
+    end
+    """
+
+    walker = OneModelWalker()
+
+    result, ast = walker.run(model)
+
+    assert result == None
+    
 def test_walk_Addition():
     model = """
     1 + 2
