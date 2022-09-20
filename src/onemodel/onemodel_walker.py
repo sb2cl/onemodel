@@ -96,6 +96,12 @@ class OneModelWalker(NodeWalker):
 
         return result
 
+    def walk_Import(self, node):
+        module_name = node.module_name
+
+        namespace = self.onemodel
+        namespace[module_name] = 1
+
     def walk_Parameter(self, node):
         result = self.walk(node.name)
         name = result["name"]

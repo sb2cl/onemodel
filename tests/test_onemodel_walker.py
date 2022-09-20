@@ -440,3 +440,7 @@ def test_walk_Import():
     result = walker.onemodel.root
 
     assert result["ex03_protein_constitutive"] != None
+    assert isinstance(
+            result["ex03_protein_constitutive"]["ProteinConstitutive"],
+            Model
+            )
