@@ -99,15 +99,19 @@ class OneModelWalker(NodeWalker):
 
     def walk_Import(self, node):
         module_name = node.module_name
+        assign_name = node.assign_name
+
+        if assign_name == None:
+            assign_name = module_name
 
         file = open(module_name + '.one')
         text = file.read()
         file.close()
 
         namespace = self.onemodel
-        namespace[module_name] = Object()
+        namespace[assign_name] = Object()
 
-        namespace.push(namespace[module_name])
+        namespace.push(namespace[assign_name])
 
         aux = self.isImporting
         self.isImporting = True
