@@ -427,8 +427,6 @@ def test_walk_Parentheis():
     assert result == [1.2,18]
 
 def test_walk_Import():
-    examples_path = os.path.dirname(os.path.abspath("README.md")) + "/examples/"
-    os.chdir(examples_path)
 
     model = """
     import ex03_protein_constitutive 
