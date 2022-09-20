@@ -98,20 +98,24 @@ class OneModelWalker(NodeWalker):
         return result
 
     def walk_Import(self, node):
+        import_name = node.import_name
         module_name = node.module_name
         assign_name = node.assign_name
 
         if assign_name == None:
-            assign_name = module_name
+            if import_name != None:
+                assign_name = import_name
+            else:
+                assign_name = module_name
 
         file = open(module_name + '.one')
         text = file.read()
         file.close()
 
         namespace = self.onemodel
-        namespace[assign_name] = Object()
 
-        namespace.push(namespace[assign_name])
+        module = Object()
+        namespace.push(module)
 
         aux = self.isImporting
         self.isImporting = True
@@ -121,6 +125,11 @@ class OneModelWalker(NodeWalker):
         self.isImporting = aux
 
         namespace.pop()
+
+        if import_name == None:
+            namespace[assign_name] = module
+        else:
+            namespace[assign_name] = module[import_name]
 
     def walk_Parameter(self, node):
         result = self.walk(node.name)
