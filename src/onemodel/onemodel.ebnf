@@ -33,7 +33,8 @@ statement
   | 'species' newline ~ {newline | @:species {',' @:species} newline} 'end'
   | 'reaction' newline ~ {newline | @:reaction} 'end'
   | 'rule' newline ~ {newline | @:rule newline} 'end'
-  | expression newline
+  | import
+  | expression
   ;
 
 
@@ -133,6 +134,12 @@ newline
   = 
   | ';'
   | /\n/
+  ;
+
+
+import::Import
+  =
+  'import' ~ name:name
   ;
 
 
