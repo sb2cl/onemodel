@@ -9,6 +9,7 @@ from onemodel.objects.assignment_rule import AssignmentRule
 from onemodel.objects.algebraic_rule import AlgebraicRule
 from onemodel.objects.rate_rule import RateRule
 from onemodel.objects.function import Function
+from onemodel.objects.model import Model
 from onemodel.builtin_functions import load_builtin_functions
 
 def load_file(filename):
@@ -29,6 +30,7 @@ class OneModelWalker(NodeWalker):
 
     numberOfUnnamedReactions = 0
     numberOfUnnamedRules = 0
+    isImporting = False
     
     def __init__(self):
         self.onemodel = OneModel()
@@ -119,7 +121,9 @@ class OneModelWalker(NodeWalker):
         namespace[name] = Species()
 
         if value:
-            namespace[name]["value"] = value
+            namespace[name]["initialConcentration"] = value
+        else:
+            namespace[name]["initialConcentration"] = 0
 
         if documentation:
             namespace[name]["__doc__"] = documentation
@@ -236,6 +240,24 @@ class OneModelWalker(NodeWalker):
         namespace[name].walker = self
 
         return namespace[name]
+
+    def walk_ModelDefinition(self, node):
+        name = node.name
+        body = node.body
+
+        namespace = self.onemodel
+
+        namespace[name] = Model()
+        namespace[name]["body"] = body
+        namespace[name].walker = self
+
+        return namespace[name]
+
+    def walk_Standalone(self, node):
+        if self.isImporting == False:
+            return self.walk(node.body)
+
+        return None
 
     def walk_DottedName(self, node):
         qualifiers = node.qualifiers
