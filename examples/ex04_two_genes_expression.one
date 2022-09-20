@@ -2,11 +2,11 @@
 
 # Import ProteinConstitutive model.
 # (note that the standalone code is not imported).
-import ex03_protein_constitutive as foo
+from ex03_protein_constitutive import ProteinConstitutive
 
 # Initialize A and B as instances of ProteinConstitutive.
-A = foo.ProteinConstitutive()  
-B = foo.ProteinConstitutive()
+A = ProteinConstitutive()  
+B = ProteinConstitutive()
 
 # We could easily add more proteins by writing:
 # C = ProteinConstitutive()
