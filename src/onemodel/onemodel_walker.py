@@ -2,6 +2,7 @@ from importlib_resources import files
 import tatsu
 from tatsu.walkers import NodeWalker
 from onemodel.onemodel import OneModel
+from onemodel.objects.object import Object
 from onemodel.objects.parameter import Parameter
 from onemodel.objects.species import Species
 from onemodel.objects.reaction import Reaction
@@ -99,8 +100,23 @@ class OneModelWalker(NodeWalker):
     def walk_Import(self, node):
         module_name = node.module_name
 
+        file = open(module_name + '.one')
+        text = file.read()
+        file.close()
+
         namespace = self.onemodel
-        namespace[module_name] = 1
+        namespace[module_name] = Object()
+
+        namespace.push(namespace[module_name])
+
+        aux = self.isImporting
+        self.isImporting = True
+
+        self.run(text)
+
+        self.isImporting = aux
+
+        namespace.pop()
 
     def walk_Parameter(self, node):
         result = self.walk(node.name)
