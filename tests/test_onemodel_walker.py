@@ -430,6 +430,7 @@ def test_walk_Import():
 
     model = """
     import ex03_protein_constitutive 
+    import ex03_protein_constitutive as foo
     """
 
     walker = OneModelWalker()
@@ -440,5 +441,9 @@ def test_walk_Import():
     assert result["ex03_protein_constitutive"] != None
     assert isinstance(
             result["ex03_protein_constitutive"]["ProteinConstitutive"],
+            Model
+            )
+    assert isinstance(
+            result["foo"]["ProteinConstitutive"],
             Model
             )

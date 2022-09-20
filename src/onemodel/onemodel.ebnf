@@ -139,7 +139,7 @@ newline
 
 import::Import
   =
-  'import' ~ module_name:name
+  'import' ~ module_name:name ['as' assign_name:name]
   ;
 
 
