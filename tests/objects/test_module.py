@@ -6,6 +6,7 @@ from pathlib import Path
 from onemodel.objects.module import Module
 from onemodel.objects.module import find_module
 from onemodel.objects.module import load_module
+from onemodel.onemodel_walker import OneModelWalker
 
 
 @pytest.fixture
@@ -32,12 +33,15 @@ def test_find_module(tmp_examples_dir):
 
 def test_load_module(tmp_examples_dir):
     os.chdir(tmp_examples_dir)
+    walker = OneModelWalker()
 
     module_name = "ex01_simple_gene_expression"
-    result = load_module(module_name)
+    result = load_module(module_name, walker)
+
+    print(result)
 
     assert isinstance(result, Module)
     assert result["__name__"] == module_name
     assert result["__file__"] == find_module(module_name)
-    assert result["mRNA"]["value"] == 0
+    assert result["k_m"]["value"] == 1
 

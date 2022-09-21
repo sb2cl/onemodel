@@ -9,11 +9,22 @@ def find_module(module_name):
     result = os.path.abspath(filename)
     return result
 
-def load_module(module_name):
+def load_module(module_name, walker):
     """Load the code of a module into a Module object. """
+    filename = find_module(module_name)
+
     module = Module()
     module["__name__"] = module_name
-    module["__file__"] = find_module(module_name)
+    module["__file__"] = filename
+
+    file = open(filename)
+    text = file.read()
+    file.close()
+    
+    walker.onemodel.push(module)
+    walker.run(text)
+    walker.onemodel.pop()
+
     return module
 
 class Module(Object):
