@@ -38,10 +38,7 @@ def test_load_module(tmp_examples_dir):
     module_name = "ex01_simple_gene_expression"
     result = load_module(module_name, walker)
 
-    print(result)
-
     assert isinstance(result, Module)
     assert result["__name__"] == module_name
     assert result["__file__"] == find_module(module_name)
     assert result["k_m"]["value"] == 1
-
