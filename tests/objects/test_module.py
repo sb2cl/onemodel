@@ -1,4 +1,5 @@
 from onemodel.objects.module import Module
+from onemodel.objects.module import find_module
 
 def test_init():
     result = Module()
