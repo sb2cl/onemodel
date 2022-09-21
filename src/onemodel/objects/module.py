@@ -9,6 +9,13 @@ def find_module(module_name):
     result = os.path.abspath(filename)
     return result
 
+def load_module(module_name):
+    """Load the code of a module into a Module object. """
+    module = Module()
+    module["__name__"] = module_name
+    module["__file__"] = find_module(module_name)
+    return module
+
 class Module(Object):
     """A module is where is saved the execution of a OneModel script.
 
@@ -22,3 +29,5 @@ class Module(Object):
 
     def __init__(self):
         super().__init__()
+        self["__name__"] = ""
+        self["__file__"] = ""

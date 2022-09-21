@@ -5,6 +5,7 @@ from pathlib import Path
 
 from onemodel.objects.module import Module
 from onemodel.objects.module import find_module
+from onemodel.objects.module import load_module
 
 
 @pytest.fixture
@@ -36,3 +37,7 @@ def test_load_module(tmp_examples_dir):
     result = load_module(module_name)
 
     assert isinstance(result, Module)
+    assert result["__name__"] == module_name
+    assert result["__file__"] == find_module(module_name)
+    assert result["mRNA"]["value"] == 0
+
