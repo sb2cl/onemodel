@@ -28,3 +28,11 @@ def test_find_module(tmp_examples_dir):
     expected = tmp_examples_dir / "ex01_simple_gene_expression.one" 
 
     assert result == str(expected)
+
+def test_load_module(tmp_examples_dir):
+    os.chdir(tmp_examples_dir)
+
+    module_name = "ex01_simple_gene_expression"
+    result = load_module(module_name)
+
+    assert isinstance(result, Module)
