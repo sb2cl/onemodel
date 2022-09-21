@@ -12,7 +12,7 @@
 
 
 # Keywords reserved.
-@@keyword:: species parameter reaction end rule function input import has standalone if model
+@@keyword:: species parameter reaction end rule function input import has standalone if model from
 
 
 start
@@ -33,6 +33,7 @@ statement
   | 'species' newline ~ {newline | @:species {',' @:species} newline} 'end'
   | 'reaction' newline ~ {newline | @:reaction} 'end'
   | 'rule' newline ~ {newline | @:rule newline} 'end'
+  | import
   | expression
   ;
 
@@ -133,6 +134,13 @@ newline
   = 
   | ';'
   | /\n/
+  ;
+
+
+import::Import
+  =
+  | 'import' ~ module_name:name ['as' assign_name:name]
+  | 'from' ~ module_name:name 'import' import_name:name ['as' assign_name:name]
   ;
 
 

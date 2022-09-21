@@ -1,3 +1,5 @@
+import os
+
 from onemodel.onemodel_walker import OneModelWalker
 from onemodel.objects.parameter import Parameter
 from onemodel.objects.species import Species
@@ -423,3 +425,30 @@ def test_walk_Parentheis():
     walker = OneModelWalker()
     result, ast = walker.run(model)
     assert result == [1.2,18]
+
+def test_walk_Import():
+
+    model = """
+    import ex03_protein_constitutive 
+    import ex03_protein_constitutive as foo
+    from ex03_protein_constitutive import ProteinConstitutive
+    """
+
+    walker = OneModelWalker()
+    result, ast = walker.run(model)
+
+    result = walker.onemodel.root
+
+    assert result["ex03_protein_constitutive"] != None
+    assert isinstance(
+            result["ex03_protein_constitutive"]["ProteinConstitutive"],
+            Model
+            )
+    assert isinstance(
+            result["foo"]["ProteinConstitutive"],
+            Model
+            )
+    assert isinstance(
+            result["ProteinConstitutive"],
+            Model
+            )
