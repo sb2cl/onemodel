@@ -111,7 +111,7 @@ class OneModelWalker(NodeWalker):
             else:
                 assign_name = module_name
 
-        module = load_module(module_name, self)
+        module = load_module(self, module_name)
 
         namespace = self.onemodel
 

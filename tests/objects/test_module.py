@@ -35,10 +35,20 @@ def test_load_module(tmp_examples_dir):
     os.chdir(tmp_examples_dir)
     walker = OneModelWalker()
 
+    import_name = None
     module_name = "ex01_simple_gene_expression"
-    result = load_module(module_name, walker)
+    assign_name = None
+
+    result = load_module(
+            walker,
+            module_name, 
+            import_name=import_name,
+            assign_name=assign_name
+            )
 
     assert isinstance(result, Module)
     assert result["__name__"] == module_name
     assert result["__file__"] == find_module(module_name)
     assert result["k_m"]["value"] == 1
+
+

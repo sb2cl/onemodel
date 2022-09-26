@@ -9,7 +9,7 @@ def find_module(module_name):
     result = os.path.abspath(filename)
     return result
 
-def load_module(module_name, walker):
+def load_module(walker, module_name, import_name=None, assign_name=None):
     """Load the code of a module into a Module object. """
     filename = find_module(module_name)
 
