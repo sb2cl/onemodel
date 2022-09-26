@@ -12,9 +12,6 @@ def find_module(walker, module_name):
     else:
         dirpath = os.path.dirname(filepath)
     
-    print(filepath)
-    print(dirpath)
-
     filename = dirpath + "/" + module_name + '.one'
     result = os.path.abspath(filename)
     return result
