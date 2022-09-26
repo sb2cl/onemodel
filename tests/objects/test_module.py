@@ -23,20 +23,12 @@ def test_init():
     result = Module()
     assert isinstance(result, Module)
 
-def test_find_module_1(tmp_examples_dir):
+def test_find_module(tmp_examples_dir):
     os.chdir(tmp_examples_dir / "src")
+    walker = OneModelWalker()
 
     module_name = "module_1"
-    result = find_module(module_name)
-    expected = tmp_examples_dir / "src/module_1.one" 
-
-    assert result == str(expected)
-
-def test_find_module_2(tmp_examples_dir):
-    os.chdir(tmp_examples_dir)
-
-    module_name = "module_1"
-    result = find_module(module_name)
+    result = find_module(walker, module_name)
     expected = tmp_examples_dir / "src/module_1.one" 
 
     assert result == str(expected)
@@ -58,7 +50,7 @@ def test_load_module_1(tmp_examples_dir):
 
     assert isinstance(result, Module)
     assert result["__name__"] == module_name
-    assert result["__file__"] == find_module(module_name)
+    assert result["__file__"] == find_module(walker, module_name)
     assert result["add"]["argument_names"] == ['a', 'b']
     assert walker.onemodel[module_name] == result  
 
