@@ -29,7 +29,10 @@ def load_module(walker, module_name, import_name=None, assign_name=None):
     if assign_name is None:
         assign_name = module_name
 
-    walker.onemodel[assign_name] = module
+    if import_name:
+        walker.onemodel[assign_name] = module[import_name]
+    else:
+        walker.onemodel[assign_name] = module
 
     return module
 
