@@ -1,0 +1,14 @@
+# other/module_2.one
+
+function mult(a, b)
+   """This function multiplies two values and prints the result."""
+
+   result = a * b
+
+   print("The result is:")
+   print(result)
+end
+
+standalone
+  mult(2, 3)
+end
