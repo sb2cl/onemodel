@@ -2,7 +2,7 @@ import os
 
 from onemodel.objects.object import Object
 
-def find_module(walker, module_name):
+def find_module(walker, module_name, qualifiers=None):
     """Find the absolute path of a module."""
 
     filepath = walker.onemodel["__file__"]
@@ -12,14 +12,17 @@ def find_module(walker, module_name):
     else:
         dirpath = os.path.dirname(filepath)
     
+    if qualifiers:
+        module_name = "/".join(qualifiers) + "/" +  module_name 
+
     filename = dirpath + "/" + module_name + '.one'
     result = os.path.abspath(filename)
     return result
 
-def load_module(walker, module_name, import_name=None, assign_name=None):
+def load_module(walker, module_name, import_name=None, assign_name=None, qualifiers=None):
     """Load the code of a module into a Module object. """
 
-    filename = find_module(walker, module_name)
+    filename = find_module(walker, module_name, qualifiers)
 
     module = Module()
     module["__name__"] = module_name

@@ -468,3 +468,4 @@ def test_walk_Import(tmp_examples_dir):
             result["add"],
             Function
             )
+    assert result["module_2"] != None

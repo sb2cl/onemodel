@@ -109,11 +109,12 @@ class OneModelWalker(NodeWalker):
         return result
 
     def walk_Import(self, node):
+        qualifiers = node.qualifiers
+        module_name = node.module_name
         import_name = node.import_name
-        module_name = self.walk(node.module_name)["dotted_name"]
         assign_name = node.assign_name
 
-        load_module(self, module_name, import_name, assign_name)
+        load_module(self, module_name, import_name, assign_name, qualifiers)
 
     def walk_Parameter(self, node):
         result = self.walk(node.name)

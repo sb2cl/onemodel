@@ -139,8 +139,8 @@ newline
 
 import::Import
   =
-  | 'import' ~ module_name:dotted_name ['as' assign_name:name]
-  | 'from' ~ module_name:dotted_name 'import' import_name:name ['as' assign_name:name]
+  | 'import' ~ {qualifiers+:name '.'} module_name:name ['as' assign_name:name]
+  | 'from' ~ {qualifiers+:name '.'} module_name:name 'import' import_name:name ['as' assign_name:name]
   ;
 
 
