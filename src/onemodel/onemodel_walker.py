@@ -34,7 +34,6 @@ class OneModelWalker(NodeWalker):
 
     numberOfUnnamedReactions = 0
     numberOfUnnamedRules = 0
-    isImporting = False
     
     def __init__(self):
         self.onemodel = OneModel()
@@ -112,10 +111,7 @@ class OneModelWalker(NodeWalker):
             else:
                 assign_name = module_name
 
-        aux = self.isImporting
-        self.isImporting = True
         module = load_module(module_name, self)
-        self.isImporting = aux
 
         namespace = self.onemodel
 
