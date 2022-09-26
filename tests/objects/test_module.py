@@ -31,7 +31,7 @@ def test_find_module(tmp_examples_dir):
 
     assert result == str(expected)
 
-def test_load_module(tmp_examples_dir):
+def test_load_module_1(tmp_examples_dir):
     os.chdir(tmp_examples_dir)
     walker = OneModelWalker()
 
@@ -50,5 +50,21 @@ def test_load_module(tmp_examples_dir):
     assert result["__name__"] == module_name
     assert result["__file__"] == find_module(module_name)
     assert result["k_m"]["value"] == 1
+    assert walker.onemodel[module_name] == result  
 
+def test_load_module_2(tmp_examples_dir):
+    os.chdir(tmp_examples_dir)
+    walker = OneModelWalker()
 
+    import_name = None
+    module_name = "ex01_simple_gene_expression"
+    assign_name = "foo"
+
+    result = load_module(
+            walker,
+            module_name, 
+            import_name=import_name,
+            assign_name=assign_name
+            )
+
+    assert walker.onemodel[assign_name] == result

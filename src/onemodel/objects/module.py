@@ -11,6 +11,7 @@ def find_module(module_name):
 
 def load_module(walker, module_name, import_name=None, assign_name=None):
     """Load the code of a module into a Module object. """
+
     filename = find_module(module_name)
 
     module = Module()
@@ -24,6 +25,11 @@ def load_module(walker, module_name, import_name=None, assign_name=None):
     walker.onemodel.push(module)
     walker.run(text)
     walker.onemodel.pop()
+
+    if assign_name is None:
+        assign_name = module_name
+
+    walker.onemodel[assign_name] = module
 
     return module
 
