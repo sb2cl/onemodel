@@ -1,0 +1,14 @@
+# module_1.one
+
+function add(a, b)
+   """This function adds two values and prints the result."""
+
+   result = a + b
+
+   print("The result is:")
+   print(result)
+end
+
+standalone
+  add(1, 2)
+end
