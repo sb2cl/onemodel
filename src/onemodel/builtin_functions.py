@@ -37,11 +37,11 @@ def globals_(scope):
     return None
 add_builtin_function("globals", [""], globals_)
 
-def list_namespace(scope):
+def locals_(scope):
     namespace = scope.namespaces[-2]
     print('{')
     for name in namespace:
         print(f"    {name} : {namespace[name]}")
     print('}')
     return None
-add_builtin_function("list_namespace", [""], list_namespace)
+add_builtin_function("locals", [""], locals_)
