@@ -1,3 +1,4 @@
+import os
 from importlib_resources import files
 import tatsu
 from tatsu.walkers import NodeWalker
@@ -19,11 +20,12 @@ from onemodel.builtin_functions import load_builtin_functions
 def load_file(filename):
     """Load a file into OneModel. """
 
-    file = open(filename)
+    filepath = os.path.abspath(filename)
+    file = open(filepath)
     text = file.read()
     file.close()
 
-    walker = OneModelWalker()
+    walker = OneModelWalker(file=filepath)
     result, ast = walker.run(text)
     
     onemodel = walker.onemodel
@@ -35,9 +37,15 @@ class OneModelWalker(NodeWalker):
     numberOfUnnamedReactions = 0
     numberOfUnnamedRules = 0
     
-    def __init__(self):
+    def __init__(self, file=None):
         self.onemodel = OneModel()
         self.onemodel["__name__"] = "__main__"
+
+        if file:
+            self.onemodel["__file__"] = file
+        else:
+            self.onemodel["__file__"] = os.path.abspath(os.getcwd())
+
         load_builtin_functions(self.onemodel)
 
         grammar = files("onemodel").joinpath("onemodel.ebnf").read_text()

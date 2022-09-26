@@ -23,8 +23,17 @@ def test_init():
     result = Module()
     assert isinstance(result, Module)
 
-def test_find_module(tmp_examples_dir):
+def test_find_module_1(tmp_examples_dir):
     os.chdir(tmp_examples_dir / "src")
+
+    module_name = "module_1"
+    result = find_module(module_name)
+    expected = tmp_examples_dir / "src/module_1.one" 
+
+    assert result == str(expected)
+
+def test_find_module_2(tmp_examples_dir):
+    os.chdir(tmp_examples_dir)
 
     module_name = "module_1"
     result = find_module(module_name)
