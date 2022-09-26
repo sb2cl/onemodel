@@ -11,6 +11,9 @@ from onemodel.objects.algebraic_rule import AlgebraicRule
 from onemodel.objects.rate_rule import RateRule
 from onemodel.objects.function import Function
 from onemodel.objects.model import Model
+from onemodel.objects.module import Module
+from onemodel.objects.module import find_module
+from onemodel.objects.module import load_module
 from onemodel.builtin_functions import load_builtin_functions
 
 def load_file(filename):
@@ -35,6 +38,7 @@ class OneModelWalker(NodeWalker):
     
     def __init__(self):
         self.onemodel = OneModel()
+        self.onemodel["__name__"] = "__main__"
         load_builtin_functions(self.onemodel)
 
         grammar = files("onemodel").joinpath("onemodel.ebnf").read_text()
@@ -108,23 +112,12 @@ class OneModelWalker(NodeWalker):
             else:
                 assign_name = module_name
 
-        file = open(module_name + '.one')
-        text = file.read()
-        file.close()
-
-        namespace = self.onemodel
-
-        module = Object()
-        namespace.push(module)
-
         aux = self.isImporting
         self.isImporting = True
-
-        self.run(text)
-
+        module = load_module(module_name, self)
         self.isImporting = aux
 
-        namespace.pop()
+        namespace = self.onemodel
 
         if import_name == None:
             namespace[assign_name] = module
@@ -289,7 +282,8 @@ class OneModelWalker(NodeWalker):
         return namespace[name]
 
     def walk_Standalone(self, node):
-        if self.isImporting == False:
+
+        if self.onemodel["__name__"] == "__main__":
             return self.walk(node.body)
 
         return None

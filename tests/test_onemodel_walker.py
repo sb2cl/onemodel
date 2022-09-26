@@ -359,7 +359,7 @@ def test_walk_Standalone():
     end
     """
     walker = OneModelWalker()
-    walker.isImporting = True
+    walker.onemodel["__name__"] = "foo"
     result, ast = walker.run(model)
     assert result == None
     
