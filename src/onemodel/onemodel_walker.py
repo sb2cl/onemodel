@@ -105,20 +105,7 @@ class OneModelWalker(NodeWalker):
         module_name = node.module_name
         assign_name = node.assign_name
 
-        if assign_name == None:
-            if import_name != None:
-                assign_name = import_name
-            else:
-                assign_name = module_name
-
-        module = load_module(self, module_name)
-
-        namespace = self.onemodel
-
-        if import_name == None:
-            namespace[assign_name] = module
-        else:
-            namespace[assign_name] = module[import_name]
+        load_module(self, module_name, import_name, assign_name)
 
     def walk_Parameter(self, node):
         result = self.walk(node.name)

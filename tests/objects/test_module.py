@@ -35,15 +35,15 @@ def test_load_module_1(tmp_examples_dir):
     os.chdir(tmp_examples_dir)
     walker = OneModelWalker()
 
-    import_name = None
     module_name = "ex01_simple_gene_expression"
+    import_name = None
     assign_name = None
 
     result = load_module(
             walker,
             module_name, 
-            import_name=import_name,
-            assign_name=assign_name
+            import_name,
+            assign_name
             )
 
     assert isinstance(result, Module)
@@ -56,15 +56,15 @@ def test_load_module_2(tmp_examples_dir):
     os.chdir(tmp_examples_dir)
     walker = OneModelWalker()
 
-    import_name = None
     module_name = "ex01_simple_gene_expression"
+    import_name = None
     assign_name = "foo"
 
     result = load_module(
             walker,
             module_name, 
-            import_name=import_name,
-            assign_name=assign_name
+            import_name,
+            assign_name
             )
 
     assert walker.onemodel[assign_name] == result
@@ -73,15 +73,32 @@ def test_load_module_3(tmp_examples_dir):
     os.chdir(tmp_examples_dir)
     walker = OneModelWalker()
 
-    import_name = "mRNA"
     module_name = "ex01_simple_gene_expression"
+    import_name = "mRNA"
     assign_name = "foo"
 
     result = load_module(
             walker,
             module_name, 
-            import_name=import_name,
-            assign_name=assign_name
+            import_name,
+            assign_name
             )
 
     assert walker.onemodel[assign_name] == result[import_name]
+
+def test_load_module_4(tmp_examples_dir):
+    os.chdir(tmp_examples_dir)
+    walker = OneModelWalker()
+
+    module_name = "ex01_simple_gene_expression"
+    import_name = "mRNA"
+    assign_name = None
+
+    result = load_module(
+            walker,
+            module_name, 
+            import_name,
+            assign_name
+            )
+
+    assert walker.onemodel[import_name] == result[import_name]

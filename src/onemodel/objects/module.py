@@ -26,6 +26,9 @@ def load_module(walker, module_name, import_name=None, assign_name=None):
     walker.run(text)
     walker.onemodel.pop()
 
+    if assign_name is None and import_name:
+        assign_name = import_name
+
     if assign_name is None:
         assign_name = module_name
 
