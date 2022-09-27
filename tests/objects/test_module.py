@@ -115,3 +115,22 @@ def test_load_module_4(tmp_examples_dir):
             )
 
     assert walker.onemodel[import_name] == result[import_name]
+
+def test_load_module_5(tmp_examples_dir):
+    os.chdir(tmp_examples_dir)
+    walker = OneModelWalker()
+
+    qualifiers = ["module_3"]
+    module_name = "module_3"
+    import_name = None
+    assign_name = None
+
+    result = load_module(
+            walker,
+            module_name, 
+            import_name,
+            assign_name,
+            qualifiers
+            )
+
+    assert walker.onemodel["module_3"]["module_3"] != None

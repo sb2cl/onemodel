@@ -53,4 +53,5 @@ def test_run(tmp_examples_dir):
     walker = OneModelWalker()
 
     onemodel = load_file("src/main.one") 
+
     assert onemodel["onemodel_blueprint"]["add"]["add"] != None
