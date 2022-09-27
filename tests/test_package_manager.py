@@ -30,5 +30,4 @@ def test_load_toml_file(tmp_examples_dir):
         "onemodel-blueprint": "https://github.com/fernandonobel/onemodel-blueprint"
     }
 
-    assert pm.dependencies == expected
-
+    assert pm.dependencies() == expected

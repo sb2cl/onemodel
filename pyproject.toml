@@ -30,6 +30,7 @@ click = "^8.0.0"
 importlib-resources = "*"
 # python-libsbml = "5.19.5"
 python-libsbml = "5.19.2"
+tomli = "*"
 
 [tool.poetry.dev-dependencies]
 nox-poetry = "*"
