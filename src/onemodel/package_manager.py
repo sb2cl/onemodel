@@ -1,4 +1,6 @@
+import os
 import tomli
+from git import Repo
 
 class PackageManager:
 
@@ -11,3 +13,8 @@ class PackageManager:
 
     def dependencies(self):
         return self.config["dependencies"]
+
+    def install_dependencies(self):
+
+        for name, url in self.dependencies().items():
+            Repo.clone_from(url, f"lib/{name}")
