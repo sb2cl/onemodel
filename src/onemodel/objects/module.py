@@ -29,7 +29,8 @@ def find_module(walker, module_name, qualifiers=None, dots_number=0):
         result = os.path.abspath(filename)
         return result
    
-    filename = dirpath + "/lib/" + module_name + '.one'
+    libpath = os.path.abspath(os.getcwd()) + "/lib"
+    filename = libpath + "/" + module_name + '.one'
     result = os.path.abspath(filename)
     return result
 
