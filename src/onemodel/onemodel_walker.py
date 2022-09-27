@@ -1,3 +1,4 @@
+import os
 from importlib_resources import files
 import tatsu
 from tatsu.walkers import NodeWalker
@@ -11,16 +12,20 @@ from onemodel.objects.algebraic_rule import AlgebraicRule
 from onemodel.objects.rate_rule import RateRule
 from onemodel.objects.function import Function
 from onemodel.objects.model import Model
+from onemodel.objects.module import Module
+from onemodel.objects.module import find_module
+from onemodel.objects.module import load_module
 from onemodel.builtin_functions import load_builtin_functions
 
 def load_file(filename):
     """Load a file into OneModel. """
 
-    file = open(filename)
+    filepath = os.path.abspath(filename)
+    file = open(filepath)
     text = file.read()
     file.close()
 
-    walker = OneModelWalker()
+    walker = OneModelWalker(file=filepath)
     result, ast = walker.run(text)
     
     onemodel = walker.onemodel
@@ -31,10 +36,16 @@ class OneModelWalker(NodeWalker):
 
     numberOfUnnamedReactions = 0
     numberOfUnnamedRules = 0
-    isImporting = False
     
-    def __init__(self):
+    def __init__(self, file=None):
         self.onemodel = OneModel()
+        self.onemodel["__name__"] = "__main__"
+
+        if file:
+            self.onemodel["__file__"] = file
+        else:
+            self.onemodel["__file__"] = os.path.abspath(os.getcwd())
+
         load_builtin_functions(self.onemodel)
 
         grammar = files("onemodel").joinpath("onemodel.ebnf").read_text()
@@ -98,38 +109,20 @@ class OneModelWalker(NodeWalker):
         return result
 
     def walk_Import(self, node):
-        import_name = node.import_name
+        dots_number = len(node.dots)
+        qualifiers = node.qualifiers
         module_name = node.module_name
+        import_name = node.import_name
         assign_name = node.assign_name
 
-        if assign_name == None:
-            if import_name != None:
-                assign_name = import_name
-            else:
-                assign_name = module_name
-
-        file = open(module_name + '.one')
-        text = file.read()
-        file.close()
-
-        namespace = self.onemodel
-
-        module = Object()
-        namespace.push(module)
-
-        aux = self.isImporting
-        self.isImporting = True
-
-        self.run(text)
-
-        self.isImporting = aux
-
-        namespace.pop()
-
-        if import_name == None:
-            namespace[assign_name] = module
-        else:
-            namespace[assign_name] = module[import_name]
+        load_module(
+            self, 
+            module_name, 
+            import_name, 
+            assign_name, 
+            qualifiers,
+            dots_number
+        )
 
     def walk_Parameter(self, node):
         result = self.walk(node.name)
@@ -289,7 +282,8 @@ class OneModelWalker(NodeWalker):
         return namespace[name]
 
     def walk_Standalone(self, node):
-        if self.isImporting == False:
+
+        if self.onemodel["__name__"] == "__main__":
             return self.walk(node.body)
 
         return None

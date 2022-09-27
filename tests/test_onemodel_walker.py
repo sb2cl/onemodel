@@ -1,4 +1,7 @@
 import os
+import pytest
+from distutils.dir_util import copy_tree
+from pathlib import Path
 
 from onemodel.onemodel_walker import OneModelWalker
 from onemodel.objects.parameter import Parameter
@@ -8,6 +11,7 @@ from onemodel.objects.assignment_rule import AssignmentRule
 from onemodel.objects.algebraic_rule import AlgebraicRule
 from onemodel.objects.rate_rule import RateRule
 from onemodel.objects.model import Model
+from onemodel.objects.function import Function
 
 def test_init():
     result = OneModelWalker()
@@ -359,7 +363,7 @@ def test_walk_Standalone():
     end
     """
     walker = OneModelWalker()
-    walker.isImporting = True
+    walker.onemodel["__name__"] = "foo"
     result, ast = walker.run(model)
     assert result == None
     
@@ -426,12 +430,24 @@ def test_walk_Parentheis():
     result, ast = walker.run(model)
     assert result == [1.2,18]
 
-def test_walk_Import():
+@pytest.fixture
+def tmp_examples_dir(tmpdir):
+    result = Path(tmpdir)
+    copy_example_files_into(result)
+    return result
+
+def copy_example_files_into(path):
+    path_test_module = os.path.dirname(__file__) + "/objects/test_module"
+    copy_tree(path_test_module, str(path))
+
+def test_walk_Import(tmp_examples_dir):
+    os.chdir(tmp_examples_dir / "src")
 
     model = """
-    import ex03_protein_constitutive 
-    import ex03_protein_constitutive as foo
-    from ex03_protein_constitutive import ProteinConstitutive
+    import module_1 
+    import module_1 as foo
+    from module_1 import add
+    import other.module_2
     """
 
     walker = OneModelWalker()
@@ -439,16 +455,17 @@ def test_walk_Import():
 
     result = walker.onemodel.root
 
-    assert result["ex03_protein_constitutive"] != None
+    assert result["module_1"] != None
     assert isinstance(
-            result["ex03_protein_constitutive"]["ProteinConstitutive"],
-            Model
+            result["module_1"]["add"],
+            Function
             )
     assert isinstance(
-            result["foo"]["ProteinConstitutive"],
-            Model
+            result["foo"]["add"],
+            Function
             )
     assert isinstance(
-            result["ProteinConstitutive"],
-            Model
+            result["add"],
+            Function
             )
+    assert result["module_2"] != None
