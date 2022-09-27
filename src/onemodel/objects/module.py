@@ -24,6 +24,12 @@ def find_module(walker, module_name, qualifiers=None, dots_number=0):
         module_name = "/".join(qualifiers) + "/" +  module_name 
 
     filename = dirpath + "/" + module_name + '.one'
+    
+    if os.path.isfile(filename):
+        result = os.path.abspath(filename)
+        return result
+   
+    filename = dirpath + "/lib/" + module_name + '.one'
     result = os.path.abspath(filename)
     return result
 
