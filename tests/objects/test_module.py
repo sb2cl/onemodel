@@ -33,6 +33,16 @@ def test_find_module(tmp_examples_dir):
 
     assert result == str(expected)
 
+def test_find_module_in_lib(tmp_examples_dir):
+    os.chdir(tmp_examples_dir)
+    walker = OneModelWalker()
+
+    module_name = "module_3"
+    result = find_module(walker, module_name)
+    expected = tmp_examples_dir / "lib/module_3.one" 
+
+    assert result == str(expected)
+
 def test_load_module_1(tmp_examples_dir):
     os.chdir(tmp_examples_dir / "src")
     walker = OneModelWalker()
