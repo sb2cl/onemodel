@@ -38,8 +38,9 @@ def test_find_module_in_lib(tmp_examples_dir):
     walker = OneModelWalker()
 
     module_name = "module_3"
-    result = find_module(walker, module_name)
-    expected = tmp_examples_dir / "lib/module_3.one" 
+    qualifiers = ["module_3"]
+    result = find_module(walker, module_name, qualifiers)
+    expected = tmp_examples_dir / "lib/module_3/src/module_3.one" 
 
     assert result == str(expected)
 
