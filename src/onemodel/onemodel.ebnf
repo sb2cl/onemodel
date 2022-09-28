@@ -12,7 +12,7 @@
 
 
 # Keywords reserved.
-@@keyword:: species parameter reaction end rule function input import has standalone if model from
+@@keyword:: species parameter reaction end rule function input import has standalone if model from extends
 
 
 start
@@ -44,6 +44,7 @@ expression
   | 'species' ~ @:species {',' @:species}
   | 'reaction' ~ @:reaction 
   | 'rule' ~ @:rule 
+  | 'extends' ~ @:extends
   | addition
   | subtraction
   | assign_name
@@ -208,6 +209,12 @@ rate_rule::RateRule
   ')'
   ':='
   math:formula
+  ;
+
+
+extends::Extends
+  =
+  model:access_name
   ;
 
 
