@@ -28,7 +28,10 @@ def find_module(walker, module_name, qualifiers=None, dots_number=0):
     if os.path.isfile(filename):
         result = os.path.abspath(filename)
         return result
-   
+
+    module_name = module_name.split("/", 1)
+    module_name = module_name[0] + "/src/" + module_name[1]
+
     libpath = os.path.abspath(os.getcwd()) + "/lib"
     filename = libpath + "/" + module_name + '.one'
     result = os.path.abspath(filename)
@@ -57,10 +60,17 @@ def load_module(walker, module_name, import_name=None, assign_name=None, qualifi
     if assign_name is None:
         assign_name = module_name
 
+    namespace = walker.onemodel
+
+    if qualifiers is not None:
+        for qualifier in qualifiers:
+            namespace[qualifier] = Module()
+            namespace = namespace[qualifier]
+
     if import_name:
-        walker.onemodel[assign_name] = module[import_name]
+        namespace[assign_name] = module[import_name]
     else:
-        walker.onemodel[assign_name] = module
+        namespace[assign_name] = module
 
     return module
 
