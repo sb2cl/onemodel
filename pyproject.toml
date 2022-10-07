@@ -23,8 +23,9 @@ classifiers = [
 include = ["NOTICE"]
 
 [tool.poetry.dependencies]
-python = "^3.8"
-tatsu = "5.6.1"
+python = "^3.7"
+# tatsu = "5.6.1"
+tatsu = "4.4.0"
 # PyQt5 = "*"
 click = "^8.0.0"
 importlib-resources = "*"
