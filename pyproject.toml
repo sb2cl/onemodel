@@ -32,7 +32,7 @@ importlib-resources = "*"
 # python-libsbml = "5.19.5"
 python-libsbml = "5.19.2"
 tomli = "*"
-GitPython = "^3.1.27"
+GitPython = "^3.1.20"
 
 [tool.poetry.dev-dependencies]
 nox-poetry = "*"
