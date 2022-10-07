@@ -14,7 +14,8 @@ class Repl:
     def __init__(self):
         self.onemodel_walker = OneModelWalker()
         self.onemodel = self.onemodel_walker.onemodel
-        self.setup_input_history()
+        # TODO: use this again
+        # self.setup_input_history()
 
     def run(self):
         """Execute the repl."""
