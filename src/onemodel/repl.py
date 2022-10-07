@@ -36,7 +36,7 @@ class Repl:
     def read(self):
         """Read the input from user."""
 
-        result = input(">>> ")
+        result = input(">> ")
 
         if result.strip() == "":
             result = None
