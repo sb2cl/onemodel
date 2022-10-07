@@ -237,6 +237,10 @@ class OneModelWalker(NodeWalker):
         namespace[name]['variable'] = variable
         namespace[name]['math'] = math
 
+    def walk_Extends(self, node):
+        model = self.walk(node.model)
+        result = model.extend()
+
     def walk_AssignName(self, node):
         result = self.walk(node.name)
         name = result["name"]

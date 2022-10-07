@@ -23,3 +23,6 @@ class Model(BaseFunction):
 
         return result
 
+    def extend(self):
+        """Execute the model into current namespace. """
+        self.walker.walk(self["body"])

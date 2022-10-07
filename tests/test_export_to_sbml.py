@@ -12,8 +12,8 @@ examples = [
     "ex02_two_genes_expression",
     "ex03_protein_constitutive",
     "ex04_two_genes_expression",
-    #"ex05_protein_induced",
-    #"ex06_antithetic_controller",
+    "ex05_protein_induced",
+    "ex06_antithetic_controller",
 ]
 
 @pytest.mark.parametrize("example_name", examples)

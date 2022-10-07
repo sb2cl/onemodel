@@ -1,11 +1,14 @@
 ### Definition of AntitheticController. ###
 
-import 'ex05_protein_induced.one'  # ProteinConstitutive and ProteinInduced.
+from ex05_protein_induced import ProteinConstitutive
+from ex05_protein_induced import ProteinInduced
 
 model AntitheticController
+
   z1 = ProteinConstitutive()  # Sigma factor.
   z2 = ProteinInduced()       # Anti-sigma factor.
   x  = ProteinInduced()       # Protein of interest to control.
+
   parameter gamma = 1         # Anithetical sequestration rate.
 
   reaction

@@ -347,6 +347,36 @@ def test_walk_ModelDefinition():
     assert result["m"]["bar"]["initialConcentration"] == 0
     assert result["m"]["R1"]["math"] == "foo - bar"
 
+def test_walk_Extends():
+    model = """
+    model A
+        parameter a = 1
+    end
+
+    model B
+        extends A
+        parameter b = 2
+    end
+
+    model C
+        extends B
+        species c
+        rule R1: c := a + b
+    end
+
+    C_instance = C()
+    """
+
+    walker = OneModelWalker()
+
+    result, ast = walker.run(model)
+
+    result = walker.onemodel.root
+    
+    assert result["C_instance"]["a"]["value"] == 1
+    assert result["C_instance"]["b"]["value"] == 2
+    assert result["C_instance"]["R1"]["math"] == "a + b"
+
 def test_walk_Standalone():
     model = """
     standalone
