@@ -43,6 +43,9 @@ class OneModelWalker(NodeWalker):
 
         if file:
             self.onemodel["__file__"] = file
+            basename = os.path.basename(file)
+            basename_without_extension = os.path.splitext(basename)[0]
+            self.onemodel.model_name = basename_without_extension
         else:
             self.onemodel["__file__"] = os.path.abspath(os.getcwd())
 
