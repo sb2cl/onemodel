@@ -1,3 +1,5 @@
+import sys
+
 from onemodel.objects.builtin_function import BuiltinFunction
 
 
@@ -20,7 +22,7 @@ def load_builtin_functions(namespace):
 ### Definition of built-in functions. ###
 
 def exit_(scope):
-    exit()
+    sys.exit()
 add_builtin_function("exit", [], exit_)
 
 def print_(scope):
