@@ -1,7 +1,8 @@
 import os
 import readline
 import atexit
-from importlib.metadata import version
+# TODO: use this again
+# from importlib.metadata import version 
 
 import onemodel
 from onemodel.onemodel_walker import OneModelWalker
@@ -29,7 +30,8 @@ class Repl:
 
             result = self.evaluate(text)
             self.print(result)
-            exit_loop = False
+
+            exit_loop = self.onemodel["__exit__"]
 
     def read(self):
         """Read the input from user."""
@@ -77,7 +79,7 @@ class Repl:
 
     def print_welcome_message(self): 
 
-        print(f"OneModel v{version('onemodel')}")
+        print(f"OneModel v1.0.0")
         print("Documentation: https://onemodel.readthedocs.io/")
         print()
 

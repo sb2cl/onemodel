@@ -1,4 +1,5 @@
 import sys
+import os
 
 from onemodel.repl import Repl
 from onemodel.onemodel_walker import load_file
@@ -13,6 +14,18 @@ def main():
             onemodel = load_file(filename)
             sbml = onemodel.get_SBML_string()
             print(sbml)
+
+        if cmd == "export":
+            filename = sys.argv[2]
+            onemodel = load_file(filename)
+            sbml = onemodel.get_SBML_string()
+
+            if not os.path.exists("./build"):
+                os.mkdir("build")
+
+            file = open("build/" + onemodel.model_name + ".xml", "w")
+            file.write(sbml)
+            file.close()
 
         if cmd == "install":
             pm = PackageManager()

@@ -23,15 +23,16 @@ classifiers = [
 include = ["NOTICE"]
 
 [tool.poetry.dependencies]
-python = "^3.8"
-tatsu = "5.6.1"
+python = "^3.7"
+# tatsu = "5.6.1"
+tatsu = "4.4.0"
 # PyQt5 = "*"
-click = "^8.0.0"
+# click = "^8.0.0"
 importlib-resources = "*"
 # python-libsbml = "5.19.5"
 python-libsbml = "5.19.2"
 tomli = "*"
-GitPython = "^3.1.27"
+GitPython = "^3.1.20"
 
 [tool.poetry.dev-dependencies]
 nox-poetry = "*"
