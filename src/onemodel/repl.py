@@ -7,6 +7,11 @@ import atexit
 import onemodel
 from onemodel.onemodel_walker import OneModelWalker
 
+def shell():
+    repl = Repl()
+    repl.run()
+
+    return repl.onemodel
 
 class Repl:
     """Read-Evaluate-Print-Loop for OneModel."""
@@ -36,7 +41,7 @@ class Repl:
     def read(self):
         """Read the input from user."""
 
-        result = input(">>> ")
+        result = input("one> ")
 
         if result.strip() == "":
             result = None
