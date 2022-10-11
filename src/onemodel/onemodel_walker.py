@@ -40,6 +40,7 @@ class OneModelWalker(NodeWalker):
     def __init__(self, file=None):
         self.onemodel = OneModel()
         self.onemodel["__name__"] = "__main__"
+        self.onemodel["__exit__"] = False
 
         if file:
             self.onemodel["__file__"] = file

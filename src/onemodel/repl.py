@@ -14,8 +14,7 @@ class Repl:
     def __init__(self):
         self.onemodel_walker = OneModelWalker()
         self.onemodel = self.onemodel_walker.onemodel
-        # TODO: use this again
-        # self.setup_input_history()
+        self.setup_input_history()
 
     def run(self):
         """Execute the repl."""
@@ -31,7 +30,8 @@ class Repl:
 
             result = self.evaluate(text)
             self.print(result)
-            exit_loop = False
+
+            exit_loop = self.onemodel["__exit__"]
 
     def read(self):
         """Read the input from user."""

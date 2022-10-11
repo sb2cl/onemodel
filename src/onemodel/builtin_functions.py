@@ -22,7 +22,8 @@ def load_builtin_functions(namespace):
 ### Definition of built-in functions. ###
 
 def exit_(scope):
-    sys.exit()
+    scope.namespaces[0]["__exit__"] = 1
+
 add_builtin_function("exit", [], exit_)
 
 def print_(scope):
