@@ -6,6 +6,7 @@ import atexit
 
 import onemodel
 from onemodel.onemodel_walker import OneModelWalker
+from tatsu.exceptions import FailedLeftRecursion
 
 def shell():
     repl = Repl()
@@ -33,8 +34,11 @@ class Repl:
             if text is None:
                 continue
 
-            result = self.evaluate(text)
-            self.print(result)
+            try:
+                result = self.evaluate(text)
+                self.print(result)
+            except Exception as e:
+                print(type(e).__name__ + ': ' + str(e))
 
             exit_loop = self.onemodel["__exit__"]
 
