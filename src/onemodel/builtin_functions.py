@@ -35,7 +35,7 @@ def globals_(scope):
     global_namespace = scope.namespaces[0]
     print('{')
     for name in global_namespace:
-        print(f"    {name} : {global_namespace[name]}")
+        print(f"    '{name}': {global_namespace[name]}")
     print('}')
     return None
 add_builtin_function("globals", [""], globals_)
@@ -44,7 +44,7 @@ def locals_(scope):
     namespace = scope.namespaces[-2]
     print('{')
     for name in namespace:
-        print(f"    {name} : {namespace[name]}")
+        print(f"    '{name}': {namespace[name]}")
     print('}')
     return None
 add_builtin_function("locals", [""], locals_)

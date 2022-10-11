@@ -27,8 +27,10 @@ class OneModel(Scope):
 
         self.model_name = "main"
         self.root = Namespace()
+        self.locals = Namespace()
 
         self.push(self.root, "")
+        self.locals = Namespace()
 
     def get_SBML_string(self):
         """Returns a SBML representation of the model. """
@@ -104,3 +106,13 @@ class OneModel(Scope):
             self.push(value, name)
             self._populate_SBML_document(SBML_model)
             self.pop()
+
+    def __str__(self):
+        result = ''
+
+        result += '{\n'
+        for name in self.root:
+            result+=f"  '{name}': {self.root[name]}\n"
+        result += '}'
+
+        return result
