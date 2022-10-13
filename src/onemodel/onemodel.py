@@ -110,9 +110,12 @@ class OneModel(Scope):
     def __str__(self):
         result = ''
 
-        result += '{\n'
-        for name in self.root:
-            result+=f"  '{name}': {self.root[name]}\n"
-        result += '}'
+        #result += '{\n'
+        result += 'Names and values\n'
+        result += '----------------\n\n'
+        for name in reversed(list(self.root.keys())):
+            #result+=f"  '{name}': {self.root[name]}\n"
+            result+=f"{name} : {self.root[name]}\n"
+        #result += '}'
 
         return result
