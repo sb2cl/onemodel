@@ -17,6 +17,15 @@ from onemodel.objects.module import find_module
 from onemodel.objects.module import load_module
 from onemodel.builtin_functions import load_builtin_functions
 
+def evaluate(code):
+    """Evaluate OneModel code."""
+
+    walker = OneModelWalker()
+    result, ast = walker.run(code)
+
+    onemodel = walker.onemodel
+    return walker.onemodel
+
 def load_file(filename):
     """Load a file into OneModel. """
 
