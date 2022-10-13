@@ -26,3 +26,9 @@ class Model(BaseFunction):
     def extend(self):
         """Execute the model into current namespace. """
         self.walker.walk(self["body"])
+
+    def __repr__(self):
+        result = "<model"
+        result += ">"
+
+        return result

@@ -39,7 +39,7 @@ def load_file(filename):
     
     onemodel = walker.onemodel
 
-    return walker.onemodel
+    return onemodel
 
 class OneModelWalker(NodeWalker):
 

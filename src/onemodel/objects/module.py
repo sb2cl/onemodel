@@ -89,3 +89,9 @@ class Module(Object):
         super().__init__()
         self["__name__"] = ""
         self["__file__"] = ""
+
+    def __repr__(self):
+        result = "<module"
+        result += ">"
+
+        return result

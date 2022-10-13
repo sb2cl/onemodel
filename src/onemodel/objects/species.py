@@ -71,3 +71,9 @@ class Species(Object):
             f'set "hasOnlySubstanceUnits" on {fullname}',
         )
 
+    def __repr__(self):
+        result = "<species"
+        result += f" initial_value={self['initialConcentration']}"
+        result += ">"
+
+        return result

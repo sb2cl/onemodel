@@ -52,3 +52,10 @@ class RateRule(Object):
             r.setMath(math_ast), 
             f"set math on rate rule {fullname}"
         )
+
+    def __repr__(self):
+        result = "<rate-rule"
+        result += f" eq='der({self['variable']}) := {self['math']}'"
+        result += ">"
+
+        return result

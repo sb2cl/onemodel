@@ -115,7 +115,7 @@ class OneModel(Scope):
         result += '----------------\n\n'
         for name in reversed(list(self.root.keys())):
             #result+=f"  '{name}': {self.root[name]}\n"
-            result+=f"{name} : {self.root[name]}\n"
+            result+=f"{name} : {repr(self.root[name])}\n"
         #result += '}'
 
         return result
