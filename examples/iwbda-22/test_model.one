@@ -1,0 +1,10 @@
+
+species
+    A = 0
+    B = 0
+    C = 0
+end
+
+parameter k = 1
+
+reaction J1: A + B -> C ; k*A*B
