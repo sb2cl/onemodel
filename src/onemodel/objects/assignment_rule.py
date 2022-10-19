@@ -55,7 +55,7 @@ class AssignmentRule(Object):
 
     def __repr__(self):
         result = "<assignment-rule"
-        result += f" eq='{self['variable']} := {self['math']}'"
+        result += f" eq='{self['variable']} := {self['math'].strip()}'"
         result += ">"
 
         return result

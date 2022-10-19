@@ -50,7 +50,7 @@ class AlgebraicRule(Object):
 
     def __repr__(self):
         result = "<algebraic-function"
-        result += f" eq='{self['variable']} == {self['math']}'"
+        result += f" eq='{self['variable']} == {self['math'].strip()}'"
         result += ">"
 
         return result

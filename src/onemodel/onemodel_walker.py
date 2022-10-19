@@ -196,6 +196,10 @@ class OneModelWalker(NodeWalker):
 
         namespace[name]["kinetic_law"] = kinetic_law
 
+        documentation = self.walk(node.documentation)
+        if documentation:
+            namespace[name]["__doc__"] = documentation
+
     def walk_AssignmentRule(self, node):
         result = self.walk(node.name)
 
@@ -213,6 +217,11 @@ class OneModelWalker(NodeWalker):
         namespace[name] = AssignmentRule()
         namespace[name]['variable'] = variable
         namespace[name]['math'] = math
+
+        documentation = self.walk(node.documentation)
+        if documentation:
+            namespace[name]["__doc__"] = documentation
+
 
     def walk_AlgebraicRule(self, node):
         result = self.walk(node.name)
@@ -232,6 +241,10 @@ class OneModelWalker(NodeWalker):
         namespace[name]['variable'] = variable
         namespace[name]['math'] = math
 
+        documentation = self.walk(node.documentation)
+        if documentation:
+            namespace[name]["__doc__"] = documentation
+
     def walk_RateRule(self, node):
         result = self.walk(node.name)
 
@@ -249,6 +262,10 @@ class OneModelWalker(NodeWalker):
         namespace[name] = RateRule()
         namespace[name]['variable'] = variable
         namespace[name]['math'] = math
+
+        documentation = self.walk(node.documentation)
+        if documentation:
+            namespace[name]["__doc__"] = documentation
 
     def walk_Extends(self, node):
         model = self.walk(node.model)

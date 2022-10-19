@@ -55,7 +55,7 @@ class RateRule(Object):
 
     def __repr__(self):
         result = "<rate-rule"
-        result += f" eq='der({self['variable']}) := {self['math']}'"
+        result += f" eq='der({self['variable']}) := {self['math'].strip()}'"
         result += ">"
 
         return result
