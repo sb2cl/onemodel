@@ -108,10 +108,9 @@ class OneModel(Scope):
             self.pop()
 
     def __str__(self):
-        result = ''
+        from tabulate import tabulate
 
-        result += 'Names and values\n'
-        result += '----------------\n\n'
+        data = []
 
         for name in reversed(list(self.root.keys())):
             if name.startswith('__'):
@@ -120,11 +119,16 @@ class OneModel(Scope):
             if name in ["locals", "globals", "print", "exit"]:
                 continue
 
-            result+=f"{name}\t: {repr(self.root[name])}"
+            value = repr(self.root[name])
 
-            if self.root[name]["__doc__"]:
-                result+= f"\t \"{self.root[name]['__doc__']}\""
+            if isinstance(self.root[name], dict):
+                doc = self.root[name]['__doc__']
+            else:
+                doc =""
 
-            result+="\n"
+            row = [name, value, doc]
+            data.append(row)
+
+        result = tabulate(data, headers=['Name', 'Value', 'Documentation'])
 
         return result

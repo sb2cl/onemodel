@@ -748,17 +748,14 @@ typing-extensions = {version = "*", markers = "python_version < \"3.8\""}
 
 [[package]]
 name = "libroadrunner"
-version = "2.2.0"
+version = "2.1.0"
 description = "libRoadRunner: A simulation and analysis library for SBML"
 category = "dev"
 optional = false
 python-versions = "*"
 
 [package.dependencies]
-numpy = [
-    {version = ">=1.22.0", markers = "python_version > \"3.7\""},
-    {version = ">=1.21.0", markers = "python_version <= \"3.7\""},
-]
+numpy = ">=1.20.2"
 
 [[package]]
 name = "markupsafe"
@@ -1032,11 +1029,11 @@ tomlkit = ">=0.7"
 
 [[package]]
 name = "numpy"
-version = "1.23.4"
+version = "1.21.0"
 description = "NumPy is the fundamental package for array computing with Python."
 category = "dev"
 optional = false
-python-versions = ">=3.8"
+python-versions = ">=3.7"
 
 [[package]]
 name = "packaging"
@@ -1588,6 +1585,17 @@ lint = ["flake8", "mypy", "docutils-stubs"]
 test = ["pytest"]
 
 [[package]]
+name = "tabulate"
+version = "0.9.0"
+description = "Pretty-print tabular data"
+category = "main"
+optional = false
+python-versions = ">=3.7"
+
+[package.extras]
+widechars = ["wcwidth"]
+
+[[package]]
 name = "tatsu"
 version = "4.4.0"
 description = "TatSu takes a grammar in a variation of EBNF as input, and outputs a memoizing PEG/Packrat parser in Python."
@@ -1763,7 +1771,7 @@ testing = ["pytest (>=6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "flake8 
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7"
-content-hash = "20943d9853947e54b4ee3acccb0b0665f22558d0a984236f3a765ca22ec45c34"
+content-hash = "43a9a15f39869990fe7235bb64a8236b8821566ff8e868e9b95c83647d3cdb96"
 
 [metadata.files]
 alabaster = []
@@ -1888,6 +1896,7 @@ sphinxcontrib-htmlhelp = []
 sphinxcontrib-jsmath = []
 sphinxcontrib-qthelp = []
 sphinxcontrib-serializinghtml = []
+tabulate = []
 tatsu = []
 terminado = []
 tinycss2 = []
