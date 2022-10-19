@@ -110,12 +110,21 @@ class OneModel(Scope):
     def __str__(self):
         result = ''
 
-        #result += '{\n'
         result += 'Names and values\n'
         result += '----------------\n\n'
+
         for name in reversed(list(self.root.keys())):
-            #result+=f"  '{name}': {self.root[name]}\n"
-            result+=f"{name} : {repr(self.root[name])}\n"
-        #result += '}'
+            if name.startswith('__'):
+                continue
+
+            if name in ["locals", "globals", "print", "exit"]:
+                continue
+
+            result+=f"{name}\t: {repr(self.root[name])}"
+
+            if self.root[name]["__doc__"]:
+                result+= f"\t \"{self.root[name]['__doc__']}\""
+
+            result+="\n"
 
         return result

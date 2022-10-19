@@ -73,7 +73,7 @@ class Species(Object):
 
     def __repr__(self):
         result = "<species"
-        result += f" initial_value={self['initialConcentration']}"
+        result += f" initialConcentration={self['initialConcentration']}"
         result += ">"
 
         return result
