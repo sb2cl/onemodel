@@ -1,10 +1,9 @@
 
-species
-    A = 0
-    B = 0
-    C = 0
-end
+# Everything you write here will be saved into "test_model.one" when you press ctrl+intro or execute this cell.
+
+species A = 0
+species B = 0
 
 parameter k = 1
 
-reaction J1: A + B -> C ; k*A*B
+reaction A -> B ; k*A

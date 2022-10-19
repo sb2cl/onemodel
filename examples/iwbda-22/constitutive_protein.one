@@ -1,0 +1,14 @@
+
+species A = 0
+species B = 0
+species C = 0
+
+parameter k_A = 1
+parameter d_A = 0.1
+parameter k_B = 1
+parameter k_C = 1
+
+reaction 0 -> A ; k_A
+reaction A -> 0 ; d_A*A
+reaction A -> B ; k_B*A
+reaction B + B -> C ; k_C*B*B
