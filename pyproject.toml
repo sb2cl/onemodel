@@ -69,6 +69,7 @@ jupyter = "^1.0.0"
 libroadrunner = "2.1.0"
 numpy = "1.21.0"
 matplotlib = "3.5.0"
+sbml2dae = "^0.1.7"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

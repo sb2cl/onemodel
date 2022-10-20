@@ -1412,6 +1412,18 @@ socks = ["PySocks (>=1.5.6,!=1.5.7)"]
 use_chardet_on_py3 = ["chardet (>=3.0.2,<6)"]
 
 [[package]]
+name = "sbml2dae"
+version = "0.1.7"
+description = "A customizable SBML to Matlab parser"
+category = "dev"
+optional = false
+python-versions = ">=3.7,<4.0"
+
+[package.dependencies]
+click = ">=8.0.0,<9.0.0"
+python-libsbml = "5.19.2"
+
+[[package]]
 name = "send2trash"
 version = "1.8.0"
 description = "Send file to trash natively under Mac OS X, Windows and Linux."
@@ -1771,7 +1783,7 @@ testing = ["pytest (>=6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "flake8 
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7"
-content-hash = "43a9a15f39869990fe7235bb64a8236b8821566ff8e868e9b95c83647d3cdb96"
+content-hash = "10b324e6f3fd537d37734f6aa072a316f488468f36e858ff3969282ee025d347"
 
 [metadata.files]
 alabaster = []
@@ -1882,6 +1894,7 @@ pyzmq = []
 qtconsole = []
 qtpy = []
 requests = []
+sbml2dae = []
 send2trash = []
 setuptools-scm = []
 six = []
