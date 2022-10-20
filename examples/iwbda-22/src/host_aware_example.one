@@ -10,6 +10,7 @@ from host_aware_model.mass_equation.mass_interpolated import MassInterpolated
 cell = HostAwareModel()
 mass = MassInterpolated()
 
+parameter __t_end = 2000
 
 # Define a constitutive expressed exogenous protein.
 p_exo = ProteinConstitutive()
