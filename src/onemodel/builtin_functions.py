@@ -60,12 +60,8 @@ def globals_(scope):
 add_builtin_function("globals", [""], globals_)
 
 def locals_(scope):
-    value = scope["value"]
 
     namespace = scope.namespaces[-2]
-
-    if value and isinstance(value, dict):
-        namespace = value
 
     from tabulate import tabulate
     
@@ -91,3 +87,39 @@ def locals_(scope):
     return None
 
 add_builtin_function("locals", ["value"], locals_)
+
+def show(scope):
+    value = scope["value"]
+
+    if value and isinstance(value, dict):
+        namespace = value
+    else:
+        print(value)
+        print()
+
+        return None
+
+    from tabulate import tabulate
+    
+    data = []
+    
+    for name in reversed(list(namespace.keys())):
+
+        value = repr(namespace[name])
+    
+        if isinstance(namespace[name], dict):
+            doc = namespace[name]['__doc__']
+        else:
+            doc =""
+    
+        row = [name, value, doc]
+        data.append(row)
+
+    result = tabulate(data, headers=['Name', 'Value', 'Documentation'])
+
+    print(result)
+    print()
+    
+    return None
+
+add_builtin_function("show", ["value"], show)

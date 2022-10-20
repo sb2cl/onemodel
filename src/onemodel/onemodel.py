@@ -116,7 +116,7 @@ class OneModel(Scope):
             if name.startswith('__'):
                 continue
 
-            if name in ["locals", "globals", "print", "exit"]:
+            if name in ["show", "locals", "globals", "print", "exit"]:
                 continue
 
             value = repr(self.root[name])
