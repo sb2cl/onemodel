@@ -153,7 +153,7 @@ parameter::Parameter
 
 species::Species
   =
-  name:dotted_name ['=' value:number] [[newline] documentation:(docstring|string)]
+  ["input"] name:dotted_name ['=' value:number] [[newline] documentation:(docstring|string)]
   ;
 
 
