@@ -1,0 +1,12 @@
+
+import protein_expression.protein_induced
+
+locals(protein_induced)
+
+#from protein_expression.protein_constitutive import ProteinConstitutive
+#from protein_expression.protein_induced import ProteinInduced
+
+#A = ProteinConstitutive()
+#B = ProteinInduced()
+
+#rule B.TF := A.protein

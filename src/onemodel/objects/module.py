@@ -67,6 +67,8 @@ def load_module(walker, module_name, import_name=None, assign_name=None, qualifi
             namespace[qualifier] = Module()
             namespace = namespace[qualifier]
 
+    namespace = walker.onemodel
+
     if import_name:
         namespace[assign_name] = module[import_name]
     else:
