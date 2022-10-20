@@ -2,3 +2,4 @@
 [dependencies]
 
 protein_expression = "https://github.com/fernandonobel/protein_expression"
+host_aware_model = "https://github.com/fernandonobel/host_aware_model"
