@@ -1,10 +1,11 @@
 
-from host_aware_model.host_aware_model.protein_constitutive import ProteinConstitutive
-from host_aware_model.host_aware_model.protein_ribosomal import ProteinRibosomal
-from host_aware_model.host_aware_model.protein_non_ribosomal import ProteinNonRibosomal
-from host_aware_model.host_aware_model.host_aware_model import HostAwareModel
-from host_aware_model.mass_equation.mass_equation import MassEquation
-from host_aware_model.mass_equation.mass_interpolated import MassInterpolated
+from host_aware_model.protein_constitutive import ProteinConstitutive
+from host_aware_model.protein_ribosomal import ProteinRibosomal
+from host_aware_model.protein_non_ribosomal import ProteinNonRibosomal
+from host_aware_model.mass_equation import MassEquation
+
+from host_aware_model.host_aware_model import HostAwareModel
+from host_aware_model.mass_interpolated import MassInterpolated
 
 
 cell = HostAwareModel()
