@@ -1,6 +1,5 @@
-
-from protein_expression.protein_constitutive import ProteinConstitutive
-from protein_expression.protein_induced import ProteinInduced
+from protein_constitutive import ProteinConstitutive
+from protein_induced import ProteinInduced
 
 x1 = ProteinConstitutive()
 x2 = ProteinInduced()

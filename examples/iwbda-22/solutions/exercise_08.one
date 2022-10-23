@@ -1,4 +1,3 @@
-
 from protein_expression.protein_constitutive import ProteinConstitutive
 from protein_expression.protein_induced import ProteinInduced
 

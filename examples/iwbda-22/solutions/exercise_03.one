@@ -1,4 +1,3 @@
-
 species A = 10
 species B = 0
 
@@ -9,4 +8,5 @@ reaction A -> B ; k*A
 # Change the value of k
 k.value = 1 
 
+# Change the initial condition of B
 B.initialConcentration = 2

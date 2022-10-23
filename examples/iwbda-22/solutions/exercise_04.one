@@ -1,0 +1,18 @@
+reaction
+    0 -> mRNA ; k_m
+    mRNA -> 0 ; d_m*mRNA
+    mRNA -> mRNA + protein ; k_p*mRNA
+    protein -> 0 ; d_p*protein
+end
+
+parameter
+    k_m = 1
+    d_m = 1
+    k_p = 1
+    d_p = 1
+end
+
+species
+    mRNA = 0
+    protein = 0
+end

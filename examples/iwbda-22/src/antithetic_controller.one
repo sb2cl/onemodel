@@ -1,3 +1,22 @@
 
 # TODO: Write your model here.
 
+from protein_constitutive import ProteinConstitutive
+from protein_induced import ProteinInduced
+
+x1 = ProteinConstitutive()
+x2 = ProteinInduced()
+
+A = ProteinInduced()
+
+parameter gamma = 1
+
+x1.d_p.value = 0
+x2.d_p.value = 0
+
+rule
+    A.TF := x1.protein
+    x2.TF := A.protein 
+end
+
+reaction x1.protein + x2.protein -> 0 ; gamma*x1.protein*x2.protein
