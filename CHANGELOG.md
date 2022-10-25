@@ -7,15 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.0] - 2022-10-25
+
 ### Added
 
 - Add a welcome message to the repl session.
 - Add docstrings.
+- Add the `onemodel.package_manager`
 
 ### Changed
 
 - Changed tests to just test for sbml generation (not Matlab generation).
 - Separated the semantic model code (onemodel.core) from the domain-specific language code (onemodel.dsl).
+- Reworked the dsl and walker to simplifiy both python implementations.
 
 ### Removed
 

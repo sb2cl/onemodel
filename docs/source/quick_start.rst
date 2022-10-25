@@ -28,10 +28,3 @@ It is most suitable for the average user.
   *onemodel-gui* screenshot
 
 .. _installation:
-
-Simple Example
---------------
-
-
-More Complex Example
---------------------
