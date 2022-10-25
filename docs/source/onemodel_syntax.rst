@@ -133,17 +133,22 @@ If multiple species are consumed or produced at the same time, their names must 
 
   # Reactions are declared within a 'reaction' 'end' block.
   reaction
-  # Species S is consumed to form P at rate k*S.
-  S -> P ; k*S
-  # mRNA transcription at a constant rate k_mRNA.
-  0 -> mRNA ; k_mRNA
-  # mRNA degradation proportional to mRNA concentration.
-  mRNA -> 0 ; d_mRNA*mRNA
-  # Antithetic sequestration.
-  sigma + anti_sigma -> 0 ; gamma*sigma*anti_sigma
-  # We can name a reaction writing its name followed by a ':'.
-  # In this way we can refer to this reaction later in the code.
-  R1: 0 -> A; k_A
+    # Species S is consumed to form P at rate k*S.
+    S -> P ; k*S
+
+    # mRNA transcription at a constant rate k_mRNA.
+    0 -> mRNA ; k_mRNA
+
+    # mRNA degradation proportional to mRNA concentration.
+    mRNA -> 0 ; d_mRNA*mRNA
+
+    # Antithetic sequestration.
+    sigma + anti_sigma -> 0 ; gamma*sigma*anti_sigma
+
+    # We can name a reaction writing its name followed by a ':'.
+    # In this way we can refer to this reaction later in the code.
+    R1: 0 -> A; k_A
+  end
 
 *Note: reactions are saved in SBML as "reaction" elements.*
 
@@ -183,7 +188,7 @@ However, the main difference is that the substitution rules are exact, and the v
 
 **Rate rules**
 
-Rate rules are declared as ``name '= equation``, and they are used to define the rate of change of a species over time (to set its derivative).
+Rate rules are declared as ``der(name) := equation``, and they are used to define the rate of change of a species over time (to set its derivative).
 
 The following code shows an example of the use of each type of rule in OneModel.
 
@@ -198,7 +203,7 @@ The following code shows an example of the use of each type of rule in OneModel.
     # (note that this could be changed into a substitution rule).
     y == 10 - x
     # Rate rule.
-    x '= S - x
+    der(x) := S - x
     # As reactions, we can give a name to the equation with ':'.
     E1: z := x + y
   end
@@ -225,18 +230,27 @@ The following code shows an example of using classes and objects.
 
   # Define 'Protein' model.
   model Protein  # Start model definition.
+
     species protein
+
     parameter k = 1, d = 1
     reaction
       0 -> protein ; k
       protein -> 0 ; d*protein
     end
+
   end  # End model definition.
   
-  # Define 'ProteinInduced' as an extension of 'Protein'.
-  model ProteinInduced (Protein)
-    input TF
+  # Define 'ProteinInduced'
+  model ProteinInduced
+
+    # Extend the code of Protein into this model
+    extends Protein
+
+    species TF
+
     parameter h = 1
+
     rule k := TF/(h + TF)  # Override the value of 'k' with a rule.
   end
   
@@ -250,36 +264,11 @@ The following code shows an example of using classes and objects.
 
 For example: the species ``A.protein`` will be saved as a species with name ``A__protein``.
   
-Input
------
-
-Inputs represent species or states that are not calculated within a model but are necessary to calculate the rest of the equations and reactions of the model. They are defined with the keyword ``input`` and the value of an input is set using a substitution rule.
-
-.. code-block::  onemodel
-  :caption: Example of defining inputs in a model with OneModel syntax.
-
-  model ProteinInduced  # Note that we don't set the value of TF in the model.
-    input TF                      # Declare TF as an input.
-    species protein
-    parameter k = 1, d = 1, h = 1
-    reaction
-      0 -> protein ; k*TF/(TF+h)  # Use the value of TF.
-      protein -> 0 ; d*protein
-    end
-  end
-  
-  standalone  # It is here where we set the value of TF.
-    species A = 10
-    B = ProteinInduced()
-    rule B.TF := A                # Set the value of B.TF to A.
-  end
-
-*Note: inputs are saved as species in SBML.*
-  
+ 
 Import
 ------
 
-OneModel syntax allows us to import code from other files into the current one using the keyword ``import``.
+OneModel syntax allows us to import code from other files into the current one using the keywords ``from`` and ``import``.
 The code from the imported file is executed as it were present in the current file, but the code inside the ``standalone`` block is omitted.
 
 .. code-block::  onemodel
@@ -287,7 +276,7 @@ The code from the imported file is executed as it were present in the current fi
 
   # To import a model, we have to write the path of the file we want to import
   # relative to the current file path.
-  import './03_protein_constitutive.one'
+  from 03_protein_constitutive import ProteinConstitutive
   
   # The code inside '03_protein_constitutive.one' will be now accesible,
   # and we can use the models defined in it.
@@ -306,7 +295,7 @@ The standalone is declared using the keyword ``standalone`` and ``end``.
 
   # Here we define a model which we will import later into other file.
   model MyModel
-    input u
+    species u
     species x=0
     rule x '= u - x
   end
