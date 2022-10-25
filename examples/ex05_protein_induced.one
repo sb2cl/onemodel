@@ -1,12 +1,14 @@
 ### Definition of ProteinInduced. ###
 
-import 'ex03_protein_constitutive.one'
+from ex03_protein_constitutive import ProteinConstitutive
 
 ## ProteinInduced extends the ProteinConstitutive model to make ##
 ## the expression inducible by a transcription factor.          ##
-model ProteinInduced(ProteinConstitutive)
+model ProteinInduced
 
-  input TF       # Define the transcriptio factor as an input.
+  extends ProteinConstitutive
+
+  species TF     # Define the transcription factor as an input.
   species k_m=0  # Override the parameter k_m to be a species.
   
   parameter

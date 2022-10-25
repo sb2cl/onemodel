@@ -44,3 +44,8 @@ def lint(s: Session) -> None:
 def type_check(s: Session) -> None:
     s.run("mypy", "src", "tests", "noxfile.py")
 
+
+@session(venv_backend="none")
+def docs(s: Session) -> None:
+    s.run("sphinx-apidoc", "-f", "-o", "./docs/source", "src/")
+    s.run("sphinx-build", "-b", "html", "docs/source", "docs/build/html")

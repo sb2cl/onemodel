@@ -1,0 +1,12 @@
+
+from protein_constitutive import ProteinConstitutive
+from ..mass_equation.mass_equation import MassEquation
+from ..mass_equation.mass_interpolated import MassInterpolated
+
+cell = HostAwareModel()
+mass = MassInterpolated()
+
+rule 
+    mass.mu := cell.mu
+    cell.m_h := mass.m_h
+end

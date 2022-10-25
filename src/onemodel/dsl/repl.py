@@ -1,42 +1,46 @@
+import atexit
 import json
-from importlib_resources import files
+import os
+import readline
 
+from importlib_resources import files
+from onemodel.core.context import Context
+from onemodel.dsl.onemodel_walker import OneModelWalker
 import tatsu
 from tatsu.walkers import NodeWalker
 
-from onemodel.utils.setup_input_history import setup_input_history
-from onemodel.dsl.onemodel_walker import OneModelWalker
-from onemodel.dsl.context import Context
 
 class Repl:
-    """ REPL
+    """REPL
 
     REPL implements the Read-Evaluate-Print-Loop for onemodel.
     """
+
     def __init__(self):
-        """ __INIT__
+        """__INIT__
         @brief: Init REPL
-        
+
         @return: REPL
         """
         pass
-      
-    def run(self):
-        """ RUN
-        @brief: Run the REPL 
 
-        @return: result Result value. 
+    def run(self):
+        """RUN
+        @brief: Run the REPL
+
+        @return: result Result value.
         """
-        setup_input_history()
+        self.setup_input_history()
         continue_loop = True
 
         # Init the model walker.
-        walker = OneModelWalker('repl')
+        walker = OneModelWalker("repl")
 
         while continue_loop:
             # 1. READ
-            text = input('onemodel> ')
-            if text.strip() == "": continue
+            text = input("onemodel> ")
+            if text.strip() == "":
+                continue
 
             # 2. EVALUATE
             try:
@@ -59,4 +63,21 @@ class Repl:
 
             # 4. LOOP
             if should_exit:
-                continue_loop = False   
+                continue_loop = False
+
+    def setup_input_history():
+        """
+        @brief: Setup the history for input() command.
+
+        @return: None
+        """
+
+        histfile = os.path.join(os.path.expanduser("~"), ".onemodel_history")
+        try:
+            readline.read_history_file(histfile)
+            # default history len is -1 (infinite), which may grow unruly
+            readline.set_history_length(1000)
+        except FileNotFoundError:
+            pass
+
+        atexit.register(readline.write_history_file, histfile)

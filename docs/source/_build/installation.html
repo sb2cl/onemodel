@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Installation &mdash; onemodel 0.1 documentation</title><link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+      <script>
+          var DOCUMENTATION_OPTIONS = {
+              URL_ROOT:'./',
+              VERSION:'0.1',
+              LANGUAGE:'None',
+              COLLAPSE_INDEX:false,
+              FILE_SUFFIX:'.html',
+              HAS_SOURCE:  true,
+              SOURCELINK_SUFFIX: '.txt'
+          };
+      </script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Quick Start" href="quick_start.html" />
+    <link rel="prev" title="Introduction" href="introduction.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> onemodel
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quick_start.html">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="onemodel_workflow.html">OneModel workflow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="onemodel_design_philosophy.html">OneModel design philosophy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="onemodel_implementation.html">OneModel implementation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="subpackage_sbml2dae.html">Subpackage SBML2dae</a></li>
+<li class="toctree-l1"><a class="reference internal" href="onemodel_syntax.html">OneModel syntax</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">onemodel</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Installation</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/installation.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="installation">
+<h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
+<p>OneModel can be installed from the Python Package Index (PyPI) repository as a package for <code class="docutils literal"><span class="pre">python3.8</span></code>.</p>
+<p>For the impatients:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>$ pip install onemodel      <span class="c1"># install OneModel</span>
+$ pip install onemodel -u   <span class="c1"># update to the newest version</span>
+$ onemodel-gui              <span class="c1"># open the graphical user interface</span>
+$ onemodel-cli              <span class="c1"># access the command-line interface</span>
+$ onemodel-cli --help       <span class="c1"># show help message</span>
+</pre></div>
+</div>
+<p>OneModel can be installed in Windows, Mac, or Linux; the only requirement is to have installed <code class="docutils literal"><span class="pre">python</span> <span class="pre">3.8</span></code>.</p>
+<p>Therefore, the first step is to install <code class="docutils literal"><span class="pre">python3.8</span></code> in your system.
+The installation process of Python varies depending on the operating system you are using: there are great tutorials regarding each operating system on the internet.</p>
+<p>Once you have installed Python, you have to verify that the correct version of <code class="docutils literal"><span class="pre">python</span></code> and <code class="docutils literal"><span class="pre">pip</span></code> are installed. For this, write in the command prompt of your system: <code class="docutils literal"><span class="pre">python</span> <span class="pre">--version</span></code> and <code class="docutils literal"><span class="pre">pip</span> <span class="pre">--version</span></code> the output of these two commands should indicate that the version of Python is 3.8 in both cases.
+If another version of Python appears, it means that you have multiple versions of Python installed in your system, then you should use <code class="docutils literal"><span class="pre">pip3.8</span></code> instead of <code class="docutils literal"><span class="pre">pip</span></code> for installing OneModel.</p>
+<p>Now you can install OneModel by writing <code class="docutils literal"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">onemodel</span></code> in the command prompt (or <code class="docutils literal"><span class="pre">pip3.8</span> <span class="pre">install</span> <span class="pre">onemodel</span></code>). This command will install OneModel and all its dependencies in your system.
+The examples of this Thesis were done for OneModel v0.0.10, they should still work in future versions, but we recommend using this specific version to follow the examples (you can install this version with <code class="docutils literal"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">onemodel==0.0.10</span></code>), and to check the Thesis GitHub repository for more information.</p>
+<p>The graphical user interface is opened by writing <code class="docutils literal"><span class="pre">onemodel-gui</span></code> in the command prompt and the command-line interface is accessed with <code class="docutils literal"><span class="pre">onemodel-cli</span></code>.</p>
+<p>Lastly, if you want to update OneModel to the newest version, you can use the following command: <code class="docutils literal"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">onemodel</span> <span class="pre">-u</span></code>.</p>
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="introduction.html" class="btn btn-neutral float-left" title="Introduction" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="quick_start.html" class="btn btn-neutral float-right" title="Quick Start" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Fernando N. Santos-Navarro.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

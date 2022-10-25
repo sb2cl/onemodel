@@ -1,0 +1,12 @@
+
+species A = 10
+species B = 0
+
+parameter k = 0.1
+
+reaction A -> B ; k*A
+
+# Change the value of k
+k.value = 1 
+
+B.initialConcentration = 2

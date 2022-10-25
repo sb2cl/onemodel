@@ -1,0 +1,9 @@
+# main.one
+
+import module_1
+import other.module_2
+import module_3.module_3
+
+module_1.add(2, 3)
+other.module_2.mult(2, 3)
+module_3.module_3.welcome()

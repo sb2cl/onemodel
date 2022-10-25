@@ -1,0 +1,9 @@
+
+# Everything you write here will be saved into "test_model.one" when you press ctrl+intro or execute this cell.
+
+species A = 0
+species B = 0
+
+parameter k = 1
+
+reaction A -> B ; k*A

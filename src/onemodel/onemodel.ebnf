@@ -1,0 +1,306 @@
+@@grammar::OneModel
+
+
+# TatSu by default defines newline as whitespace but onemodel syntax
+# uses newlines as separators. So we have removed the intro from the
+# whitespace characters in TatSu.
+@@whitespace::/[\t ]+/
+
+
+# This allows us to use comments like in python.
+@@eol_comments::/#.*?$/
+
+
+# Keywords reserved.
+@@keyword:: species parameter reaction end rule function input import has standalone if model from extends
+
+
+start
+  = 
+  {@:statements} $
+  ;
+
+
+statements
+  =
+  {newline} @:statement {{newline}+ @:statement} {newline}
+  ;
+
+
+statement
+  =
+  | 'parameter' newline ~ {newline | @:parameter {',' @:parameter} newline} 'end'
+  | 'species' newline ~ {newline | @:species {',' @:species} newline} 'end'
+  | 'reaction' newline ~ {newline | @:reaction} 'end'
+  | 'rule' newline ~ {newline | @:rule newline} 'end'
+  | import
+  | expression
+  ;
+
+
+expression
+  =
+  | 'parameter' ~ @:parameter {',' @:parameter}
+  | 'species' ~ @:species {',' @:species}
+  | 'reaction' ~ @:reaction 
+  | 'rule' ~ @:rule 
+  | 'extends' ~ @:extends
+  | addition
+  | subtraction
+  | assign_name
+  | term
+  ;
+
+
+addition::Addition
+  =
+  left:expression op:'+' ~ right:term
+  ;
+
+
+subtraction::Subtraction
+  =
+  left:expression op:'-' ~ right:term
+  ;
+
+
+term
+  =
+  | multiplication
+  | division
+  | factor
+  ;
+
+
+multiplication::Multiplication
+  =
+  left:term op:'*' ~ right:factor
+  ;
+
+
+division::Division
+  =
+  left:term op:'/' ~ right:factor
+  ;
+
+
+factor
+  =
+  | '+' ~ @:factor
+  | inverse_addition
+  | power
+  ;
+
+
+inverse_addition::InverseAddition
+  =
+  '-' ~ base:factor
+  ;
+
+
+power::Power
+  =
+  base:call ['^' ~ exponent:factor]
+  ;
+
+
+call::Call
+  = 
+  | value:atom '(' [args+:expression {',' args+:expression}] ')'
+  | next:atom
+  ; 
+
+
+atom
+  =
+  | '(' ~ @:expression ')'
+  | number
+  | docstring
+  | string
+  | access_name
+  | function_definition
+  | model_definition
+  | standalone
+  ;
+
+
+number
+  =
+  | float
+  | integer
+  ;
+
+
+newline 
+  = 
+  | ';'
+  | /\n/
+  ;
+
+
+import::Import
+  =
+  | 'import' ~ {dots+:'.'} {qualifiers+:name '.'} module_name:name ['as' assign_name:name]
+  | 'from' ~ {dots+:'.'} {qualifiers+:name '.'} module_name:name 'import' import_name:name ['as' assign_name:name]
+  ;
+
+
+parameter::Parameter
+  =
+  name:dotted_name ['=' value:number] [[newline] documentation:(docstring|string)]
+  ;
+
+
+species::Species
+  =
+  ["input"] name:dotted_name ['=' value:number] [[newline] documentation:(docstring|string)]
+  ;
+
+
+reaction::Reaction
+  =
+  [name:dotted_name ':']
+  (
+    '0' |
+    reactants+:dotted_name {'+' | reactants+:dotted_name}
+  )
+  '->' 
+  (
+    '0' | 
+    products+:dotted_name {'+' | products+:dotted_name}
+  )
+  newline 
+  kinetic_law:formula
+  [[newline] documentation:(docstring|string)]
+  ;
+
+
+rule
+  =
+  | assignment_rule
+  | algebraic_rule
+  | rate_rule
+  ;
+
+
+assignment_rule::AssignmentRule
+  =
+  [name:dotted_name ':' !'='] # We need !'=' to avoid matching ':='.
+  variable:dotted_name
+  ':='
+  math:formula
+  [[newline] documentation:(docstring|string)]
+  ;
+
+
+algebraic_rule::AlgebraicRule
+  =
+  [name:dotted_name ':']
+  variable:dotted_name
+  '=='
+  math:formula
+  [[newline] documentation:(docstring|string)]
+  ;
+
+
+rate_rule::RateRule
+  =
+  [name:dotted_name ':' !'='] # We need !'=' to avoid matching ':='.
+  'der'
+  '('
+  variable:dotted_name
+  ')'
+  ':='
+  math:formula
+  [[newline] documentation:(docstring|string)]
+  ;
+
+
+extends::Extends
+  =
+  model:access_name
+  ;
+
+
+assign_name::AssignName
+  =
+  name:dotted_name '=' value:expression
+  ;
+
+
+access_name::AccessName
+  =
+  name:dotted_name
+  ;
+
+
+function_definition::FunctionDefinition
+  =
+  'function' name:name '(' [args+:name {',' args+:name}] ')' newline
+  {newline | body:statement newline}
+  'end'
+  ;
+
+
+model_definition::ModelDefinition
+  =
+  'model' name:name newline
+  {newline | body:statement newline}
+  'end'
+  ;
+
+
+standalone::Standalone
+  =
+  'standalone' newline
+  {newline | body:statement newline}
+  'end'
+  ;
+
+
+dotted_name::DottedName
+  =
+  {qualifiers+:name '.'} name:name
+  ;
+
+
+@name  # Name cannot be a keyword name.
+name::str
+  =
+  /(?!\d)\w+/ 
+  ;
+
+
+float::Float
+  =
+  | value:/\d*(?:\.\d+)?(?:(e|E)(?:\+|\-|)\d+)/  # Scientific notation: 1e2, 1e+2, 10e-3
+  | value:/\d*\.\d+/                             # Regular floats: 0.1, 1.05, etc.
+  ;
+
+
+integer::Integer
+  = 
+  value:/\d+/
+  ;
+
+
+docstring::Docstring
+  =
+  | '"""' ~ value:/[\w\W]*?(?=\")/ '"""'
+  | "'''" ~ value:/[\w\W]*?(?=\')/ "'''"
+  ;
+
+
+string::String
+  =
+  | '"' value:/.+?(?=\")/ '"'
+  | "'" value:/.+?(?=\')/ "'"
+  ;
+
+
+formula::str
+  =
+  /[^\\\r\n\f'\;#\"]*/
+  ;
+
+

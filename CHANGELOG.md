@@ -7,11 +7,33 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.0] - 2022-10-25
+
+### Added
+
+- Add a welcome message to the repl session.
+- Add docstrings.
+- Add the `onemodel.package_manager`
+
+### Changed
+
+- Changed tests to just test for sbml generation (not Matlab generation).
+- Separated the semantic model code (onemodel.core) from the domain-specific language code (onemodel.dsl).
+- Reworked the dsl and walker to simplifiy both python implementations.
+
+### Removed
+
+- The generation of MATLAB code is removed (onemodel only generates sbml code as output).
+- The subpackage `onemodel.cli` is removed from the source code of `onemodel` (it has its own repository as `onemodel-cli`).
+- The subpackage `onemodel.gui` is removed from the source code of `onemodel` (it has its own repository as `onemodel-gui`).
+- The subpackage `sbml2dae` is not installed in `onemodel`.
+- The `examples` for learning `onemodel` are removed from the source code of `onemodel` (they have their own repository as `onemodel-examples`).
+
 ## [0.2.0] - 2022-06-21
 
 ### Added
 
-- Add the changelog.
+- Add `CHANGELOG.md`.
 - Add a `Makefile` to streamline using `poetry`.
 - The `NOTICE` file is included in the build.
 - Add test for exporting from onemodel into matlab.
@@ -31,6 +53,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Use `poetry` for managing the project.
 
-[unreleased]: https://github.com/sb2cl/onemodel/compare/v0.1.0...develop
+[unreleased]: https://github.com/sb2cl/onemodel/compare/v0.2.0...develop
 [0.2.0]: https://github.com/sb2cl/onemodel/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/sb2cl/onemodel/releases/tag/v0.1.0

@@ -42,9 +42,6 @@
         <listOfReactants>
           <speciesReference species="mRNA_A" constant="true"/>
         </listOfReactants>
-        <listOfModifiers>
-          <modifierSpeciesReference species="mRNA_A"/>
-        </listOfModifiers>
         <kineticLaw>
           <math xmlns="http://www.w3.org/1998/Math/MathML">
             <apply>
@@ -63,9 +60,6 @@
           <speciesReference species="mRNA_A" constant="true"/>
           <speciesReference species="protein_A" constant="true"/>
         </listOfProducts>
-        <listOfModifiers>
-          <modifierSpeciesReference species="mRNA_A"/>
-        </listOfModifiers>
         <kineticLaw>
           <math xmlns="http://www.w3.org/1998/Math/MathML">
             <apply>
@@ -80,9 +74,6 @@
         <listOfReactants>
           <speciesReference species="protein_A" constant="true"/>
         </listOfReactants>
-        <listOfModifiers>
-          <modifierSpeciesReference species="protein_A"/>
-        </listOfModifiers>
         <kineticLaw>
           <math xmlns="http://www.w3.org/1998/Math/MathML">
             <apply>
@@ -107,9 +98,6 @@
         <listOfReactants>
           <speciesReference species="mRNA_B" constant="true"/>
         </listOfReactants>
-        <listOfModifiers>
-          <modifierSpeciesReference species="mRNA_B"/>
-        </listOfModifiers>
         <kineticLaw>
           <math xmlns="http://www.w3.org/1998/Math/MathML">
             <apply>
@@ -128,9 +116,6 @@
           <speciesReference species="mRNA_B" constant="true"/>
           <speciesReference species="protein_B" constant="true"/>
         </listOfProducts>
-        <listOfModifiers>
-          <modifierSpeciesReference species="mRNA_B"/>
-        </listOfModifiers>
         <kineticLaw>
           <math xmlns="http://www.w3.org/1998/Math/MathML">
             <apply>
@@ -145,9 +130,6 @@
         <listOfReactants>
           <speciesReference species="protein_B" constant="true"/>
         </listOfReactants>
-        <listOfModifiers>
-          <modifierSpeciesReference species="protein_B"/>
-        </listOfModifiers>
         <kineticLaw>
           <math xmlns="http://www.w3.org/1998/Math/MathML">
             <apply>

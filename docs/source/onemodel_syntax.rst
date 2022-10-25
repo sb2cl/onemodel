@@ -39,7 +39,7 @@ Comments
 Single-line comments start with a numeric hash symbol ``#`` and finish at the end of the line.
 The following code shows an example OneModel code with comments.
 
-.. code-block:: 
+.. code-block::  onemodel
   :caption: Example of using comments with OneModel syntax.
 
   # SimpleReaction models a simple reaction.
@@ -61,7 +61,7 @@ They are used in the definition of the reaction rate constant and rules.
 Parameters are declared using the keyword ``parameter``.
 The following code shows the different alternatives for declaring parameters.
 
-.. code-block:: 
+.. code-block::  onemodel
   :caption: Example of declaring parameters with OneModel syntax.
 
   # Parameters can be defined with a single-line command.
@@ -89,7 +89,7 @@ Species
 Species represent both (pseudo-)chemical and (pseudo-)biological species and state variables; values that change during simulation time due to reactions or rules.
 Species are declared using the keyword ``species``.
 
-.. code-block:: 
+.. code-block::  onemodel
   :caption: Example of declaring species with OneModel syntax.
 
   # Similar to parameters, species can be defined with a single-line command.
@@ -121,29 +121,34 @@ If we define the rate of change of a species with a reaction, we cannot add a ne
 
 Reactions are declared using the keyword ``reaction`` and are defined using the following syntax:
 
-.. code-block:: 
+.. code-block::  onemodel
 
   name: reactants -> products; rate
 
 where ``name:`` is the name of the reaction (this is an optional part), ``reactants`` are the name of the species which the reactions will consume, ``->`` is the arrow of the reaction and indicates the directionality of it, ``products`` are the name of the species produced by the reaction, ``;`` is used to separate the reaction rate from the rest of the reaction, and ``rate`` is an equation (composed by parameters or species) which calculates the reaction rate.
 If multiple species are consumed or produced at the same time, their names must be separated by a ``+`` sign.
 
-.. code-block:: 
+.. code-block::  onemodel
   :caption: Example of declaring reactions with OneModel syntax.
 
   # Reactions are declared within a 'reaction' 'end' block.
   reaction
-  # Species S is consumed to form P at rate k*S.
-  S -> P ; k*S
-  # mRNA transcription at a constant rate k_mRNA.
-  0 -> mRNA ; k_mRNA
-  # mRNA degradation proportional to mRNA concentration.
-  mRNA -> 0 ; d_mRNA*mRNA
-  # Antithetic sequestration.
-  sigma + anti_sigma -> 0 ; gamma*sigma*anti_sigma
-  # We can name a reaction writing its name followed by a ':'.
-  # In this way we can refer to this reaction later in the code.
-  R1: 0 -> A; k_A
+    # Species S is consumed to form P at rate k*S.
+    S -> P ; k*S
+
+    # mRNA transcription at a constant rate k_mRNA.
+    0 -> mRNA ; k_mRNA
+
+    # mRNA degradation proportional to mRNA concentration.
+    mRNA -> 0 ; d_mRNA*mRNA
+
+    # Antithetic sequestration.
+    sigma + anti_sigma -> 0 ; gamma*sigma*anti_sigma
+
+    # We can name a reaction writing its name followed by a ':'.
+    # In this way we can refer to this reaction later in the code.
+    R1: 0 -> A; k_A
+  end
 
 *Note: reactions are saved in SBML as "reaction" elements.*
 
@@ -183,11 +188,11 @@ However, the main difference is that the substitution rules are exact, and the v
 
 **Rate rules**
 
-Rate rules are declared as ``name '= equation``, and they are used to define the rate of change of a species over time (to set its derivative).
+Rate rules are declared as ``der(name) := equation``, and they are used to define the rate of change of a species over time (to set its derivative).
 
 The following code shows an example of the use of each type of rule in OneModel.
 
-.. code-block::
+.. code-block:: onemodel
   :caption: Example of declaring rules with OneModel syntax.
 
   # Rules are declared within a 'rule' 'end' block.
@@ -198,7 +203,7 @@ The following code shows an example of the use of each type of rule in OneModel.
     # (note that this could be changed into a substitution rule).
     y == 10 - x
     # Rate rule.
-    x '= S - x
+    der(x) := S - x
     # As reactions, we can give a name to the equation with ':'.
     E1: z := x + y
   end
@@ -220,23 +225,32 @@ Inheritance is done by writing the parent class name in parentheses in the defin
 
 The following code shows an example of using classes and objects.
 
-.. code-block:: 
+.. code-block::  onemodel
   :caption: Example of declaring models, extending them and instantiating objects with OneModel syntax.
 
   # Define 'Protein' model.
   model Protein  # Start model definition.
+
     species protein
+
     parameter k = 1, d = 1
     reaction
       0 -> protein ; k
       protein -> 0 ; d*protein
     end
+
   end  # End model definition.
   
-  # Define 'ProteinInduced' as an extension of 'Protein'.
-  model ProteinInduced (Protein)
-    input TF
+  # Define 'ProteinInduced'
+  model ProteinInduced
+
+    # Extend the code of Protein into this model
+    extends Protein
+
+    species TF
+
     parameter h = 1
+
     rule k := TF/(h + TF)  # Override the value of 'k' with a rule.
   end
   
@@ -250,44 +264,19 @@ The following code shows an example of using classes and objects.
 
 For example: the species ``A.protein`` will be saved as a species with name ``A__protein``.
   
-Input
------
-
-Inputs represent species or states that are not calculated within a model but are necessary to calculate the rest of the equations and reactions of the model. They are defined with the keyword ``input`` and the value of an input is set using a substitution rule.
-
-.. code-block:: 
-  :caption: Example of defining inputs in a model with OneModel syntax.
-
-  model ProteinInduced  # Note that we don't set the value of TF in the model.
-    input TF                      # Declare TF as an input.
-    species protein
-    parameter k = 1, d = 1, h = 1
-    reaction
-      0 -> protein ; k*TF/(TF+h)  # Use the value of TF.
-      protein -> 0 ; d*protein
-    end
-  end
-  
-  standalone  # It is here where we set the value of TF.
-    species A = 10
-    B = ProteinInduced()
-    rule B.TF := A                # Set the value of B.TF to A.
-  end
-
-*Note: inputs are saved as species in SBML.*
-  
+ 
 Import
 ------
 
-OneModel syntax allows us to import code from other files into the current one using the keyword ``import``.
+OneModel syntax allows us to import code from other files into the current one using the keywords ``from`` and ``import``.
 The code from the imported file is executed as it were present in the current file, but the code inside the ``standalone`` block is omitted.
 
-.. code-block:: 
+.. code-block::  onemodel
   :caption: Example of importing code with OneModel syntax.
 
   # To import a model, we have to write the path of the file we want to import
   # relative to the current file path.
-  import './03_protein_constitutive.one'
+  from 03_protein_constitutive import ProteinConstitutive
   
   # The code inside '03_protein_constitutive.one' will be now accesible,
   # and we can use the models defined in it.
@@ -301,12 +290,12 @@ Standalone
 The code inside the standalone block will not be imported to other files: the standalone code is only executed when we run the model directly.
 The standalone is declared using the keyword ``standalone`` and ``end``.
 
-.. code-block:: 
+.. code-block::  onemodel
   :caption: Example of use of the standalone keyword with OneModel syntax.
 
   # Here we define a model which we will import later into other file.
   model MyModel
-    input u
+    species u
     species x=0
     rule x '= u - x
   end

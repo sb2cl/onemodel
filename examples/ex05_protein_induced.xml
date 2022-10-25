@@ -31,7 +31,7 @@
       <parameter id="B__k_m_max" value="1" units="per_second" constant="true"/>
     </listOfParameters>
     <listOfRules>
-      <assignmentRule id="B___R0" variable="B__k_m">
+      <assignmentRule id="B___R8" variable="B__k_m">
         <math xmlns="http://www.w3.org/1998/Math/MathML">
           <apply>
             <divide/>
@@ -48,7 +48,7 @@
           </apply>
         </math>
       </assignmentRule>
-      <assignmentRule id="_R1" variable="B__TF">
+      <assignmentRule id="_R9" variable="B__TF">
         <math xmlns="http://www.w3.org/1998/Math/MathML">
           <ci> A__protein </ci>
         </math>
@@ -69,9 +69,6 @@
         <listOfReactants>
           <speciesReference species="A__mRNA" constant="true"/>
         </listOfReactants>
-        <listOfModifiers>
-          <modifierSpeciesReference species="A__mRNA"/>
-        </listOfModifiers>
         <kineticLaw>
           <math xmlns="http://www.w3.org/1998/Math/MathML">
             <apply>
@@ -90,9 +87,6 @@
           <speciesReference species="A__mRNA" constant="true"/>
           <speciesReference species="A__protein" constant="true"/>
         </listOfProducts>
-        <listOfModifiers>
-          <modifierSpeciesReference species="A__mRNA"/>
-        </listOfModifiers>
         <kineticLaw>
           <math xmlns="http://www.w3.org/1998/Math/MathML">
             <apply>
@@ -107,9 +101,6 @@
         <listOfReactants>
           <speciesReference species="A__protein" constant="true"/>
         </listOfReactants>
-        <listOfModifiers>
-          <modifierSpeciesReference species="A__protein"/>
-        </listOfModifiers>
         <kineticLaw>
           <math xmlns="http://www.w3.org/1998/Math/MathML">
             <apply>
@@ -137,9 +128,6 @@
         <listOfReactants>
           <speciesReference species="B__mRNA" constant="true"/>
         </listOfReactants>
-        <listOfModifiers>
-          <modifierSpeciesReference species="B__mRNA"/>
-        </listOfModifiers>
         <kineticLaw>
           <math xmlns="http://www.w3.org/1998/Math/MathML">
             <apply>
@@ -158,9 +146,6 @@
           <speciesReference species="B__mRNA" constant="true"/>
           <speciesReference species="B__protein" constant="true"/>
         </listOfProducts>
-        <listOfModifiers>
-          <modifierSpeciesReference species="B__mRNA"/>
-        </listOfModifiers>
         <kineticLaw>
           <math xmlns="http://www.w3.org/1998/Math/MathML">
             <apply>
@@ -175,9 +160,6 @@
         <listOfReactants>
           <speciesReference species="B__protein" constant="true"/>
         </listOfReactants>
-        <listOfModifiers>
-          <modifierSpeciesReference species="B__protein"/>
-        </listOfModifiers>
         <kineticLaw>
           <math xmlns="http://www.w3.org/1998/Math/MathML">
             <apply>

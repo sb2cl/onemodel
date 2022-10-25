@@ -1,0 +1,22 @@
+
+# TODO: Write your model here.
+
+from protein_constitutive import ProteinConstitutive
+
+model ProteinInduced
+    extends ProteinConstitutive
+    
+    species
+        TF
+        k_m
+    end
+    
+    parameter h = 1
+    
+    rule k_m := TF/(TF + h)
+end
+
+A = ProteinConstitutive()
+B = ProteinInduced()
+
+rule B.TF := A.protein

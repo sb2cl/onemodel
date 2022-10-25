@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Examples &mdash; onemodel 0.1 documentation</title><link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+      <script>
+          var DOCUMENTATION_OPTIONS = {
+              URL_ROOT:'./',
+              VERSION:'0.1',
+              LANGUAGE:'None',
+              COLLAPSE_INDEX:false,
+              FILE_SUFFIX:'.html',
+              HAS_SOURCE:  true,
+              SOURCELINK_SUFFIX: '.txt'
+          };
+      </script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="OneModel syntax" href="onemodel_syntax.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> onemodel
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quick_start.html">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="onemodel_workflow.html">OneModel workflow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="onemodel_design_philosophy.html">OneModel design philosophy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="onemodel_implementation.html">OneModel implementation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="subpackage_sbml2dae.html">Subpackage SBML2dae</a></li>
+<li class="toctree-l1"><a class="reference internal" href="onemodel_syntax.html">OneModel syntax</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#constitutive-protein-expression">Constitutive protein expression</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#induced-protein-expression">Induced protein expression</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#antithetic-controller">Antithetic controller</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#host-aware-antithetic-controller">Host-aware antithetic controller</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">onemodel</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Examples</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/examples.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="examples">
+<h1>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h1>
+<p>To simplify and streamline the modeling tasks, OneModel allows us to create incremental implementations of a model by using smaller models previously defined.
+In the following sections, we present two case scenarios to show how to work with OneModel and how these ideas can be carried out with its syntax in an easy way.
+These case scenarios demonstrate how to use OneModel software.</p>
+<p>We used the following software tools to perform the examples: Matlab R2020b, Python v3.8.0, and OneModel v0.0.10.
+We recommend using the same software versions to replicate the examples.</p>
+<div class="section" id="constitutive-protein-expression">
+<span id="sec-constitutive-protein-expression"></span><h2>Constitutive protein expression<a class="headerlink" href="#constitutive-protein-expression" title="Permalink to this headline">¶</a></h2>
+<p>In this section, we show an example of how to model constitutive protein expression using OneModel syntax.
+The code examples are easy-to-follow, and they are well commented: there is no need to know OneModel syntax to follow them.
+Moreover, it shows the benefits of using OneModel syntax for modeling synthetic biology circuits.</p>
+<p>Protein expression—in this chapter, we use protein expression and gene expression interchangeably, as we will implement models of gene expression leading to the synthesis of proteins—is a complex process that involves many reactions and interactions.
+For this example, we simplify this process, and we take into account mRNA transcription, protein translation, and degradation of mRNA and protein:</p>
+<div class="figure align-center" id="id2">
+<span id="reactions"></span><a class="reference internal image-reference" href="_images/constitutive_expression_reactions.svg"><img alt="constitutive protein expression reactions" src="_images/constitutive_expression_reactions.svg" width="250" /></a>
+<p class="caption"><span class="caption-number">Fig. 8 </span><span class="caption-text">Reactions of constitutive protein expression</span></p>
+</div>
+<p>where <code class="docutils literal"><span class="pre">mRNA</span></code> and <code class="docutils literal"><span class="pre">protein</span></code> are the mRNA and protein concentration (we could alternatively work with the number of molecules of each species instead of working with concentrations); <code class="docutils literal"><span class="pre">k_m</span></code> and <code class="docutils literal"><span class="pre">k_p</span></code> are the rate constants related to transcription and translation, respectively; and <code class="docutils literal"><span class="pre">d_m</span></code> and <code class="docutils literal"><span class="pre">d_p</span></code> are the degradation rate constants of the mRNA and the protein.</p>
+<p>In the set of reactions of <a class="reference internal" href="#reactions"><span class="std std-numref">Fig. 8</span></a>, there are three different classes of model-elements: species (<code class="docutils literal"><span class="pre">mRNA</span></code> and <code class="docutils literal"><span class="pre">protein</span></code>), parameters (<code class="docutils literal"><span class="pre">k_m</span></code>, <code class="docutils literal"><span class="pre">k_p</span></code>, <code class="docutils literal"><span class="pre">d_m</span></code> and <code class="docutils literal"><span class="pre">d_p</span></code>) and the reactions.
+These are the elements that we have to implement using the OneModel syntax.</p>
+<p><a class="reference internal" href="#basic-mrna-and-protein"><span class="std std-numref">Listing 10</span></a> implements the model-elements in <a class="reference internal" href="#reactions"><span class="std std-numref">Fig. 8</span></a> using OneModel syntax.
+Lines 3–6 define mRNA and protein as species and set their initial values to zero.
+Lines 8–13 define the parameters and set their values to one (for example purposes).
+Moreover, lines 15–20 define the reactions, with their explicit reaction rates placed after the <code class="docutils literal"><span class="pre">;</span></code> symbol.
+Note that texts after a <code class="docutils literal"><span class="pre">#</span></code> symbol are comments which are only used to explain the function of the code.</p>
+<div class="literal-block-wrapper docutils container" id="id3">
+<span id="basic-mrna-and-protein"></span><div class="code-block-caption"><span class="caption-number">Listing 10 </span><span class="caption-text">Example of modeling constitutive gene expression (transcription, translation and degradation) using OneModel.</span><a class="headerlink" href="#id3" title="Permalink to this code">¶</a></div>
+<div class="highlight-onemodel"><div class="highlight"><pre><span></span>### Simple gene expression model. ###
+
+species       # Start declaring species.
+  mRNA=0      # mRNA concentration.
+  protein=0   # Protein concentration.
+end           # End declaring species.
+
+parameter     # Start declaring parameters.
+  k_m=1       # mRNA transcription rate.
+  d_m=1       # mRNA degradation rate.
+  k_p=1       # Protein translation rate.
+  d_p=1       # Protein degradation rate.
+end           # End delaring parameters.
+
+reaction                                # Start declaring reactions.
+  0 -&gt; mRNA              ; k_m          # mRNA transcription.
+  mRNA -&gt; 0              ; d_m*mRNA     # mRNA degradation.
+  mRNA -&gt; mRNA + protein ; k_p*mRNA     # Protein translation.
+  protein -&gt; 0           ; d_p*protein  # Protein degradation.
+end                                     # Stop declaring reactions.
+</pre></div>
+</div>
+</div>
+<p><a class="reference internal" href="#basic-mrna-and-protein-sim"><span class="std std-numref">Fig. 9</span></a> shows a simulation of this code.
+Once we have the OneModel implementation, we can use SBML2dae to generate a Matlab implementation of the OneModel code to simulate it.
+This way, if the simulation result is coherent, we can validate the OneModel code and continue with this example.</p>
+<div class="figure align-center" id="id4">
+<span id="basic-mrna-and-protein-sim"></span><a class="reference internal image-reference" href="_images/ex01_simple_gene_expression.svg"><img alt="simple gene expression simulation" src="_images/ex01_simple_gene_expression.svg" width="300" /></a>
+<p class="caption"><span class="caption-number">Fig. 9 </span><span class="caption-text">In blue is shown mRNA concentration and in red protein concentration. All units are arbitrary.</span></p>
+</div>
+<p>A synthetic circuit rarely consists of the expression of just one protein.
+Typically they are composed of several proteins (two, or three, even hundreds of them).
+As a result, the mathematical models tend to get very repetitive because it is necessary to replicate the set of reactions for each of the proteins.</p>
+<p>One of the most common approaches to this problem is to implement each protein’s reactions and equations by hand: copy-pasting the code and thus making a monolithic model.
+Copy-pasting is a bad programming practice, and it should be avoided.
+Models of this type are hard to maintain and to use.
+Indeed, this bad programming practice is due to using software that does not allow incremental and/or modular modeling.</p>
+<p><a class="reference internal" href="#two-genes-expression-bad"><span class="std std-numref">Listing 11</span></a> is an example of this bad programming practice.
+What we have done in this example is to copy-paste the <a class="reference internal" href="#basic-mrna-and-protein"><span class="std std-numref">Listing 10</span></a> twice.
+We have changed the name of species and parameters to create one set of species and parameters for the constitutive expression of protein A and another set for protein B.
+This code is hard to read, and this situation will worsen with each extra protein we want to add to the model: we developed OneModel to avoid this type of situations.</p>
+<div class="literal-block-wrapper docutils container" id="id5">
+<span id="two-genes-expression-bad"></span><div class="code-block-caption"><span class="caption-number">Listing 11 </span><span class="caption-text">Example of bad programming practices to avoid. Here is modeled the expression of two genes by copy and pasting the <a class="reference internal" href="#basic-mrna-and-protein"><span class="std std-numref">Listing 10</span></a>.</span><a class="headerlink" href="#id5" title="Permalink to this code">¶</a></div>
+<div class="highlight-onemodel"><div class="highlight"><pre><span></span>### How NOT to model the expression of two genes. ###
+
+species
+  mRNA_A=0, protein_A=0   # Gene A mRNA and protein concentration.
+  mRNA_B=0, protein_B=0   # Gene A mRNA and protein concentration.
+end
+
+parameter
+  k_m_A=1,  d_m_A=1   # Transcription and degradation rates of mRNA A.
+  k_p_A=1,  d_p_A=1   # Translation and degradation rates of protein A.
+  k_m_B=1,  d_m_B=1   # Transcription and degradation rates of mRNA B.
+  k_p_B=1,  d_p_B=1   # Translation and degradation rates of protein B.
+end
+
+reaction
+  0 -&gt; mRNA_A                  ; k_m_A           # Transcription mRNA A.
+  mRNA_A -&gt; 0                  ; d_m_A*mRNA_A    # Degradation mRNA A.
+  mRNA_A -&gt; mRNA_A + protein_A ; k_p_A*mRNA_A    # Translation protein A.
+  protein_A -&gt; 0               ; d_p_A*protein_A # Degradation protein A.
+  0 -&gt; mRNA_B                  ; k_m_B           # Transcription mRNA B.
+  mRNA_B -&gt; 0                  ; d_m_B*mRNA_B    # Degradation mRNA B.
+  mRNA_B -&gt; mRNA_B + protein_B ; k_p_B*mRNA_B    # Translation protein B.
+  protein_B -&gt; 0               ; d_p_B*protein_B # Degradation protein B.
+end
+</pre></div>
+</div>
+</div>
+<p>The efficient solution to this problem is to use modularity.
+OneModel syntax allows us to wrap <a class="reference internal" href="#basic-mrna-and-protein"><span class="std std-numref">Listing 10</span></a> as a <code class="docutils literal"><span class="pre">model</span></code>.
+We group all the species, parameters, and reactions as a module which we can reuse by instantiating it as objects instead of copy-pasting the code for each protein.
+This way, we avoid copy-pasting the code for each protein.
+Instead, we can create multiple instances of this model.</p>
+<p><a class="reference internal" href="#protein-constitutive"><span class="std std-numref">Listing 12</span></a> shows how to implement <a class="reference internal" href="#basic-mrna-and-protein"><span class="std std-numref">Listing 10</span></a> as a <code class="docutils literal"><span class="pre">model</span></code>.
+This process is easy to do; we need to wrap the previous code inside the <code class="docutils literal"><span class="pre">model</span></code> and <code class="docutils literal"><span class="pre">end</span></code> keywords (lines 4–19).
+This way, <code class="docutils literal"><span class="pre">ProteinConstitutive</span></code> is a constructor which will generate instances of the model for us.</p>
+<p>In the <code class="docutils literal"><span class="pre">standalone</span></code> block, we show an example of using <code class="docutils literal"><span class="pre">ProteinConstitutive</span></code>.
+We have just created object A which is an instance of model <code class="docutils literal"><span class="pre">ProteinConstitutive</span></code>.
+Object A has a copy of all the model-elements of <code class="docutils literal"><span class="pre">ProteinConstitutive</span></code>, and they are accessible by the use of the <code class="docutils literal"><span class="pre">.</span></code> operator. For example, the mRNA concentration of object A can be accessed as <code class="docutils literal"><span class="pre">A.mRNA</span></code>.</p>
+<div class="literal-block-wrapper docutils container" id="id6">
+<span id="protein-constitutive"></span><div class="code-block-caption"><span class="caption-number">Listing 12 </span><span class="caption-text">Example of how to build a reusable model for constitutive gene expression using OneModel syntax.</span><a class="headerlink" href="#id6" title="Permalink to this code">¶</a></div>
+<div class="highlight-onemodel"><div class="highlight"><pre><span></span>### Definition of ProteinConstitutive. ###
+
+## ProteinConstitutive models constitutive gene expression. ##
+model ProteinConstitutive  # Start declaring model.
+
+  species mRNA=0, protein=0  # mRNA and protein concentration.
+
+  parameter
+    k_m=1, d_m=1  # mRNA transcription and degradation rate.
+    k_p=1, d_p=1  # Protein translation and degradation rate.
+  end
+
+  reaction
+    0 -&gt; mRNA              ; k_m          # mRNA transcription.
+    mRNA -&gt; 0              ; d_m*mRNA     # mRNA degradation.
+    mRNA -&gt; mRNA + protein ; k_p*mRNA     # Protein translation.
+    protein -&gt; 0           ; d_p*protein  # Protein degradation.
+  end
+end  # End declaring model.
+
+## Example of how to use ProteinConstitutive. ##
+standalone
+  A = ProteinConstitutive()
+end
+</pre></div>
+</div>
+</div>
+<p><a class="reference internal" href="#two-genes-expression"><span class="std std-numref">Listing 13</span></a> shows how easy it is to model the expression of two proteins taking advantage of the previously defined model.
+First, we must import the previous code into the new model (line 5).
+And then, we just need to create as many proteins as we need by writing lines 8–9.
+Declaring models and instantiating objects is an efficient way to model the expression of two proteins.</p>
+<div class="literal-block-wrapper docutils container" id="id7">
+<span id="two-genes-expression"></span><div class="code-block-caption"><span class="caption-number">Listing 13 </span><span class="caption-text">Example of how to use the model defined in <a class="reference internal" href="#protein-constitutive"><span class="std std-numref">Listing 12</span></a> to model the expression of two genes.</span><a class="headerlink" href="#id7" title="Permalink to this code">¶</a></div>
+<div class="highlight-onemodel"><div class="highlight"><pre><span></span>### How to model the expression of two proteins. ###
+
+# Import ProteinConstitutive model.
+# (note that the standalone code is not imported).
+import &#39;./ex03_protein_constitutive.one&#39;
+
+# Initialize A and B as instances of ProteinConstitutive.
+A = ProteinConstitutive()
+B = ProteinConstitutive()
+
+# We could easily add more proteins by writing:
+# C = ProteinConstitutive()
+# ...
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="induced-protein-expression">
+<h2>Induced protein expression<a class="headerlink" href="#induced-protein-expression" title="Permalink to this headline">¶</a></h2>
+<p><code class="docutils literal"><span class="pre">ProteinConstitutive</span></code> models genes that are constitutive expressed.
+In many synthetic circuits, the presence of a transcription factor (which could also be a protein) can induce gene expression.
+This section, we show how to create another model for induced protein expression.</p>
+<p>As a first approach, we could create a new model by copy-pasting the code of <code class="docutils literal"><span class="pre">ProteinConstitutive</span></code> and modifying it to make the expression inducible: this would be another type of bad programming practice.
+Doing that is equivalent to what we did in <a class="reference internal" href="#two-genes-expression-bad"><span class="std std-numref">Listing 11</span></a>, and it would lead to an inefficient workflow because each time we want to define a new <code class="docutils literal"><span class="pre">model</span></code> we will have to duplicate the transcription and translation reactions.</p>
+<blockquote>
+<div>Whenever you are tempted to copy-pasting any part of your code: stop doing it; it is an indicator that there is a better way to do it.
+Take the time to see if someone else has stumbled upon your problem—it’s a golden opportunity to improve your programming skills—.</div></blockquote>
+<p>In the previous case, the solution was to implement a <code class="docutils literal"><span class="pre">model</span></code> instead of copy-pasting the code.
+Here the solution is to create a new <code class="docutils literal"><span class="pre">model</span></code> by extending the functionality of <code class="docutils literal"><span class="pre">ProteinConstitutive</span></code>.</p>
+<div class="literal-block-wrapper docutils container" id="id8">
+<span id="protein-induced"></span><div class="code-block-caption"><span class="caption-number">Listing 14 </span><span class="caption-text">Example of modeling induced gene expression by extending the previously defined <code class="docutils literal"><span class="pre">ProteinConstitutive</span></code> model.</span><a class="headerlink" href="#id8" title="Permalink to this code">¶</a></div>
+<div class="highlight-onemodel"><div class="highlight"><pre><span></span>### Definition of ProteinInduced. ###
+
+import &#39;ex03_protein_constitutive.one&#39;
+
+## ProteinInduced extends the ProteinConstitutive model to make ##
+## the expression inducible by a transcription factor.          ##
+model ProteinInduced(ProteinConstitutive)
+
+  input TF       # Define the transcription factor as an input.
+  species k_m=0  # Override the parameter k_m to be a species.
+
+  parameter
+    h = 1        # Half-activation threshold.
+    k_m_max = 1  # Maximum transcription rate.
+  end
+
+  # Set the value of k_m as an substitution equation.
+  rule k_m := k_m_max * TF/(TF+h)
+end
+
+## Example of how to use ProteinInduced. ##
+standalone
+  A = ProteinConstitutive()
+  B = ProteinInduced()
+
+  rule B.TF := A.protein  # Set protein A as the transcription factor of B.
+end
+</pre></div>
+</div>
+</div>
+<p><a class="reference internal" href="#protein-induced"><span class="std std-numref">Listing 14</span></a> shows the definition of a new model <code class="docutils literal"><span class="pre">ProteinInduced</span></code> by extending <code class="docutils literal"><span class="pre">ProteinConstitutive</span></code>.
+First, we have to import the code of <code class="docutils literal"><span class="pre">ProteinConstitutive</span></code> (line 3).
+We declare <code class="docutils literal"><span class="pre">ProteinInduced</span></code> model and we set <code class="docutils literal"><span class="pre">ProteinConstitutive</span></code> as its parent (note that the name of <code class="docutils literal"><span class="pre">ProteinConstitutive</span></code> is in the parentheses in line 7).
+This way, <code class="docutils literal"><span class="pre">ProteinInduced</span></code> will have all the model-elements defined in its parent.
+The rest of the work is to add the inducible part to the model.
+For this, we do not need to change the reactions; we just need the value of parameter <code class="docutils literal"><span class="pre">k_m</span></code> to change depending on the transcription factor concentration.
+To this end, we declare the transcription factor <code class="docutils literal"><span class="pre">TF</span></code> as an input (line 9).
+We override the parameter <code class="docutils literal"><span class="pre">k_m</span></code> to be a species in line 10 (note that the declaration of species refers both to chemical species or to state variables).
+The last step is to declare the parameters for a Hill-like function (lines 13–14) and assign the value of <code class="docutils literal"><span class="pre">k_m</span></code> as the Hill function using the substitution rule.</p>
+<p>The <code class="docutils literal"><span class="pre">standalone</span></code> example (lines 22–26) models a constitutively expressed protein A and a protein B which is induced by A.
+<a class="reference internal" href="#protein-induced-sim"><span class="std std-numref">Fig. 10</span></a> shows a simulation of <code class="docutils literal"><span class="pre">ProteinInduced</span></code>.</p>
+<div class="figure align-center" id="id9">
+<span id="protein-induced-sim"></span><a class="reference internal image-reference" href="_images/ex05_protein_induced.svg"><img alt="simulation of protein induced" src="_images/ex05_protein_induced.svg" width="250" /></a>
+<p class="caption"><span class="caption-number">Fig. 10 </span><span class="caption-text">Simulation of <code class="docutils literal"><span class="pre">ex05_protein_induced.one</span></code>. Protein A is expressed constitutively, and protein B expression is induced by protein A. The mRNA and protein concentration of gene A are shown in blue and red, and the ones of gene B are shown in yellow and purple. All units are arbitrary.</span></p>
+</div>
+</div>
+<div class="section" id="antithetic-controller">
+<h2>Antithetic controller<a class="headerlink" href="#antithetic-controller" title="Permalink to this headline">¶</a></h2>
+<p>To exemplify more complex gene circuits, in this section, we model an antithetic controller making use of the models for constitutive and induced protein expression defined in the previous sections.</p>
+<p>The antithetic controller is a synthetic gene system to robustly control the expression of a protein of interest.
+This circuit is implemented using three genes coding three proteins: sigma <code class="docutils literal"><span class="pre">z_1</span></code>, anti-sigma <code class="docutils literal"><span class="pre">z_2</span></code>, and the protein of interest <code class="docutils literal"><span class="pre">x</span></code>.
+Normally, <code class="docutils literal"><span class="pre">z_1</span></code> is constitutively expressed and induces the production of <code class="docutils literal"><span class="pre">x</span></code>. In turn, <code class="docutils literal"><span class="pre">x</span></code> activates the expression of <code class="docutils literal"><span class="pre">z_2</span></code>.
+Finally, <code class="docutils literal"><span class="pre">z_1</span></code> and <code class="docutils literal"><span class="pre">z_2</span></code> annihilate each other in a sequestration reaction, thus closing the loop.</p>
+<p>The following set of reactions shows all the biochemical reactions in this gene circuit.
+The reactions related to protein expression and degradation:</p>
+<div class="figure align-center" id="id10">
+<span id="eq-antithetic-a"></span><a class="reference internal image-reference" href="_images/ex06_antithetic_reactions_1.svg"><img alt="antithetic reactions" src="_images/ex06_antithetic_reactions_1.svg" width="400" /></a>
+<p class="caption"><span class="caption-number">Fig. 11 </span><span class="caption-text">Transcription, translation and degradation reactions</span></p>
+</div>
+<p>and the sequestration reaction:</p>
+<div class="figure align-center" id="id11">
+<span id="eq-antithetic-b"></span><a class="reference internal image-reference" href="_images/ex06_antithetic_reactions_2.svg"><img alt="antithetic reactions" src="_images/ex06_antithetic_reactions_2.svg" width="100" /></a>
+<p class="caption"><span class="caption-number">Fig. 12 </span><span class="caption-text">Sequestration reaction</span></p>
+</div>
+<p>where <code class="docutils literal"><span class="pre">m_{i}</span></code> are the mRNA concentration of <code class="docutils literal"><span class="pre">z_1</span></code>, <code class="docutils literal"><span class="pre">z_2</span></code> and <code class="docutils literal"><span class="pre">x</span></code>; <code class="docutils literal"><span class="pre">k_m^i</span></code> and <code class="docutils literal"><span class="pre">k_p^i</span></code> are the rate constant parameters related to transcription and translation, respectively; <code class="docutils literal"><span class="pre">d_m^i</span></code> and <code class="docutils literal"><span class="pre">d_p^i</span></code>  are the degradation rate constants of mRNA and protein; <code class="docutils literal"><span class="pre">f(x)</span></code> and <code class="docutils literal"><span class="pre">g(z_1)</span></code> are activation Hill-like functions; and <code class="docutils literal"><span class="pre">\gamma</span></code> is the antithetical sequestration rate constant.</p>
+<p>Note that in <a class="reference internal" href="#eq-antithetic-a"><span class="std std-numref">Fig. 11</span></a> there are a lot of repetitive reactions to model the expression of <code class="docutils literal"><span class="pre">z_1</span></code>, <code class="docutils literal"><span class="pre">z_2</span></code>, and <code class="docutils literal"><span class="pre">x</span></code>.
+We can take advantage of this repetitive structure and use the model for protein expression that we defined before.</p>
+<p><a class="reference internal" href="#id1"><span class="std std-numref">Listing 15</span></a> is an implementation of the <code class="docutils literal"><span class="pre">AntitheticController</span></code> model using the models <code class="docutils literal"><span class="pre">ProteinConstitutive</span></code> and <code class="docutils literal"><span class="pre">ProteinInduced</span></code>.</p>
+<p>First, we have to import the previous models into this new one (line 3).
+Note that <code class="docutils literal"><span class="pre">'ex05_protein_induced.one'</span></code> already imports <code class="docutils literal"><span class="pre">ProteinConstitutive</span></code>.
+We define the three proteins which make the circuit. We use <code class="docutils literal"><span class="pre">ProteinConstitutive</span></code> for protein <code class="docutils literal"><span class="pre">z1</span></code> and <code class="docutils literal"><span class="pre">ProteinInduced</span></code> for proteins <code class="docutils literal"><span class="pre">z2</span></code> and <code class="docutils literal"><span class="pre">x</span></code> (lines 6–8).
+We define the annihilation rate constant <code class="docutils literal"><span class="pre">gamma</span></code> (line 9), and we add the annihilation reaction to the model (line 14).</p>
+<p>Note that if we define models using reactions (instead of rules), we can add more reactions to previously defined models, and OneModel will update all the rates of changes of the species automatically—this makes it very easy to expand the functionality of models as we have done with adding the antithetic reaction in Code <a class="reference internal" href="#id1"><span class="std std-numref">Listing 15</span></a>.</p>
+<div class="literal-block-wrapper docutils container" id="id12">
+<span id="id1"></span><div class="code-block-caption"><span class="caption-number">Listing 15 </span><span class="caption-text">Example of modeling an antithetic controller using textit{OneModel} syntax.</span><a class="headerlink" href="#id12" title="Permalink to this code">¶</a></div>
+<div class="highlight-onemodel"><div class="highlight"><pre><span></span>### Definition of AntitheticController. ###
+
+import &#39;ex05_protein_induced.one&#39;  # ProteinConstitutive and ProteinInduced.
+
+model AntitheticController
+  z1 = ProteinConstitutive()  # Sigma factor.
+  z2 = ProteinInduced()       # Anti-sigma factor.
+  x  = ProteinInduced()       # Protein of interest to control.
+  parameter gamma = 1         # Antithetic sequestration rate.
+
+  reaction
+    # We have to add the antithetic reaction.
+    # Note that we can access species inside objects using &#39;.&#39; operator.
+    z1.protein + z2.protein -&gt; 0 ; gamma*z1.protein*z2.protein
+  end
+
+  rule
+    x.TF  := z1.protein  # Set z1 as the transcription factor of x.
+    z2.TF := x.protein   # Set x as the transcription factor of z2.
+  end
+end
+
+standalone  # Example of how to use the AntitheticController.
+  circuit = AntitheticController()
+end
+</pre></div>
+</div>
+</div>
+<p>Then, we set <code class="docutils literal"><span class="pre">z1</span></code> as the transcription factor of protein <code class="docutils literal"><span class="pre">x</span></code>. In turn, <code class="docutils literal"><span class="pre">x</span></code> will be the transcription factor of protein <code class="docutils literal"><span class="pre">z2</span></code> (lines 18–19).
+Finally, we set the standalone example as just the AntitheticController.
+<a class="reference internal" href="#antithetic-controller-sim"><span class="std std-numref">Fig. 13</span></a> shows a simulation of the <code class="docutils literal"><span class="pre">AntitheticController</span></code> model.</p>
+<div class="figure align-center" id="id13">
+<span id="antithetic-controller-sim"></span><a class="reference internal image-reference" href="_images/ex06_antithetic_controller.svg"><img alt="antithetic controller simulation" src="_images/ex06_antithetic_controller.svg" width="250" /></a>
+<p class="caption"><span class="caption-number">Fig. 13 </span><span class="caption-text">Simulation of <code class="docutils literal"><span class="pre">ex06_antithetic_controller.one</span></code>. The concentration of sigma protein <code class="docutils literal"><span class="pre">z_1</span></code> is shown in blue, in red the anti-sigma concentration <code class="docutils literal"><span class="pre">z2</span></code> and in yellow the protein of interest <code class="docutils literal"><span class="pre">x</span></code>. All units are arbitrary.</span></p>
+</div>
+</div>
+<div class="section" id="host-aware-antithetic-controller">
+<h2>Host-aware antithetic controller<a class="headerlink" href="#host-aware-antithetic-controller" title="Permalink to this headline">¶</a></h2>
+<p>This last example shows the use of OneModel with complex and large models.
+The first approach to model a synthetic gene circuit is usually done by neglecting the interactions between the host cell and the gene circuit.
+However, there is an increasing need to include host dynamics to improve model prediction capabilities.
+These host-aware dynamic models are complex and not easy to implement since they may contain several states and equations.</p>
+<p>Code <a class="reference internal" href="#wildtype"><span class="std std-numref">Listing 16</span></a> depicts the <code class="docutils literal"><span class="pre">WildType</span></code> model that represents the host-aware model freely distributed with OneModel.
+Lines 8–17 show an incomplete representation of it just for demonstration purposes.
+This model implements the equations of the host-aware model and takes into account the host dynamics, the competition for cell resources in protein expression, and its effect on cell growth.
+The model <code class="docutils literal"><span class="pre">WildType</span></code> is rather complex.
+However, from a user perspective, we only need to know how to modify its input <code class="docutils literal"><span class="pre">WSum</span></code> (line 10), which is a value that keeps track of the burden introduced by the expression of exogenous proteins like the ones introduced by the antithetic controller.
+<code class="docutils literal"><span class="pre">WildType_ProteinConstitutive</span></code> is a model provided also by <code class="docutils literal"><span class="pre">WildType</span></code>, which defines the base protein expression mechanism.
+The user may use this model as a building block for its own circuits (similarly to section <a class="reference internal" href="#sec-constitutive-protein-expression"><span class="std std-ref">Constitutive protein expression</span></a>).
+There were no inputs in the original <code class="docutils literal"><span class="pre">ProteinConstitutive</span></code> model. However <code class="docutils literal"><span class="pre">WildType_ProteinConstitutive</span></code> is a more complex model which has inputs to calculate protein expression as function of the effective translation rate of ribosomes <code class="docutils literal"><span class="pre">nu_t</span></code>, and the cell growth rate <code class="docutils literal"><span class="pre">mu</span></code>.</p>
+<div class="literal-block-wrapper docutils container" id="id14">
+<span id="wildtype"></span><div class="code-block-caption"><span class="caption-number">Listing 16 </span><span class="caption-text"><code class="docutils literal"><span class="pre">WildType</span></code> is the host-aware model freely distributed with OneModel, <code class="docutils literal"><span class="pre">WildType_ProteinConstitutive</span></code> is the constitutive protein expression mechanism, and <code class="docutils literal"><span class="pre">WildType_ProteinInduced</span></code> is the inucible protein experssion mechanism. The figure shows an incomplete representation of these models only for the example purposes.</span><a class="headerlink" href="#id14" title="Permalink to this code">¶</a></div>
+<div class="highlight-onemodel"><div class="highlight"><pre><span></span>### Definition of WildType. ###
+
+# We show here an incomplete implementation of WildType and
+# WildType_ProteinConstitutive and WildType_ProteinInduced
+# (the &#39;dot-dot-dot&#39; indicates that the original original code continues).
+
+## Host aware model of a E.coli. cell##
+model WildType
+  input WSum_exo  # Burden generated by exogenous genes.
+  # The model takes into account many relevant variables as:
+  # the effective ribosome elongation rate, the growth rate, etc.
+  species nu_t, mu, ...
+  ...
+end
+
+## Model for consitutive protein expression. ##
+model WildType_ProteinConstitutive
+  input nu_t, mu, ...  # The inputs of this model are species of WildType.
+  species W # Burden generated by the expression of this protein.
+  ...
+end
+
+## Model for induced protein expression. ##
+model WildType_ProteinInduced (WildType_ProteinConstitutive)
+  input TF  # Transcription factor which induced expression.
+  ...
+end
+</pre></div>
+</div>
+</div>
+<p><a class="reference internal" href="#wildtypeantitheticcontroller"><span class="std std-numref">Listing 17</span></a> shows the <code class="docutils literal"><span class="pre">WildType_AntitheticController</span></code> model that is the implementation of the antithetic controller taking into account the host dynamics.</p>
+<p>First, in line 2 we import the <code class="docutils literal"><span class="pre">WildType</span></code>, the <code class="docutils literal"><span class="pre">WildType_ProteinConstitutive</span></code> and the <code class="docutils literal"><span class="pre">WildType_ProteinInduced</span></code> models.
+Then in line 4, we declare a new model <code class="docutils literal"><span class="pre">WildType_AntitheticController</span></code> as an extension of <code class="docutils literal"><span class="pre">WildType</span></code> model; this way, we have all the dynamics of the host, and we only need to add the remaining dynamics of the antithetic controller.
+In lines 5–8, we define the proteins of the antithetic controller, sigma <code class="docutils literal"><span class="pre">z1</span></code> as a constitutive expressed protein and anti-sigma and the protein of interest (<code class="docutils literal"><span class="pre">z2</span></code> and <code class="docutils literal"><span class="pre">x</span></code>) as induced expressed proteins.
+The <code class="docutils literal"><span class="pre">WildType</span></code> model needs to know if any of the proteins are under active degradation to ensure that the cell mass is calculated correctly. Therefore we cannot implement the antithetic reaction as we did in <a class="reference internal" href="#id1"><span class="std std-numref">Listing 15</span></a>.
+However, there is a simple workaround; we can define the complex sigma and anti-sigma <code class="docutils literal"><span class="pre">z12</span></code> (line 7) that is not expressed directly by the cell (line 10) but is generated as a result of the sequestration reaction of the antithetic controller (line 17).
+The rest we have to do in the model is to set up the antithetic controller (lines 21–22) and calculate the total burden generated by the exogenous proteins (line 26).
+Finally, we have to satisfy the inputs for each protein (lines 30–32); this step is omitted in the example for brevity.</p>
+<div class="literal-block-wrapper docutils container" id="id15">
+<span id="wildtypeantitheticcontroller"></span><div class="code-block-caption"><span class="caption-number">Listing 17 </span><span class="caption-text">Example of how to model a host-aware antithetic controller with OneModel syntax.</span><a class="headerlink" href="#id15" title="Permalink to this code">¶</a></div>
+<div class="highlight-onemodel"><div class="highlight"><pre><span></span>### Host-aware antithetic controller circuit. ###
+import &#39;ex07_wild_type.one&#39;
+
+model WildType_AntitheticController (WildType)
+  z1  = WildType_ProteinConstitutive() # Sigma.
+  z2  = WildType_ProteinInduced()      # Anti-sigma.
+  z12 = WildType_ProteinConstitutive() # Sigma and anti-sigma complex.
+  x   = WildType_ProteinInduced()      # Protein of interest.
+
+  parameter z12.omega=0  # z12 is not expressed.
+  parameter gamma=10     # Antithetic sequestration rate.
+
+  # We have to add the antithetic reaction, but note that in the
+  # wild-type model we cannot degrade proteins directly, instead
+  # we have to redirect the mass of z1 and z2 into z12.
+  reaction
+    z1.protein + z2.protein -&gt; z12.protein ; gamma*z1.protein*z2.protein
+  end
+
+  rule
+    x.TF  := z1.protein  # Set z1 as the transcription factor of x.
+    z2.TF := x.protein   # Set x as the transcription factor of z2.
+  end
+
+  # We have to take into account the burden of the exogenous proteins.
+  rule cell.WSum_exo := z1.W + z2.W + z12.w + x.W
+
+  # Lastly, we have to satisfy the inputs of z1, z2, z12, and x.
+  rule
+    z1.nu_t := cell.nu_t
+    z1.mu := cell.mu
+    ...
+  end
+end
+
+standalone  # Example of how to use the WildType_AntitheticController.
+  ac = WildType_AntitheticController()
+end
+</pre></div>
+</div>
+</div>
+<p><a class="reference internal" href="#host-aware-sim"><span class="std std-numref">Fig. 14</span></a> shows a set of simulations of the host-aware antithetic controller performed with SBML2dae.
+In these simulations, we have considered two simplifications of the model: (i) to neglect the burden produced by the antithetic controller to the host—this is done by removing the <code class="docutils literal"><span class="pre">z1.W</span> <span class="pre">+</span> <span class="pre">z2.W</span> <span class="pre">+</span> <span class="pre">z12.W</span></code> term from line 26 of Code <a class="reference internal" href="#wildtypeantitheticcontroller"><span class="std std-numref">Listing 17</span></a>—, and (ii) to neglect the dilution of the sigma and anti-sigma factors of the antithetic controller.</p>
+<div class="figure align-center" id="id16">
+<span id="host-aware-sim"></span><a class="reference internal image-reference" href="_images/Example_03.svg"><img alt="simulation of host-aware antithetic" src="_images/Example_03.svg" width="500" /></a>
+<p class="caption"><span class="caption-number">Fig. 14 </span><span class="caption-text">Set of simulations of the host-aware antithetic controller, each line corresponds to a simulation with different conditions.
+The solid lines correspond to simulations that neglect the dilution of the sigma and anti-sigma factors on the antithetic controller, while the dashed lines correspond to simulations that take dilution into account.
+The blue lines correspond to simulations that neglect the burden produced by the antithetic controller to the host, and the red lines correspond to simulations in which this burden is taken into account.
+The left plot shows the protein of interest <code class="docutils literal"><span class="pre">x</span></code> to be controlled by the antithetic controller, the reference of the antithetic controller was set to 70 fg.
+The right plot shows the host growth rate.</span></p>
+</div>
+<p>If we neglect the burden produced by the antithetic controller (blue lines), we can see how the growth rate does not change during simulation time (both solid and dashed blue lines overlap in the plot). However, if we consider that burden (red lines), we see how the growth rates vary accordingly—because now the host is using resources to express the antithetic controller instead of using them to grow.</p>
+<p>Suppose we neglect the dilution of the sigma and anti-sigma factors (solid lines). In that case, the antithetic controller will preserve the integral action, which makes <code class="docutils literal"><span class="pre">x</span></code> to reach the reference of 70 fg in the solid blue line, however in the solid red line (where the burden is taken into account) the <code class="docutils literal"><span class="pre">x</span></code> still gets to the reference (this is not shown in the figure) but it takes much more time—due to effect of the integral action is diminished due to the cell is growing slower—. However, if we consider the dilution (dashed lines), the antithetic controller loses the integral action and never achieves the reference value.</p>
+<p>We have done this because it is an excellent example of showing the flexibility of the OneModel workflow; it is straightforward to perform multiple simulations with different conditions taking advantage of the modularity.</p>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="onemodel_syntax.html" class="btn btn-neutral float-left" title="OneModel syntax" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Fernando N. Santos-Navarro.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

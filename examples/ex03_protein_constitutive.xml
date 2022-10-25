@@ -36,9 +36,6 @@
         <listOfReactants>
           <speciesReference species="A__mRNA" constant="true"/>
         </listOfReactants>
-        <listOfModifiers>
-          <modifierSpeciesReference species="A__mRNA"/>
-        </listOfModifiers>
         <kineticLaw>
           <math xmlns="http://www.w3.org/1998/Math/MathML">
             <apply>
@@ -57,9 +54,6 @@
           <speciesReference species="A__mRNA" constant="true"/>
           <speciesReference species="A__protein" constant="true"/>
         </listOfProducts>
-        <listOfModifiers>
-          <modifierSpeciesReference species="A__mRNA"/>
-        </listOfModifiers>
         <kineticLaw>
           <math xmlns="http://www.w3.org/1998/Math/MathML">
             <apply>
@@ -74,9 +68,6 @@
         <listOfReactants>
           <speciesReference species="A__protein" constant="true"/>
         </listOfReactants>
-        <listOfModifiers>
-          <modifierSpeciesReference species="A__protein"/>
-        </listOfModifiers>
         <kineticLaw>
           <math xmlns="http://www.w3.org/1998/Math/MathML">
             <apply>

@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OneModel design philosophy &mdash; onemodel 0.1 documentation</title><link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+      <script>
+          var DOCUMENTATION_OPTIONS = {
+              URL_ROOT:'./',
+              VERSION:'0.1',
+              LANGUAGE:'None',
+              COLLAPSE_INDEX:false,
+              FILE_SUFFIX:'.html',
+              HAS_SOURCE:  true,
+              SOURCELINK_SUFFIX: '.txt'
+          };
+      </script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="OneModel implementation" href="onemodel_implementation.html" />
+    <link rel="prev" title="OneModel workflow" href="onemodel_workflow.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> onemodel
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quick_start.html">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="onemodel_workflow.html">OneModel workflow</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">OneModel design philosophy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="onemodel_implementation.html">OneModel implementation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="subpackage_sbml2dae.html">Subpackage SBML2dae</a></li>
+<li class="toctree-l1"><a class="reference internal" href="onemodel_syntax.html">OneModel syntax</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">onemodel</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>OneModel design philosophy</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/onemodel_design_philosophy.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="onemodel-design-philosophy">
+<h1>OneModel design philosophy<a class="headerlink" href="#onemodel-design-philosophy" title="Permalink to this headline">¶</a></h1>
+<p>OneModel was developed to meet the following design requirements in systems and synthetic biology:</p>
+<ul class="simple">
+<li><strong>Reactions:</strong> to define models based on reactions with linear or rational rates (e.g. a Hill function) that depend on reactant concentrations.</li>
+<li><strong>ODE:</strong> to define models based on ordinary differential equations (ODE).</li>
+<li><strong>DAE:</strong> to define models based on ODE and differential-algebraic equations (DAE).</li>
+<li><strong>Modularity:</strong> to define models incrementally and reuse specific model parts or functions.</li>
+<li><strong>Accessibility:</strong> low entry barriers for non-expert users, and ease to integrate with other available tools.</li>
+<li><strong>Simplicity:</strong> the tool’s scope is limited to the definition and generation of SBML models; and the simplicity of the tool’s internal implementation.</li>
+<li><strong>Open source:</strong> the code is freely available to the public.</li>
+</ul>
+<p>Most of the available text-based tools fail to meet these requirements.
+The following table enumerates the tools which best met our design requirements.</p>
+<div class="figure align-center" id="id1">
+<a class="reference internal image-reference" href="_images/onemodel_table.svg"><img alt="onemodel comparison table" src="_images/onemodel_table.svg" width="500" /></a>
+<p class="caption"><span class="caption-number">Fig. 4 </span><span class="caption-text">Available software compared with the requirements. Ticks green (fully met), and yellow  (partially met).</span></p>
+</div>
+<p>The three of them (Antimony, Little b and BioCRNpyler) allow the user to define models based on reactions and ODE, but none of these tools supports algebraic equations (DAE), an inherent element of the reduced-order models generated by the quasi-steady-state (QSS) approximation.</p>
+<p>They also provide enough modularity for model definition. Antimony had some minor problems that limited its full potential (but they will most likely be fixed in the following versions).</p>
+<p>About accessibility, Antimony is very accessible through the use of Tellurium, it defines its domain-specific language (as OneModel does), and the need of knowing Python is just for simulation and analysis of the generated models (not the definition of them).
+BioCRNpyler is very accessible but does not define a domain-specific language, and it relies on Python knowledge for the definition of the models.
+Little b does not meet our requirements for accessibility.</p>
+<p>Concerning simplicity, the three tools are focused on the definition of SBML models.
+Antimony defines its custom syntax parser that is a handicap when one looks for the simplicity of the tool’s internal implementation: it will make it harder to understand, extend, and maintain the tool’s code by external developers.
+Little b source code was not found by the author.
+BioCRNpyler internal implementation is available and is based on Python; therefore, the simplicity requirement is satisfied.</p>
+<p>All three tools are freely distributed, but we did not find the source code for Little b.</p>
+<p>OneModel allows the user to define models with chemical or biochemical pseudo-reactions; and differential and algebraic equations.
+It has sufficient modularity to implement complex models efficiently.
+In addition, OneModel defines a domain-specific language (to avoid learning Python by the user) and incorporates two interfaces: the graphical user interface, which lowers the entry barriers for non-expert users to the minimum, and the command-line interface for expert users to integrate OneModel into their workflows.
+It is focused on definition of SBML models and it minimizes the use of custom code in its implementation.
+Finally, it is freely distributed and its source code can be found at <a class="reference external" href="https://github.com/sb2cl/onemodel">https://github.com/sb2cl/onemodel</a>.</p>
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="onemodel_workflow.html" class="btn btn-neutral float-left" title="OneModel workflow" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="onemodel_implementation.html" class="btn btn-neutral float-right" title="OneModel implementation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Fernando N. Santos-Navarro.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,31 +1,27 @@
 import sys
 
 from importlib_resources import files
-
+from libsbml import *
+from onemodel.core.context import Context
+from onemodel.core.context_root import ContextRoot
+from onemodel.core.values.function import Function
+from onemodel.core.values.model import Model
+from onemodel.core.values.number import Number
+from onemodel.core.values.parameter import Parameter
+from onemodel.core.values.reaction import Reaction
+from onemodel.core.values.rule_algebraic import RuleAlgebraic
+from onemodel.core.values.rule_assignment import RuleAssignment
+from onemodel.core.values.rule_rate import RuleRate
+from onemodel.core.values.species import Species
+from onemodel.core.values.string import String
+from onemodel.core.values.struct import Struct
+from onemodel.utils import check, getAstNames
 import tatsu
 from tatsu.walkers import NodeWalker
 
-from libsbml import *
-
-from onemodel.dsl.context import Context
-from onemodel.dsl.context_root import ContextRoot
-
-from onemodel.dsl.values.species import Species
-from onemodel.dsl.values.parameter import Parameter
-from onemodel.dsl.values.reaction import Reaction
-from onemodel.dsl.values.rule_rate import RuleRate
-from onemodel.dsl.values.rule_assignment import RuleAssignment
-from onemodel.dsl.values.rule_algebraic import RuleAlgebraic
-from onemodel.dsl.values.number import Number
-from onemodel.dsl.values.string import String
-from onemodel.dsl.values.struct import Struct
-from onemodel.dsl.values.function import Function
-from onemodel.dsl.values.model import Model
-
-from onemodel.dsl.utils import check, getAstNames
 
 class OneModelWalker(NodeWalker):
-    def __init__(self, model_name, context = None):
+    def __init__(self, model_name, context=None):
         # Name for generating files.
         self.model_name = model_name
 
@@ -52,7 +48,7 @@ class OneModelWalker(NodeWalker):
         self.isImporting = False
 
         # Load the grammar.
-        self.grammar = files('onemodel.dsl').joinpath('onemodel.ebnf').read_text()
+        self.grammar = files("onemodel.dsl").joinpath("onemodel.ebnf").read_text()
 
         # Load the parser with the grammar.
         self.parser = tatsu.compile(self.grammar, asmodel=True)
@@ -80,45 +76,44 @@ class OneModelWalker(NodeWalker):
         try:
             self.document = SBMLDocument(3, 2)
         except ValueError:
-            raise SystemExit('Could not create SBMLDocument object')
+            raise SystemExit("Could not create SBMLDocument object")
 
         # Create the basic Model object inside the SBMLDocument object.
         self.model = self.document.createModel()
-        check(self.model, 'create model')
-        check(self.model.setName(self.model_name), 'set model name')
-        check(self.model.setId(self.model_name), 'set model id')
-        check(self.model.setTimeUnits('second'), 'set model-wide time units')
-        check(self.model.setExtentUnits('mole'), 'set model units of extent')
-        check(self.model.setSubstanceUnits('mole'), 'set model substance units')
+        check(self.model, "create model")
+        check(self.model.setName(self.model_name), "set model name")
+        check(self.model.setId(self.model_name), "set model id")
+        check(self.model.setTimeUnits("second"), "set model-wide time units")
+        check(self.model.setExtentUnits("mole"), "set model units of extent")
+        check(self.model.setSubstanceUnits("mole"), "set model substance units")
 
         # Create a unit definition we will need later.
         per_second = self.model.createUnitDefinition()
-        check(per_second, 'create unit definition')
-        check(per_second.setId('per_second'),'set unit definition id')
+        check(per_second, "create unit definition")
+        check(per_second.setId("per_second"), "set unit definition id")
 
         unit = per_second.createUnit()
-        check(unit, 'create unit on per_second')
-        check(unit.setKind(UNIT_KIND_SECOND),'set unit kind')
-        check(unit.setExponent(-1), 'set unit exponent')
-        check(unit.setScale(0), 'set unit scale')
-        check(unit.setMultiplier(1), 'set unit multiplier')
+        check(unit, "create unit on per_second")
+        check(unit.setKind(UNIT_KIND_SECOND), "set unit kind")
+        check(unit.setExponent(-1), "set unit exponent")
+        check(unit.setScale(0), "set unit scale")
+        check(unit.setMultiplier(1), "set unit multiplier")
 
         # Create a default_compartment.
         c = self.model.createCompartment()
-    
 
         # TODO: This should be added to root context.
-        #self.current_context.set(
-        #    'default_compartment', 
+        # self.current_context.set(
+        #    'default_compartment',
         #    c
-        #)
+        # )
 
-        check(c, 'create default compartment')
-        check(c.setId('default_compartment'), 'set compartment id')
+        check(c, "create default compartment")
+        check(c.setId("default_compartment"), "set compartment id")
         check(c.setConstant(True), 'set compartment "constant"')
         check(c.setSize(1), 'set compartment "size"')
-        check(c.setSpatialDimensions(3), 'set compartment dimensions')
-        check(c.setUnits('litre'), 'set compartment size units')
+        check(c.setSpatialDimensions(3), "set compartment dimensions")
+        check(c.setUnits("litre"), "set compartment size units")
 
     def populateSBMLDocument(self):
         for symbol in self.current_context.symbols:
@@ -147,8 +142,8 @@ class OneModelWalker(NodeWalker):
         f = os.path.dirname(f)
         f = os.path.join(f, filepath)
         f = os.path.abspath(f)
-        
-        file = open(f) 
+
+        file = open(f)
         text = file.read()
         file.close()
 
@@ -177,7 +172,7 @@ class OneModelWalker(NodeWalker):
         context = self.current_context
 
         if type(name) == list:
-            for i in range(len(name)-1):
+            for i in range(len(name) - 1):
                 context = context.get(name[i])
             name = name[-1]
 
@@ -185,9 +180,9 @@ class OneModelWalker(NodeWalker):
             value = 0
 
         if not type(value) in (int, float):
-            print('Error: value must be int or float')
+            print("Error: value must be int or float")
             return
- 
+
         s = Species()
 
         s.initialConcentration = value
@@ -203,19 +198,19 @@ class OneModelWalker(NodeWalker):
         context = self.current_context
 
         if type(name) == list:
-            for i in range(len(name)-1):
+            for i in range(len(name) - 1):
                 context = context.get(name[i])
             name = name[-1]
 
-        if value != None: 
+        if value != None:
             value = value.value
         else:
             value = 0
 
         if not type(value) in (int, float):
-            print('Error: value must be int or float')
+            print("Error: value must be int or float")
             return
-            
+
         p = Parameter()
 
         p.value = value
@@ -231,13 +226,13 @@ class OneModelWalker(NodeWalker):
         kinetic_law_str = node.kinetic_law
 
         if type(reactants) != list:
-            reactants = [reactants] 
+            reactants = [reactants]
 
         if type(products) != list:
-            products = [products] 
+            products = [products]
 
         if name == None:
-            name = f'_J{self.numReactions}'
+            name = f"_J{self.numReactions}"
             self.numReactions += 1
 
         # Create reaction.
@@ -260,13 +255,13 @@ class OneModelWalker(NodeWalker):
             raise TypeError('variable must be "Species"')
 
         if type(name) == list:
-            full_name = ''
+            full_name = ""
             for item in name:
-                full_name += item + '__'
+                full_name += item + "__"
             name = full_name[0:-2]
 
         if name == None:
-            name = f'_R{self.numRules}'
+            name = f"_R{self.numRules}"
             self.numRules += 1
 
         # Create rate rule.
@@ -288,13 +283,13 @@ class OneModelWalker(NodeWalker):
             raise TypeError('variable must be "Species"')
 
         if name == None:
-            name = f'_R{self.numRules}'
+            name = f"_R{self.numRules}"
             self.numRules += 1
 
         if type(name) == list:
-            full_name = ''
+            full_name = ""
             for item in name:
-                full_name += item + '__'
+                full_name += item + "__"
             name = full_name[0:-2]
 
         r = RuleAssignment()
@@ -312,7 +307,7 @@ class OneModelWalker(NodeWalker):
         math = node.math
 
         if name == None:
-            name = f'_R{self.numRules}'
+            name = f"_R{self.numRules}"
             self.numRules += 1
 
         r = RuleAlgebraic()
@@ -344,7 +339,7 @@ class OneModelWalker(NodeWalker):
         context = self.current_context
 
         if type(name) == list:
-            for i in range(len(name)-1):
+            for i in range(len(name) - 1):
                 context = context.get(name[i])
 
             context.set(name[-1], value)
@@ -366,10 +361,7 @@ class OneModelWalker(NodeWalker):
         if type(args) != list:
             args = [args]
 
-        result = value.__call__(
-            self,
-            args
-        )
+        result = value.__call__(self, args)
 
         if type(result) == list:
             result = result[-1]
@@ -392,7 +384,7 @@ class OneModelWalker(NodeWalker):
 
     def walk_String(self, node):
         value = str(node.value)
-        
+
         value = String(value)
 
         return value
@@ -408,7 +400,7 @@ class OneModelWalker(NodeWalker):
         context = self.current_context
 
         if type(name) == list:
-            for i in range(len(name)-1):
+            for i in range(len(name) - 1):
                 context = context.get(name[i])
 
             value = context.get(name[-1])
@@ -437,10 +429,7 @@ class OneModelWalker(NodeWalker):
         if type(args) != list:
             args = [args]
 
-        function = Function(
-                name,
-                args,
-                body)
+        function = Function(name, args, body)
 
         self.current_context.set(name, function)
 

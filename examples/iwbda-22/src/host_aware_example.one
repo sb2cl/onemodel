@@ -1,0 +1,38 @@
+
+from host_aware_model.protein_constitutive import ProteinConstitutive
+from host_aware_model.protein_ribosomal import ProteinRibosomal
+from host_aware_model.protein_non_ribosomal import ProteinNonRibosomal
+from host_aware_model.mass_equation import MassEquation
+
+from host_aware_model.host_aware_model import HostAwareModel
+from host_aware_model.mass_interpolated import MassInterpolated
+
+
+cell = HostAwareModel()
+mass = MassInterpolated()
+
+parameter __t_end = 2000
+
+# Define a constitutive expressed exogenous protein.
+p_exo = ProteinConstitutive()
+
+# Add protein A to the model.
+rule
+    p_exo.nu_t := cell.nu_t
+    p_exo.mu := cell.mu
+    p_exo.r := cell.r
+    p_exo.m_h := cell.m_h
+    p_exo.J_host_sum := cell.J_host_sum
+end
+
+# Override equations.
+rule
+    cell.WSum_equation:  WSum := p_r.W + p_nr.W + p_exo.W
+    cell.m_p_equation:   m_p := p_r.m + p_nr.m + p_exo.m
+end
+
+
+rule 
+    mass.mu := cell.mu
+    cell.m_h := mass.m_h
+end
