@@ -47,3 +47,10 @@ class AlgebraicRule(Object):
             r.setMath(math_ast),
             f"set math on algebraic rule {fullname}"
         )
+
+    def __repr__(self):
+        result = "<algebraic-function"
+        result += f" eq='{self['variable']} == {self['math'].strip()}'"
+        result += ">"
+
+        return result

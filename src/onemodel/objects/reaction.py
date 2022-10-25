@@ -169,3 +169,27 @@ class Reaction(Object):
                 modifier_ref.setSpecies(item), 
                 "assign modifier species"
             )
+
+    def __repr__(self):
+        eq = ""
+
+        if self["reactants"]:
+            eq += ' + '.join(self["reactants"])
+        else:
+            eq += "0"
+
+        eq += " -> "
+
+        if self["products"]:
+            eq += ' + '.join(self["products"])
+        else:
+            eq += "0"
+
+        eq += f" ; {self['kinetic_law'].strip()}"
+
+
+        result = "<reaction"
+        result += f" eq='{eq}'"
+        result += ">"
+
+        return result

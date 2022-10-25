@@ -27,8 +27,10 @@ class OneModel(Scope):
 
         self.model_name = "main"
         self.root = Namespace()
+        self.locals = Namespace()
 
         self.push(self.root, "")
+        self.locals = Namespace()
 
     def get_SBML_string(self):
         """Returns a SBML representation of the model. """
@@ -104,3 +106,29 @@ class OneModel(Scope):
             self.push(value, name)
             self._populate_SBML_document(SBML_model)
             self.pop()
+
+    def __str__(self):
+        from tabulate import tabulate
+
+        data = []
+
+        for name in reversed(list(self.root.keys())):
+            if name.startswith('__'):
+                continue
+
+            if name in ["show", "locals", "globals", "print", "exit"]:
+                continue
+
+            value = repr(self.root[name])
+
+            if isinstance(self.root[name], dict):
+                doc = self.root[name]['__doc__']
+            else:
+                doc =""
+
+            row = [name, value, doc]
+            data.append(row)
+
+        result = tabulate(data, headers=['Name', 'Value', 'Documentation'])
+
+        return result

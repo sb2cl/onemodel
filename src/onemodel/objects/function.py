@@ -15,3 +15,9 @@ class Function(BaseFunction):
         """ Run the builtin function given the scope. """
         result = self.walker.walk(self["body"])
         return result
+
+    def __repr__(self):
+        result = "<function"
+        result += ">"
+
+        return result

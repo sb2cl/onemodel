@@ -38,3 +38,9 @@ class Object(Namespace):
           class.
         """
         pass
+
+    def __repr__(self):
+        result = "<object"
+        result += ">"
+
+        return result

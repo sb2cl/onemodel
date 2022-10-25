@@ -17,6 +17,15 @@ from onemodel.objects.module import find_module
 from onemodel.objects.module import load_module
 from onemodel.builtin_functions import load_builtin_functions
 
+def evaluate(code):
+    """Evaluate OneModel code."""
+
+    walker = OneModelWalker()
+    result, ast = walker.run(code)
+
+    onemodel = walker.onemodel
+    return walker.onemodel
+
 def load_file(filename):
     """Load a file into OneModel. """
 
@@ -30,7 +39,7 @@ def load_file(filename):
     
     onemodel = walker.onemodel
 
-    return walker.onemodel
+    return onemodel
 
 class OneModelWalker(NodeWalker):
 
@@ -187,6 +196,10 @@ class OneModelWalker(NodeWalker):
 
         namespace[name]["kinetic_law"] = kinetic_law
 
+        documentation = self.walk(node.documentation)
+        if documentation:
+            namespace[name]["__doc__"] = documentation
+
     def walk_AssignmentRule(self, node):
         result = self.walk(node.name)
 
@@ -204,6 +217,11 @@ class OneModelWalker(NodeWalker):
         namespace[name] = AssignmentRule()
         namespace[name]['variable'] = variable
         namespace[name]['math'] = math
+
+        documentation = self.walk(node.documentation)
+        if documentation:
+            namespace[name]["__doc__"] = documentation
+
 
     def walk_AlgebraicRule(self, node):
         result = self.walk(node.name)
@@ -223,6 +241,10 @@ class OneModelWalker(NodeWalker):
         namespace[name]['variable'] = variable
         namespace[name]['math'] = math
 
+        documentation = self.walk(node.documentation)
+        if documentation:
+            namespace[name]["__doc__"] = documentation
+
     def walk_RateRule(self, node):
         result = self.walk(node.name)
 
@@ -240,6 +262,10 @@ class OneModelWalker(NodeWalker):
         namespace[name] = RateRule()
         namespace[name]['variable'] = variable
         namespace[name]['math'] = math
+
+        documentation = self.walk(node.documentation)
+        if documentation:
+            namespace[name]["__doc__"] = documentation
 
     def walk_Extends(self, node):
         model = self.walk(node.model)

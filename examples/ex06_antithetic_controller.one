@@ -9,7 +9,7 @@ model AntitheticController
   z2 = ProteinInduced()       # Anti-sigma factor.
   x  = ProteinInduced()       # Protein of interest to control.
 
-  parameter gamma = 1         # Anithetical sequestration rate.
+  parameter gamma = 1         # Antithetical sequestration rate.
 
   reaction
     # We have to add the antithetical reaction.

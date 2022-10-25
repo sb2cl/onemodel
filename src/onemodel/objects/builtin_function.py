@@ -21,3 +21,9 @@ class BuiltinFunction (BaseFunction):
         """ Run the builtin function given the scope. """
         result = self["body"](scope)
         return result
+
+    def __repr__(self):
+        result = "<builtin-function"
+        result += ">"
+
+        return result

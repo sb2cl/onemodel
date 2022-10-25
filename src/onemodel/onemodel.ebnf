@@ -153,7 +153,7 @@ parameter::Parameter
 
 species::Species
   =
-  name:dotted_name ['=' value:number] [[newline] documentation:(docstring|string)]
+  ["input"] name:dotted_name ['=' value:number] [[newline] documentation:(docstring|string)]
   ;
 
 
@@ -171,6 +171,7 @@ reaction::Reaction
   )
   newline 
   kinetic_law:formula
+  [[newline] documentation:(docstring|string)]
   ;
 
 
@@ -188,6 +189,7 @@ assignment_rule::AssignmentRule
   variable:dotted_name
   ':='
   math:formula
+  [[newline] documentation:(docstring|string)]
   ;
 
 
@@ -197,6 +199,7 @@ algebraic_rule::AlgebraicRule
   variable:dotted_name
   '=='
   math:formula
+  [[newline] documentation:(docstring|string)]
   ;
 
 
@@ -209,6 +212,7 @@ rate_rule::RateRule
   ')'
   ':='
   math:formula
+  [[newline] documentation:(docstring|string)]
   ;
 
 
@@ -296,7 +300,7 @@ string::String
 
 formula::str
   =
-  /[^\\\r\n\f'\;#]*/
+  /[^\\\r\n\f'\;#\"]*/
   ;
 
 

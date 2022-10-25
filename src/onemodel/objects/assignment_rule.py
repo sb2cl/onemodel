@@ -52,3 +52,10 @@ class AssignmentRule(Object):
             r.setMath(math_ast),
             f"set math on assignment rule {fullname}"
         )
+
+    def __repr__(self):
+        result = "<assignment-rule"
+        result += f" eq='{self['variable']} := {self['math'].strip()}'"
+        result += ">"
+
+        return result

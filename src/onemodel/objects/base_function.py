@@ -59,3 +59,9 @@ class BaseFunction(Object):
             result[name] = value
 
         return result
+
+    def __repr__(self):
+        result = "<base-function"
+        result += ">"
+
+        return result

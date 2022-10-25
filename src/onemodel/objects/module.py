@@ -67,6 +67,8 @@ def load_module(walker, module_name, import_name=None, assign_name=None, qualifi
             namespace[qualifier] = Module()
             namespace = namespace[qualifier]
 
+    namespace = walker.onemodel
+
     if import_name:
         namespace[assign_name] = module[import_name]
     else:
@@ -89,3 +91,9 @@ class Module(Object):
         super().__init__()
         self["__name__"] = ""
         self["__file__"] = ""
+
+    def __repr__(self):
+        result = "<module"
+        result += ">"
+
+        return result
