@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "onemodel"
-version = "0.2.0"
+version = "1.0.0"
 description = "OneModel: an open-source SBML modeling tool"
 authors = ["Fernando N. Santos-Navarro <fersann1@upv.es>"]
 license = "Apache-2.0"
